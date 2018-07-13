@@ -18,14 +18,9 @@ namespace ParserWebCore.NetworkLibrary
                 try
                 {
                     var task = Task.Run(() => (new TimedWebClient()).DownloadString(url));
-                    if (task.Wait(TimeSpan.FromSeconds(650)))
-                    {
-                        tmp = task.Result;
-                        break;
-                    }
-
-                    throw new TimeoutException();
-                    //tmp = new TimedWebClient().DownloadString(url);
+                    if (!task.Wait(TimeSpan.FromSeconds(650))) throw new TimeoutException();
+                    tmp = task.Result;
+                    break;
                 }
 
                 catch (Exception e)

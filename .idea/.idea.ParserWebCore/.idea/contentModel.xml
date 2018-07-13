@@ -17,6 +17,10 @@
         <e p="Logger" t="Include">
           <e p="Log.cs" t="Include" />
         </e>
+        <e p="NetworkLibrary" t="Include">
+          <e p="DownloadString.cs" t="Include" />
+          <e p="TimedWebClient.cs" t="Include" />
+        </e>
         <e p="Parser" t="Include">
           <e p="IParser.cs" t="Include" />
           <e p="ParserAbstract.cs" t="Include" />

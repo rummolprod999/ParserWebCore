@@ -8,6 +8,12 @@
           <e p="Arguments.cs" t="Include" />
           <e p="Builder.cs" t="Include" />
         </e>
+        <e p="Connections" t="Include">
+          <e p="ConnectToDb.cs" t="Include" />
+        </e>
+        <e p="Extensions" t="Include">
+          <e p="StringExtensions.cs" t="Include" />
+        </e>
         <e p="Logger" t="Include">
           <e p="Log.cs" t="Include" />
         </e>

@@ -50,9 +50,9 @@ namespace ParserWebCore.BuilderApp
         private static void GetSettings()
         {
             var nameFile = $"{path}{Path.DirectorySeparatorChar}settings.json";
-            using (StreamReader reader = File.OpenText(nameFile))
+            using (var reader = File.OpenText(nameFile))
             {
-                JObject o = (JObject) JToken.ReadFrom(new JsonTextReader(reader));
+                var o = (JObject) JToken.ReadFrom(new JsonTextReader(reader));
                 Prefix = (string) o["prefix"];
                 UserDb = (string) o["userdb"];
                 PassDb = (string) o["passdb"];
@@ -81,7 +81,7 @@ namespace ParserWebCore.BuilderApp
         {
             if (Directory.Exists(TempDir))
             {
-                DirectoryInfo dirInfo = new DirectoryInfo(TempDir);
+                var dirInfo = new DirectoryInfo(TempDir);
                 dirInfo.Delete(true);
                 Directory.CreateDirectory(TempDir);
             }

@@ -18,13 +18,13 @@ namespace ParserWebCore.Logger
 
         public static void Logger(params object[] parametrs)
         {
-            string s = "";
+            var s = "";
             s += DateTime.Now.ToString(CultureInfo.InvariantCulture);
             s = parametrs.Aggregate(s, (current, t) => $"{current} {t}");
 
             lock (_locker)
             {
-                using (StreamWriter sw = new StreamWriter(FileLog, true, Encoding.Default))
+                using (var sw = new StreamWriter(FileLog, true, Encoding.Default))
                 {
                     sw.WriteLine(s);
                 }

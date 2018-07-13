@@ -1,7 +1,10 @@
 ﻿namespace ParserWebCore.Parser
 {
-    public class ParserAgrokomplex
+    public class ParserAgrokomplex : IParser
     {
-        
+        public void Parsing()
+        {
+            
+        }
     }
 }

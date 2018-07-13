@@ -4,6 +4,20 @@
     <e p="$USER_HOME$/.Rider2018.1/system/resharper-host/local/Transient/ReSharperHost/v12/SolutionCaches/_ParserWebCore.1370944712.00" t="ExcludeRecursive" />
     <e p="$PROJECT_DIR$" t="IncludeFlat">
       <e p="ParserWebCore" t="IncludeRecursive">
+        <e p="BuilderApp" t="Include">
+          <e p="Arguments.cs" t="Include" />
+          <e p="Builder.cs" t="Include" />
+        </e>
+        <e p="Logger" t="Include">
+          <e p="Log.cs" t="Include" />
+        </e>
+        <e p="Parser" t="Include">
+          <e p="IParser.cs" t="Include" />
+          <e p="ParserAgrokomplex.cs" t="Include" />
+        </e>
+        <e p="ParserExecutor" t="Include">
+          <e p="Executor.cs" t="Include" />
+        </e>
         <e p="ParserWebCore.csproj" t="IncludeRecursive" />
         <e p="Program.cs" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
@@ -14,6 +28,7 @@
             </e>
           </e>
         </e>
+        <e p="settings.json" t="Include" />
       </e>
       <e p="ParserWebCore.sln" t="IncludeFlat" />
       <e p="packages" t="ExcludeRecursive" />

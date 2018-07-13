@@ -2,6 +2,6 @@
 {
     public interface IParser
     {
-        
+        void Parsing();
     }
 }

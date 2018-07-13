@@ -10,18 +10,24 @@ namespace ParserWebCore.ParserExecutor
         {
             switch (arg)
             {
-                    case Arguments.Agrokomplex:
-                        Parser = new ParserAgrokomplex();
-                        break;
+                case Arguments.Agrocomplex:
+                    Parser = new ParserAgrokomplex();
+                    break;
             }
-           
         }
 
         public IParser Parser;
 
         public void ExecuteParser()
         {
-            Parser.Parsing();
+            try
+            {
+                Parser.Parsing();
+            }
+            catch (Exception e)
+            {
+                Logger.Log.Logger("Exeption in parsing()", e);
+            }
         }
     }
 }

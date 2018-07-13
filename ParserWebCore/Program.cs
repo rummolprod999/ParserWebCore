@@ -1,11 +1,12 @@
 ﻿using System;
 using ParserWebCore.BuilderApp;
+using ParserWebCore.ParserExecutor;
 
 namespace ParserWebCore
 {
     class Program
     {
-        public static Arguments Arg { get; set; }
+        private static Arguments Arg { get; set; }
         
         static void Main(string[] args)
         {
@@ -16,12 +17,19 @@ namespace ParserWebCore
                 return;
             }
             Init(args[0]);
+            Parser();
         }
 
         private static void Init(string a)
         {
             Builder.GetBuilder(a);
             Arg = Builder.Arg;
+        }
+
+        private static void Parser()
+        {
+            var executor = new Executor(Arg);
+            executor.ExecuteParser();
         }
     }
 }

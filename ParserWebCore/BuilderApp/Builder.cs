@@ -25,7 +25,7 @@ namespace ParserWebCore.BuilderApp
         private static Builder _b;
         public static readonly string reqArguments = "agrocomplex";
 
-        private static string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName()
+        private static readonly string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName()
             .CodeBase.Substring(5));
 
         private Builder(string arg)
@@ -40,7 +40,7 @@ namespace ParserWebCore.BuilderApp
             switch (s)
             {
                 case "agrocomplex":
-                    Arg = Arguments.Agrokomplex;
+                    Arg = Arguments.Agrocomplex;
                     break;
                 default:
                     throw new Exception($"Неправильно указан аргумент {s}, используйте {reqArguments}");
@@ -72,7 +72,7 @@ namespace ParserWebCore.BuilderApp
 
                 LogDir = $"{path}{Path.DirectorySeparatorChar}{LogDirTmp}";
                 TempDir = $"{path}{Path.DirectorySeparatorChar}{TempDirTmp}";
-                FileLog = $"{path}{Path.DirectorySeparatorChar}{Arg}_{DateTime.Now:dd_MM_yyyy}.log";
+                FileLog = $"{LogDir}{Path.DirectorySeparatorChar}{Arg}_{DateTime.Now:dd_MM_yyyy}.log";
                 ConnectString = $"Server={Server};port={Port};Database={Database};User Id={UserDb};password={PassDb};CharSet=utf8;Convert Zero Datetime=True;default command timeout=3600;Connection Timeout=3600;SslMode=none";ConnectString = $"Server={Server};port={Port};Database={Database};User Id={UserDb};password={PassDb};CharSet=utf8;Convert Zero Datetime=True;default command timeout=3600;Connection Timeout=3600;SslMode=none";
             }
         }

@@ -37,9 +37,13 @@
           <e p="TenderAbstract.cs" t="Include" />
           <e p="TenderAgrokomplex.cs" t="Include" />
         </e>
+        <e p="TenderType" t="Include">
+          <e p="AbstractTypeT.cs" t="Include" />
+          <e p="TypeAgrokomplex.cs" t="Include" />
+        </e>
         <e p="bin" t="ExcludeRecursive" />
         <e p="obj" t="ExcludeRecursive">
-          <e p="Debug" t="Include">
+          <e p="Release" t="Include">
             <e p="netcoreapp2.1" t="Include">
               <e p="ParserWebCore.AssemblyInfo.cs" t="Include" />
             </e>

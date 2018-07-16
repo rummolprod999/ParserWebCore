@@ -135,6 +135,7 @@ namespace ParserWebCore.NetworkLibrary
                 {
                     var task = Task.Run(() =>
                     {
+                        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
                         var v = new TimedWebClient {Encoding = Encoding.GetEncoding("windows-1251")};
                         return v.DownloadString(url);
                     });

@@ -24,12 +24,17 @@ namespace ParserWebCore.Tender
             };
         }
 
-        private string PlacingWay;
+        private string _placingWay;
         private string EtpName { get; set; }
         private string EtpUrl { get; set; }
-        private int TypeFz { get; set; }
+        protected int TypeFz { get; set; }
         public static int Count { get; set; }
         public event Action<int> CountTender;
+
+        public void Counter(int res)
+        {
+            CountTender?.Invoke(res);
+        }
 
         protected void AddVerNumber(MySqlConnection connect, string purchaseNumber, int typeFz)
         {
@@ -89,13 +94,13 @@ namespace ParserWebCore.Tender
 
         protected void GetPlacingWay(MySqlConnection connect, out int idPlacingWay)
         {
-            if (!string.IsNullOrEmpty(PlacingWay))
+            if (!string.IsNullOrEmpty(_placingWay))
             {
                 var selectPlacingWay =
                     $"SELECT id_placing_way FROM {Builder.Prefix}placing_way WHERE name = @name";
                 var cmd5 = new MySqlCommand(selectPlacingWay, connect);
                 cmd5.Prepare();
-                cmd5.Parameters.AddWithValue("@name", PlacingWay);
+                cmd5.Parameters.AddWithValue("@name", _placingWay);
                 var dt4 = new DataTable();
                 var adapter4 = new MySqlDataAdapter {SelectCommand = cmd5};
                 adapter4.Fill(dt4);
@@ -109,8 +114,8 @@ namespace ParserWebCore.Tender
                         $"INSERT INTO {Builder.Prefix}placing_way SET name= @name, conformity = @conformity";
                     var cmd6 = new MySqlCommand(insertPlacingWay, connect);
                     cmd6.Prepare();
-                    var conformity = GetConformity(PlacingWay);
-                    cmd6.Parameters.AddWithValue("@name", PlacingWay);
+                    var conformity = GetConformity(_placingWay);
+                    cmd6.Parameters.AddWithValue("@name", _placingWay);
                     cmd6.Parameters.AddWithValue("@conformity", conformity);
                     cmd6.ExecuteNonQuery();
                     idPlacingWay = (int) cmd6.LastInsertedId;
@@ -153,7 +158,7 @@ namespace ParserWebCore.Tender
             return 6;
         }
         
-        private void TenderKwords(MySqlConnection connect, int idTender, bool pils = false)
+        protected void TenderKwords(MySqlConnection connect, int idTender, bool pils = false)
         {
             var resString = "";
             if (pils)

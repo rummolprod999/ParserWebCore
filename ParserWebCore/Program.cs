@@ -13,7 +13,7 @@ namespace ParserWebCore
             if (args.Length == 0)
             {
                 Console.WriteLine(
-                    $"Недостаточно аргументов для запуска, используйте {Builder.reqArguments} в качестве аргумента");
+                    $"Недостаточно аргументов для запуска, используйте {Builder.ReqArguments} в качестве аргумента");
                 return;
             }
             Init(args[0]);

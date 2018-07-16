@@ -8,12 +8,12 @@ namespace ParserWebCore.Logger
 {
     public static class Log
     {
-        private static string FileLog;
+        private static string _fileLog;
         private static object _locker = new object();
 
         static Log()
         {
-            FileLog = BuilderApp.Builder.FileLog;
+            _fileLog = BuilderApp.Builder.FileLog;
         }
 
         public static void Logger(params object[] parametrs)
@@ -24,7 +24,7 @@ namespace ParserWebCore.Logger
 
             lock (_locker)
             {
-                using (var sw = new StreamWriter(FileLog, true, Encoding.Default))
+                using (var sw = new StreamWriter(_fileLog, true, Encoding.Default))
                 {
                     sw.WriteLine(s);
                 }

@@ -23,9 +23,9 @@ namespace ParserWebCore.BuilderApp
         public static string Prefix { get; set; }
         public static Arguments Arg { get; set; }
         private static Builder _b;
-        public static readonly string reqArguments = "agrocomplex";
+        public static readonly string ReqArguments = "agrocomplex";
 
-        private static readonly string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName()
+        private static readonly string Path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName()
             .CodeBase.Substring(5));
 
         private Builder(string arg)
@@ -43,13 +43,13 @@ namespace ParserWebCore.BuilderApp
                     Arg = Arguments.Agrocomplex;
                     break;
                 default:
-                    throw new Exception($"Неправильно указан аргумент {s}, используйте {reqArguments}");
+                    throw new Exception($"Неправильно указан аргумент {s}, используйте {ReqArguments}");
             }
         }
 
         private static void GetSettings()
         {
-            var nameFile = $"{path}{Path.DirectorySeparatorChar}settings.json";
+            var nameFile = $"{Path}{System.IO.Path.DirectorySeparatorChar}settings.json";
             using (var reader = File.OpenText(nameFile))
             {
                 var o = (JObject) JToken.ReadFrom(new JsonTextReader(reader));
@@ -59,20 +59,20 @@ namespace ParserWebCore.BuilderApp
                 Server = (string) o["server"];
                 Port = Int32.TryParse((string) o["port"], out Port) ? Int32.Parse((string) o["port"]) : 3306;
                 Database = (string) o["database"];
-                var LogDirTmp = o["dirs"]
+                var logDirTmp = o["dirs"]
                     .Where(c => ((JObject) c).Properties().First().Name == Arg.ToString().ToLower())
                     .Select(c => (string) c.SelectToken("..log")).First();
-                var TempDirTmp = o["dirs"]
+                var tempDirTmp = o["dirs"]
                     .Where(c => ((JObject) c).Properties().First().Name == Arg.ToString().ToLower())
                     .Select(c => (string) c.SelectToken("..temp")).First();
-                if (string.IsNullOrEmpty(LogDirTmp) || string.IsNullOrEmpty(TempDirTmp))
+                if (string.IsNullOrEmpty(logDirTmp) || string.IsNullOrEmpty(tempDirTmp))
                 {
                     throw new Exception("Can not find logDir or tempDir in settings.json");
                 }
 
-                LogDir = $"{path}{Path.DirectorySeparatorChar}{LogDirTmp}";
-                TempDir = $"{path}{Path.DirectorySeparatorChar}{TempDirTmp}";
-                FileLog = $"{LogDir}{Path.DirectorySeparatorChar}{Arg}_{DateTime.Now:dd_MM_yyyy}.log";
+                LogDir = $"{Path}{System.IO.Path.DirectorySeparatorChar}{logDirTmp}";
+                TempDir = $"{Path}{System.IO.Path.DirectorySeparatorChar}{tempDirTmp}";
+                FileLog = $"{LogDir}{System.IO.Path.DirectorySeparatorChar}{Arg}_{DateTime.Now:dd_MM_yyyy}.log";
                 ConnectString = $"Server={Server};port={Port};Database={Database};User Id={UserDb};password={PassDb};CharSet=utf8;Convert Zero Datetime=True;default command timeout=3600;Connection Timeout=3600;SslMode=none";ConnectString = $"Server={Server};port={Port};Database={Database};User Id={UserDb};password={PassDb};CharSet=utf8;Convert Zero Datetime=True;default command timeout=3600;Connection Timeout=3600;SslMode=none";
             }
         }

@@ -20,10 +20,10 @@ namespace ParserWebCore.BuilderApp
         [Required] public static string Database { get; set; }
         [Required] public static string ConnectString { get; set; }
         public static int Port;
-        public static string Prefix { get; set; }
-        public static Arguments Arg { get; set; }
+        public static string Prefix { get; private set; }
+        public static Arguments Arg { get; private set; }
         private static Builder _b;
-        public static readonly string ReqArguments = "agrocomplex";
+        public const string ReqArguments = "agrocomplex, kzgroup";
 
         private static readonly string Path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName()
             .CodeBase.Substring(5));
@@ -41,6 +41,9 @@ namespace ParserWebCore.BuilderApp
             {
                 case "agrocomplex":
                     Arg = Arguments.Agrocomplex;
+                    break;
+                case "kzgroup":
+                    Arg = Arguments.Kzgroup;
                     break;
                 default:
                     throw new Exception($"Неправильно указан аргумент {s}, используйте {ReqArguments}");

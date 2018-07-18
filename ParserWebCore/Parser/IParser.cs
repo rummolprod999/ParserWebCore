@@ -1,10 +1,7 @@
-﻿using ParserWebCore.Tender;
-
-namespace ParserWebCore.Parser
+﻿namespace ParserWebCore.Parser
 {
     public interface IParser
     {
         void Parsing();
-        void ParserTender(ITender t);
     }
 }

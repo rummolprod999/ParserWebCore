@@ -13,6 +13,11 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Agrocomplex:
                     Parser = new ParserAgrokomplex();
                     break;
+                case Arguments.Kzgroup:
+                    Parser = new ParserKzGroup();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }
         }
 

@@ -31,7 +31,7 @@ namespace ParserWebCore.Tender
         public static int Count { get; set; }
         public event Action<int> CountTender;
 
-        public void Counter(int res)
+        protected void Counter(int res)
         {
             CountTender?.Invoke(res);
         }

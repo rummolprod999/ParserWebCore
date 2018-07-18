@@ -8,20 +8,20 @@ using ParserWebCore.TenderType;
 
 namespace ParserWebCore.Parser
 {
-    public class ParserAgrokomplex : ParserAbstract, IParser
+    public class ParserKzGroup : ParserAbstract, IParser
     {
-        private const int Count = 10;
+        private const int Count = 5;
 
         public void Parsing()
         {
-            Parse(ParsingAgrocomplex);
+            Parse(ParsingKzGroup);
         }
 
-        private void ParsingAgrocomplex()
+        private void ParsingKzGroup()
         {
             for (var i = 1; i <= Count; i++)
             {
-                var urlpage = $"http://www.zao-agrokomplex.ru/purchase/?PAGEN_1={i}";
+                var urlpage = $"http://kzgroup.ru/rus/tenders?page={i}&text=";
                 try
                 {
                     ParsingPage(urlpage);
@@ -35,7 +35,7 @@ namespace ParserWebCore.Parser
 
         private void ParsingPage(string url)
         {
-            var s = DownloadString.DownL1251(url);
+            var s = DownloadString.DownL(url);
             if (String.IsNullOrEmpty(s))
             {
                 Log.Logger("Empty string in ParserPage()", url);
@@ -45,7 +45,7 @@ namespace ParserWebCore.Parser
             var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(s);
             var tens =
-                htmlDoc.DocumentNode.SelectNodes("//div[@class = 't_lots']/table/tbody/tr") ??
+                htmlDoc.DocumentNode.SelectNodes("//div[contains(@class, 'tableBox')]/table/tr[position() > 1]") ??
                 new HtmlNodeCollection(null);
             foreach (var a in tens)
             {
@@ -62,7 +62,7 @@ namespace ParserWebCore.Parser
 
         private void ParserTender(HtmlNode n)
         {
-            var href = (n.SelectSingleNode(".//a[contains(@class, 't_lot_title')]")?.Attributes["href"]?.Value ?? "")
+            var href = (n.SelectSingleNode("./td[1]/a")?.Attributes["href"]?.Value ?? "")
                 .Trim();
             if (string.IsNullOrEmpty(href))
             {
@@ -70,26 +70,23 @@ namespace ParserWebCore.Parser
                 return;
             }
 
-            href = $"http://www.zao-agrokomplex.ru/purchase/{href}";
-            var purNum = href.GetDateFromRegex(@"LOT_ID=(\d+)");
+            href = $"http://kzgroup.ru{href}";
+            var purNum = href.GetDateFromRegex(@"/(\d+)/$");
             if (string.IsNullOrEmpty(purNum))
             {
                 Log.Logger("Empty purNum", href);
                 return;
             }
 
-            var purName = (n.SelectSingleNode(".//a[contains(@class, 't_lot_title')]")
+            var purName = (n.SelectSingleNode("./td[3]")
                                ?.InnerText ?? "").Trim();
-            var orgName = (n.SelectSingleNode(".//span[b = 'Компания:']")
-                               ?.InnerText ?? "").Replace("Компания:", "").Trim();
-            var contactPerson = (n.SelectSingleNode(".//span[b = 'Ответственный:']")
-                                     ?.InnerText ?? "").Replace("Ответственный:", "").Trim();
-            var phone = (n.SelectSingleNode(".//span[b = 'Телефон:']")
-                             ?.InnerText ?? "").Replace("Телефон:", "").Trim();
+            var orgName = (n.SelectSingleNode("./td[4]")
+                               ?.InnerText ?? "").Trim();
             var datePubT =
-                (n.SelectSingleNode(".//span[contains(b, 'Дата начала:')]")
-                     ?.InnerText ?? "").Replace("Дата начала:", "").Trim();
-            var datePub = datePubT.ParseDateUn("dd.MM.yyyy HH:mm:ss");
+                (n.SelectSingleNode("./td[5]")
+                     ?.InnerText ?? "").Trim();
+            datePubT = datePubT.GetDateFromRegex(@"(\d{2}\.\d{2}\.\d{4})");
+            var datePub = datePubT.ParseDateUn("dd.MM.yyyy");
             if (datePub == DateTime.MinValue)
             {
                 Log.Logger("Empty datePub", href);
@@ -97,17 +94,20 @@ namespace ParserWebCore.Parser
             }
 
             var dateEndT =
-                (n.SelectSingleNode(".//span[contains(b, 'Дата окончания:')]")
-                     ?.InnerText ?? "").Replace("Дата окончания:", "").Trim();
-            var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm:ss");
+                (n.SelectSingleNode("./td[7]")
+                     ?.InnerText ?? "").Trim();
+            var dateEndT1 = dateEndT.GetDateFromRegex(@"(\d{2}\.\d{2}\.\d{4})");
+            var timeEndT = dateEndT.GetDateFromRegex(@"(\d{2}:\d{2})");
+            dateEndT = $"{dateEndT1} {timeEndT}".Trim();
+            var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm");
             if (dateEnd == DateTime.MinValue)
             {
                 Log.Logger("Empty dateEnd", href);
                 return;
             }
 
-            var tn = new TenderAgrokomplex("АО «Агрокомплекс»", "http://www.zao-agrokomplex.ru/purchase", 65,
-                new TypeAgrokomplex
+            var tn = new TenderKzGroup("ПАО «Кировский завод»", "http://kzgroup.ru", 67,
+                new TypeKzGroup
                 {
                     OrgName = orgName,
                     DateEnd = dateEnd,
@@ -115,8 +115,6 @@ namespace ParserWebCore.Parser
                     Href = href,
                     PurNum = purNum,
                     PurName = purName,
-                    ContactPerson = contactPerson,
-                    Phone = phone
                 });
             ParserTender(tn);
         }

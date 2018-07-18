@@ -2,6 +2,7 @@
 {
     public enum Arguments
     {
-        Agrocomplex
+        Agrocomplex,
+        Kzgroup
     }
 }

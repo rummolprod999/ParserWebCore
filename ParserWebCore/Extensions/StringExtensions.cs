@@ -19,7 +19,7 @@ namespace ParserWebCore.Extensions
         public static DateTime ParseDateUn(this string s, string form)
         {
             var d = DateTime.MinValue;
-            if (!String.IsNullOrEmpty(s))
+            if (!string.IsNullOrEmpty(s))
             {
                 try
                 {

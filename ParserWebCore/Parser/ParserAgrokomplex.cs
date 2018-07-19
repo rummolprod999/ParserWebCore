@@ -36,7 +36,7 @@ namespace ParserWebCore.Parser
         private void ParsingPage(string url)
         {
             var s = DownloadString.DownL1251(url);
-            if (String.IsNullOrEmpty(s))
+            if (string.IsNullOrEmpty(s))
             {
                 Log.Logger("Empty string in ParserPage()", url);
                 return;

@@ -60,7 +60,7 @@ namespace ParserWebCore.BuilderApp
                 UserDb = (string) o["userdb"];
                 PassDb = (string) o["passdb"];
                 Server = (string) o["server"];
-                Port = Int32.TryParse((string) o["port"], out Port) ? Int32.Parse((string) o["port"]) : 3306;
+                Port = int.TryParse((string) o["port"], out Port) ? int.Parse((string) o["port"]) : 3306;
                 Database = (string) o["database"];
                 var logDirTmp = o["dirs"]
                     .Where(c => ((JObject) c).Properties().First().Name == Arg.ToString().ToLower())

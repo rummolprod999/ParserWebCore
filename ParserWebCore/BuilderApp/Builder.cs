@@ -19,11 +19,11 @@ namespace ParserWebCore.BuilderApp
         [Required] public static string Server { get; set; }
         [Required] public static string Database { get; set; }
         [Required] public static string ConnectString { get; set; }
-        public static int Port;
+        private static int _port;
         public static string Prefix { get; private set; }
         public static Arguments Arg { get; private set; }
         private static Builder _b;
-        public const string ReqArguments = "agrocomplex, kzgroup";
+        public const string ReqArguments = "agrocomplex, kzgroup, agrotomsk";
 
         private static readonly string Path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName()
             .CodeBase.Substring(5));
@@ -45,6 +45,9 @@ namespace ParserWebCore.BuilderApp
                 case "kzgroup":
                     Arg = Arguments.Kzgroup;
                     break;
+                case "agrotomsk":
+                    Arg = Arguments.Agrotomsk;
+                    break;
                 default:
                     throw new Exception($"Неправильно указан аргумент {s}, используйте {ReqArguments}");
             }
@@ -60,7 +63,7 @@ namespace ParserWebCore.BuilderApp
                 UserDb = (string) o["userdb"];
                 PassDb = (string) o["passdb"];
                 Server = (string) o["server"];
-                Port = int.TryParse((string) o["port"], out Port) ? int.Parse((string) o["port"]) : 3306;
+                _port = int.TryParse((string) o["port"], out _port) ? int.Parse((string) o["port"]) : 3306;
                 Database = (string) o["database"];
                 var logDirTmp = o["dirs"]
                     .Where(c => ((JObject) c).Properties().First().Name == Arg.ToString().ToLower())
@@ -76,7 +79,7 @@ namespace ParserWebCore.BuilderApp
                 LogDir = $"{Path}{System.IO.Path.DirectorySeparatorChar}{logDirTmp}";
                 TempDir = $"{Path}{System.IO.Path.DirectorySeparatorChar}{tempDirTmp}";
                 FileLog = $"{LogDir}{System.IO.Path.DirectorySeparatorChar}{Arg}_{DateTime.Now:dd_MM_yyyy}.log";
-                ConnectString = $"Server={Server};port={Port};Database={Database};User Id={UserDb};password={PassDb};CharSet=utf8;Convert Zero Datetime=True;default command timeout=3600;Connection Timeout=3600;SslMode=none";ConnectString = $"Server={Server};port={Port};Database={Database};User Id={UserDb};password={PassDb};CharSet=utf8;Convert Zero Datetime=True;default command timeout=3600;Connection Timeout=3600;SslMode=none";
+                ConnectString = $"Server={Server};port={_port};Database={Database};User Id={UserDb};password={PassDb};CharSet=utf8;Convert Zero Datetime=True;default command timeout=3600;Connection Timeout=3600;SslMode=none";ConnectString = $"Server={Server};port={_port};Database={Database};User Id={UserDb};password={PassDb};CharSet=utf8;Convert Zero Datetime=True;default command timeout=3600;Connection Timeout=3600;SslMode=none";
             }
         }
 

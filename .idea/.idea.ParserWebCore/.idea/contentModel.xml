@@ -11,6 +11,9 @@
         <e p="Connections" t="Include">
           <e p="ConnectToDb.cs" t="Include" />
         </e>
+        <e p="Creators" t="Include">
+          <e p="CreatorChromeDriver.cs" t="Include" />
+        </e>
         <e p="Extensions" t="Include">
           <e p="ListExtensions.cs" t="Include" />
           <e p="StringExtensions.cs" t="Include" />
@@ -25,6 +28,7 @@
         <e p="Parser" t="Include">
           <e p="IParser.cs" t="Include" />
           <e p="ParserAbstract.cs" t="Include" />
+          <e p="ParserAgroTomsk.cs" t="Include" />
           <e p="ParserAgrokomplex.cs" t="Include" />
           <e p="ParserKzGroup.cs" t="Include" />
         </e>
@@ -36,17 +40,19 @@
         <e p="Tender" t="Include">
           <e p="ITender.cs" t="Include" />
           <e p="TenderAbstract.cs" t="Include" />
+          <e p="TenderAgroTomsk.cs" t="Include" />
           <e p="TenderAgrokomplex.cs" t="Include" />
           <e p="TenderKzGroup.cs" t="Include" />
         </e>
         <e p="TenderType" t="Include">
           <e p="AbstractTypeT.cs" t="Include" />
+          <e p="TypeAgroTomsk.cs" t="Include" />
           <e p="TypeAgrokomplex.cs" t="Include" />
           <e p="TypeKzGroup.cs" t="Include" />
         </e>
         <e p="bin" t="ExcludeRecursive" />
         <e p="obj" t="ExcludeRecursive">
-          <e p="Release" t="Include">
+          <e p="Debug" t="Include">
             <e p="netcoreapp2.1" t="Include">
               <e p="ParserWebCore.AssemblyInfo.cs" t="Include" />
             </e>

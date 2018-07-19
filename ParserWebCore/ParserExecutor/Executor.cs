@@ -11,23 +11,26 @@ namespace ParserWebCore.ParserExecutor
             switch (arg)
             {
                 case Arguments.Agrocomplex:
-                    Parser = new ParserAgrokomplex();
+                    _parser = new ParserAgrokomplex();
                     break;
                 case Arguments.Kzgroup:
-                    Parser = new ParserKzGroup();
+                    _parser = new ParserKzGroup();
+                    break;
+                case Arguments.Agrotomsk:
+                    _parser = new ParserAgroTomsk();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }
         }
 
-        public IParser Parser;
+        private readonly IParser _parser;
 
         public void ExecuteParser()
         {
             try
             {
-                Parser.Parsing();
+                _parser.Parsing();
             }
             catch (Exception e)
             {

@@ -3,6 +3,7 @@
     public enum Arguments
     {
         Agrocomplex,
-        Kzgroup
+        Kzgroup,
+        Agrotomsk
     }
 }

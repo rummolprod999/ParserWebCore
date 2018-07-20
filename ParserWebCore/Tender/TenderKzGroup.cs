@@ -220,9 +220,9 @@ namespace ParserWebCore.Tender
                 var urlAtt = $"http://kzgroup.ru{urlAttT}";
                 if (!string.IsNullOrEmpty(fName))
                 {
-                    string insertAttach =
+                    var insertAttach =
                         $"INSERT INTO {Builder.Prefix}attachment SET id_tender = @id_tender, file_name = @file_name, url = @url";
-                    MySqlCommand cmd10 = new MySqlCommand(insertAttach, connect);
+                    var cmd10 = new MySqlCommand(insertAttach, connect);
                     cmd10.Prepare();
                     cmd10.Parameters.AddWithValue("@id_tender", idTender);
                     cmd10.Parameters.AddWithValue("@file_name", fName);

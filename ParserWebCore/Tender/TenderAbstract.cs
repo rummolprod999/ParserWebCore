@@ -24,7 +24,7 @@ namespace ParserWebCore.Tender
             };
         }
 
-        private string _placingWay;
+        protected string PlacingWay;
         private string EtpName { get; set; }
         private string EtpUrl { get; set; }
         protected int TypeFz { get; set; }
@@ -94,13 +94,13 @@ namespace ParserWebCore.Tender
 
         protected void GetPlacingWay(MySqlConnection connect, out int idPlacingWay)
         {
-            if (!string.IsNullOrEmpty(_placingWay))
+            if (!string.IsNullOrEmpty(PlacingWay))
             {
                 var selectPlacingWay =
                     $"SELECT id_placing_way FROM {Builder.Prefix}placing_way WHERE name = @name";
                 var cmd5 = new MySqlCommand(selectPlacingWay, connect);
                 cmd5.Prepare();
-                cmd5.Parameters.AddWithValue("@name", _placingWay);
+                cmd5.Parameters.AddWithValue("@name", PlacingWay);
                 var dt4 = new DataTable();
                 var adapter4 = new MySqlDataAdapter {SelectCommand = cmd5};
                 adapter4.Fill(dt4);
@@ -114,8 +114,8 @@ namespace ParserWebCore.Tender
                         $"INSERT INTO {Builder.Prefix}placing_way SET name= @name, conformity = @conformity";
                     var cmd6 = new MySqlCommand(insertPlacingWay, connect);
                     cmd6.Prepare();
-                    var conformity = GetConformity(_placingWay);
-                    cmd6.Parameters.AddWithValue("@name", _placingWay);
+                    var conformity = GetConformity(PlacingWay);
+                    cmd6.Parameters.AddWithValue("@name", PlacingWay);
                     cmd6.Parameters.AddWithValue("@conformity", conformity);
                     cmd6.ExecuteNonQuery();
                     idPlacingWay = (int) cmd6.LastInsertedId;

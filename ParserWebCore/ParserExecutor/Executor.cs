@@ -19,6 +19,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Agrotomsk:
                     _parser = new ParserAgroTomsk();
                     break;
+                case Arguments.Sibintek:
+                    _parser = new ParserSibintek();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

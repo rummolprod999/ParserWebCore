@@ -8,8 +8,13 @@ namespace ParserWebCore.NetworkLibrary
         protected override WebRequest GetWebRequest(Uri address)
         {
             var wr = base.GetWebRequest(address);
-            wr.Timeout = 600000;
-            return wr;
+            if (wr != null)
+            {
+                wr.Timeout = 600000;
+                return wr;
+            }
+
+            return null;
         }
     }
 
@@ -18,9 +23,14 @@ namespace ParserWebCore.NetworkLibrary
         protected override WebRequest GetWebRequest(Uri address)
         {
             var wr = (HttpWebRequest) base.GetWebRequest(address);
-            wr.Timeout = 600000;
-            wr.UserAgent = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:55.0) Gecko/20100101 Firefox/55.0";
-            return wr;
+            if (wr != null)
+            {
+                wr.Timeout = 600000;
+                wr.UserAgent = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:55.0) Gecko/20100101 Firefox/55.0";
+                return wr;
+            }
+
+            return null;
         }
     }
 

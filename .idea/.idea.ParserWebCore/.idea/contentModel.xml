@@ -32,6 +32,7 @@
           <e p="ParserAgroTomsk.cs" t="Include" />
           <e p="ParserAgrokomplex.cs" t="Include" />
           <e p="ParserKzGroup.cs" t="Include" />
+          <e p="ParserSibintek.cs" t="Include" />
         </e>
         <e p="ParserExecutor" t="Include">
           <e p="Executor.cs" t="Include" />

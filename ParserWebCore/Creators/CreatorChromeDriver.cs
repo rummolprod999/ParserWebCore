@@ -6,7 +6,7 @@ namespace ParserWebCore.Creators
 {
     public static class CreatorChromeDriver
     {
-        private static ChromeDriver Driver;
+        private static ChromeDriver _driver;
         static CreatorChromeDriver()
         {
             try
@@ -15,10 +15,10 @@ namespace ParserWebCore.Creators
                 options.AddArguments("headless");
                 options.AddArguments("disable-gpu");
                 options.AddArguments("no-sandbox");
-                Driver = new ChromeDriver("/usr/local/bin", options);
-                Driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(120);
+                _driver = new ChromeDriver("/usr/local/bin", options);
+                _driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(120);
                 //Driver.Manage().Window.Maximize();
-                Driver.Manage().Cookies.DeleteAllCookies();
+                _driver.Manage().Cookies.DeleteAllCookies();
             }
             catch (Exception e)
             {
@@ -29,7 +29,7 @@ namespace ParserWebCore.Creators
 
         public static ref ChromeDriver GetChromeDriver()
         {
-            return ref Driver;
+            return ref _driver;
         }
     }
 }

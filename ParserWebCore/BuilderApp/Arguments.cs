@@ -4,6 +4,7 @@
     {
         Agrocomplex,
         Kzgroup,
-        Agrotomsk
+        Agrotomsk,
+        Sibintek
     }
 }

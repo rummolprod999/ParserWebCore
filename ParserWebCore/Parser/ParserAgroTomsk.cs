@@ -15,7 +15,7 @@ namespace ParserWebCore.Parser
     public class ParserAgroTomsk : ParserAbstract, IParser
     {
         private const int Count = 5;
-        private TimeSpan timeoutB = TimeSpan.FromSeconds(120);
+        private TimeSpan _timeoutB = TimeSpan.FromSeconds(120);
         private const string Url = "http://agro.zakupki.tomsk.ru/Competition/Competition_Request_Cost.aspx?Sale=0";
         private List<TypeAgroTomsk> _listTenders = new List<TypeAgroTomsk>();
         private readonly ChromeDriver _driver = CreatorChromeDriver.GetChromeDriver();
@@ -44,7 +44,7 @@ namespace ParserWebCore.Parser
 
         private void ParserSelenium()
         {
-            var wait = new WebDriverWait(_driver, timeoutB);
+            var wait = new WebDriverWait(_driver, _timeoutB);
             _driver.Navigate().GoToUrl(Url);
             Thread.Sleep(5000);
             wait.Until(dr =>
@@ -84,7 +84,7 @@ namespace ParserWebCore.Parser
 
         private void ParsingNextPage()
         {
-            var wait = new WebDriverWait(_driver, timeoutB);
+            var wait = new WebDriverWait(_driver, _timeoutB);
             for (var i = 1; i <= Count; i++)
             {
                 try

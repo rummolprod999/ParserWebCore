@@ -302,7 +302,7 @@ namespace ParserWebCore.Tender
         {
             if (okpd2Code.Length > 1)
             {
-                var dot = okpd2Code.IndexOf(".");
+                var dot = okpd2Code.IndexOf(".", StringComparison.Ordinal);
                 if (dot != -1)
                 {
                     var okpd2GroupCodeTemp = okpd2Code.Substring(0, dot);

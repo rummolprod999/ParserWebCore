@@ -307,8 +307,7 @@ namespace ParserWebCore.Tender
                 {
                     var okpd2GroupCodeTemp = okpd2Code.Substring(0, dot);
                     okpd2GroupCodeTemp = okpd2GroupCodeTemp.Substring(0, 2);
-                    int tempOkpd2GroupCode;
-                    if (!int.TryParse(okpd2GroupCodeTemp, out tempOkpd2GroupCode))
+                    if (!int.TryParse(okpd2GroupCodeTemp, out var tempOkpd2GroupCode))
                     {
                         tempOkpd2GroupCode = 0;
                     }
@@ -327,7 +326,7 @@ namespace ParserWebCore.Tender
 
             if (okpd2Code.Length > 3)
             {
-                var dot = okpd2Code.IndexOf(".");
+                var dot = okpd2Code.IndexOf(".", StringComparison.Ordinal);
                 if (dot != -1)
                 {
                     okpd2GroupLevel1Code = okpd2Code.Substring(dot + 1, 1);

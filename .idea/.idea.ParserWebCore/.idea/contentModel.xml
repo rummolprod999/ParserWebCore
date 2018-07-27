@@ -45,12 +45,14 @@
           <e p="TenderAgroTomsk.cs" t="Include" />
           <e p="TenderAgrokomplex.cs" t="Include" />
           <e p="TenderKzGroup.cs" t="Include" />
+          <e p="TenderSibintek.cs" t="Include" />
         </e>
         <e p="TenderType" t="Include">
           <e p="AbstractTypeT.cs" t="Include" />
           <e p="TypeAgroTomsk.cs" t="Include" />
           <e p="TypeAgrokomplex.cs" t="Include" />
           <e p="TypeKzGroup.cs" t="Include" />
+          <e p="TypeSibIntek.cs" t="Include" />
         </e>
         <e p="bin" t="ExcludeRecursive" />
         <e p="obj" t="ExcludeRecursive">

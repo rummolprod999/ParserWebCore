@@ -41,6 +41,7 @@ namespace ParserWebCore.Tender
 
                 var dateUpd = DateTime.Now;
                 var cancelStatus = 0;
+                var updated = false;
                 var selectDateT =
                     $"SELECT id_tender, date_version, cancel FROM {Builder.Prefix}tender WHERE purchase_number = @purchase_number AND type_fz = @type_fz";
                 var cmd2 = new MySqlCommand(selectDateT, connect);
@@ -53,7 +54,7 @@ namespace ParserWebCore.Tender
                 foreach (DataRow row in dt2.Rows)
                 {
                     //DateTime dateNew = DateTime.Parse(pr.DatePublished);
-
+                    updated = true;
                     if (dateUpd >= (DateTime) row["date_version"])
                     {
                         row["cancel"] = 1;
@@ -131,7 +132,7 @@ namespace ParserWebCore.Tender
                 cmd9.Parameters.AddWithValue("@print_form", printForm);
                 var resInsertTender = cmd9.ExecuteNonQuery();
                 var idTender = (int) cmd9.LastInsertedId;
-                Counter(resInsertTender);
+                Counter(resInsertTender, updated);
                 var lotNum = 1;
                 var insertLot =
                     $"INSERT INTO {Builder.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency";

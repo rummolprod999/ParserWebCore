@@ -11,6 +11,7 @@ namespace ParserWebCore.Parser
             Log.Logger("Время начала парсинга");
             op?.Invoke();
             Log.Logger("Добавили Tender", TenderAbstract.Count);
+            Log.Logger("Обновили Tender", TenderAbstract.UpCount);
             Log.Logger("Время окончания парсинга");
         }
 

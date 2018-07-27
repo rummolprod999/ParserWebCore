@@ -15,10 +15,12 @@ namespace ParserWebCore.Tender
             EtpName = etpName ?? throw new ArgumentNullException(nameof(etpName));
             EtpUrl = etpUrl ?? throw new ArgumentNullException(nameof(etpUrl));
             TypeFz = typeFz;
-            CountTender += delegate(int d)
+            CountTender += delegate(int d, bool b)
             {
-                if (d > 0)
+                if (!b && d > 0)
                     Count++;
+                else if (b && d > 0)
+                    UpCount++;
                 else
                     Log.Logger("Не удалось добавить Tender");
             };
@@ -29,11 +31,12 @@ namespace ParserWebCore.Tender
         private string EtpUrl { get; set; }
         protected int TypeFz { get; set; }
         public static int Count { get; set; }
-        public event Action<int> CountTender;
+        public static int UpCount { get; set; }
+        public event Action<int, bool> CountTender;
 
-        protected void Counter(int res)
+        protected void Counter(int res, bool b)
         {
-            CountTender?.Invoke(res);
+            CountTender?.Invoke(res, b);
         }
 
         protected void AddVerNumber(MySqlConnection connect, string purchaseNumber, int typeFz)

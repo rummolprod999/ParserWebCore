@@ -5,6 +5,7 @@
         Agrocomplex,
         Kzgroup,
         Agrotomsk,
-        Sibintek
+        Sibintek,
+        Setonline
     }
 }

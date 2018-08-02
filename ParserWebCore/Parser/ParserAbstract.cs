@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text.RegularExpressions;
+using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
 using ParserWebCore.Tender;
 
@@ -25,6 +27,11 @@ namespace ParserWebCore.Parser
             {
                 Log.Logger($"Exeption in {t.GetType()}", e);
             }
+        }
+
+        protected string GetPriceFromString(string nmcK)
+        {
+            return Regex.Replace(nmcK.GetDateFromRegex(@"^([\d \.]+)\s"), @"\s+", "");
         }
     }
 }

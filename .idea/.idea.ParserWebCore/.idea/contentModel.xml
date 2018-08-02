@@ -32,6 +32,7 @@
           <e p="ParserAgroTomsk.cs" t="Include" />
           <e p="ParserAgrokomplex.cs" t="Include" />
           <e p="ParserKzGroup.cs" t="Include" />
+          <e p="ParserSetOnline.cs" t="Include" />
           <e p="ParserSibintek.cs" t="Include" />
         </e>
         <e p="ParserExecutor" t="Include">
@@ -45,6 +46,7 @@
           <e p="TenderAgroTomsk.cs" t="Include" />
           <e p="TenderAgrokomplex.cs" t="Include" />
           <e p="TenderKzGroup.cs" t="Include" />
+          <e p="TenderSetOnline.cs" t="Include" />
           <e p="TenderSibintek.cs" t="Include" />
         </e>
         <e p="TenderType" t="Include">
@@ -52,6 +54,7 @@
           <e p="TypeAgroTomsk.cs" t="Include" />
           <e p="TypeAgrokomplex.cs" t="Include" />
           <e p="TypeKzGroup.cs" t="Include" />
+          <e p="TypeSetOnline.cs" t="Include" />
           <e p="TypeSibIntek.cs" t="Include" />
         </e>
         <e p="bin" t="ExcludeRecursive" />

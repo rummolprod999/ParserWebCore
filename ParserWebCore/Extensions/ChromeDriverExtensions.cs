@@ -1,6 +1,7 @@
 ﻿using System;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Remote;
 using ParserWebCore.Logger;
 
 namespace ParserWebCore.Extensions
@@ -48,6 +49,18 @@ namespace ParserWebCore.Extensions
                     Log.Logger(e);
                     if (count > 10) return;
                 }
+            }
+        }
+
+        public static IWebElement FindElementWithoutException<T>(this T driver, By by) where T:ISearchContext
+        {
+            try
+            {
+                return driver.FindElement(by);
+            }
+            catch (Exception)
+            {
+                return null;
             }
         }
     }

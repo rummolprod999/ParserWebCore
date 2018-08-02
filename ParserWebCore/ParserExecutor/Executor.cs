@@ -22,6 +22,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Sibintek:
                     _parser = new ParserSibintek();
                     break;
+                case Arguments.Setonline:
+                    _parser = new ParserSetOnline();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

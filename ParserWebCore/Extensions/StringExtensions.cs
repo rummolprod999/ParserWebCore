@@ -53,5 +53,21 @@ namespace ParserWebCore.Extensions
 
             return ret;
         }
+
+        public static string GetDateWithMonth(this string s)
+        {
+            if (s.Contains("янв")) return s.Replace("янв", "01");
+            if (s.Contains("фев")) return s.Replace("фев", "02");
+            if (s.Contains("мар")) return s.Replace("мар", "03");
+            if (s.Contains("апр")) return s.Replace("апр", "04");
+            if (s.Contains("ма")) return s.Replace("ма", "05");
+            if (s.Contains("июн")) return s.Replace("июн", "06");
+            if (s.Contains("июл")) return s.Replace("июл", "07");
+            if (s.Contains("авг")) return s.Replace("авг", "08");
+            if (s.Contains("сен")) return s.Replace("сен", "09");
+            if (s.Contains("окт")) return s.Replace("окт", "10");
+            if (s.Contains("ноя")) return s.Replace("ноя", "11");
+            return s.Contains("дек") ? s.Replace("дек", "12") : "";
+        }
     }
 }

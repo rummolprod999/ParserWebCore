@@ -69,5 +69,19 @@ namespace ParserWebCore.Extensions
             if (s.Contains("ноя")) return s.Replace("ноя", "11");
             return s.Contains("дек") ? s.Replace("дек", "12") : "";
         }
+
+        public static string DelDoubleWhitespace(this string s)
+        {
+            var resString = Regex.Replace(s, @"\s+", " ");
+            resString = resString.Trim();
+            return resString;
+        }
+
+        public static string DelAllWhitespace(this string s)
+        {
+            var resString = Regex.Replace(s, @"\s+", "");
+            resString = resString.Trim();
+            return resString;
+        }
     }
 }

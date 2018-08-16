@@ -6,6 +6,7 @@
         Kzgroup,
         Agrotomsk,
         Sibintek,
-        Setonline
+        Setonline,
+        Mzvoron
     }
 }

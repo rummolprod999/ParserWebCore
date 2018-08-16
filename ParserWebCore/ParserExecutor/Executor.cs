@@ -25,6 +25,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Setonline:
                     _parser = new ParserSetOnline();
                     break;
+                case Arguments.Mzvoron:
+                    _parser = new ParserMzVoron();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

@@ -7,6 +7,7 @@
         Agrotomsk,
         Sibintek,
         Setonline,
-        Mzvoron
+        Mzvoron,
+        Maxi
     }
 }

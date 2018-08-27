@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="$USER_HOME$/.Rider2018.1/system/resharper-host/local/Transient/ReSharperHost/v12/SolutionCaches/_ParserWebCore.1370944712.00" t="ExcludeRecursive" />
+    <e p="/app" t="IncludeRecursive" />
+    <e p="/b405b5e9" t="IncludeRecursive" />
+    <e p="$APPLICATION_CONFIG_DIR$/consoles/db" t="IncludeRecursive" />
+    <e p="$APPLICATION_CONFIG_DIR$/extensions" t="IncludeRecursive" />
+    <e p="$APPLICATION_CONFIG_DIR$/scratches" t="IncludeRecursive" />
+    <e p="$USER_HOME$/.Rider2018.2/system/extResources" t="IncludeRecursive" />
+    <e p="$USER_HOME$/.Rider2018.2/system/resharper-host/local/Transient/ReSharperHost/v182/SolutionCaches/_ParserWebCore.1370944712.00" t="ExcludeRecursive" />
     <e p="$PROJECT_DIR$" t="IncludeFlat">
+      <e p=".git/info/exclude" t="IncludeRecursive" />
       <e p="ParserWebCore" t="IncludeRecursive">
         <e p="BuilderApp" t="Include">
           <e p="Arguments.cs" t="Include" />
@@ -32,6 +39,7 @@
           <e p="ParserAgroTomsk.cs" t="Include" />
           <e p="ParserAgrokomplex.cs" t="Include" />
           <e p="ParserKzGroup.cs" t="Include" />
+          <e p="ParserMaxi.cs" t="Include" />
           <e p="ParserMzVoron.cs" t="Include" />
           <e p="ParserSetOnline.cs" t="Include" />
           <e p="ParserSibintek.cs" t="Include" />
@@ -47,6 +55,7 @@
           <e p="TenderAgroTomsk.cs" t="Include" />
           <e p="TenderAgrokomplex.cs" t="Include" />
           <e p="TenderKzGroup.cs" t="Include" />
+          <e p="TenderMaxi.cs" t="Include" />
           <e p="TenderMzVoron.cs" t="Include" />
           <e p="TenderSetOnline.cs" t="Include" />
           <e p="TenderSibintek.cs" t="Include" />
@@ -56,6 +65,7 @@
           <e p="TypeAgroTomsk.cs" t="Include" />
           <e p="TypeAgrokomplex.cs" t="Include" />
           <e p="TypeKzGroup.cs" t="Include" />
+          <e p="TypeMaxi.cs" t="Include" />
           <e p="TypeMzVoron.cs" t="Include" />
           <e p="TypeSetOnline.cs" t="Include" />
           <e p="TypeSibIntek.cs" t="Include" />

@@ -28,6 +28,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Mzvoron:
                     _parser = new ParserMzVoron();
                     break;
+                case Arguments.Maxi:
+                    _parser = new ParserMaxi();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }
@@ -43,7 +46,7 @@ namespace ParserWebCore.ParserExecutor
             }
             catch (Exception e)
             {
-                Logger.Log.Logger("Exeption in parsing()", e);
+                Logger.Log.Logger("Exception in parsing()", e);
             }
         }
     }

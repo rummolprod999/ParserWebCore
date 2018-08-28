@@ -15,7 +15,7 @@ namespace ParserWebCore.Parser
     public class ParserMzVoron : ParserAbstract, IParser
     {
         private const int Count = 10;
-        private TimeSpan _timeoutB = TimeSpan.FromSeconds(120);
+        private TimeSpan _timeoutB = TimeSpan.FromSeconds(30);
         private const string Url = "http://mx3.keysystems.ru/mzvoron/GzwSP/NoticesGrid";
         private readonly ChromeDriver _driver = CreatorChromeDriver.GetChromeDriver();
         private List<TypeMzVoron> _tendersList = new List<TypeMzVoron>();
@@ -70,7 +70,7 @@ namespace ParserWebCore.Parser
                 Thread.Sleep(5000);
                 wait.Until(dr =>
                     dr.FindElement(By.XPath(
-                        "//div[@class = 'grid_content']/div[contains(@class, 'gridview_item')][10]/table/tbody")));
+                        "//div[@class = 'grid_content']/div[contains(@class, 'gridview_item')][1]/table/tbody")));
                 ParsingList();
             }
         }
@@ -107,7 +107,7 @@ namespace ParserWebCore.Parser
 
             for (var i = 1; i <= 10; i++)
             {
-                var dd = 4;
+                var dd = 2;
                 while (true)
                 {
                     try

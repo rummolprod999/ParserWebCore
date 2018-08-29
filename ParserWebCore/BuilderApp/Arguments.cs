@@ -8,6 +8,11 @@
         Sibintek,
         Setonline,
         Mzvoron,
-        Maxi
+        Maxi,
+        Tver,
+        Murman,
+        Kalug,
+        Smol,
+        Samar
     }
 }

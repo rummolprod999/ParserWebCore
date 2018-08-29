@@ -38,6 +38,8 @@
           <e p="ParserAbstract.cs" t="Include" />
           <e p="ParserAgroTomsk.cs" t="Include" />
           <e p="ParserAgrokomplex.cs" t="Include" />
+          <e p="ParserDecoratorGzwSP.cs" t="Include" />
+          <e p="ParserGzwSP.cs" t="Include" />
           <e p="ParserKzGroup.cs" t="Include" />
           <e p="ParserMaxi.cs" t="Include" />
           <e p="ParserMzVoron.cs" t="Include" />
@@ -54,6 +56,7 @@
           <e p="TenderAbstract.cs" t="Include" />
           <e p="TenderAgroTomsk.cs" t="Include" />
           <e p="TenderAgrokomplex.cs" t="Include" />
+          <e p="TenderGzwSP.cs" t="Include" />
           <e p="TenderKzGroup.cs" t="Include" />
           <e p="TenderMaxi.cs" t="Include" />
           <e p="TenderMzVoron.cs" t="Include" />

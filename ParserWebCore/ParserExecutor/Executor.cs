@@ -31,6 +31,13 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Maxi:
                     _parser = new ParserMaxi();
                     break;
+                case Arguments.Tver:
+                case Arguments.Murman:
+                case Arguments.Kalug:
+                case Arguments.Smol:
+                case Arguments.Samar:
+                    _parser = new ParserDecoratorGzwSp(arg);
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

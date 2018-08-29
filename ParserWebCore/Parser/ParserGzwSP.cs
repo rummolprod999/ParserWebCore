@@ -156,8 +156,14 @@ namespace ParserWebCore.Parser
             //_driver.SwitchTo().DefaultContent();
             var purName =
                 t.FindElementWithoutException(By.XPath(".//span[. = 'Объект закупки']/following-sibling::span"))?.Text
-                    .Trim() ??
-                throw new Exception("Can not find purName ");
+                    .Trim() ?? "";
+            if (string.IsNullOrEmpty(purName))
+            {
+                purName =
+                    t.FindElementWithoutException(By.XPath(".//span[. = 'Объект исследования']/following-sibling::span"))?.Text
+                        .Trim() ??
+                    throw new Exception("Can not find purName ");
+            }
             var href = t.FindElementWithoutException(By.XPath(".//span[@class = 'regnumber']/a"))?.GetAttribute("href")
                            .Trim() ??
                        throw new Exception("Can not find href");

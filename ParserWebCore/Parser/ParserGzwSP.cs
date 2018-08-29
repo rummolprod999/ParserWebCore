@@ -64,7 +64,7 @@ namespace ParserWebCore.Parser
             wait.Until(dr =>
                 dr.FindElement(By.XPath(
                     "//div[@class = 'grid_content']/div[contains(@class, 'gridview_item')][10]/table/tbody")));
-            ParsingList();
+            ParsingList(1);
             for (var i = 0; i < Count; i++)
             {
                 try
@@ -84,7 +84,7 @@ namespace ParserWebCore.Parser
                 wait.Until(dr =>
                     dr.FindElement(By.XPath(
                         "//div[@class = 'grid_content']/div[contains(@class, 'gridview_item')][1]/table/tbody")));
-                ParsingList();
+                ParsingList(i);
             }
         }
 
@@ -99,7 +99,7 @@ namespace ParserWebCore.Parser
             }
         }
 
-        private void ParsingList()
+        private void ParsingList(int pageNum)
         {
             var wait = new WebDriverWait(_driver, _timeoutB);
             /*var tenders =
@@ -136,6 +136,12 @@ namespace ParserWebCore.Parser
                     }
                     catch (Exception e)
                     {
+                        if (e.Message.Contains("Timed out after"))
+                        {
+                            Log.Logger($"find the last tender number {i} on page {pageNum+1}");
+                            return;
+                        }
+
                         dd--;
                         if (dd != 0) continue;
                         Log.Logger(e);
@@ -164,19 +170,33 @@ namespace ParserWebCore.Parser
             var datePub = datePubT.ParseDateUn("dd.MM.yyyy");
             if (datePub == DateTime.MinValue)
             {
+                datePub = datePubT.ParseDateUn("dd.MM.yyyy HH:mm");
+            }
+
+            if (datePub == DateTime.MinValue)
+            {
                 Log.Logger("Empty datePub");
                 return;
             }
 
-            var dateEndT =
+            var dateEndTT =
                 t.FindElementWithoutException(By.XPath(".//span[. = 'Период подачи заявок']/following-sibling::span"))
                     ?.Text.Trim() ??
                 throw new Exception("Can not find dateEndT");
-            dateEndT = dateEndT.GetDateFromRegex(@"(\d{2}\.\d{2}\.\d{4}\s*\d{2}:\d{2})$").DelDoubleWhitespace();
+            var dateEndT = dateEndTT.GetDateFromRegex(@"(\d{2}\.\d{2}\.\d{4}\s*\d{2}:\d{2})$").DelDoubleWhitespace();
+            if (string.IsNullOrEmpty(dateEndT))
+            {
+                dateEndT = dateEndTT.GetDateFromRegex(@"(\d{2}\.\d{2}\.\d{4})$").DelDoubleWhitespace();
+            }
             var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm");
             if (dateEnd == DateTime.MinValue)
             {
-                Log.Logger("Empty dateEnd");
+                dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy");
+            }
+
+            if (dateEnd == DateTime.MinValue)
+            {
+                Log.Logger("Empty dateEnd", href);
             }
 
             var status =

@@ -13,9 +13,9 @@ using ParserWebCore.TenderType;
 
 namespace ParserWebCore.Parser
 {
-    public class ParserGzwSp : ParserAbstract, IParser
+    public class ParserGzwSpSamar : ParserAbstract, IParser
     {
-        public ParserGzwSp(string url, string baseurl, string etpName, string etpUrl, int typeFz, Arguments arg)
+        public ParserGzwSpSamar(string url, string baseurl, string etpName, string etpUrl, int typeFz, Arguments arg)
         {
             _url = url;
             _baseUrl = baseurl;
@@ -33,7 +33,7 @@ namespace ParserWebCore.Parser
         private string _etpUrl;
         private int _typeFz;
         private Arguments _arg;
-        private readonly ChromeDriver _driver = CreatorChromeDriver.GetChromeDriver();
+        private readonly ChromeDriver _driver = CreatorChromeDriverNoSSL.GetChromeDriver();
         private List<TypeMzVoron> _tendersList = new List<TypeMzVoron>();
 
         public void Parsing()
@@ -131,9 +131,9 @@ namespace ParserWebCore.Parser
                         _driver.SwitchTo().DefaultContent();
                         wait.Until(dr =>
                             dr.FindElement(By.XPath(
-                                $"//div[@class = 'grid_content']/div[contains(@class, 'gridview_item')][{i}]/table/tbody")));
+                                $"//div[@class = 'grid_content']//div[contains(@class, 'gridview_item')][{i}]/table/tbody")));
                         var t = _driver.FindElementByXPath(
-                            $"//div[@class = 'grid_content']/div[contains(@class, 'gridview_item')][{i}]/table/tbody");
+                            $"//div[@class = 'grid_content']//div[contains(@class, 'gridview_item')][{i}]/table/tbody");
                         ParsingPage(t);
                         break;
                     }

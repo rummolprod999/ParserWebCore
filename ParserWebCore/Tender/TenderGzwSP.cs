@@ -16,13 +16,16 @@ namespace ParserWebCore.Tender
     {
         private readonly TypeMzVoron _tn;
         private string _baseUrl;
+        private Arguments _arg;
 
-        public TenderGzwSp(string etpName, string etpUrl, int typeFz, TypeMzVoron tn, string baseurl) : base(etpName,
-            etpUrl,
-            typeFz)
+        public TenderGzwSp(string etpName, string etpUrl, int typeFz, TypeMzVoron tn, string baseurl, Arguments arg) :
+            base(etpName,
+                etpUrl,
+                typeFz)
         {
             _tn = tn;
             _baseUrl = baseurl;
+            _arg = arg;
         }
 
         public void ParsingTender()
@@ -141,11 +144,34 @@ namespace ParserWebCore.Tender
                                       "//td[. = 'Способ закупки']/following-sibling::td")
                                   ?.Value ?? "").Trim();
                 GetPlacingWay(connect, out var idPlacingWay);
+                var idRegion = 0;
+                switch (_arg)
+                {
+                    case Arguments.Tver:
+                        idRegion = GetRegionFromString("твер", connect);
+                        break;
+                    case Arguments.Murman:
+                        idRegion = GetRegionFromString("мурман", connect);
+                        break;
+                    case Arguments.Kalug:
+                        idRegion = GetRegionFromString("калужск", connect);
+                        break;
+                    case Arguments.Smol:
+                        idRegion = GetRegionFromString("смолен", connect);
+                        break;
+                    case Arguments.Samar:
+                        idRegion = GetRegionFromString("самар", connect);
+                        break;
+                    default:
+                        idRegion = 0;
+                        break;
+                }
+
                 var insertTender =
                     $"INSERT INTO {Builder.Prefix}tender SET id_region = @id_region, id_xml = @id_xml, purchase_number = @purchase_number, doc_publish_date = @doc_publish_date, href = @href, purchase_object_info = @purchase_object_info, type_fz = @type_fz, id_organizer = @id_organizer, id_placing_way = @id_placing_way, id_etp = @id_etp, end_date = @end_date, scoring_date = @scoring_date, bidding_date = @bidding_date, cancel = @cancel, date_version = @date_version, num_version = @num_version, notice_version = @notice_version, xml = @xml, print_form = @print_form";
                 var cmd9 = new MySqlCommand(insertTender, connect);
                 cmd9.Prepare();
-                cmd9.Parameters.AddWithValue("@id_region", 0);
+                cmd9.Parameters.AddWithValue("@id_region", idRegion);
                 cmd9.Parameters.AddWithValue("@id_xml", _tn.PurNum);
                 cmd9.Parameters.AddWithValue("@purchase_number", _tn.PurNum);
                 cmd9.Parameters.AddWithValue("@doc_publish_date", _tn.DatePub);

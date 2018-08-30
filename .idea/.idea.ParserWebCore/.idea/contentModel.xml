@@ -20,6 +20,7 @@
         </e>
         <e p="Creators" t="Include">
           <e p="CreatorChromeDriver.cs" t="Include" />
+          <e p="CreatorChromeDriverNoSSL.cs" t="Include" />
         </e>
         <e p="Extensions" t="Include">
           <e p="ChromeDriverExtensions.cs" t="Include" />
@@ -40,6 +41,7 @@
           <e p="ParserAgrokomplex.cs" t="Include" />
           <e p="ParserDecoratorGzwSP.cs" t="Include" />
           <e p="ParserGzwSP.cs" t="Include" />
+          <e p="ParserGzwSPSamar.cs" t="Include" />
           <e p="ParserKzGroup.cs" t="Include" />
           <e p="ParserMaxi.cs" t="Include" />
           <e p="ParserMzVoron.cs" t="Include" />

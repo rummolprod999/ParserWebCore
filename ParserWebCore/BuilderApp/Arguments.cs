@@ -13,6 +13,7 @@
         Murman,
         Kalug,
         Smol,
-        Samar
+        Samar,
+        Udmurt
     }
 }

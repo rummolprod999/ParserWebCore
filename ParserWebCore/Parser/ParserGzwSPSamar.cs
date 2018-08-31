@@ -66,7 +66,7 @@ namespace ParserWebCore.Parser
             Thread.Sleep(5000);
             wait.Until(dr =>
                 dr.FindElement(By.XPath(
-                    "//div[@class = 'grid_content']/div[contains(@class, 'gridview_item')][10]/table/tbody")));
+                    "//div[@class = 'grid_content']/div[contains(@class, 'gridview_item')][1]/table/tbody")));
             ParsingList(1);
             for (var i = 0; i < Count; i++)
             {

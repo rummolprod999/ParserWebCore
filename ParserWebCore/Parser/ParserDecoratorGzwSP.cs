@@ -46,6 +46,13 @@ namespace ParserWebCore.Parser
                         "Малые закупки Самарской области",
                         "https://webtorgi.samregion.ru/smallpurchases/GzwSP/NoticesGrid", 89, _arguments).Parsing();
                     break;
+                case Arguments.Udmurt:
+                    new ParserGzwSp("http://wt.mfur.ru/smallpurchases/GzwSP/NoticesGrid",
+                            "http://wt.mfur.ru",
+                            "Малые закупки Удмуртской Республики",
+                            "http://wt.mfur.ru/smallpurchases/GzwSP/NoticesGrid", 90, _arguments)
+                        .Parsing();
+                    break;
                 default: throw new ArgumentOutOfRangeException(nameof(_arguments), _arguments, null);
             }
         }

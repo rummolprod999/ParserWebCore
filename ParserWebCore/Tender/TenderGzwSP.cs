@@ -162,6 +162,9 @@ namespace ParserWebCore.Tender
                     case Arguments.Samar:
                         idRegion = GetRegionFromString("самар", connect);
                         break;
+                    case Arguments.Udmurt:
+                        idRegion = GetRegionFromString("удмурт", connect);
+                        break;
                     default:
                         idRegion = 0;
                         break;

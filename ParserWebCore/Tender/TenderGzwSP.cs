@@ -31,6 +31,7 @@ namespace ParserWebCore.Tender
         public void ParsingTender()
         {
             var dateUpd = DateTime.Now;
+            int idRegion;
             using (var connect = ConnectToDb.GetDbConnection())
             {
                 connect.Open();
@@ -144,7 +145,6 @@ namespace ParserWebCore.Tender
                                       "//td[. = 'Способ закупки']/following-sibling::td")
                                   ?.Value ?? "").Trim();
                 GetPlacingWay(connect, out var idPlacingWay);
-                var idRegion = 0;
                 switch (_arg)
                 {
                     case Arguments.Tver:

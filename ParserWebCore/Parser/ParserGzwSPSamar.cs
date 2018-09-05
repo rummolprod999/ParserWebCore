@@ -33,7 +33,7 @@ namespace ParserWebCore.Parser
         private string _etpUrl;
         private int _typeFz;
         private Arguments _arg;
-        private readonly ChromeDriver _driver = CreatorChromeDriverNoSSL.GetChromeDriver();
+        private readonly ChromeDriver _driver = CreatorChromeDriverNoSsl.GetChromeDriver();
         private List<TypeMzVoron> _tendersList = new List<TypeMzVoron>();
 
         public void Parsing()
@@ -188,14 +188,14 @@ namespace ParserWebCore.Parser
                 return;
             }
 
-            var dateEndTT =
+            var dateEndTt =
                 t.FindElementWithoutException(By.XPath(".//span[. = 'Период подачи заявок']/following-sibling::span"))
                     ?.Text.Trim() ??
                 throw new Exception("Can not find dateEndT");
-            var dateEndT = dateEndTT.GetDateFromRegex(@"(\d{2}\.\d{2}\.\d{4}\s*\d{2}:\d{2})$").DelDoubleWhitespace();
+            var dateEndT = dateEndTt.GetDateFromRegex(@"(\d{2}\.\d{2}\.\d{4}\s*\d{2}:\d{2})$").DelDoubleWhitespace();
             if (string.IsNullOrEmpty(dateEndT))
             {
-                dateEndT = dateEndTT.GetDateFromRegex(@"(\d{2}\.\d{2}\.\d{4})$").DelDoubleWhitespace();
+                dateEndT = dateEndTt.GetDateFromRegex(@"(\d{2}\.\d{2}\.\d{4})$").DelDoubleWhitespace();
             }
             var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm");
             if (dateEnd == DateTime.MinValue)

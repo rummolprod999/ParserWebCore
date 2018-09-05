@@ -4,10 +4,10 @@ using ParserWebCore.Logger;
 
 namespace ParserWebCore.Creators
 {
-    public class CreatorChromeDriverNoSSL
+    public static class CreatorChromeDriverNoSsl
     {
         private static ChromeDriver _driver;
-        static CreatorChromeDriverNoSSL()
+        static CreatorChromeDriverNoSsl()
         {
             try
             {

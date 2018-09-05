@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using HtmlAgilityPack;
 using ParserWebCore.Extensions;
 using ParserWebCore.Logger;

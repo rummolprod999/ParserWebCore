@@ -113,9 +113,17 @@ namespace ParserWebCore.Parser
                     try
                     {
                         _driver.SwitchTo().DefaultContent();
-                        wait.Until(dr =>
-                            dr.FindElement(By.XPath(
-                                $"//div[@class = 'grid_content']/div[contains(@class, 'gridview_item')][{i}]/table/tbody")));
+                        try
+                        {
+                            wait.Until(dr =>
+                                dr.FindElement(By.XPath(
+                                    $"//div[@class = 'grid_content']/div[contains(@class, 'gridview_item')][{i}]/table/tbody")));
+                        }
+                        catch (Exception)
+                        {
+                            goto Finish;
+                        }
+
                         var t = _driver.FindElementByXPath(
                             $"//div[@class = 'grid_content']/div[contains(@class, 'gridview_item')][{i}]/table/tbody");
                         ParsingPage(t);
@@ -130,6 +138,9 @@ namespace ParserWebCore.Parser
                     }
                 }
             }
+
+            Finish:
+            Log.Logger("Last element on page");
         }
 
         private void ParsingPage(IWebElement t)

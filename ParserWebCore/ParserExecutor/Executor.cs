@@ -39,6 +39,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Udmurt:
                     _parser = new ParserDecoratorGzwSp(arg);
                     break;
+                case Arguments.Segezha:
+                    _parser = new ParserSegezha();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

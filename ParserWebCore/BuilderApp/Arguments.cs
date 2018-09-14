@@ -14,6 +14,7 @@
         Kalug,
         Smol,
         Samar,
-        Udmurt
+        Udmurt,
+        Segezha
     }
 }

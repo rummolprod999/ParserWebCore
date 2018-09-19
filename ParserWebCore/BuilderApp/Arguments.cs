@@ -15,6 +15,7 @@
         Smol,
         Samar,
         Udmurt,
-        Segezha
+        Segezha,
+        Akashevo
     }
 }

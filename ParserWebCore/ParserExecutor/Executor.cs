@@ -42,6 +42,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Segezha:
                     _parser = new ParserSegezha();
                     break;
+                case Arguments.Akashevo:
+                    _parser = new ParserAkashevo();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

@@ -37,6 +37,7 @@
           <e p="ParserAbstract.cs" t="Include" />
           <e p="ParserAgroTomsk.cs" t="Include" />
           <e p="ParserAgrokomplex.cs" t="Include" />
+          <e p="ParserAkashevo.cs" t="Include" />
           <e p="ParserDecoratorGzwSP.cs" t="Include" />
           <e p="ParserGzwSP.cs" t="Include" />
           <e p="ParserGzwSPSamar.cs" t="Include" />
@@ -57,6 +58,7 @@
           <e p="TenderAbstract.cs" t="Include" />
           <e p="TenderAgroTomsk.cs" t="Include" />
           <e p="TenderAgrokomplex.cs" t="Include" />
+          <e p="TenderAkashevo.cs" t="Include" />
           <e p="TenderGzwSP.cs" t="Include" />
           <e p="TenderKzGroup.cs" t="Include" />
           <e p="TenderMaxi.cs" t="Include" />
@@ -78,7 +80,7 @@
         </e>
         <e p="bin" t="ExcludeRecursive" />
         <e p="obj" t="ExcludeRecursive">
-          <e p="Debug" t="Include">
+          <e p="Release" t="Include">
             <e p="netcoreapp2.1" t="Include">
               <e p="ParserWebCore.AssemblyInfo.cs" t="Include" />
             </e>

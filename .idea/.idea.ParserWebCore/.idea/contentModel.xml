@@ -47,6 +47,7 @@
           <e p="ParserSegezha.cs" t="Include" />
           <e p="ParserSetOnline.cs" t="Include" />
           <e p="ParserSibintek.cs" t="Include" />
+          <e p="ParserSitno.cs" t="Include" />
         </e>
         <e p="ParserExecutor" t="Include">
           <e p="Executor.cs" t="Include" />

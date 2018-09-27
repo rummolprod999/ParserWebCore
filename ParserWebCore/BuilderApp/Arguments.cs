@@ -16,6 +16,7 @@
         Samar,
         Udmurt,
         Segezha,
-        Akashevo
+        Akashevo,
+        Sitno
     }
 }

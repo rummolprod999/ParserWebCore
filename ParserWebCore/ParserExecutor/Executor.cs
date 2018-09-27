@@ -45,6 +45,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Akashevo:
                     _parser = new ParserAkashevo();
                     break;
+                case Arguments.Sitno:
+                    _parser = new ParserSitno();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

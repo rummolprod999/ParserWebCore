@@ -71,7 +71,7 @@ namespace ParserWebCore.Parser
             }
 
             href = $"http://www.zao-agrokomplex.ru/purchase/{href}";
-            var purNum = href.GetDateFromRegex(@"LOT_ID=(\d+)");
+            var purNum = href.GetDataFromRegex(@"LOT_ID=(\d+)");
             if (string.IsNullOrEmpty(purNum))
             {
                 Log.Logger("Empty purNum", href);

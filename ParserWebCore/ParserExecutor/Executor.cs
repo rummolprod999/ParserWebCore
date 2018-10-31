@@ -48,6 +48,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Sitno:
                     _parser = new ParserSitno();
                     break;
+                case Arguments.Naftan:
+                    _parser = new ParserNaftan();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

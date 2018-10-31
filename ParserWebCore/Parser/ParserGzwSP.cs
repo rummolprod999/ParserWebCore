@@ -192,10 +192,10 @@ namespace ParserWebCore.Parser
                 t.FindElementWithoutException(By.XPath(".//span[. = 'Период подачи заявок']/following-sibling::span"))
                     ?.Text.Trim() ??
                 throw new Exception("Can not find dateEndT");
-            var dateEndT = dateEndTt.GetDateFromRegex(@"(\d{2}\.\d{2}\.\d{4}\s*\d{2}:\d{2})$").DelDoubleWhitespace();
+            var dateEndT = dateEndTt.GetDataFromRegex(@"(\d{2}\.\d{2}\.\d{4}\s*\d{2}:\d{2})$").DelDoubleWhitespace();
             if (string.IsNullOrEmpty(dateEndT))
             {
-                dateEndT = dateEndTt.GetDateFromRegex(@"(\d{2}\.\d{2}\.\d{4})$").DelDoubleWhitespace();
+                dateEndT = dateEndTt.GetDataFromRegex(@"(\d{2}\.\d{2}\.\d{4})$").DelDoubleWhitespace();
             }
             var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm");
             if (dateEnd == DateTime.MinValue)

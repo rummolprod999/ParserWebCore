@@ -71,7 +71,7 @@ namespace ParserWebCore.Parser
             }
 
             href = $"http://kzgroup.ru{href}";
-            var purNum = href.GetDateFromRegex(@"/(\d+)/$");
+            var purNum = href.GetDataFromRegex(@"/(\d+)/$");
             if (string.IsNullOrEmpty(purNum))
             {
                 Log.Logger("Empty purNum", href);
@@ -85,7 +85,7 @@ namespace ParserWebCore.Parser
             var datePubT =
                 (n.SelectSingleNode("./td[5]")
                      ?.InnerText ?? "").Trim();
-            datePubT = datePubT.GetDateFromRegex(@"(\d{2}\.\d{2}\.\d{4})");
+            datePubT = datePubT.GetDataFromRegex(@"(\d{2}\.\d{2}\.\d{4})");
             var datePub = datePubT.ParseDateUn("dd.MM.yyyy");
             if (datePub == DateTime.MinValue)
             {
@@ -96,8 +96,8 @@ namespace ParserWebCore.Parser
             var dateEndT =
                 (n.SelectSingleNode("./td[7]")
                      ?.InnerText ?? "").Trim();
-            var dateEndT1 = dateEndT.GetDateFromRegex(@"(\d{2}\.\d{2}\.\d{4})");
-            var timeEndT = dateEndT.GetDateFromRegex(@"(\d{2}:\d{2})");
+            var dateEndT1 = dateEndT.GetDataFromRegex(@"(\d{2}\.\d{2}\.\d{4})");
+            var timeEndT = dateEndT.GetDataFromRegex(@"(\d{2}:\d{2})");
             dateEndT = $"{dateEndT1} {timeEndT}".Trim();
             var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm");
             if (dateEnd == DateTime.MinValue)

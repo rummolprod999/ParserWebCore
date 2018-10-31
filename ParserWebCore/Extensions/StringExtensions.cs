@@ -34,7 +34,7 @@ namespace ParserWebCore.Extensions
             return d;
         }
 
-        public static string GetDateFromRegex(this string s, string r)
+        public static string GetDataFromRegex(this string s, string r)
         {
             var ret = "";
             try
@@ -52,6 +52,25 @@ namespace ParserWebCore.Extensions
             }
 
             return ret;
+        }
+
+        public static (string, string) GetTwoDataFromRegex(this string s, string r)
+        {
+            try
+            {
+                var regex = new Regex(r, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                var matches = regex.Matches(s);
+                if (matches.Count > 0)
+                {
+                    return (matches[0].Groups[1].Value.Trim(), matches[0].Groups[2].Value.Trim());
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Logger(e, r);
+            }
+
+            return ("", "");
         }
 
         public static string GetDateWithMonth(this string s)

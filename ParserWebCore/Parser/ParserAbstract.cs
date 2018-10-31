@@ -31,7 +31,7 @@ namespace ParserWebCore.Parser
 
         protected string GetPriceFromString(string nmcK)
         {
-            return Regex.Replace(nmcK.GetDateFromRegex(@"^([\d \.]+)\s"), @"\s+", "");
+            return Regex.Replace(nmcK.GetDataFromRegex(@"^([\d \.]+)\s"), @"\s+", "");
         }
     }
 }

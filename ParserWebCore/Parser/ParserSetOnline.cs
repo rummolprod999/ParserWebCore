@@ -119,7 +119,7 @@ namespace ParserWebCore.Parser
             var pwName = t.FindElementWithoutException(By.XPath("./td[2]/div"))?.Text.Trim() ?? "";
             var nmcKt = t.FindElementWithoutException(By.XPath("./td[5]/div"))?.Text.Trim() ?? "";
             var nmcK = GetPriceFromString(nmcKt);
-            var currency = nmcKt.GetDateFromRegex(@"^[\d \.]+\s([\. \p{IsCyrillic}]+)\s");
+            var currency = nmcKt.GetDataFromRegex(@"^[\d \.]+\s([\. \p{IsCyrillic}]+)\s");
             var tt = new TypeSetOnline
             {
                 OrgName = orgName,

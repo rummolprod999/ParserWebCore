@@ -17,6 +17,7 @@
         Udmurt,
         Segezha,
         Akashevo,
-        Sitno
+        Sitno,
+        Naftan
     }
 }

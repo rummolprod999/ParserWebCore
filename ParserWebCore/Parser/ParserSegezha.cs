@@ -71,7 +71,7 @@ namespace ParserWebCore.Parser
             }
 
             href = $"https://segezha-group.com{href}";
-            var purNum = href.GetDateFromRegex(@"purchasing/(\d+)/");
+            var purNum = href.GetDataFromRegex(@"purchasing/(\d+)/");
             if (string.IsNullOrEmpty(purNum))
             {
                 Log.Logger("Empty purNum", href);

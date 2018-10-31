@@ -227,7 +227,7 @@ namespace ParserWebCore.Tender
                                 .SelectSingleNode(
                                     "//li[contains(b, 'Сведения о начальной цене договора (цене лота)')]/following-sibling::ul/li[1]")
                                 ?.Value ?? "").Trim();
-                nmck = nmck.GetDateFromRegex(@"([\d ,]+)\s");
+                nmck = nmck.GetDataFromRegex(@"([\d ,]+)\s");
                 nmck = nmck.Replace("&nbsp;", "").Replace(",", ".");
                 nmck = Regex.Replace(nmck, @"\s+", "");
                 var lotNum = 1;

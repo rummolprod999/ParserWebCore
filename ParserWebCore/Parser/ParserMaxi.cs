@@ -68,7 +68,7 @@ namespace ParserWebCore.Parser
             }
 
             href = $"http://maxi-cre.ru{href}";
-            var purNum = href.GetDateFromRegex(@"/(\d+)/$");
+            var purNum = href.GetDataFromRegex(@"/(\d+)/$");
             if (string.IsNullOrEmpty(purNum))
             {
                 Log.Logger("Empty purNum", href);
@@ -79,7 +79,7 @@ namespace ParserWebCore.Parser
                               $"Can not find purName in {href}");
             var dates = n.SelectSingleNode("./td[2]")?.InnerText?.DelDoubleWhitespace().Trim() ?? throw new Exception(
                             $"Can not find dates in {href}");
-            var datePubT = dates.GetDateFromRegex(@"с\s*(\d{2}\.\d{2}\.\d{4})");
+            var datePubT = dates.GetDataFromRegex(@"с\s*(\d{2}\.\d{2}\.\d{4})");
             var datePub = datePubT.ParseDateUn("dd.MM.yyyy");
             if (datePub == DateTime.MinValue)
             {
@@ -87,7 +87,7 @@ namespace ParserWebCore.Parser
                 return;
             }
 
-            var dateEndT = dates.GetDateFromRegex(@"по\s*(\d{2}\.\d{2}\.\d{4})");
+            var dateEndT = dates.GetDataFromRegex(@"по\s*(\d{2}\.\d{2}\.\d{4})");
             var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy");
             if (dateEnd == DateTime.MinValue)
             {

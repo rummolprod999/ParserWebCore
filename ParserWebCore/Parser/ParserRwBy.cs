@@ -79,7 +79,7 @@ namespace ParserWebCore.Parser
                 return;
             }
 
-            var tn = new TenderRwBy("Белорусская железная дорога", "https://www.rw.by", 127,
+            var tn = new TenderRwBy("Белорусская железная дорога", "https://www.rw.by", 128,
                 new TypeRwBy {PurName = purName, PurNum = purNum, DatePub = datePub, Href = href});
             ParserTender(tn);
         }

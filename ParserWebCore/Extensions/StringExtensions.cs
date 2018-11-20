@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Globalization;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Web;
 using ParserWebCore.Logger;
 
 namespace ParserWebCore.Extensions
@@ -101,6 +103,26 @@ namespace ParserWebCore.Extensions
             var resString = Regex.Replace(s, @"\s+", "");
             resString = resString.Trim();
             return resString;
+        }
+
+        public static string ToMd5(this string s)
+        {
+            using (var md = MD5.Create())
+            {
+                var data = md.ComputeHash(Encoding.UTF8.GetBytes(s));
+                var sBuilder = new StringBuilder();
+                foreach (var v in data)
+                {
+                    sBuilder.Append(v.ToString("x2"));
+                }
+
+                return sBuilder.ToString();
+            }
+        }
+
+        public static string ReplaceHtmlEntyty(this string s)
+        {
+            return HttpUtility.HtmlDecode(s);
         }
     }
 }

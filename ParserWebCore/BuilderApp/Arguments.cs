@@ -18,6 +18,7 @@
         Segezha,
         Akashevo,
         Sitno,
-        Naftan
+        Naftan,
+        Rwby
     }
 }

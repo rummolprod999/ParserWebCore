@@ -45,6 +45,7 @@
           <e p="ParserMaxi.cs" t="Include" />
           <e p="ParserMzVoron.cs" t="Include" />
           <e p="ParserNaftan.cs" t="Include" />
+          <e p="ParserRwBy.cs" t="Include" />
           <e p="ParserSegezha.cs" t="Include" />
           <e p="ParserSetOnline.cs" t="Include" />
           <e p="ParserSibintek.cs" t="Include" />
@@ -66,6 +67,7 @@
           <e p="TenderMaxi.cs" t="Include" />
           <e p="TenderMzVoron.cs" t="Include" />
           <e p="TenderNaftan.cs" t="Include" />
+          <e p="TenderRwBy.cs" t="Include" />
           <e p="TenderSegezha.cs" t="Include" />
           <e p="TenderSetOnline.cs" t="Include" />
           <e p="TenderSibintek.cs" t="Include" />
@@ -78,6 +80,7 @@
           <e p="TypeMaxi.cs" t="Include" />
           <e p="TypeMzVoron.cs" t="Include" />
           <e p="TypeNaftan.cs" t="Include" />
+          <e p="TypeRwBy.cs" t="Include" />
           <e p="TypeSegezha.cs" t="Include" />
           <e p="TypeSetOnline.cs" t="Include" />
           <e p="TypeSibIntek.cs" t="Include" />

@@ -51,6 +51,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Naftan:
                     _parser = new ParserNaftan();
                     break;
+                case Arguments.Rwby:
+                    _parser = new ParserRwBy();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

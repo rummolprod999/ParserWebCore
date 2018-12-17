@@ -21,7 +21,7 @@ namespace ParserWebCore.Parser
         {
             for (var i = 1; i <= Count; i++)
             {
-                var urlpage = $"http://www.zao-agrokomplex.ru/purchase/?PAGEN_1={i}";
+                var urlpage = $"http://tender.zao-agrokomplex.ru/purchase/?PAGEN_1={i}";
                 try
                 {
                     ParsingPage(urlpage);
@@ -70,7 +70,7 @@ namespace ParserWebCore.Parser
                 return;
             }
 
-            href = $"http://www.zao-agrokomplex.ru/purchase/{href}";
+            href = $"http://tender.zao-agrokomplex.ru/purchase/{href}";
             var purNum = href.GetDataFromRegex(@"LOT_ID=(\d+)");
             if (string.IsNullOrEmpty(purNum))
             {

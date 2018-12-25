@@ -54,6 +54,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Rwby:
                     _parser = new ParserRwBy();
                     break;
+                case Arguments.Tekkom:
+                    _parser = new ParserTekKom();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

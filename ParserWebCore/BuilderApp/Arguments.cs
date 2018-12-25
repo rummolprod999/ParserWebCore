@@ -19,6 +19,7 @@
         Akashevo,
         Sitno,
         Naftan,
-        Rwby
+        Rwby,
+        Tekkom
     }
 }

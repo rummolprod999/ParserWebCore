@@ -4,8 +4,8 @@
     <e p="$APPLICATION_CONFIG_DIR$/consoles/db" t="IncludeRecursive" />
     <e p="$APPLICATION_CONFIG_DIR$/extensions" t="IncludeRecursive" />
     <e p="$APPLICATION_CONFIG_DIR$/scratches" t="IncludeRecursive" />
-    <e p="$USER_HOME$/.Rider2018.2/system/extResources" t="IncludeRecursive" />
-    <e p="$USER_HOME$/.Rider2018.2/system/resharper-host/local/Transient/ReSharperHost/v182/SolutionCaches/_ParserWebCore.1370944712.00" t="ExcludeRecursive" />
+    <e p="$USER_HOME$/.Rider2018.3/system/extResources" t="IncludeRecursive" />
+    <e p="$USER_HOME$/.Rider2018.3/system/resharper-host/local/Transient/ReSharperHost/v183/SolutionCaches/_ParserWebCore.1370944712.00" t="ExcludeRecursive" />
     <e p="$PROJECT_DIR$" t="IncludeFlat">
       <e p=".git/info/exclude" t="IncludeRecursive" />
       <e p="ParserWebCore" t="IncludeRecursive">
@@ -50,12 +50,16 @@
           <e p="ParserSetOnline.cs" t="Include" />
           <e p="ParserSibintek.cs" t="Include" />
           <e p="ParserSitno.cs" t="Include" />
+          <e p="ParserTekKom.cs" t="Include" />
         </e>
         <e p="ParserExecutor" t="Include">
           <e p="Executor.cs" t="Include" />
         </e>
         <e p="ParserWebCore.csproj" t="IncludeRecursive" />
         <e p="Program.cs" t="Include" />
+        <e p="SharedLibraries" t="Include">
+          <e p="SharedTekTorg.cs" t="Include" />
+        </e>
         <e p="Tender" t="Include">
           <e p="ITender.cs" t="Include" />
           <e p="TenderAbstract.cs" t="Include" />
@@ -71,6 +75,7 @@
           <e p="TenderSegezha.cs" t="Include" />
           <e p="TenderSetOnline.cs" t="Include" />
           <e p="TenderSibintek.cs" t="Include" />
+          <e p="TenderTekKom.cs" t="Include" />
         </e>
         <e p="TenderType" t="Include">
           <e p="AbstractTypeT.cs" t="Include" />
@@ -84,6 +89,7 @@
           <e p="TypeSegezha.cs" t="Include" />
           <e p="TypeSetOnline.cs" t="Include" />
           <e p="TypeSibIntek.cs" t="Include" />
+          <e p="TypeTekKom.cs" t="Include" />
         </e>
         <e p="bin" t="ExcludeRecursive" />
         <e p="obj" t="ExcludeRecursive">

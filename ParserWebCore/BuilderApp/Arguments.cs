@@ -20,6 +20,7 @@
         Sitno,
         Naftan,
         Rwby,
-        Tekkom
+        Tekkom,
+        Tekmarket
     }
 }

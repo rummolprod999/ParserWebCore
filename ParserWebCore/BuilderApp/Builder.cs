@@ -23,7 +23,9 @@ namespace ParserWebCore.BuilderApp
         public static string Prefix { get; private set; }
         public static Arguments Arg { get; private set; }
         private static Builder _b;
-        public const string ReqArguments = "agrocomplex, kzgroup, agrotomsk, sibintek, setonline, mzvoron, maxi, tver, murman, kalug, smol, samar, udmurt, segezha, akashevo, sitno, naftan, rwby, tekkom";
+
+        public const string ReqArguments =
+            "agrocomplex, kzgroup, agrotomsk, sibintek, setonline, mzvoron, maxi, tver, murman, kalug, smol, samar, udmurt, segezha, akashevo, sitno, naftan, rwby, tekkom, tekmarket";
 
         private static readonly string Path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName()
             .CodeBase.Substring(5));
@@ -96,6 +98,9 @@ namespace ParserWebCore.BuilderApp
                 case "tekkom":
                     Arg = Arguments.Tekkom;
                     break;
+                case "tekmarket":
+                    Arg = Arguments.Tekmarket;
+                    break;
                 default:
                     throw new Exception($"Неправильно указан аргумент {s}, используйте {ReqArguments}");
             }
@@ -127,7 +132,10 @@ namespace ParserWebCore.BuilderApp
                 LogDir = $"{Path}{System.IO.Path.DirectorySeparatorChar}{logDirTmp}";
                 TempDir = $"{Path}{System.IO.Path.DirectorySeparatorChar}{tempDirTmp}";
                 FileLog = $"{LogDir}{System.IO.Path.DirectorySeparatorChar}{Arg}_{DateTime.Now:dd_MM_yyyy}.log";
-                ConnectString = $"Server={Server};port={_port};Database={Database};User Id={UserDb};password={PassDb};CharSet=utf8;Convert Zero Datetime=True;default command timeout=3600;Connection Timeout=3600;SslMode=none";ConnectString = $"Server={Server};port={_port};Database={Database};User Id={UserDb};password={PassDb};CharSet=utf8;Convert Zero Datetime=True;default command timeout=3600;Connection Timeout=3600;SslMode=none";
+                ConnectString =
+                    $"Server={Server};port={_port};Database={Database};User Id={UserDb};password={PassDb};CharSet=utf8;Convert Zero Datetime=True;default command timeout=3600;Connection Timeout=3600;SslMode=none";
+                ConnectString =
+                    $"Server={Server};port={_port};Database={Database};User Id={UserDb};password={PassDb};CharSet=utf8;Convert Zero Datetime=True;default command timeout=3600;Connection Timeout=3600;SslMode=none";
             }
         }
 

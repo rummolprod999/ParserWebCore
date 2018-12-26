@@ -57,6 +57,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Tekkom:
                     _parser = new ParserTekKom();
                     break;
+                case Arguments.Tekmarket:
+                    _parser = new ParserTekMarket();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

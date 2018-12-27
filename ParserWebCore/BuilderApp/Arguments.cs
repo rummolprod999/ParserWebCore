@@ -21,6 +21,7 @@
         Naftan,
         Rwby,
         Tekkom,
-        Tekmarket
+        Tekmarket,
+        Tekmos
     }
 }

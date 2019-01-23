@@ -22,6 +22,7 @@
         Rwby,
         Tekkom,
         Tekmarket,
-        Tekmos
+        Tekmos,
+        Mlconf
     }
 }

@@ -28,6 +28,12 @@
         <e p="Logger" t="Include">
           <e p="Log.cs" t="Include" />
         </e>
+        <e p="MlConformity" t="Include">
+          <e p="CheckerPrediction.cs" t="Include" />
+          <e p="ConformChecker.cs" t="Include" />
+          <e p="ConformityLearner.cs" t="Include" />
+          <e p="ParserConformity.cs" t="Include" />
+        </e>
         <e p="NetworkLibrary" t="Include">
           <e p="DownloadString.cs" t="Include" />
           <e p="TimedWebClient.cs" t="Include" />

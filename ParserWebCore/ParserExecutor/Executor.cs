@@ -1,5 +1,6 @@
 ﻿using System;
 using ParserWebCore.BuilderApp;
+using ParserWebCore.MlConformity;
 using ParserWebCore.Parser;
 
 namespace ParserWebCore.ParserExecutor
@@ -62,6 +63,9 @@ namespace ParserWebCore.ParserExecutor
                     break;
                 case Arguments.Tekmos:
                     _parser = new ParserTekMos();
+                    break;
+                case Arguments.Mlconf:
+                    _parser = new ParserConformity();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);

@@ -16,7 +16,7 @@ namespace ParserWebCore.Tender
     {
         private readonly TypeMzVoron _tn;
         private string _baseUrl;
-        private Arguments _arg;
+        private readonly Arguments _arg;
 
         public TenderGzwSp(string etpName, string etpUrl, int typeFz, TypeMzVoron tn, string baseurl, Arguments arg) :
             base(etpName,
@@ -54,7 +54,16 @@ namespace ParserWebCore.Tender
                 }
 
                 Thread.Sleep(5000);
-                var s = DownloadString.DownL(_tn.Href);
+                string s;
+                if (_arg == Arguments.Samar || _arg == Arguments.Udmurt)
+                {
+                    s = DownloadString.DownLUserAgent(_tn.Href);
+                }
+                else
+                {
+                    s = DownloadString.DownL(_tn.Href);
+                }
+
                 if (string.IsNullOrEmpty(s))
                 {
                     Log.Logger("Empty string in ParsingTender()", _tn.Href);

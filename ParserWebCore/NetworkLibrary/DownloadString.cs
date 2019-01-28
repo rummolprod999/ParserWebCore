@@ -27,7 +27,7 @@ namespace ParserWebCore.NetworkLibrary
                 {
                     if (count >= 3)
                     {
-                        Log.Logger($"Не удалось скачать xml за {count} попыток", url);
+                        Log.Logger($"Не удалось скачать за {count} попыток", url);
                         break;
                     }
 
@@ -48,7 +48,7 @@ namespace ParserWebCore.NetworkLibrary
                             return tmp;
                     }
 
-                    Log.Logger("Не удалось получить строку xml", e, url);
+                    Log.Logger("Не удалось получить строку", e, url);
                     count++;
                     Thread.Sleep(5000);
                 }
@@ -82,11 +82,11 @@ namespace ParserWebCore.NetworkLibrary
 
                     if (count >= 5)
                     {
-                        Log.Logger($"Не удалось скачать xml за {count} попыток", url);
+                        Log.Logger($"Не удалось скачать за {count} попыток", url);
                         break;
                     }
 
-                    Log.Logger("Не удалось получить строку xml", ex.Message, url);
+                    Log.Logger("Не удалось получить строку", ex.Message, url);
                     count++;
                     Thread.Sleep(5000);
                 }
@@ -94,7 +94,7 @@ namespace ParserWebCore.NetworkLibrary
                 {
                     if (count >= 5)
                     {
-                        Log.Logger($"Не удалось скачать xml за {count} попыток", url);
+                        Log.Logger($"Не удалось скачать за {count} попыток", url);
                         break;
                     }
 
@@ -115,7 +115,7 @@ namespace ParserWebCore.NetworkLibrary
                             goto Finish;
                     }
 
-                    Log.Logger("Не удалось получить строку xml", e, url);
+                    Log.Logger("Не удалось получить строку", e, url);
                     count++;
                     Thread.Sleep(5000);
                 }
@@ -147,11 +147,11 @@ namespace ParserWebCore.NetworkLibrary
                 {
                     if (count >= 3)
                     {
-                        Log.Logger($"Не удалось скачать xml за {count} попыток", url);
+                        Log.Logger($"Не удалось скачать за {count} попыток", url);
                         break;
                     }
 
-                    Log.Logger("Не удалось получить строку xml", e, url);
+                    Log.Logger("Не удалось получить строку", e, url);
                     count++;
                     Thread.Sleep(5000);
                 }

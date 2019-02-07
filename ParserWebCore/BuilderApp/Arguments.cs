@@ -23,6 +23,7 @@
         Tekkom,
         Tekmarket,
         Tekmos,
-        Mlconf
+        Mlconf,
+        Tekrn
     }
 }

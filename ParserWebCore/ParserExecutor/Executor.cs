@@ -67,6 +67,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Mlconf:
                     _parser = new ParserConformity();
                     break;
+                case Arguments.Tekrn:
+                    _parser = new ParserTekRn();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

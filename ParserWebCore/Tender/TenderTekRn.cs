@@ -60,6 +60,12 @@ namespace ParserWebCore.Tender
                 var dateEndT =
                     (document.QuerySelector("td:contains('Дата окончания приема заявок') + td")?.TextContent ??
                      "").Trim();
+                if (dateEndT == "")
+                {
+                    dateEndT =
+                        (document.QuerySelector("td:contains('Подведение итогов не позднее') + td")?.TextContent ??
+                         "").Trim();
+                }
                 var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm 'GMT'z");
                 if (dateEnd == DateTime.MinValue)
                 {

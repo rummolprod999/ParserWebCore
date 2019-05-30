@@ -25,7 +25,7 @@ namespace ParserWebCore.BuilderApp
         private static Builder _b;
 
         public const string ReqArguments =
-            "agrocomplex, kzgroup, agrotomsk, sibintek, setonline, mzvoron, maxi, tver, murman, kalug, smol, samar, udmurt, segezha, akashevo, sitno, naftan, rwby, tekkom, tekmarket, tekmos, mlconf, tekrn";
+            "agrocomplex, kzgroup, agrotomsk, sibintek, setonline, mzvoron, maxi, tver, murman, kalug, smol, samar, udmurt, segezha, akashevo, sitno, naftan, rwby, tekkom, tekmarket, tekmos, mlconf, tekrn, brn32";
 
         public static readonly string Path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName()
             .CodeBase.Substring(5));
@@ -109,6 +109,9 @@ namespace ParserWebCore.BuilderApp
                     break;
                 case "tekrn":
                     Arg = Arguments.Tekrn;
+                    break;
+                case "brn32":
+                    Arg = Arguments.Brn32;
                     break;
                 default:
                     throw new Exception($"Неправильно указан аргумент {s}, используйте {ReqArguments}");

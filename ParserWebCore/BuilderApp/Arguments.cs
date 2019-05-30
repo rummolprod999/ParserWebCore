@@ -24,6 +24,7 @@
         Tekmarket,
         Tekmos,
         Mlconf,
-        Tekrn
+        Tekrn,
+        Brn32
     }
 }

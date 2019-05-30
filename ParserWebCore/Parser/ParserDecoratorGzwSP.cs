@@ -52,6 +52,13 @@ namespace ParserWebCore.Parser
                             "http://wt.mfur.ru/smallpurchases/GzwSP/NoticesGrid", 90, _arguments)
                         .Parsing();
                     break;
+                case Arguments.Brn32:
+                    new ParserGzwSp("http://tender32.ru/site/GzwSP/NoticesGrid",
+                            "http://tender32.ru",
+                            "Электронный магазин Брянской области",
+                            "http://tender32.ru/site/GzwSP/NoticesGrid", 193, _arguments)
+                        .Parsing();
+                    break;
                 default: throw new ArgumentOutOfRangeException(nameof(_arguments), _arguments, null);
             }
         }

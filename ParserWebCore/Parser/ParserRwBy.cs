@@ -61,6 +61,7 @@ namespace ParserWebCore.Parser
         {
             var href = (n.SelectSingleNode(".//a")?.Attributes["href"]?.Value ?? "")
                 .Trim();
+            href = $"https://www.rw.by{href}";
             if (string.IsNullOrEmpty(href))
             {
                 Log.Logger("Empty href");

@@ -41,7 +41,7 @@ namespace ParserWebCore.Parser
                 Log.Logger(
                     $"Null count page in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
                     urlStart);
-                return;
+                max = 1;
             }
 
             GetPage(max, urlStart);
@@ -51,7 +51,7 @@ namespace ParserWebCore.Parser
         {
             for (var i = 1; i <= max; i++)
             {
-                var url = $"{urlStart}&page={i}";
+                var url = $"{urlStart}&page={i}&limit=500";
                 try
                 {
                     ParsingPage(url);

@@ -25,6 +25,7 @@
         Tekmos,
         Mlconf,
         Tekrn,
-        Brn32
+        Brn32,
+        SportMaster
     }
 }

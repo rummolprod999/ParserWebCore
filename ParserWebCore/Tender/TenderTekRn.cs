@@ -69,10 +69,7 @@ namespace ParserWebCore.Tender
                 var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm 'GMT'z");
                 if (dateEnd == DateTime.MinValue)
                 {
-                    Log.Logger(
-                        $"Empty dateEnd in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
-                        _tn.Href, dateEndT);
-                    return;
+                    dateEnd = datePub;
                 }
 
                 var purNum = _tn.PurNum;

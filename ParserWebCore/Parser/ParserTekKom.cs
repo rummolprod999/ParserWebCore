@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using AngleSharp.Dom;
 using AngleSharp.Parser.Html;
+using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.SharedLibraries;
@@ -101,6 +102,7 @@ namespace ParserWebCore.Parser
             var tenderUrl = urlT;
             if (urlT != null && !urlT.Contains("https://")) tenderUrl = $"https://www.tektorg.ru{urlT}";
             var status = (t.QuerySelector("div span:contains('Статус:')")?.TextContent?.Replace("Статус:", "") ?? "").Trim();
+            status = status.GetDataFromRegex("(.+)Осталось:.+").Trim();
             var tn = new TenderTekKom("ТЭК Торг Коммерческие закупки и 223-ФЗ", "https://www.tektorg.ru/223-fz/procedures", 138,
                 new TypeTekKom
                 {

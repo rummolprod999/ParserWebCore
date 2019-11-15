@@ -103,7 +103,10 @@ namespace ParserWebCore.Parser
             if (urlT != null && !urlT.Contains("https://")) tenderUrl = $"https://www.tektorg.ru{urlT}";
             var status = (t.QuerySelector("div span:contains('Статус:')")?.TextContent?.Replace("Статус:", "") ?? "")
                 .Trim();
-            status = status.GetDataFromRegex("(.+)Осталось:.+").Trim();
+            if (status.Contains("Осталось:"))
+            {
+                status = status.GetDataFromRegex("(.+)Осталось:.+").Trim();
+            }
             var purName = (t.QuerySelector("a.section-procurement__item-title")?.TextContent ?? "").Trim();
             if (string.IsNullOrEmpty(purName))
             {

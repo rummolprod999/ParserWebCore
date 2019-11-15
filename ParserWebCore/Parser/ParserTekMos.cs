@@ -102,7 +102,10 @@ namespace ParserWebCore.Parser
             var tenderUrl = urlT;
             if (urlT != null && !urlT.Contains("https://")) tenderUrl = $"https://www.tektorg.ru{urlT}";
             var status = (t.QuerySelector("div span:contains('Статус:')")?.TextContent?.Replace("Статус:", "") ?? "").Trim();
-            status = status.GetDataFromRegex("(.+)Осталось:.+").Trim();
+            if (status.Contains("Осталось:"))
+            {
+                status = status.GetDataFromRegex("(.+)Осталось:.+").Trim();
+            }
             var tn = new TenderTekMos("ТЭК Торг ТЭК Мосэнерго", "https://www.tektorg.ru/mosenergo/procedures", 140,
                 new TypeTekMos
                 {

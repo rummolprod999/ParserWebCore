@@ -102,7 +102,10 @@ namespace ParserWebCore.Parser
             var tenderUrl = urlT;
             if (urlT != null && !urlT.Contains("https://")) tenderUrl = $"https://www.tektorg.ru{urlT}";
             var status = (t.QuerySelector("div span:contains('Статус:')")?.TextContent?.Replace("Статус:", "") ?? "").Trim();
-            status = status.GetDataFromRegex("(.+)Осталось:.+").Trim();
+            if (status.Contains("Осталось:"))
+            {
+                status = status.GetDataFromRegex("(.+)Осталось:.+").Trim();
+            }
             var tn = new TenderTekKom("ТЭК Торг Коммерческие закупки и 223-ФЗ", "https://www.tektorg.ru/223-fz/procedures", 138,
                 new TypeTekKom
                 {

@@ -26,6 +26,7 @@
         Mlconf,
         Tekrn,
         Brn32,
-        SportMaster
+        SportMaster,
+        Teksil
     }
 }

@@ -74,6 +74,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.SportMaster:
                     _parser = new ParserSportMaster();
                     break;
+                case Arguments.Teksil:
+                    _parser = new ParserTekSil();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

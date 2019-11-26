@@ -27,6 +27,7 @@
         Tekrn,
         Brn32,
         SportMaster,
-        Teksil
+        Teksil,
+        SberB2B
     }
 }

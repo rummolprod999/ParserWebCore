@@ -77,6 +77,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Teksil:
                     _parser = new ParserTekSil();
                     break;
+                case Arguments.SberB2B:
+                    _parser = new ParserSberB2B();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

@@ -37,6 +37,7 @@
         </e>
         <e p="NetworkLibrary" t="Include">
           <e p="DownloadString.cs" t="Include" />
+          <e p="HttpPostSberB2B.cs" t="Include" />
           <e p="TimedWebClient.cs" t="Include" />
         </e>
         <e p="Parser" t="Include">
@@ -126,6 +127,7 @@
         </e>
         <e p="settings.json" t="Include" />
         <e p="test.html" t="Include" />
+        <e p="test.json" t="Include" />
       </e>
       <e p="ParserWebCore.sln" t="IncludeFlat" />
       <e p="packages" t="ExcludeRecursive" />

@@ -18,14 +18,14 @@ namespace ParserWebCore.NetworkLibrary
                 try
                 {
                     var task = Task.Run(() => (new TimedWebClient()).DownloadString(url));
-                    if (!task.Wait(TimeSpan.FromSeconds(650))) throw new TimeoutException();
+                    if (!task.Wait(TimeSpan.FromSeconds(60))) throw new TimeoutException();
                     tmp = task.Result;
                     break;
                 }
 
                 catch (Exception e)
                 {
-                    if (count >= 3)
+                    if (count >= 2)
                     {
                         Log.Logger($"Не удалось скачать за {count} попыток", url);
                         break;
@@ -66,7 +66,7 @@ namespace ParserWebCore.NetworkLibrary
                 try
                 {
                     var task = Task.Run(() => (new TimedWebClientUa()).DownloadString(url));
-                    if (!task.Wait(TimeSpan.FromSeconds(100))) throw new TimeoutException();
+                    if (!task.Wait(TimeSpan.FromSeconds(60))) throw new TimeoutException();
                     tmp = task.Result;
                     break;
                 }
@@ -80,7 +80,7 @@ namespace ParserWebCore.NetworkLibrary
                         return tmp;
                     }
 
-                    if (count >= 5)
+                    if (count >= 2)
                     {
                         Log.Logger($"Не удалось скачать за {count} попыток", url);
                         break;
@@ -92,7 +92,7 @@ namespace ParserWebCore.NetworkLibrary
                 }
                 catch (Exception e)
                 {
-                    if (count >= 5)
+                    if (count >= 2)
                     {
                         Log.Logger($"Не удалось скачать за {count} попыток", url);
                         break;
@@ -139,13 +139,13 @@ namespace ParserWebCore.NetworkLibrary
                         var v = new TimedWebClient {Encoding = Encoding.GetEncoding("windows-1251")};
                         return v.DownloadString(url);
                     });
-                    if (!task.Wait(TimeSpan.FromSeconds(650))) throw new TimeoutException();
+                    if (!task.Wait(TimeSpan.FromSeconds(60))) throw new TimeoutException();
                     tmp = task.Result;
                     break;
                 }
                 catch (Exception e)
                 {
-                    if (count >= 3)
+                    if (count >= 2)
                     {
                         Log.Logger($"Не удалось скачать за {count} попыток", url);
                         break;
@@ -169,7 +169,7 @@ namespace ParserWebCore.NetworkLibrary
                 try
                 {
                     var task = Task.Run(() => (new HttpPostSberB2B(num)).DownloadString(url));
-                    if (!task.Wait(TimeSpan.FromSeconds(100))) throw new TimeoutException();
+                    if (!task.Wait(TimeSpan.FromSeconds(60))) throw new TimeoutException();
                     tmp = task.Result;
                     break;
                 }
@@ -183,7 +183,7 @@ namespace ParserWebCore.NetworkLibrary
                         return tmp;
                     }
 
-                    if (count >= 5)
+                    if (count >= 2)
                     {
                         Log.Logger($"Не удалось скачать за {count} попыток", url);
                         break;
@@ -195,7 +195,7 @@ namespace ParserWebCore.NetworkLibrary
                 }
                 catch (Exception e)
                 {
-                    if (count >= 5)
+                    if (count >= 2)
                     {
                         Log.Logger($"Не удалось скачать за {count} попыток", url);
                         break;

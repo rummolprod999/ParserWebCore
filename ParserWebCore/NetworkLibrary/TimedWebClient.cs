@@ -12,7 +12,7 @@ namespace ParserWebCore.NetworkLibrary
             var wr = base.GetWebRequest(address);
             if (wr != null)
             {
-                wr.Timeout = 600000;
+                wr.Timeout = 20000;
                 return wr;
             }
 
@@ -27,7 +27,7 @@ namespace ParserWebCore.NetworkLibrary
             var wr = (HttpWebRequest) base.GetWebRequest(address);
             if (wr != null)
             {
-                wr.Timeout = 600000;
+                wr.Timeout = 20000;
                 wr.UserAgent = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:55.0) Gecko/20100101 Firefox/55.0";
                 return wr;
             }
@@ -68,7 +68,7 @@ namespace ParserWebCore.NetworkLibrary
                     streamWriter.Write(byteArray);
                     streamWriter.Flush();
                 }
-                wr.Timeout = 600000;
+                wr.Timeout = 20000;
                 wr.UserAgent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.99 Safari/537.36 Vivaldi/2.9.1705.41";
                 
                 return wr;

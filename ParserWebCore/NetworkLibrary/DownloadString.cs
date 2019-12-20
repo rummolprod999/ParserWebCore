@@ -56,6 +56,54 @@ namespace ParserWebCore.NetworkLibrary
 
             return tmp;
         }
+        
+        public static string DownLTektorg(string url)
+        {
+            var tmp = "";
+            var count = 0;
+            while (true)
+            {
+                try
+                {
+                    var task = Task.Run(() => (new TimedWebClientTektorg()).DownloadString(url));
+                    if (!task.Wait(TimeSpan.FromSeconds(60))) throw new TimeoutException();
+                    tmp = task.Result;
+                    break;
+                }
+
+                catch (Exception e)
+                {
+                    if (count >= 2)
+                    {
+                        Log.Logger($"Не удалось скачать за {count} попыток", url);
+                        break;
+                    }
+
+                    switch (e)
+                    {
+                        case AggregateException a
+                            when a.InnerException != null && a.InnerException.Message.Contains("(404) Not Found"):
+                            Log.Logger("404 Exception", a.InnerException.Message, url);
+                            return tmp;
+                        case AggregateException a
+                            when a.InnerException != null && a.InnerException.Message.Contains("(403) Forbidden"):
+                            Log.Logger("403 Exception", a.InnerException.Message, url);
+                            return tmp;
+                        case AggregateException a when a.InnerException != null &&
+                                                       a.InnerException.Message.Contains(
+                                                           "The remote server returned an error: (434)"):
+                            Log.Logger("434 Exception", a.InnerException.Message, url);
+                            return tmp;
+                    }
+
+                    Log.Logger("Не удалось получить строку", e, url);
+                    count++;
+                    Thread.Sleep(5000);
+                }
+            }
+
+            return tmp;
+        }
 
         public static string DownLUserAgent(string url)
         {

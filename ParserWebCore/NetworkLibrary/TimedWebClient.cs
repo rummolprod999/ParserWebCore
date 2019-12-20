@@ -36,6 +36,23 @@ namespace ParserWebCore.NetworkLibrary
         }
     }
     
+    public class TimedWebClientTektorg : WebClient
+    {
+        protected override WebRequest GetWebRequest(Uri address)
+        {
+            var wr = (HttpWebRequest) base.GetWebRequest(address);
+            if (wr != null)
+            {
+                wr.Timeout = 20000;
+                wr.UserAgent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.99 Safari/537.36 Vivaldi/2.9.1705.41";
+                wr.Headers.Add("cookie", "SL_GWPT_Show_Hide_tmp=1; SL_wptGlobTipTmp=1; Drupal.visitor.procedures_theme=blocks; _ym_uid=1572329683844748249; _ym_d=1572329683; _fbp=fb.1.1572329684066.1937010747; _ga=GA1.2.1694310890.1572329684; swp_token=1576744962:ae7ba5b4340734576bab54682f90c5be:0b5912261567c6b88f45a8c9bba719ea; _gid=GA1.2.896146885.1576743180; _ym_visorc_47749948=w; _ym_isad=2; _ym_visorc_37860345=w");
+                return wr;
+            }
+
+            return null;
+        }
+    }
+    
     public class TimedWebSber : WebClient
     {
         private readonly int page;

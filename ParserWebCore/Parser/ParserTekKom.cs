@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Security.Policy;
 using AngleSharp.Dom;
 using AngleSharp.Parser.Html;
 using ParserWebCore.Extensions;
@@ -67,11 +68,12 @@ namespace ParserWebCore.Parser
 
         private void ParsingPage(string url)
         {
-            var s = DownloadString.DownL(url);
+            var s = DownloadString.DownLTektorg(url);
             if (string.IsNullOrEmpty(s))
             {
                 Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
                     url);
+                return;
             }
 
             var parser = new HtmlParser();
@@ -106,11 +108,39 @@ namespace ParserWebCore.Parser
             {
                 status = status.GetDataFromRegex("(.+)Осталось:.+").Trim();
             }
+            var datePubT = (t.QuerySelector("span:contains('Дата публикации:')")?.TextContent ?? "").Replace("Дата публикации:", "").Trim();
+            var dateEndT = (t.QuerySelector("span:contains('Дата окончания приема заявок')")?.TextContent ??
+                            "").Replace("Дата окончания приема заявок:", "").Trim();
+            if (dateEndT == "")
+            {
+                dateEndT =
+                    (t.QuerySelector("span:contains('Подведение итогов не позднее')")?.TextContent ??
+                     "").Replace("Подведение итогов не позднее:", "").Trim();
+            }
+            var datePub = datePubT.ParseDateUn("dd.MM.yyyy HH:mm 'GMT'z");
+            var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm 'GMT'z");
+            if (datePub == DateTime.MinValue || dateEnd == DateTime.MinValue)
+            {
+                Log.Logger($"Empty dates in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                    urlT, datePubT, dateEndT);
+                return;
+            }
+            var purNumT = (t.QuerySelector("div.section-procurement__item-numbers > span")?.TextContent ?? "").Trim();
+            var purNum = purNumT.Replace("Номер закупки на сайте ЭТП:", "").Trim();
+            if (string.IsNullOrEmpty(purNum))
+            {
+                Log.Logger($"Empty purNum in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                    urlT, purNumT);
+                return;
+            }
             var tn = new TenderTekKom("ТЭК Торг Коммерческие закупки и 223-ФЗ", "https://www.tektorg.ru/223-fz/procedures", 138,
                 new TypeTekKom
                 {
                     Href = tenderUrl,
-                    Status = status
+                    Status = status,
+                     PurNum = purNum,
+                     DatePub = datePub,
+                     DateEnd = dateEnd
                 });
             ParserTender(tn);
         }

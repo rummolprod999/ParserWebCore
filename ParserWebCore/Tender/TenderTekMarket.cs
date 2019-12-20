@@ -52,6 +52,7 @@ namespace ParserWebCore.Tender
                     Log.Logger(
                         $"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
                         _tn.Href);
+                    return;
                 }
 
                 var parser = new HtmlParser();

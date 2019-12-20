@@ -31,37 +31,12 @@ namespace ParserWebCore.Tender
             {
                 Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
                     _tn.Href);
+                return;
             }
 
             var parser = new HtmlParser();
             var document = parser.Parse(s);
-            var datePubT = (document.QuerySelector("td:contains('Дата публикации:') + td")?.TextContent ?? "").Trim();
-            var datePub = datePubT.ParseDateUn("dd.MM.yyyy HH:mm 'GMT'z");
-            var dateEndT = (document.QuerySelector("td:contains('Дата окончания приема заявок') + td")?.TextContent ??
-                            "").Trim();
-            if (dateEndT == "")
-            {
-                dateEndT =
-                    (document.QuerySelector("td:contains('Подведение итогов не позднее') + td")?.TextContent ??
-                     "").Trim();
-            }
-            var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm 'GMT'z");
-            if (datePub == DateTime.MinValue || dateEnd == DateTime.MinValue)
-            {
-                Log.Logger($"Empty dates in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
-                    _tn.Href, datePubT, dateEndT);
-                return;
-            }
-
-            var purNumT = (document.QuerySelector("h1.section-procurement__title")?.TextContent ?? "").Trim();
-            var purNum = purNumT.GetDataFromRegex("Извещение о процедуре (.+)");
-            if (string.IsNullOrEmpty(purNum))
-            {
-                Log.Logger($"Empty purNum in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
-                    _tn.Href, purNumT);
-                return;
-            }
-
+            
             var noticeVersion = _tn.Status;
             using (var connect = ConnectToDb.GetDbConnection())
             {
@@ -70,8 +45,8 @@ namespace ParserWebCore.Tender
                     $"SELECT id_tender FROM {Builder.Prefix}tender WHERE purchase_number = @purchase_number AND end_date = @end_date AND type_fz = @type_fz AND notice_version = @notice_version";
                 var cmd = new MySqlCommand(selectTend, connect);
                 cmd.Prepare();
-                cmd.Parameters.AddWithValue("@purchase_number", purNum);
-                cmd.Parameters.AddWithValue("@end_date", dateEnd);
+                cmd.Parameters.AddWithValue("@purchase_number", _tn.PurNum);
+                cmd.Parameters.AddWithValue("@end_date", _tn.DateEnd);
                 cmd.Parameters.AddWithValue("@type_fz", TypeFz);
                 cmd.Parameters.AddWithValue("@notice_version", noticeVersion);
                 var dt = new DataTable();
@@ -85,7 +60,7 @@ namespace ParserWebCore.Tender
 
                 var dateUpd = DateTime.Now;
 
-                var (updated, cancelStatus) = UpdateTenderVersion(connect, purNum, dateUpd);
+                var (updated, cancelStatus) = UpdateTenderVersion(connect, _tn.PurNum, dateUpd);
                 var printForm = _tn.Href;
                 var customerId = 0;
                 var organiserId = 0;
@@ -102,16 +77,16 @@ namespace ParserWebCore.Tender
                 var cmd9 = new MySqlCommand(insertTender, connect);
                 cmd9.Prepare();
                 cmd9.Parameters.AddWithValue("@id_region", 0);
-                cmd9.Parameters.AddWithValue("@id_xml", purNum);
-                cmd9.Parameters.AddWithValue("@purchase_number", purNum);
-                cmd9.Parameters.AddWithValue("@doc_publish_date", datePub);
+                cmd9.Parameters.AddWithValue("@id_xml", _tn.PurNum);
+                cmd9.Parameters.AddWithValue("@purchase_number", _tn.PurNum);
+                cmd9.Parameters.AddWithValue("@doc_publish_date", _tn.DatePub);
                 cmd9.Parameters.AddWithValue("@href", _tn.Href);
                 cmd9.Parameters.AddWithValue("@purchase_object_info", purObjInfo);
                 cmd9.Parameters.AddWithValue("@type_fz", TypeFz);
                 cmd9.Parameters.AddWithValue("@id_organizer", organiserId);
                 cmd9.Parameters.AddWithValue("@id_placing_way", idPlacingWay);
                 cmd9.Parameters.AddWithValue("@id_etp", idEtp);
-                cmd9.Parameters.AddWithValue("@end_date", dateEnd);
+                cmd9.Parameters.AddWithValue("@end_date", _tn.DateEnd);
                 cmd9.Parameters.AddWithValue("@scoring_date", DateTime.MinValue);
                 cmd9.Parameters.AddWithValue("@bidding_date", DateTime.MinValue);
                 cmd9.Parameters.AddWithValue("@cancel", cancelStatus);
@@ -136,7 +111,7 @@ namespace ParserWebCore.Tender
                     "div.procedure__lots > div.procedure__lot");
                 GetLots(lots, connect, idTender, customerId);
                 TenderKwords(connect, idTender);
-                AddVerNumber(connect, purNum, TypeFz);
+                AddVerNumber(connect, _tn.PurNum, TypeFz);
             }
         }
 

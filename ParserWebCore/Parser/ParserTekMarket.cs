@@ -115,11 +115,11 @@ namespace ParserWebCore.Parser
                     tenderUrl);
             }
 
-            var datePubT = (t.QuerySelector("div span:contains('Дата начала подачи предложений:')")?.TextContent
-                                ?.Replace("Дата начала подачи предложений:", "") ?? "").Trim();
+            var datePubT = (t.QuerySelector("div span:contains('Дата публикации:')")?.TextContent
+                                ?.Replace("Дата публикации:", "") ?? "").Trim();
             var datePub = datePubT.ParseDateUn("dd.MM.yyyy HH:mm 'GMT'z");
-            var dateEndT = (t.QuerySelector("div span:contains('Дата окончания подачи предложений')")?.TextContent
-                                ?.Replace("Дата окончания подачи предложений", "") ?? "").Trim();
+            var dateEndT = (t.QuerySelector("div span:contains('Дата окончания приема заявок')")?.TextContent
+                                ?.Replace("Дата окончания приема заявок", "") ?? "").Trim();
             var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm 'GMT'z");
             if (datePub == DateTime.MinValue || dateEnd == DateTime.MinValue)
             {

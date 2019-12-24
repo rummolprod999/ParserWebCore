@@ -123,8 +123,8 @@ namespace ParserWebCore.Parser
             var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm 'GMT'z");
             if (datePub == DateTime.MinValue || dateEnd == DateTime.MinValue)
             {
-                Log.Logger($"Empty dates in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
-                    tenderUrl, datePubT, dateEndT);
+                Log.Logger($"Empty dates in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name} datePubT: {datePubT} dateEndT: {dateEndT}",
+                    tenderUrl);
                 return;
             }
 

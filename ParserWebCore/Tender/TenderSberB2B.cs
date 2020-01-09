@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Web;
 using AngleSharp.Parser.Html;
 using HtmlAgilityPack;
@@ -131,7 +132,8 @@ namespace ParserWebCore.Tender
                 var resInsertTender = cmd9.ExecuteNonQuery();
                 var idTender = (int) cmd9.LastInsertedId;
                 Counter(resInsertTender, updated);
-                var attachments = GetElements(tender, "attachments_files");
+                var attachments = GetElements(tender, "current_condition.attachments_files");
+                attachments.AddRange(GetElements(tender, "current_condition.interaction_files"));
                 foreach (var att in attachments)
                 {
                     var name = ((string) att.SelectToken("name") ?? "").Trim();

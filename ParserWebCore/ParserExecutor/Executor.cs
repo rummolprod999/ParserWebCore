@@ -80,6 +80,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.SberB2B:
                     _parser = new ParserSberB2B();
                     break;
+                case Arguments.ZakupMos:
+                    _parser = new ParserZakupMos();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

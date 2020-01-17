@@ -65,6 +65,7 @@
           <e p="ParserTekMos.cs" t="Include" />
           <e p="ParserTekRn.cs" t="Include" />
           <e p="ParserTekSil.cs" t="Include" />
+          <e p="ParserZakupMos.cs" t="Include" />
         </e>
         <e p="ParserExecutor" t="Include">
           <e p="Executor.cs" t="Include" />
@@ -96,6 +97,7 @@
           <e p="TenderTekMos.cs" t="Include" />
           <e p="TenderTekRn.cs" t="Include" />
           <e p="TenderTekSil.cs" t="Include" />
+          <e p="TenderZakupMos.cs" t="Include" />
         </e>
         <e p="TenderType" t="Include">
           <e p="AbstractTypeT.cs" t="Include" />
@@ -116,6 +118,7 @@
           <e p="TypeTekMos.cs" t="Include" />
           <e p="TypeTekRn.cs" t="Include" />
           <e p="TypeTekSil.cs" t="Include" />
+          <e p="TypeZakupMos.cs" t="Include" />
         </e>
         <e p="bin" t="ExcludeRecursive" />
         <e p="obj" t="ExcludeRecursive">

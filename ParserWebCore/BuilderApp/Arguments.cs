@@ -28,6 +28,7 @@
         Brn32,
         SportMaster,
         Teksil,
-        SberB2B
+        SberB2B,
+        ZakupMos
     }
 }

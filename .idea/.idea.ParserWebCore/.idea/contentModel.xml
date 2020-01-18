@@ -38,6 +38,7 @@
         <e p="NetworkLibrary" t="Include">
           <e p="DownloadString.cs" t="Include" />
           <e p="HttpPostSberB2B.cs" t="Include" />
+          <e p="HttpPostZakMos.cs" t="Include" />
           <e p="TimedWebClient.cs" t="Include" />
         </e>
         <e p="Parser" t="Include">

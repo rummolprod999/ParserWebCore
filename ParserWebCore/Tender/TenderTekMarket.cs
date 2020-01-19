@@ -46,7 +46,7 @@ namespace ParserWebCore.Tender
                     return;
                 }
 
-                var s = DownloadString.DownL(_tn.Href);
+                var s = DownloadString.DownLTektorg(_tn.Href);
                 if (String.IsNullOrEmpty(s))
                 {
                     Log.Logger(

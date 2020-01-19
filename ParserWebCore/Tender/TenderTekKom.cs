@@ -26,7 +26,7 @@ namespace ParserWebCore.Tender
 
         public void ParsingTender()
         {
-            var s = DownloadString.DownL(_tn.Href);
+            var s = DownloadString.DownLTektorg(_tn.Href);
             if (String.IsNullOrEmpty(s))
             {
                 Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",

@@ -66,7 +66,7 @@ namespace ParserWebCore.NetworkLibrary
                 try
                 {
                     var task = Task.Run(() => (new TimedWebClientTektorg()).DownloadString(url));
-                    if (!task.Wait(TimeSpan.FromSeconds(60))) throw new TimeoutException();
+                    if (!task.Wait(TimeSpan.FromSeconds(30))) throw new TimeoutException();
                     tmp = task.Result;
                     break;
                 }

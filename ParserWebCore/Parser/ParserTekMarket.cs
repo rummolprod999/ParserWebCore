@@ -13,7 +13,7 @@ namespace ParserWebCore.Parser
 {
     public class ParserTekMarket : ParserAbstract, IParser
     {
-        private int _dateMinus => 35;
+        private int _dateMinus => 3;
 
         public void Parsing()
         {

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json.Linq;
 using ParserWebCore.BuilderApp;
 using ParserWebCore.Logger;
 
@@ -37,6 +39,24 @@ namespace ParserWebCore.Tender
         protected void Counter(int res, bool b)
         {
             CountTender?.Invoke(res, b);
+        }
+        
+        public List<JToken> GetElements(JToken j, string s)
+        {
+            var els = new List<JToken>();
+            var elsObj = j.SelectToken(s);
+            if (elsObj == null || elsObj.Type == JTokenType.Null) return els;
+            switch (elsObj.Type)
+            {
+                case JTokenType.Object:
+                    els.Add(elsObj);
+                    break;
+                case JTokenType.Array:
+                    els.AddRange(elsObj);
+                    break;
+            }
+
+            return els;
         }
 
         protected void AddVerNumber(MySqlConnection connect, string purchaseNumber, int typeFz)

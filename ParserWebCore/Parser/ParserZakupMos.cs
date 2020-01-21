@@ -1,8 +1,11 @@
 using System;
+using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
+using ParserWebCore.Tender;
+using ParserWebCore.TenderType;
 
 namespace ParserWebCore.Parser
 {
@@ -118,9 +121,34 @@ namespace ParserWebCore.Parser
             var orgName = ((string) t.SelectToken("purchaseCreator.name") ?? "").Trim();
             var orgInn = ((string) t.SelectToken("purchaseCreator.inn") ?? "").Trim();
             var nmck = (decimal?) t.SelectToken("startPrice") ?? 0.0m;
-            Console.WriteLine(regionName);
-            Console.WriteLine(nmck);
-            Console.WriteLine();
+            var customers = new List<TypeZakupMos.Customer>();
+            var cusEl = GetElements(t, "customers");
+            cusEl.ForEach(c =>
+            {
+                var cusName = ((string) c.SelectToken("name") ?? "").Trim();
+                var cusInn = ((string) c.SelectToken("inn") ?? "").Trim();
+                customers.Add(new TypeZakupMos.Customer(cusName, cusInn));
+            });
+            var typeZakupMos = new TypeZakupMos
+            {
+                Href = href,
+                Status = status,
+                PurNum = purNum,
+                DatePub = datePub,
+                DateEnd = dateEnd,
+                PurName = purName,
+                Id = iD,
+                RegionName = regionName,
+                OrgName = orgName,
+                OrgInn = orgInn,
+                Nmck = nmck,
+                Customers = customers,
+                NeedId = needId,
+                TenderId = tenderId,
+                AuctionId = auctionId
+            };
+            ParserTender(new TenderZakupMos("Портал поставщиков правительства Москвы", "https://zakupki.mos.ru/", 235,
+                typeZakupMos));
         }
     }
 }

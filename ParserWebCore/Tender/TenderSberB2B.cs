@@ -234,7 +234,7 @@ namespace ParserWebCore.Tender
             }
         }
 
-        public List<JToken> GetElements(JToken j, string s)
+        public new List<JToken> GetElements(JToken j, string s)
         {
             var els = new List<JToken>();
             var elsObj = j.SelectToken(s);

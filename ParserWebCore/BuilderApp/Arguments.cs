@@ -29,6 +29,7 @@
         SportMaster,
         Teksil,
         SberB2B,
-        ZakupMos
+        ZakupMos,
+        Agat
     }
 }

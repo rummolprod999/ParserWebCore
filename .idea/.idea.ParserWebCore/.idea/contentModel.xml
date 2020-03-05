@@ -3,7 +3,6 @@
   <component name="ContentModelStore">
     <e p="$APPLICATION_CONFIG_DIR$/consoles/db" t="IncludeRecursive" />
     <e p="$APPLICATION_CONFIG_DIR$/extensions" t="IncludeRecursive" />
-    <e p="$APPLICATION_CONFIG_DIR$/scratches" t="IncludeRecursive" />
     <e p="$USER_HOME$/.Rider2019.3/system/extResources" t="IncludeRecursive" />
     <e p="$USER_HOME$/.Rider2019.3/system/resharper-host/local/Transient/ReSharperHost/v193/SolutionCaches/_ParserWebCore.1370944712.00" t="ExcludeRecursive" />
     <e p="$USER_HOME$/.Rider2019.3/system/rust_expanded_macros/YifbGshe/expansions" t="IncludeRecursive" />
@@ -44,6 +43,7 @@
         <e p="Parser" t="Include">
           <e p="IParser.cs" t="Include" />
           <e p="ParserAbstract.cs" t="Include" />
+          <e p="ParserAgat.cs" t="Include" />
           <e p="ParserAgroTomsk.cs" t="Include" />
           <e p="ParserAgrokomplex.cs" t="Include" />
           <e p="ParserAkashevo.cs" t="Include" />
@@ -79,6 +79,7 @@
         <e p="Tender" t="Include">
           <e p="ITender.cs" t="Include" />
           <e p="TenderAbstract.cs" t="Include" />
+          <e p="TenderAgat.cs" t="Include" />
           <e p="TenderAgroTomsk.cs" t="Include" />
           <e p="TenderAgrokomplex.cs" t="Include" />
           <e p="TenderAkashevo.cs" t="Include" />
@@ -102,6 +103,7 @@
         </e>
         <e p="TenderType" t="Include">
           <e p="AbstractTypeT.cs" t="Include" />
+          <e p="TypeAgat.cs" t="Include" />
           <e p="TypeAgroTomsk.cs" t="Include" />
           <e p="TypeAgrokomplex.cs" t="Include" />
           <e p="TypeKzGroup.cs" t="Include" />

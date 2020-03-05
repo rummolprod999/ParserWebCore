@@ -1,6 +1,5 @@
 using System;
 using System.Data;
-using System.Linq;
 using MySql.Data.MySqlClient;
 using ParserWebCore.BuilderApp;
 using ParserWebCore.Connections;
@@ -8,11 +7,11 @@ using ParserWebCore.TenderType;
 
 namespace ParserWebCore.Tender
 {
-    public class TenderSportMaster : TenderAbstract, ITender
+    public class TenderAgat : TenderAbstract, ITender
     {
-        private readonly TypeSportmaster _tn;
+        private readonly TypeAgat _tn;
 
-        public TenderSportMaster(string etpName, string etpUrl, int typeFz, TypeSportmaster tn) : base(etpName, etpUrl,
+        public TenderAgat(string etpName, string etpUrl, int typeFz, TypeAgat tn) : base(etpName, etpUrl,
             typeFz)
         {
             _tn = tn;
@@ -37,7 +36,6 @@ namespace ParserWebCore.Tender
                 adapter.Fill(dt);
                 if (dt.Rows.Count > 0)
                 {
-                    //Log.Logger("This tender is exist in base", PurNum);
                     return;
                 }
 
@@ -55,13 +53,10 @@ namespace ParserWebCore.Tender
                 adapter2.Fill(dt2);
                 foreach (DataRow row in dt2.Rows)
                 {
-                    //DateTime dateNew = DateTime.Parse(pr.DatePublished);
                     updated = true;
                     if (dateUpd >= (DateTime) row["date_version"])
                     {
                         row["cancel"] = 1;
-                        //row.AcceptChanges();
-                        //row.SetModified();
                     }
                     else
                     {
@@ -75,7 +70,7 @@ namespace ParserWebCore.Tender
                 var printForm = _tn.Href;
                 var customerId = 0;
                 var organiserId = 0;
-                var orgName = "ООО «Спортмастер»";
+                var orgName = "ООО «ТД «Агат»";
                 if (!string.IsNullOrEmpty(orgName))
                 {
                     var selectOrg =
@@ -93,8 +88,8 @@ namespace ParserWebCore.Tender
                     else
                     {
                         var phone = "8 495 777-777-1";
-                        var email = "e-commerce@sportmaster.ru";
-                        var inn = "7728551528";
+                        var email = "feedback@agatgroup.com";
+                        var inn = "";
                         var kpp = "";
                         var contactPerson = "";
                         var addOrganizer =
@@ -164,27 +159,11 @@ namespace ParserWebCore.Tender
                         var customerRegNumber = Guid.NewGuid().ToString();
                         cmd14.Parameters.AddWithValue("@reg_num", customerRegNumber);
                         cmd14.Parameters.AddWithValue("@full_name", orgName);
-                        cmd14.Parameters.AddWithValue("@inn", "7728551528");
+                        cmd14.Parameters.AddWithValue("@inn", "");
                         cmd14.ExecuteNonQuery();
                         customerId = (int) cmd14.LastInsertedId;
                     }
                 }
-
-                foreach (var doc in _tn.Attach.ToList())
-                {
-                    if (!string.IsNullOrEmpty(doc.Key))
-                    {
-                        var insertAttach =
-                            $"INSERT INTO {Builder.Prefix}attachment SET id_tender = @id_tender, file_name = @file_name, url = @url";
-                        var cmd10 = new MySqlCommand(insertAttach, connect);
-                        cmd10.Prepare();
-                        cmd10.Parameters.AddWithValue("@id_tender", idTender);
-                        cmd10.Parameters.AddWithValue("@file_name", doc.Key);
-                        cmd10.Parameters.AddWithValue("@url", doc.Value);
-                        cmd10.ExecuteNonQuery();
-                    }
-                }
-
                 var lotNum = 1;
                 var insertLot =
                     $"INSERT INTO {Builder.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency, finance_source = @finance_source";
@@ -205,6 +184,16 @@ namespace ParserWebCore.Tender
                 cmd19.Parameters.AddWithValue("@id_customer", customerId);
                 cmd19.Parameters.AddWithValue("@name", _tn.PurName);
                 cmd19.ExecuteNonQuery();
+                var insertCustomerRequirement =
+                    $"INSERT INTO {Builder.Prefix}customer_requirement SET id_lot = @id_lot, id_customer = @id_customer, delivery_place = @delivery_place, max_price = @max_price, delivery_term = @delivery_term";
+                var cmd16 = new MySqlCommand(insertCustomerRequirement, connect);
+                cmd16.Prepare();
+                cmd16.Parameters.AddWithValue("@id_lot", idLot);
+                cmd16.Parameters.AddWithValue("@id_customer", customerId);
+                cmd16.Parameters.AddWithValue("@delivery_place", "");
+                cmd16.Parameters.AddWithValue("@max_price", "");
+                cmd16.Parameters.AddWithValue("@delivery_term", _tn.Requirements);
+                cmd16.ExecuteNonQuery();
                 TenderKwords(connect, idTender);
                 AddVerNumber(connect, _tn.PurNum, TypeFz);
             }

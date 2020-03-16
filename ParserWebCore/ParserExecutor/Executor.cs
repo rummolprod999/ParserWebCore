@@ -86,6 +86,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Agat:
                     _parser = new ParserAgat();
                     break;
+                case Arguments.Rubex:
+                    _parser = new ParserRubex();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

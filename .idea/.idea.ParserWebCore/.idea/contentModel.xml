@@ -5,7 +5,6 @@
     <e p="$APPLICATION_CONFIG_DIR$/extensions" t="IncludeRecursive" />
     <e p="$USER_HOME$/.Rider2019.3/system/extResources" t="IncludeRecursive" />
     <e p="$USER_HOME$/.Rider2019.3/system/resharper-host/local/Transient/ReSharperHost/v193/SolutionCaches/_ParserWebCore.1370944712.00" t="ExcludeRecursive" />
-    <e p="$USER_HOME$/.Rider2019.3/system/rust_expanded_macros/YifbGshe/expansions" t="IncludeRecursive" />
     <e p="$PROJECT_DIR$" t="IncludeFlat">
       <e p=".git/info/exclude" t="IncludeRecursive" />
       <e p="ParserWebCore" t="IncludeRecursive">
@@ -54,6 +53,7 @@
           <e p="ParserMaxi.cs" t="Include" />
           <e p="ParserMzVoron.cs" t="Include" />
           <e p="ParserNaftan.cs" t="Include" />
+          <e p="ParserRubex.cs" t="Include" />
           <e p="ParserRwBy.cs" t="Include" />
           <e p="ParserSberB2B.cs" t="Include" />
           <e p="ParserSegezha.cs" t="Include" />
@@ -88,6 +88,7 @@
           <e p="TenderMaxi.cs" t="Include" />
           <e p="TenderMzVoron.cs" t="Include" />
           <e p="TenderNaftan.cs" t="Include" />
+          <e p="TenderRubex.cs" t="Include" />
           <e p="TenderRwBy.cs" t="Include" />
           <e p="TenderSberB2B.cs" t="Include" />
           <e p="TenderSegezha.cs" t="Include" />
@@ -110,6 +111,7 @@
           <e p="TypeMaxi.cs" t="Include" />
           <e p="TypeMzVoron.cs" t="Include" />
           <e p="TypeNaftan.cs" t="Include" />
+          <e p="TypeRubex.cs" t="Include" />
           <e p="TypeRwBy.cs" t="Include" />
           <e p="TypeSber.cs" t="Include" />
           <e p="TypeSegezha.cs" t="Include" />
@@ -138,5 +140,6 @@
       <e p="ParserWebCore.sln" t="IncludeFlat" />
       <e p="packages" t="ExcludeRecursive" />
     </e>
+    <e p="/rust_expanded_macros/YifbGshe" t="IncludeRecursive" />
   </component>
 </project>

@@ -30,6 +30,7 @@
         Teksil,
         SberB2B,
         ZakupMos,
-        Agat
+        Agat,
+        Rubex
     }
 }

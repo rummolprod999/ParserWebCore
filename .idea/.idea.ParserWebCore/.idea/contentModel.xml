@@ -55,6 +55,7 @@
           <e p="ParserNaftan.cs" t="Include" />
           <e p="ParserRubex.cs" t="Include" />
           <e p="ParserRwBy.cs" t="Include" />
+          <e p="ParserSamCom.cs" t="Include" />
           <e p="ParserSberB2B.cs" t="Include" />
           <e p="ParserSegezha.cs" t="Include" />
           <e p="ParserSetOnline.cs" t="Include" />
@@ -90,6 +91,7 @@
           <e p="TenderNaftan.cs" t="Include" />
           <e p="TenderRubex.cs" t="Include" />
           <e p="TenderRwBy.cs" t="Include" />
+          <e p="TenderSamCom.cs" t="Include" />
           <e p="TenderSberB2B.cs" t="Include" />
           <e p="TenderSegezha.cs" t="Include" />
           <e p="TenderSetOnline.cs" t="Include" />
@@ -113,6 +115,7 @@
           <e p="TypeNaftan.cs" t="Include" />
           <e p="TypeRubex.cs" t="Include" />
           <e p="TypeRwBy.cs" t="Include" />
+          <e p="TypeSamCom.cs" t="Include" />
           <e p="TypeSber.cs" t="Include" />
           <e p="TypeSegezha.cs" t="Include" />
           <e p="TypeSetOnline.cs" t="Include" />

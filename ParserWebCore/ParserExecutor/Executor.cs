@@ -89,6 +89,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Rubex:
                     _parser = new ParserRubex();
                     break;
+                case Arguments.SamCom:
+                    _parser = new ParserSamCom();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

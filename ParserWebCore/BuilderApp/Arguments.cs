@@ -31,6 +31,7 @@
         SberB2B,
         ZakupMos,
         Agat,
-        Rubex
+        Rubex,
+        SamCom
     }
 }

@@ -32,6 +32,7 @@
         ZakupMos,
         Agat,
         Rubex,
-        SamCom
+        SamCom,
+        Ravis
     }
 }

@@ -95,6 +95,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Ravis:
                     _parser = new ParserRavis();
                     break;
+                case Arguments.Boaz:
+                    _parser = new ParserBoaz();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

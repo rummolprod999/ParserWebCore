@@ -33,6 +33,7 @@
         Agat,
         Rubex,
         SamCom,
-        Ravis
+        Ravis,
+        Boaz
     }
 }

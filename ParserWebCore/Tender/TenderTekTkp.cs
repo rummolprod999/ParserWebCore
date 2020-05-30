@@ -14,11 +14,11 @@ using ParserWebCore.TenderType;
 
 namespace ParserWebCore.Tender
 {
-    public class TenderTekKom : TenderAbstract, ITender
+    public class TenderTekTkp : TenderAbstract, ITender
     {
         private readonly TypeTekKom _tn;
 
-        public TenderTekKom(string etpName, string etpUrl, int typeFz, TypeTekKom tn) : base(etpName, etpUrl,
+        public TenderTekTkp(string etpName, string etpUrl, int typeFz, TypeTekKom tn) : base(etpName, etpUrl,
             typeFz)
         {
             _tn = tn;
@@ -36,7 +36,7 @@ namespace ParserWebCore.Tender
 
             var parser = new HtmlParser();
             var document = parser.Parse(s);
-            
+
             var noticeVersion = _tn.Status;
             using (var connect = ConnectToDb.GetDbConnection())
             {
@@ -109,13 +109,14 @@ namespace ParserWebCore.Tender
                 GetDocs(docs, connect, idTender);
                 var lots = document.QuerySelectorAll(
                     "div.procedure__lots > div.procedure__lot");
-                GetLots(lots, connect, idTender, customerId, purObjInfo);
+                GetLots(lots, connect, idTender, customerId, purObjInfo, document);
                 TenderKwords(connect, idTender);
                 AddVerNumber(connect, _tn.PurNum, TypeFz);
             }
         }
 
-        private void GetLots(IHtmlCollection<IElement> lots, MySqlConnection connect, int idTender, int customerId, string purObjInfo)
+        private void GetLots(IHtmlCollection<IElement> lots, MySqlConnection connect, int idTender, int customerId,
+            string purObjInfo, IHtmlDocument document)
         {
             foreach (var lot in lots)
             {
@@ -131,13 +132,14 @@ namespace ParserWebCore.Tender
                     (lot.QuerySelector("td:contains('Предмет договора:') +  td")?.TextContent ?? "").Trim();
                 if (string.IsNullOrEmpty(purName)) purName = purObjInfo;
                 var insertLot =
-                    $"INSERT INTO {Builder.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency";
+                    $"INSERT INTO {Builder.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency, lot_name = @lot_name";
                 var cmd18 = new MySqlCommand(insertLot, connect);
                 cmd18.Prepare();
                 cmd18.Parameters.AddWithValue("@id_tender", idTender);
                 cmd18.Parameters.AddWithValue("@lot_number", lotNum);
                 cmd18.Parameters.AddWithValue("@max_price", nmck);
                 cmd18.Parameters.AddWithValue("@currency", currency);
+                cmd18.Parameters.AddWithValue("@lot_name", purObjInfo);
                 cmd18.ExecuteNonQuery();
                 var idLot = (int) cmd18.LastInsertedId;
                 var customerFullName =
@@ -170,35 +172,84 @@ namespace ParserWebCore.Tender
                         customerId = (int) cmd14.LastInsertedId;
                     }
                 }
-                
-                var okpd2Temp =
-                    (lot.QuerySelector("td:contains('Код классификатора ОКДП/ОКПД2') +  td")?.TextContent ?? "")
-                    .Trim();
-                var okpd2Code = okpd2Temp.GetDataFromRegex(@"^(\d[\.|\d]*\d)");
-                var okpd2GroupCode = 0;
-                var okpd2GroupLevel1Code = "";
-                if (!String.IsNullOrEmpty(okpd2Code))
+
+                var objectsP = document.QuerySelectorAll(
+                    "table.tableUnit tbody tr");
+                if (objectsP.Length == 0)
                 {
-                    GetOkpd(okpd2Code, out okpd2GroupCode, out okpd2GroupLevel1Code);
+                    var okpd2Temp =
+                        (lot.QuerySelector("td:contains('Код классификатора ОКДП/ОКПД2') +  td")?.TextContent ?? "")
+                        .Trim();
+                    var okpd2Code = okpd2Temp.GetDataFromRegex(@"^(\d[\.|\d]*\d)");
+                    var okpd2GroupCode = 0;
+                    var okpd2GroupLevel1Code = "";
+                    if (!String.IsNullOrEmpty(okpd2Code))
+                    {
+                        GetOkpd(okpd2Code, out okpd2GroupCode, out okpd2GroupLevel1Code);
+                    }
+
+                    var okpdName = okpd2Temp.GetDataFromRegex(@"^\d[\.|\d]*\d (.*)$");
+                    if (!string.IsNullOrEmpty(purName))
+                    {
+                        var insertLotitem =
+                            $"INSERT INTO {Builder.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name, sum = @sum, okpd2_code = @okpd2_code, okpd2_group_code = @okpd2_group_code, okpd2_group_level1_code = @okpd2_group_level1_code, okpd_name = @okpd_name";
+                        var cmd19 = new MySqlCommand(insertLotitem, connect);
+                        cmd19.Prepare();
+                        cmd19.Parameters.AddWithValue("@id_lot", idLot);
+                        cmd19.Parameters.AddWithValue("@id_customer", customerId);
+                        cmd19.Parameters.AddWithValue("@name", purName);
+                        cmd19.Parameters.AddWithValue("@sum", nmck);
+                        cmd19.Parameters.AddWithValue("@okpd2_code", okpd2Code);
+                        cmd19.Parameters.AddWithValue("@okpd2_group_code", okpd2GroupCode);
+                        cmd19.Parameters.AddWithValue("@okpd2_group_level1_code", okpd2GroupLevel1Code);
+                        cmd19.Parameters.AddWithValue("@okpd_name", okpdName);
+                        cmd19.ExecuteNonQuery();
+                    }
+                }
+                else
+                {
+                    foreach (var po in objectsP)
+                    {
+                        var okpd2Temp =
+                            (po.QuerySelector("td:nth-of-type(5)")?.TextContent ?? "")
+                            .Trim();
+                        var okpd2Code = okpd2Temp.GetDataFromRegex(@"^(\d[\.|\d]*\d)");
+                        var okpd2GroupCode = 0;
+                        var okpd2GroupLevel1Code = "";
+                        if (!String.IsNullOrEmpty(okpd2Code))
+                        {
+                            GetOkpd(okpd2Code, out okpd2GroupCode, out okpd2GroupLevel1Code);
+                        }
+
+                        var okpdName = okpd2Temp.GetDataFromRegex(@"^\d[\.|\d]*\d (.*)$");
+                        var poName = (po.QuerySelector("td:nth-of-type(1)")?.TextContent ?? "")
+                            .Trim();
+                        var okei = (po.QuerySelector("td:nth-of-type(3)")?.TextContent ?? "")
+                            .Trim();
+                        var quant = (po.QuerySelector("td:nth-of-type(4)")?.TextContent ?? "")
+                            .Trim();
+                        if (!string.IsNullOrEmpty(purName))
+                        {
+                            var insertLotitem =
+                                $"INSERT INTO {Builder.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name, sum = @sum, okpd2_code = @okpd2_code, okpd2_group_code = @okpd2_group_code, okpd2_group_level1_code = @okpd2_group_level1_code, okpd_name = @okpd_name, okei = @okei, 	quantity_value = @	quantity_value, customer_quantity_value = @customer_quantity_value";
+                            var cmd19 = new MySqlCommand(insertLotitem, connect);
+                            cmd19.Prepare();
+                            cmd19.Parameters.AddWithValue("@id_lot", idLot);
+                            cmd19.Parameters.AddWithValue("@id_customer", customerId);
+                            cmd19.Parameters.AddWithValue("@name", poName);
+                            cmd19.Parameters.AddWithValue("@sum", "");
+                            cmd19.Parameters.AddWithValue("@okpd2_code", okpd2Code);
+                            cmd19.Parameters.AddWithValue("@okpd2_group_code", okpd2GroupCode);
+                            cmd19.Parameters.AddWithValue("@okpd2_group_level1_code", okpd2GroupLevel1Code);
+                            cmd19.Parameters.AddWithValue("@okpd_name", okpdName);
+                            cmd19.Parameters.AddWithValue("@okei", okei);
+                            cmd19.Parameters.AddWithValue("@quantity_value", quant);
+                            cmd19.Parameters.AddWithValue("@customer_quantity_value", quant);
+                            cmd19.ExecuteNonQuery();
+                        }
+                    }
                 }
 
-                var okpdName = okpd2Temp.GetDataFromRegex(@"^\d[\.|\d]*\d (.*)$");
-                if (!string.IsNullOrEmpty(purName))
-                {
-                    var insertLotitem =
-                        $"INSERT INTO {Builder.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name, sum = @sum, okpd2_code = @okpd2_code, okpd2_group_code = @okpd2_group_code, okpd2_group_level1_code = @okpd2_group_level1_code, okpd_name = @okpd_name";
-                    var cmd19 = new MySqlCommand(insertLotitem, connect);
-                    cmd19.Prepare();
-                    cmd19.Parameters.AddWithValue("@id_lot", idLot);
-                    cmd19.Parameters.AddWithValue("@id_customer", customerId);
-                    cmd19.Parameters.AddWithValue("@name", purName);
-                    cmd19.Parameters.AddWithValue("@sum", nmck);
-                    cmd19.Parameters.AddWithValue("@okpd2_code", okpd2Code);
-                    cmd19.Parameters.AddWithValue("@okpd2_group_code", okpd2GroupCode);
-                    cmd19.Parameters.AddWithValue("@okpd2_group_level1_code", okpd2GroupLevel1Code);
-                    cmd19.Parameters.AddWithValue("@okpd_name", okpdName);
-                    cmd19.ExecuteNonQuery();
-                }
 
                 var appGuarAt = (lot.QuerySelector("td:contains('Обеспечение заявки:') +  td")?.TextContent ?? "")
                     .Trim();
@@ -265,7 +316,7 @@ namespace ParserWebCore.Tender
                                  "")
                         .Trim();
                     var email = (document.QuerySelector("td:contains('Адрес электронной почты:') +  td")
-                                     ?.TextContent ?? "")
+                            ?.TextContent ?? "")
                         .Trim();
                     var contactPerson =
                         (document.QuerySelector("td:contains('ФИО контактного лица:') +  td")?.TextContent ?? "")

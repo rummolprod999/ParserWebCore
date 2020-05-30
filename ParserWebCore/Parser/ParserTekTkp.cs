@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Security.Policy;
 using AngleSharp.Dom;
 using AngleSharp.Parser.Html;
 using ParserWebCore.Extensions;
@@ -12,19 +11,19 @@ using ParserWebCore.TenderType;
 
 namespace ParserWebCore.Parser
 {
-    public class ParserTekKom : ParserAbstract, IParser
+    public class ParserTekTkp : ParserAbstract, IParser
     {
         private int _dateMinus => 3;
 
         public void Parsing()
         {
-            Parse(ParsingTekKom);
+            Parse(ParsingTekTkp);
         }
 
-        private void ParsingTekKom()
+        private void ParsingTekTkp()
         {
             var dateM = DateTime.Now.AddMinutes(-1 * _dateMinus * 24 * 60);
-            var urlStart = $"https://www.tektorg.ru/223-fz/procedures?dpfrom={dateM:dd.MM.yyyy}";
+            var urlStart = $"https://www.tektorg.ru/rosnefttkp/procedures?dpfrom={dateM:dd.MM.yyyy}";
             var max = 0;
             try
             {
@@ -75,7 +74,6 @@ namespace ParserWebCore.Parser
                     url);
                 return;
             }
-
             var parser = new HtmlParser();
             var document = parser.Parse(s);
             var tens = document.All.Where(m => m.ClassList.Contains("section-procurement__item") && m.TagName == "DIV");
@@ -139,14 +137,14 @@ namespace ParserWebCore.Parser
                     urlT, purNumT);
                 return;
             }
-            var tn = new TenderTekKom("ТЭК Торг Коммерческие закупки и 223-ФЗ", "https://www.tektorg.ru/223-fz/procedures", 138,
+            var tn = new TenderTekTkp("ТЭК Торг  Роснефть - Запросы (Т)КП", "https://www.tektorg.ru/rosnefttkp/procedures", 259,
                 new TypeTekKom
                 {
                     Href = tenderUrl,
                     Status = status,
-                     PurNum = purNum,
-                     DatePub = datePub,
-                     DateEnd = dateEnd
+                    PurNum = purNum,
+                    DatePub = datePub,
+                    DateEnd = dateEnd
                 });
             ParserTender(tn);
         }

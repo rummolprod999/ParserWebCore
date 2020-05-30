@@ -98,6 +98,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Boaz:
                     _parser = new ParserBoaz();
                     break;
+                case Arguments.TekTkp:
+                    _parser = new ParserTekTkp();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

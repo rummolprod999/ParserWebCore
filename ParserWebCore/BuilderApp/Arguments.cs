@@ -34,6 +34,7 @@
         Rubex,
         SamCom,
         Ravis,
-        Boaz
+        Boaz,
+        TekTkp
     }
 }

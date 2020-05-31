@@ -100,16 +100,27 @@ namespace ParserWebCore.Parser
             }
 
             var tenderUrl = urlT;
-            if (urlT != null && !urlT.Contains("https://")) tenderUrl = $"https://www.tektorg.ru{urlT}";
-            var status = (t.QuerySelector("div span:contains('Статус:')")?.TextContent?.Replace("Статус:", "") ?? "")
-                .Trim();
+            if (!urlT.Contains("https://")) tenderUrl = $"https://www.tektorg.ru{urlT}";
+            var status = (t.QuerySelector("div span:contains('Статус:')")?.TextContent?.Replace("Статус:", "") ?? "").Trim();
             if (status.Contains("Осталось:"))
             {
-                status = status.GetDataFromRegex("(.+)Осталось:.+").Trim();
+                status = status.GetDataFromRegex("(.+)\n.+Осталось:.+").Trim();
             }
-            var datePubT =
-                (t.QuerySelector("div span:contains('Дата публикации:')")?.TextContent
-                     ?.Replace("Дата публикации:", "") ?? "").Trim();
+            var datePubT = (t.QuerySelector("div.section-procurement__item-dateTo:contains('Дата публикации:')")?.TextContent ?? "").Replace("Дата публикации:", "").Trim();
+            var dateEndT = (t.QuerySelector("div.section-procurement__item-dateTo:contains('Дата окончания приема заявок')")?.TextContent ??
+                            "").Replace("Дата окончания приема заявок:", "").Replace("Дата окончания приема заявок", "").Trim();
+            if (dateEndT == "")
+            {
+                dateEndT =
+                    (t.QuerySelector("span:contains('Подведение итогов не позднее')")?.TextContent ??
+                     "").Replace("Подведение итогов не позднее:", "").Trim();
+            }
+            if (dateEndT == "")
+            {
+                dateEndT =
+                    (t.QuerySelector("div.section-procurement__item-dateTo:contains('Подведение итогов не позднее')")?.TextContent ??
+                     "").Replace("Подведение итогов не позднее:", "").Replace("Подведение итогов не позднее", "").Trim();
+            }
             var datePub = datePubT.ParseDateUn("dd.MM.yyyy HH:mm 'GMT'z");
             if (datePub == DateTime.MinValue)
             {

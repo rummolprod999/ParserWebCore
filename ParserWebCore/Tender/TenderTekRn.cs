@@ -124,13 +124,13 @@ namespace ParserWebCore.Tender
                 GetDocs(docs, connect, idTender);
                 var lots = document.QuerySelectorAll(
                     "div.procedure__lots > div.procedure__lot");
-                GetLots(lots, connect, idTender, customerId);
+                GetLots(lots, connect, idTender, customerId, purObjInfo);
                 TenderKwords(connect, idTender);
                 AddVerNumber(connect, purNum, TypeFz);
             }
         }
 
-        private void GetLots(IHtmlCollection<IElement> lots, MySqlConnection connect, int idTender, int customerId)
+        private void GetLots(IHtmlCollection<IElement> lots, MySqlConnection connect, int idTender, int customerId, string purObjInfo)
         {
             foreach (var lot in lots)
             {
@@ -142,6 +142,9 @@ namespace ParserWebCore.Tender
                 var nmckT = (lot.QuerySelector("td:contains('Начальная цена:') +  td")?.TextContent ?? "0.0")
                     .Trim();
                 var nmck = SharedTekTorg.ParsePrice(nmckT);
+                var purName =
+                    (lot.QuerySelector("td:contains('Предмет договора:') +  td")?.TextContent ?? "").Trim();
+                if (string.IsNullOrEmpty(purName)) purName = purObjInfo;
                 var insertLot =
                     $"INSERT INTO {Builder.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency";
                 var cmd18 = new MySqlCommand(insertLot, connect);
@@ -182,9 +185,7 @@ namespace ParserWebCore.Tender
                         customerId = (int) cmd14.LastInsertedId;
                     }
                 }
-
-                var purName =
-                    (lot.QuerySelector("td:contains('Предмет договора:') +  td")?.TextContent ?? "").Trim();
+                
                 var okpd2Temp =
                     (lot.QuerySelector("td:contains('Код классификатора ОКДП/ОКПД2') +  td")?.TextContent ?? "")
                     .Trim();

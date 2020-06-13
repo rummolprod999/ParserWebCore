@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading;
 using AngleSharp.Dom;
 using AngleSharp.Parser.Html;
 using ParserWebCore.Extensions;
@@ -147,6 +148,7 @@ namespace ParserWebCore.Parser
                     DateEnd = dateEnd
                 });
             ParserTender(tn);
+            Thread.Sleep(5000);
         }
     }
 }

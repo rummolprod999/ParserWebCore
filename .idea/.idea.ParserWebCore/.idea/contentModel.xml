@@ -35,6 +35,7 @@
           <e p="DownloadString.cs" t="Include" />
           <e p="HttpPostSberB2B.cs" t="Include" />
           <e p="HttpPostZakMos.cs" t="Include" />
+          <e p="HttpZmoRts.cs" t="Include" />
           <e p="TimedWebClient.cs" t="Include" />
         </e>
         <e p="Parser" t="Include">
@@ -69,6 +70,7 @@
           <e p="ParserTekSil.cs" t="Include" />
           <e p="ParserTekTkp.cs" t="Include" />
           <e p="ParserZakupMos.cs" t="Include" />
+          <e p="ParserZmoRts.cs" t="Include" />
         </e>
         <e p="ParserExecutor" t="Include">
           <e p="Executor.cs" t="Include" />
@@ -107,6 +109,7 @@
           <e p="TenderTekSil.cs" t="Include" />
           <e p="TenderTekTkp.cs" t="Include" />
           <e p="TenderZakupMos.cs" t="Include" />
+          <e p="TenderZmoRts.cs" t="Include" />
         </e>
         <e p="TenderType" t="Include">
           <e p="AbstractTypeT.cs" t="Include" />
@@ -133,6 +136,7 @@
           <e p="TypeTekRn.cs" t="Include" />
           <e p="TypeTekSil.cs" t="Include" />
           <e p="TypeZakupMos.cs" t="Include" />
+          <e p="TypeZmoRts.cs" t="Include" />
         </e>
         <e p="bin" t="ExcludeRecursive" />
         <e p="obj" t="ExcludeRecursive">

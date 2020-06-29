@@ -35,6 +35,7 @@
         SamCom,
         Ravis,
         Boaz,
-        TekTkp
+        TekTkp,
+        ZmoRts
     }
 }

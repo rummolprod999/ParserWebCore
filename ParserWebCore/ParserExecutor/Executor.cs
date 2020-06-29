@@ -101,6 +101,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.TekTkp:
                     _parser = new ParserTekTkp();
                     break;
+                case Arguments.ZmoRts:
+                    _parser = new ParserZmoRts();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

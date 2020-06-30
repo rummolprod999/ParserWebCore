@@ -1,11 +1,13 @@
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace ParserWebCore.NetworkLibrary
 {
-    public class HttpZmoRts
+    public class HttpZmoRts1
     {
-        public HttpZmoRts()
+        public HttpZmoRts1()
         {
         }
 
@@ -21,6 +23,27 @@ namespace ParserWebCore.NetworkLibrary
                 var res = response.Result;
                 return res.Content.ReadAsStringAsync().Result;
             }
+        }
+    }
+    
+    public class HttpZmoRts
+    {
+        public HttpZmoRts()
+        {
+        }
+
+        public string DownloadString(string url, string data, int section)
+        {
+            var result = "";
+            using (var client = new WebClient())
+            {
+                client.Headers[HttpRequestHeader.ContentType] = "application/json";
+                client.Headers[HttpRequestHeader.UserAgent] = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.56 Safari/537.36";
+                client.Headers.Add("xxx-tenantid-header", section.ToString());
+                result = client.UploadString(url, "POST", data);
+            }
+
+            return result;
         }
     }
 }

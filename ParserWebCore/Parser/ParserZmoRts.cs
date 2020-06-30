@@ -1,15 +1,82 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json.Linq;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
+using ParserWebCore.TenderType;
 
 namespace ParserWebCore.Parser
 {
-    public class ParserZmoRts: ParserAbstract, IParser
+    public class ParserZmoRts : ParserAbstract, IParser
     {
-        private readonly int _countPage = 5;
+        private readonly int _countPage = 2;
         private readonly string _apiUrl = "https://zmo-new-webapi.rts-tender.ru/market/api/v1/trades/publicsearch2";
-        private readonly int[] _sections = { 162, 168, 196, 198, 248, 220, 190, 218, 216, 222, 190, 204};
+
+        private readonly Dictionary<string, int>[] _sections =
+        {
+            new Dictionary<string, int>
+            {
+                ["{\"Title\":\"Тип поиска\",\"ShortName\":\"t\",\"Type\":1,\"Value\":1,\"Name\":\"MarketSearchAction\"},{\"Title\":\"Признак малого и среднего предпринимательства\",\"ShortName\":\"smp\",\"Type\":1,\"Value\":0,\"Name\":\"SmpFilterState\"}"]
+                    = 162
+            },
+            new Dictionary<string, int>
+            {
+                ["{\"Title\":\"Тип поиска\",\"ShortName\":\"t\",\"Type\":1,\"Value\":1,\"Name\":\"MarketSearchAction\"},{\"Title\":\"Признак малого и среднего предпринимательства\",\"ShortName\":\"smp\",\"Type\":1,\"Value\":0,\"Name\":\"SmpFilterState\"}"]
+                    = 168
+            },
+            new Dictionary<string, int>
+            {
+                ["{\"Title\":\"Тип поиска\",\"ShortName\":\"t\",\"Type\":1,\"Value\":0,\"Name\":\"MarketSearchAction\"}"]
+                    = 196
+            },
+            new Dictionary<string, int>
+            {
+                ["{\"Title\":\"Тип поиска\",\"ShortName\":\"t\",\"Type\":1,\"Value\":1,\"Name\":\"MarketSearchAction\"},{\"Title\":\"Признак малого и среднего предпринимательства\",\"ShortName\":\"smp\",\"Type\":1,\"Value\":0,\"Name\":\"SmpFilterState\"}"]
+                    = 208
+            },
+            new Dictionary<string, int>
+            {
+                ["{\"Title\":\"Тип поиска\",\"ShortName\":\"t\",\"Type\":1,\"Value\":1,\"Name\":\"MarketSearchAction\"},{\"Title\":\"Признак малого и среднего предпринимательства\",\"ShortName\":\"smp\",\"Type\":1,\"Value\":0,\"Name\":\"SmpFilterState\"}"]
+                    = 198
+            },
+            new Dictionary<string, int>
+            {
+                ["{\"Title\":\"Тип поиска\",\"ShortName\":\"t\",\"Type\":1,\"Value\":0,\"Name\":\"MarketSearchAction\"}"]
+                    = 248
+            },
+            new Dictionary<string, int>
+            {
+                ["{\"Title\":\"Тип поиска\",\"ShortName\":\"t\",\"Type\":1,\"Value\":1,\"Name\":\"MarketSearchAction\"},{\"Title\":\"Признак малого и среднего предпринимательства\",\"ShortName\":\"smp\",\"Type\":1,\"Value\":0,\"Name\":\"SmpFilterState\"}"]
+                    = 220
+            },
+            new Dictionary<string, int>
+            {
+                ["{\"Title\":\"Тип поиска\",\"ShortName\":\"t\",\"Type\":1,\"Value\":1,\"Name\":\"MarketSearchAction\"},{\"Title\":\"Признак малого и среднего предпринимательства\",\"ShortName\":\"smp\",\"Type\":1,\"Value\":0,\"Name\":\"SmpFilterState\"}"]
+                    = 204
+            },
+            new Dictionary<string, int>
+            {
+                ["{\"Title\":\"Тип поиска\",\"ShortName\":\"t\",\"Type\":1,\"Value\":1,\"Name\":\"MarketSearchAction\"},{\"Title\":\"Признак малого и среднего предпринимательства\",\"ShortName\":\"smp\",\"Type\":1,\"Value\":0,\"Name\":\"SmpFilterState\"}"]
+                    = 190
+            },
+            new Dictionary<string, int>
+            {
+                ["{\"Title\":\"Тип поиска\",\"ShortName\":\"t\",\"Type\":1,\"Value\":1,\"Name\":\"MarketSearchAction\"},{\"Title\":\"Признак малого и среднего предпринимательства\",\"ShortName\":\"smp\",\"Type\":1,\"Value\":0,\"Name\":\"SmpFilterState\"}"]
+                    = 222
+            },
+            new Dictionary<string, int>
+            {
+                ["{\"Title\":\"Тип поиска\",\"ShortName\":\"t\",\"Type\":1,\"Value\":1,\"Name\":\"MarketSearchAction\"},{\"Title\":\"Признак малого и среднего предпринимательства\",\"ShortName\":\"smp\",\"Type\":1,\"Value\":0,\"Name\":\"SmpFilterState\"}"]
+                    = 218
+            },
+            new Dictionary<string, int>
+            {
+                ["{\"Title\":\"Тип поиска\",\"ShortName\":\"t\",\"Type\":1,\"Value\":1,\"Name\":\"MarketSearchAction\"},{\"Title\":\"Признак малого и среднего предпринимательства\",\"ShortName\":\"smp\",\"Type\":1,\"Value\":0,\"Name\":\"SmpFilterState\"}"]
+                    = 216
+            }
+        };
+
         public void Parsing()
         {
             Parse(ParsingZmoRts);
@@ -27,26 +94,69 @@ namespace ParserWebCore.Parser
                     }
                     catch (Exception e)
                     {
-                        Log.Logger($"Error in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}", e);
+                        Log.Logger($"Error in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                            e);
                     }
                 }
             });
-            
         }
 
-        private void GetPage(int num, in int section)
+        private void GetPage(int num, in Dictionary<string, int> section)
         {
-            var data = "{\"FilterSource\":1,\"Paging\":{\"Page\":" + num + ",\"ItemsPerPage\":9},\"PaginationEventType\":0,\"Sorting\":[{\"field\":\"PublicationDate\",\"title\":\"По новизне\",\"direction\":\"Descending\",\"active\":true}],\"Filtering\":[{\"Title\":\"Регионы поставки\",\"ShortName\":\"regs\",\"Type\":0,\"Value\":[],\"Name\":\"KladrCodeRegions\"},{\"Title\":\"Тип поиска\",\"ShortName\":\"t\",\"Type\":1,\"Value\":1,\"Name\":\"MarketSearchAction\"},{\"Title\":\"Окпд2 коды\",\"ShortName\":\"okpd2s\",\"Type\":0,\"Value\":[],\"Name\":\"Okpd2Codes\"},{\"Title\":\"Организации\",\"ShortName\":\"orgs\",\"Type\":0,\"Value\":[],\"Name\":\"Organizations\"},{\"Title\":\"Статус\",\"ShortName\":\"sts\",\"Type\":1,\"Value\":[],\"Name\":\"Statuses\"}]}";
-            var s = DownloadString.DownLRtsZmo(_apiUrl, data, section);
+            var data = "{\"FilterSource\":1,\"Paging\":{\"Page\":" + num +
+                       ",\"ItemsPerPage\":50},\"PaginationEventType\":0,\"Sorting\":[{\"field\":\"PublicationDate\",\"title\":\"По новизне\",\"direction\":\"Descending\",\"active\":true}],\"Filtering\":[" +
+                       section.Keys.First() + "]}";
+            var s = DownloadString.DownLRtsZmo(_apiUrl, data, section.Values.First());
             if (string.IsNullOrEmpty(s))
             {
                 Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
                     _apiUrl);
                 return;
             }
-            Console.WriteLine(s);
-            
+
+            if (s.ToLower().Contains("exception"))
+            {
+                Log.Logger(s);
+                return;
+            }
+
+            var jObj = JObject.Parse(s);
+            var tenders = GetElements(jObj, "data.items");
+            foreach (var t in tenders)
+            {
+                try
+                {
+                    ParserTenderObj(t);
+                }
+                catch (Exception e)
+                {
+                    Log.Logger($"Error in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                        e, t.ToString());
+                }
+            }
+        }
+
+        private void ParserTenderObj(JToken t)
+        {
+            var id = ((string) t.SelectToken("Id") ?? "").Trim();
+            var lotId = ((string) t.SelectToken("LotId") ?? "").Trim();
+            var purName = ((string) t.SelectToken("Name") ?? "").Trim();
+            var nmck = ((string) t.SelectToken("Price") ?? "").Trim();
+            var cusName = ((string) t.SelectToken("CustomerName") ?? "").Trim();
+            var stateString = ((string) t.SelectToken("StateString") ?? "").Trim();
+            var publicationDate = (DateTime?) t.SelectToken("PublicationDate") ?? DateTime.MinValue;
+            var endDate = (DateTime?) t.SelectToken("FillingApplicationEndDate") ?? DateTime.MinValue;
+            var delivPlaces = GetElements(t, "DeliveryKladrs")
+                .Select(m => ((string) m.SelectToken("Name") ?? "").Trim()).ToArray();
+            var host = GetElements(t, "Hosts").Select(m => (string) m ?? "").FirstOrDefault();
+            if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(lotId) || publicationDate == DateTime.MinValue ||
+                endDate == DateTime.MinValue)
+            {
+                Log.Logger("Bad trender", t.ToString());
+                return;
+            }
+            var tender = new TypeZmoRts{Id = id, LotId = lotId, CusName = cusName, DeliveryKladrRegionName = delivPlaces, EndDate = endDate, Host = host, Nmck = nmck, PublicationDate = publicationDate, PurName = purName, StateString = stateString};
+            Console.WriteLine(tender);
         }
     }
-    
 }

@@ -130,6 +130,9 @@ namespace ParserWebCore.Tender
                     case 216:
                         href = $"https://gkb1-74.rts-tender.ru/zapros/{_tn.Id}/request";
                         break;
+                    case 222:
+                        href = $"https://rtmarket.rts-tender.ru/zapros/{_tn.Id}/request";
+                        break;
                     default:
                         Log.Logger("Bad url", url);
                         return;

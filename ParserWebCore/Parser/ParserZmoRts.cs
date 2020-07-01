@@ -4,6 +4,7 @@ using System.Linq;
 using Newtonsoft.Json.Linq;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
+using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
 
 namespace ParserWebCore.Parser
@@ -126,7 +127,7 @@ namespace ParserWebCore.Parser
             {
                 try
                 {
-                    ParserTenderObj(t);
+                    ParserTenderObj(t, section.Values.First());
                 }
                 catch (Exception e)
                 {
@@ -136,7 +137,7 @@ namespace ParserWebCore.Parser
             }
         }
 
-        private void ParserTenderObj(JToken t)
+        private void ParserTenderObj(JToken t, int sec)
         {
             var id = ((string) t.SelectToken("Id") ?? "").Trim();
             var lotId = ((string) t.SelectToken("LotId") ?? "").Trim();
@@ -152,11 +153,12 @@ namespace ParserWebCore.Parser
             if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(lotId) || publicationDate == DateTime.MinValue ||
                 endDate == DateTime.MinValue)
             {
-                Log.Logger("Bad trender", t.ToString());
+                Log.Logger("selling", id);
                 return;
             }
             var tender = new TypeZmoRts{Id = id, LotId = lotId, CusName = cusName, DeliveryKladrRegionName = delivPlaces, EndDate = endDate, Host = host, Nmck = nmck, PublicationDate = publicationDate, PurName = purName, StateString = stateString};
-            Console.WriteLine(tender);
+            ParserTender(new TenderZmoRts("РТС–тендер. Корпоративные магазины ЗМО", "https://www.rts-tender.ru/zmo/corporatemall", 261,
+                tender, sec));
         }
     }
 }

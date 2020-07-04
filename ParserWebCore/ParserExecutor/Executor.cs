@@ -104,6 +104,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.ZmoRts:
                     _parser = new ParserZmoRts();
                     break;
+                case Arguments.RtsMarket:
+                    _parser = new ParserRtsMarket();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

@@ -36,6 +36,7 @@
         Ravis,
         Boaz,
         TekTkp,
-        ZmoRts
+        ZmoRts,
+        RtsMarket
     }
 }

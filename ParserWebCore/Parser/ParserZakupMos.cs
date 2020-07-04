@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Web;
 using Newtonsoft.Json.Linq;
 using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
@@ -37,9 +38,11 @@ namespace ParserWebCore.Parser
         private void GetPage(int num)
         {
             var data =
-                "{\"filter\":{\"auctionSpecificFilter\":{},\"needSpecificFilter\":{},\"tenderSpecificFilter\":{}},\"order\":[{\"field\":\"PublishDate\",\"desc\":true}],\"withCount\":true,\"take\":50,\"skip\":" +
-                num * 50 + "}";
-            var s = DownloadString.DownLZakMos(_url, data);
+                $"{{\"filter\":{{\"auctionSpecificFilter\":{{}},\"needSpecificFilter\":{{}},\"tenderSpecificFilter\":{{}}}},\"order\":[{{\"field\":\"PublishDate\",\"desc\":true}}],\"withCount\":true,\"take\":50,\"skip\":{num * 50}}}";
+            var url =
+                $"https://old.zakupki.mos.ru/api/Cssp/Purchase/Query?queryDto={{\"filter\":{{\"auctionSpecificFilter\":{{}},\"needSpecificFilter\":{{}},\"tenderSpecificFilter\":{{}}}},\"order\":[{{\"field\":\"PublishDate\",\"desc\":true}}],\"withCount\":true,\"take\":50,\"skip\":{num * 50}}}";
+            url = Uri.EscapeUriString(url);
+            var s = DownloadString.DownLUserAgent(url);
             if (string.IsNullOrEmpty(s))
             {
                 Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",

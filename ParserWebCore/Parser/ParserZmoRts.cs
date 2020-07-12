@@ -11,69 +11,69 @@ namespace ParserWebCore.Parser
 {
     public class ParserZmoRts : ParserAbstract, IParser
     {
-        private readonly int _countPage = 2;
+        private readonly int _countPage = 5;
         private readonly string _apiUrl = "https://zmo-new-webapi.rts-tender.ru/market/api/v1/trades/publicsearch2";
 
         private readonly Dictionary<string, int>[] _sections =
         {
             new Dictionary<string, int>
             {
-                ["{\"Title\":\"Тип поиска\",\"ShortName\":\"t\",\"Type\":1,\"Value\":1,\"Name\":\"MarketSearchAction\"},{\"Title\":\"Признак малого и среднего предпринимательства\",\"ShortName\":\"smp\",\"Type\":1,\"Value\":0,\"Name\":\"SmpFilterState\"}"]
+                ["{\"Title\":\"Тип поиска\",\"ShortName\":\"t\",\"Type\":1,\"Value\":1,\"Name\":\"MarketSearchAction\"},{\"Title\":\"Признак малого и среднего предпринимательства\",\"ShortName\":\"smp\",\"Type\":1,\"Value\":0,\"Name\":\"SmpFilterState\"},{\"Title\":\"Статус\",\"ShortName\":\"sts\",\"Type\":1,\"Value\":[0,1,2,3,4],\"Name\":\"Statuses\"}"]
                     = 162
             },
             new Dictionary<string, int>
             {
-                ["{\"Title\":\"Тип поиска\",\"ShortName\":\"t\",\"Type\":1,\"Value\":1,\"Name\":\"MarketSearchAction\"},{\"Title\":\"Признак малого и среднего предпринимательства\",\"ShortName\":\"smp\",\"Type\":1,\"Value\":0,\"Name\":\"SmpFilterState\"}"]
+                ["{\"Title\":\"Тип поиска\",\"ShortName\":\"t\",\"Type\":1,\"Value\":1,\"Name\":\"MarketSearchAction\"},{\"Title\":\"Признак малого и среднего предпринимательства\",\"ShortName\":\"smp\",\"Type\":1,\"Value\":0,\"Name\":\"SmpFilterState\"},{\"Title\":\"Статус\",\"ShortName\":\"sts\",\"Type\":1,\"Value\":[0,1,2,3,4],\"Name\":\"Statuses\"}"]
                     = 168
             },
             new Dictionary<string, int>
             {
-                ["{\"Title\":\"Тип поиска\",\"ShortName\":\"t\",\"Type\":1,\"Value\":0,\"Name\":\"MarketSearchAction\"}"]
+                ["{\"Title\":\"Тип поиска\",\"ShortName\":\"t\",\"Type\":1,\"Value\":0,\"Name\":\"MarketSearchAction\"},{\"Title\":\"Статус\",\"ShortName\":\"sts\",\"Type\":1,\"Value\":[0,1,2,3,4],\"Name\":\"Statuses\"}"]
                     = 196
             },
             new Dictionary<string, int>
             {
-                ["{\"Title\":\"Тип поиска\",\"ShortName\":\"t\",\"Type\":1,\"Value\":1,\"Name\":\"MarketSearchAction\"},{\"Title\":\"Признак малого и среднего предпринимательства\",\"ShortName\":\"smp\",\"Type\":1,\"Value\":0,\"Name\":\"SmpFilterState\"}"]
+                ["{\"Title\":\"Тип поиска\",\"ShortName\":\"t\",\"Type\":1,\"Value\":1,\"Name\":\"MarketSearchAction\"},{\"Title\":\"Признак малого и среднего предпринимательства\",\"ShortName\":\"smp\",\"Type\":1,\"Value\":0,\"Name\":\"SmpFilterState\"},{\"Title\":\"Статус\",\"ShortName\":\"sts\",\"Type\":1,\"Value\":[0,1,2,3,4],\"Name\":\"Statuses\"}"]
                     = 208
             },
             new Dictionary<string, int>
             {
-                ["{\"Title\":\"Тип поиска\",\"ShortName\":\"t\",\"Type\":1,\"Value\":1,\"Name\":\"MarketSearchAction\"},{\"Title\":\"Признак малого и среднего предпринимательства\",\"ShortName\":\"smp\",\"Type\":1,\"Value\":0,\"Name\":\"SmpFilterState\"}"]
+                ["{\"Title\":\"Тип поиска\",\"ShortName\":\"t\",\"Type\":1,\"Value\":1,\"Name\":\"MarketSearchAction\"},{\"Title\":\"Признак малого и среднего предпринимательства\",\"ShortName\":\"smp\",\"Type\":1,\"Value\":0,\"Name\":\"SmpFilterState\"},{\"Title\":\"Статус\",\"ShortName\":\"sts\",\"Type\":1,\"Value\":[0,1,2,3,4],\"Name\":\"Statuses\"}"]
                     = 198
             },
             new Dictionary<string, int>
             {
-                ["{\"Title\":\"Тип поиска\",\"ShortName\":\"t\",\"Type\":1,\"Value\":0,\"Name\":\"MarketSearchAction\"}"]
+                ["{\"Title\":\"Тип поиска\",\"ShortName\":\"t\",\"Type\":1,\"Value\":0,\"Name\":\"MarketSearchAction\"},{\"Title\":\"Статус\",\"ShortName\":\"sts\",\"Type\":1,\"Value\":[0,1,2,3,4],\"Name\":\"Statuses\"}"]
                     = 248
             },
             new Dictionary<string, int>
             {
-                ["{\"Title\":\"Тип поиска\",\"ShortName\":\"t\",\"Type\":1,\"Value\":1,\"Name\":\"MarketSearchAction\"},{\"Title\":\"Признак малого и среднего предпринимательства\",\"ShortName\":\"smp\",\"Type\":1,\"Value\":0,\"Name\":\"SmpFilterState\"}"]
+                ["{\"Title\":\"Тип поиска\",\"ShortName\":\"t\",\"Type\":1,\"Value\":1,\"Name\":\"MarketSearchAction\"},{\"Title\":\"Признак малого и среднего предпринимательства\",\"ShortName\":\"smp\",\"Type\":1,\"Value\":0,\"Name\":\"SmpFilterState\"},{\"Title\":\"Статус\",\"ShortName\":\"sts\",\"Type\":1,\"Value\":[0,1,2,3,4],\"Name\":\"Statuses\"}"]
                     = 220
             },
             new Dictionary<string, int>
             {
-                ["{\"Title\":\"Тип поиска\",\"ShortName\":\"t\",\"Type\":1,\"Value\":1,\"Name\":\"MarketSearchAction\"},{\"Title\":\"Признак малого и среднего предпринимательства\",\"ShortName\":\"smp\",\"Type\":1,\"Value\":0,\"Name\":\"SmpFilterState\"}"]
+                ["{\"Title\":\"Тип поиска\",\"ShortName\":\"t\",\"Type\":1,\"Value\":1,\"Name\":\"MarketSearchAction\"},{\"Title\":\"Признак малого и среднего предпринимательства\",\"ShortName\":\"smp\",\"Type\":1,\"Value\":0,\"Name\":\"SmpFilterState\"},{\"Title\":\"Статус\",\"ShortName\":\"sts\",\"Type\":1,\"Value\":[0,1,2,3,4],\"Name\":\"Statuses\"}"]
                     = 204
             },
             new Dictionary<string, int>
             {
-                ["{\"Title\":\"Тип поиска\",\"ShortName\":\"t\",\"Type\":1,\"Value\":1,\"Name\":\"MarketSearchAction\"},{\"Title\":\"Признак малого и среднего предпринимательства\",\"ShortName\":\"smp\",\"Type\":1,\"Value\":0,\"Name\":\"SmpFilterState\"}"]
+                ["{\"Title\":\"Тип поиска\",\"ShortName\":\"t\",\"Type\":1,\"Value\":1,\"Name\":\"MarketSearchAction\"},{\"Title\":\"Признак малого и среднего предпринимательства\",\"ShortName\":\"smp\",\"Type\":1,\"Value\":0,\"Name\":\"SmpFilterState\"},{\"Title\":\"Статус\",\"ShortName\":\"sts\",\"Type\":1,\"Value\":[0,1,2,3,4],\"Name\":\"Statuses\"}"]
                     = 190
             },
             new Dictionary<string, int>
             {
-                ["{\"Title\":\"Тип поиска\",\"ShortName\":\"t\",\"Type\":1,\"Value\":1,\"Name\":\"MarketSearchAction\"},{\"Title\":\"Признак малого и среднего предпринимательства\",\"ShortName\":\"smp\",\"Type\":1,\"Value\":0,\"Name\":\"SmpFilterState\"}"]
+                ["{\"Title\":\"Тип поиска\",\"ShortName\":\"t\",\"Type\":1,\"Value\":1,\"Name\":\"MarketSearchAction\"},{\"Title\":\"Признак малого и среднего предпринимательства\",\"ShortName\":\"smp\",\"Type\":1,\"Value\":0,\"Name\":\"SmpFilterState\"},{\"Title\":\"Статус\",\"ShortName\":\"sts\",\"Type\":1,\"Value\":[0,1,2,3,4],\"Name\":\"Statuses\"}"]
                     = 222
             },
             new Dictionary<string, int>
             {
-                ["{\"Title\":\"Тип поиска\",\"ShortName\":\"t\",\"Type\":1,\"Value\":1,\"Name\":\"MarketSearchAction\"},{\"Title\":\"Признак малого и среднего предпринимательства\",\"ShortName\":\"smp\",\"Type\":1,\"Value\":0,\"Name\":\"SmpFilterState\"}"]
+                ["{\"Title\":\"Тип поиска\",\"ShortName\":\"t\",\"Type\":1,\"Value\":1,\"Name\":\"MarketSearchAction\"},{\"Title\":\"Признак малого и среднего предпринимательства\",\"ShortName\":\"smp\",\"Type\":1,\"Value\":0,\"Name\":\"SmpFilterState\"},{\"Title\":\"Статус\",\"ShortName\":\"sts\",\"Type\":1,\"Value\":[0,1,2,3,4],\"Name\":\"Statuses\"}"]
                     = 218
             },
             new Dictionary<string, int>
             {
-                ["{\"Title\":\"Тип поиска\",\"ShortName\":\"t\",\"Type\":1,\"Value\":1,\"Name\":\"MarketSearchAction\"},{\"Title\":\"Признак малого и среднего предпринимательства\",\"ShortName\":\"smp\",\"Type\":1,\"Value\":0,\"Name\":\"SmpFilterState\"}"]
+                ["{\"Title\":\"Тип поиска\",\"ShortName\":\"t\",\"Type\":1,\"Value\":1,\"Name\":\"MarketSearchAction\"},{\"Title\":\"Признак малого и среднего предпринимательства\",\"ShortName\":\"smp\",\"Type\":1,\"Value\":0,\"Name\":\"SmpFilterState\"},{\"Title\":\"Статус\",\"ShortName\":\"sts\",\"Type\":1,\"Value\":[0,1,2,3,4],\"Name\":\"Statuses\"}"]
                     = 216
             }
         };

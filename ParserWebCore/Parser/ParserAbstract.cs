@@ -10,7 +10,7 @@ namespace ParserWebCore.Parser
 {
     public abstract class ParserAbstract
     {
-        protected void Parse(Action op)
+        protected virtual void Parse(Action op)
         {
             Log.Logger("Время начала парсинга");
             op?.Invoke();

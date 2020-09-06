@@ -29,8 +29,8 @@ namespace ParserWebCore.Tender
         }
 
         protected string PlacingWay;
-        private string EtpName { get; set; }
-        private string EtpUrl { get; set; }
+        protected string EtpName { get; set; }
+        protected string EtpUrl { get; set; }
         protected int TypeFz { get; set; }
         public static int Count { get; set; }
         public static int UpCount { get; set; }

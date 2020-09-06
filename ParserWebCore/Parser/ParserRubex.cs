@@ -11,7 +11,7 @@ namespace ParserWebCore.Parser
 {
     public class ParserRubex : ParserAbstract, IParser
     {
-        private readonly string urlpage = "https://rubexgroup.ru/%D0%B7%D0%B0%D0%BA%D1%83%D0%BF%D0%BA%D0%B8/";
+        private readonly string _urlpage = "https://rubexgroup.ru/%D0%B7%D0%B0%D0%BA%D1%83%D0%BF%D0%BA%D0%B8/";
 
         public void Parsing()
         {
@@ -22,7 +22,7 @@ namespace ParserWebCore.Parser
         {
             try
             {
-                ParsingPage(urlpage);
+                ParsingPage(_urlpage);
             }
             catch (Exception e)
             {

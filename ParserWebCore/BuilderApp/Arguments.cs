@@ -37,6 +37,7 @@
         Boaz,
         TekTkp,
         ZmoRts,
-        RtsMarket
+        RtsMarket,
+        Uralmash
     }
 }

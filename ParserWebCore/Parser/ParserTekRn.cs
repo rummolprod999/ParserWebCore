@@ -13,7 +13,7 @@ namespace ParserWebCore.Parser
 {
     public class ParserTekRn : ParserAbstract, IParser
     {
-        private int _dateMinus => 10;
+        private int DateMinus => 10;
 
         public void Parsing()
         {
@@ -22,7 +22,7 @@ namespace ParserWebCore.Parser
 
         private void ParsingTekRn()
         {
-            var dateM = DateTime.Now.AddMinutes(-1 * _dateMinus * 24 * 60);
+            var dateM = DateTime.Now.AddMinutes(-1 * DateMinus * 24 * 60);
             var urlStart = $"https://www.tektorg.ru/rosneft/procedures?dpfrom={dateM:dd.MM.yyyy}";
             var max = 0;
             try

@@ -12,7 +12,7 @@ namespace ParserWebCore.Parser
 {
     public class ParserSportMaster: ParserAbstract, IParser
     {
-        private readonly string urlpage = "http://zakupki.sportmaster.ru/list/";
+        private readonly string _urlpage = "http://zakupki.sportmaster.ru/list/";
         public void Parsing()
         {
             Parse(ParsingSportMaster);
@@ -22,7 +22,7 @@ namespace ParserWebCore.Parser
         {
             try
             {
-                ParsingPage(urlpage);
+                ParsingPage(_urlpage);
             }
             catch (Exception e)
             {

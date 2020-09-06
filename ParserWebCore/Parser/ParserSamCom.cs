@@ -13,7 +13,7 @@ namespace ParserWebCore.Parser
 {
     public class ParserSamCom : ParserAbstract, IParser
     {
-        private readonly string urlpage = "https://samcomsys.ru/purchaselist?purchasestatus_id=13";
+        private readonly string _urlpage = "https://samcomsys.ru/purchaselist?purchasestatus_id=13";
 
         public void Parsing()
         {
@@ -24,7 +24,7 @@ namespace ParserWebCore.Parser
         {
             try
             {
-                ParsingPage(urlpage);
+                ParsingPage(_urlpage);
             }
             catch (Exception e)
             {
@@ -62,7 +62,7 @@ namespace ParserWebCore.Parser
 
         private void ParserTender(HtmlNode n)
         {
-            var href = urlpage;
+            var href = _urlpage;
             var purName =
                 n.SelectSingleNode(".//span[. = 'Наименование:']/following-sibling::span")?.InnerText?.Trim() ??
                 throw new Exception(

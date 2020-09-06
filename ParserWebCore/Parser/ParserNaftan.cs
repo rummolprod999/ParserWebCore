@@ -17,7 +17,7 @@ namespace ParserWebCore.Parser
         private readonly TimeSpan _timeoutB = TimeSpan.FromSeconds(30);
         private const string StartUrl = "http://www.naftan.by/ru/all_tenders.aspx?KindGoodId=-1";
         private readonly ChromeDriver _driver = CreatorChromeDriver.GetChromeDriver();
-        private List<TenderNaftan> list_tenders = new List<TenderNaftan>();
+        private List<TenderNaftan> _listTenders = new List<TenderNaftan>();
 
         public void Parsing()
         {
@@ -76,7 +76,7 @@ namespace ParserWebCore.Parser
 
         private void ParsingListTendersNaftan()
         {
-            foreach (var t in list_tenders)
+            foreach (var t in _listTenders)
             {
                 try
                 {
@@ -164,7 +164,7 @@ namespace ParserWebCore.Parser
             var tt = new TypeNaftan
                 {DateEnd = dateEnd, DatePub = datePub, Href = href, PurName = purName, PurNum = purNum};
             var tn = new TenderNaftan("ОАО «Нафтан»", "http://www.naftan.by/", 118, tt);
-            list_tenders.Add(tn);
+            _listTenders.Add(tn);
         }
 
         private int GetLastNumPage()

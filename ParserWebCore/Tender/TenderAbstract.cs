@@ -366,7 +366,7 @@ namespace ParserWebCore.Tender
         public int GetRegionFromString(string st, MySqlConnection connect)
         {
             var idRegion = 0;
-            var regionS = isContainsRegion(st);
+            var regionS = IsContainsRegion(st);
             if (regionS == "") return idRegion;
             var selectReg = $"SELECT id FROM {Builder.Prefix}region WHERE name LIKE @name";
             var cmd46 = new MySqlCommand(selectReg, connect);
@@ -387,7 +387,7 @@ namespace ParserWebCore.Tender
             return idRegion;
         }
 
-        private string isContainsRegion(string s)
+        private string IsContainsRegion(string s)
         {
             s = s.ToLower();
             if (s.Contains("отсуств")) return "";

@@ -14,7 +14,7 @@ namespace ParserWebCore.Parser
 {
     public class ParserTekTkp : ParserAbstract, IParser
     {
-        private int _dateMinus => 3;
+        private int DateMinus => 3;
 
         public void Parsing()
         {
@@ -23,7 +23,7 @@ namespace ParserWebCore.Parser
 
         private void ParsingTekTkp()
         {
-            var dateM = DateTime.Now.AddMinutes(-1 * _dateMinus * 24 * 60);
+            var dateM = DateTime.Now.AddMinutes(-1 * DateMinus * 24 * 60);
             var urlStart = $"https://www.tektorg.ru/rosnefttkp/procedures?dpfrom={dateM:dd.MM.yyyy}";
             var max = 0;
             try

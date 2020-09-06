@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="$USER_HOME$/.cache/JetBrains/Rider2020.1/extResources" t="IncludeRecursive" />
-    <e p="$USER_HOME$/.cache/JetBrains/Rider2020.1/resharper-host/local/Transient/ReSharperHost/v201/SolutionCaches/_ParserWebCore.1370944712.00" t="ExcludeRecursive" />
+    <e p="$USER_HOME$/.cache/JetBrains/Rider2020.2/extResources" t="IncludeRecursive" />
+    <e p="$USER_HOME$/.cache/JetBrains/Rider2020.2/resharper-host/local/Transient/Rider/v202/SolutionCaches/_ParserWebCore.1370944712.00" t="ExcludeRecursive" />
     <e p="$PROJECT_DIR$" t="IncludeFlat">
       <e p=".git/info/exclude" t="IncludeRecursive" />
       <e p="ParserWebCore" t="IncludeRecursive">
@@ -54,6 +54,7 @@
           <e p="ParserMzVoron.cs" t="Include" />
           <e p="ParserNaftan.cs" t="Include" />
           <e p="ParserRavis.cs" t="Include" />
+          <e p="ParserRtsMarket.cs" t="Include" />
           <e p="ParserRubex.cs" t="Include" />
           <e p="ParserRwBy.cs" t="Include" />
           <e p="ParserSamCom.cs" t="Include" />
@@ -69,6 +70,9 @@
           <e p="ParserTekRn.cs" t="Include" />
           <e p="ParserTekSil.cs" t="Include" />
           <e p="ParserTekTkp.cs" t="Include" />
+          <e p="ParserUralmash.cs" t="Include" />
+          <e p="ParserUralmash1.cs" t="Include" />
+          <e p="ParserUralmash2.cs" t="Include" />
           <e p="ParserZakupMos.cs" t="Include" />
           <e p="ParserZmoRts.cs" t="Include" />
         </e>
@@ -94,6 +98,7 @@
           <e p="TenderMzVoron.cs" t="Include" />
           <e p="TenderNaftan.cs" t="Include" />
           <e p="TenderRavis.cs" t="Include" />
+          <e p="TenderRtsMarket.cs" t="Include" />
           <e p="TenderRubex.cs" t="Include" />
           <e p="TenderRwBy.cs" t="Include" />
           <e p="TenderSamCom.cs" t="Include" />
@@ -108,6 +113,8 @@
           <e p="TenderTekRn.cs" t="Include" />
           <e p="TenderTekSil.cs" t="Include" />
           <e p="TenderTekTkp.cs" t="Include" />
+          <e p="TenderUralmash1.cs" t="Include" />
+          <e p="TenderUralmash2.cs" t="Include" />
           <e p="TenderZakupMos.cs" t="Include" />
           <e p="TenderZmoRts.cs" t="Include" />
         </e>
@@ -135,6 +142,8 @@
           <e p="TypeTekMos.cs" t="Include" />
           <e p="TypeTekRn.cs" t="Include" />
           <e p="TypeTekSil.cs" t="Include" />
+          <e p="TypeUral1.cs" t="Include" />
+          <e p="TypeUral2.cs" t="Include" />
           <e p="TypeZakupMos.cs" t="Include" />
           <e p="TypeZmoRts.cs" t="Include" />
         </e>
@@ -149,6 +158,7 @@
         <e p="settings.json" t="Include" />
         <e p="test.html" t="Include" />
         <e p="test.json" t="Include" />
+        <e p="test2.json" t="Include" />
       </e>
       <e p="ParserWebCore.sln" t="IncludeFlat" />
       <e p="packages" t="ExcludeRecursive" />

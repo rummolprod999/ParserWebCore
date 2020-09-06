@@ -9,7 +9,7 @@ namespace ParserWebCore.MlConformity
 {
     public class ParserConformity : IParser
     {
-        private DataTable dt = new DataTable();
+        private DataTable _dt = new DataTable();
 
         public void Parsing()
         {
@@ -21,7 +21,7 @@ namespace ParserWebCore.MlConformity
         private void Parser()
         {
             GetListConformity();
-            if (dt.Rows.Count == 0)
+            if (_dt.Rows.Count == 0)
             {
                 Log.Logger("Can not empty conformity in table");
                 return;
@@ -31,7 +31,7 @@ namespace ParserWebCore.MlConformity
             using (var connect = ConnectToDb.GetDbConnection())
             {
                 connect.Open();
-                ml.PredictConformity(dt.Rows, connect);
+                ml.PredictConformity(_dt.Rows, connect);
             }
         }
 
@@ -45,7 +45,7 @@ namespace ParserWebCore.MlConformity
                 var cmd1 = new MySqlCommand(selectPw, connect);
                 cmd1.Prepare();
                 var adapter1 = new MySqlDataAdapter {SelectCommand = cmd1};
-                adapter1.Fill(dt);
+                adapter1.Fill(_dt);
             }
         }
     }

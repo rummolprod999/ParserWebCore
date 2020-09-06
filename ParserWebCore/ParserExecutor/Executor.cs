@@ -107,6 +107,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.RtsMarket:
                     _parser = new ParserRtsMarket();
                     break;
+                case Arguments.Uralmash:
+                    _parser = new ParserUralmash();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

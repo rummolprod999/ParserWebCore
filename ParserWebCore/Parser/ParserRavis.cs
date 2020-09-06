@@ -10,7 +10,7 @@ namespace ParserWebCore.Parser
 {
     public class ParserRavis : ParserAbstract, IParser
     {
-        private readonly string urlpage = "http://ravistender.ru";
+        private readonly string _urlpage = "http://ravistender.ru";
 
         public void Parsing()
         {
@@ -21,7 +21,7 @@ namespace ParserWebCore.Parser
         {
             try
             {
-                ParsingPage(urlpage);
+                ParsingPage(_urlpage);
             }
             catch (Exception e)
             {
@@ -59,7 +59,7 @@ namespace ParserWebCore.Parser
 
         private void ParserTender(HtmlNode n)
         {
-            var href = urlpage;
+            var href = _urlpage;
             var purName =
                 n.SelectSingleNode("./td[1]")?.InnerText?.Trim() ??
                 throw new Exception(

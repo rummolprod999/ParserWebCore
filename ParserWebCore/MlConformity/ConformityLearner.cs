@@ -16,9 +16,9 @@ namespace ParserWebCore.MlConformity
 {
     public class ConformityLearner
     {
-        private string _trainDataPath => Path.Combine(Builder.Path, "Data", "placing_way.tsv");
-        private string _testDataPath => Path.Combine(Builder.Path, "Data", "placing_way_test.tsv");
-        private string _modelPath => Path.Combine(Builder.Path, "Models", "model.zip");
+        private string TrainDataPath => Path.Combine(Builder.Path, "Data", "placing_way.tsv");
+        private string TestDataPath => Path.Combine(Builder.Path, "Data", "placing_way_test.tsv");
+        private string ModelPath => Path.Combine(Builder.Path, "Models", "model.zip");
         private MLContext _mlContext;
         private PredictionEngine<ConformChecker, CheckerPrediction> _predEngine;
         private ITransformer _trainedModel;
@@ -41,8 +41,8 @@ namespace ParserWebCore.MlConformity
 
         private void ModelLearner()
         {
-            if (new FileInfo(_modelPath).Exists) return;
-            _trainingDataView = _mlContext.Data.CreateTextReader<ConformChecker>(hasHeader: true).Read(_trainDataPath);
+            if (new FileInfo(ModelPath).Exists) return;
+            _trainingDataView = _mlContext.Data.CreateTextReader<ConformChecker>(hasHeader: true).Read(TrainDataPath);
             var pipeline = ProcessData();
             var trainingPipeline = BuildAndTrainModel(_trainingDataView, pipeline);
             Evaluate();
@@ -76,17 +76,17 @@ namespace ParserWebCore.MlConformity
 
         private void SaveModelAsFile(MLContext mlContext, ITransformer model)
         {
-            using (var fs = new FileStream(_modelPath, FileMode.Create, FileAccess.Write, FileShare.Write))
+            using (var fs = new FileStream(ModelPath, FileMode.Create, FileAccess.Write, FileShare.Write))
                 mlContext.Model.Save(model, fs);
 
-            Console.WriteLine("The model is saved to {0}", _modelPath);
+            Console.WriteLine("The model is saved to {0}", ModelPath);
         }
 
         private void Evaluate()
         {
             Console.WriteLine(
                 $"=============== Evaluating to get model's accuracy metrics - Starting time: {DateTime.Now.ToString()} ===============");
-            var testDataView = _mlContext.Data.CreateTextReader<ConformChecker>(hasHeader: true).Read(_testDataPath);
+            var testDataView = _mlContext.Data.CreateTextReader<ConformChecker>(hasHeader: true).Read(TestDataPath);
             var testMetrics = _mlContext.MulticlassClassification.Evaluate(_trainedModel.Transform(testDataView));
             Console.WriteLine(
                 $"=============== Evaluating to get model's accuracy metrics - Ending time: {DateTime.Now.ToString(CultureInfo.InvariantCulture)} ===============");
@@ -106,7 +106,7 @@ namespace ParserWebCore.MlConformity
         public void PredictConformity(DataRowCollection dr, MySqlConnection connect)
         {
             ITransformer loadedModel;
-            using (var stream = new FileStream(_modelPath, FileMode.Open, FileAccess.Read, FileShare.Read))
+            using (var stream = new FileStream(ModelPath, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
                 loadedModel = _mlContext.Model.Load(stream);
             }

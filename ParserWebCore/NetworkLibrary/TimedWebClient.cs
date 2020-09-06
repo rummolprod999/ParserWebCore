@@ -57,10 +57,10 @@ namespace ParserWebCore.NetworkLibrary
     
     public class TimedWebSber : WebClient
     {
-        private readonly int page;
+        private readonly int _page;
         public TimedWebSber(int page)
         {
-            this.page = page;
+            this._page = page;
         }
 
         protected override WebRequest GetWebRequest(Uri address)

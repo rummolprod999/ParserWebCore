@@ -56,7 +56,7 @@ namespace ParserWebCore.NetworkLibrary
 
             return tmp;
         }
-        
+
         public static string DownLTektorg(string url)
         {
             var tmp = "";
@@ -207,7 +207,7 @@ namespace ParserWebCore.NetworkLibrary
 
             return tmp;
         }
-        
+
         public static string DownLSber(string url, int num)
         {
             var tmp = "";
@@ -275,7 +275,7 @@ namespace ParserWebCore.NetworkLibrary
             Finish:
             return tmp;
         }
-        
+
         public static string DownLZakMos(string url, string data)
         {
             var tmp = "";
@@ -343,7 +343,7 @@ namespace ParserWebCore.NetworkLibrary
             Finish:
             return tmp;
         }
-        
+
         public static string DownLRtsZmo(string url, string data, int section)
         {
             var tmp = "";
@@ -353,6 +353,75 @@ namespace ParserWebCore.NetworkLibrary
                 try
                 {
                     var task = Task.Run(() => (new HttpZmoRts()).DownloadString(url, data, section));
+                    if (!task.Wait(TimeSpan.FromSeconds(60))) throw new TimeoutException();
+                    tmp = task.Result;
+                    break;
+                }
+                catch (WebException ex)
+                {
+                    if (ex.Response is HttpWebResponse r) Log.Logger("Response code: ", r.StatusCode);
+                    if (ex.Response is HttpWebResponse errorResponse &&
+                        errorResponse.StatusCode == HttpStatusCode.Forbidden)
+                    {
+                        Log.Logger("Error 403 or 434");
+                        return tmp;
+                    }
+
+                    if (count >= 2)
+                    {
+                        Log.Logger($"Не удалось скачать за {count} попыток", url);
+                        break;
+                    }
+
+                    Log.Logger("Не удалось получить строку", ex.Message, url);
+                    count++;
+                    Thread.Sleep(5000);
+                }
+                catch (Exception e)
+                {
+                    if (count >= 2)
+                    {
+                        Log.Logger($"Не удалось скачать за {count} попыток", url);
+                        break;
+                    }
+
+                    switch (e)
+                    {
+                        case AggregateException a
+                            when a.InnerException != null && a.InnerException.Message.Contains("(404) Not Found"):
+                            Log.Logger("404 Exception", a.InnerException.Message, url);
+                            goto Finish;
+                        case AggregateException a
+                            when a.InnerException != null && a.InnerException.Message.Contains("(403) Forbidden"):
+                            Log.Logger("403 Exception", a.InnerException.Message, url);
+                            goto Finish;
+                        case AggregateException a when a.InnerException != null &&
+                                                       a.InnerException.Message.Contains(
+                                                           "The remote server returned an error: (434)"):
+                            Log.Logger("434 Exception", a.InnerException.Message, url);
+                            goto Finish;
+                    }
+
+                    Log.Logger("Не удалось получить строку", e, url);
+                    count++;
+                    Thread.Sleep(5000);
+                }
+            }
+
+            Finish:
+            return tmp;
+        }
+
+
+        public static string DownLHttpPost(string url)
+        {
+            var tmp = "";
+            var count = 0;
+            while (true)
+            {
+                try
+                {
+                    var task = Task.Run(() => (HttpPostAll.CreateInstance()).DownloadString(url));
                     if (!task.Wait(TimeSpan.FromSeconds(60))) throw new TimeoutException();
                     tmp = task.Result;
                     break;

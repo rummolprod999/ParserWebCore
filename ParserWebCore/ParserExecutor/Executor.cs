@@ -110,6 +110,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Uralmash:
                     _parser = new ParserUralmash();
                     break;
+                case Arguments.LotOnline:
+                    _parser = new ParserLotOnline();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

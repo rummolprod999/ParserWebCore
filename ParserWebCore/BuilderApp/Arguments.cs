@@ -38,6 +38,7 @@
         TekTkp,
         ZmoRts,
         RtsMarket,
-        Uralmash
+        Uralmash,
+        LotOnline,
     }
 }

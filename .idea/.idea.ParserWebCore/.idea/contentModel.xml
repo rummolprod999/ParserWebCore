@@ -33,6 +33,7 @@
         </e>
         <e p="NetworkLibrary" t="Include">
           <e p="DownloadString.cs" t="Include" />
+          <e p="HttpPostAll.cs" t="Include" />
           <e p="HttpPostSberB2B.cs" t="Include" />
           <e p="HttpPostZakMos.cs" t="Include" />
           <e p="HttpZmoRts.cs" t="Include" />
@@ -50,6 +51,7 @@
           <e p="ParserGzwSP.cs" t="Include" />
           <e p="ParserGzwSPSamar.cs" t="Include" />
           <e p="ParserKzGroup.cs" t="Include" />
+          <e p="ParserLotOnline.cs" t="Include" />
           <e p="ParserMaxi.cs" t="Include" />
           <e p="ParserMzVoron.cs" t="Include" />
           <e p="ParserNaftan.cs" t="Include" />
@@ -94,6 +96,7 @@
           <e p="TenderBoaz.cs" t="Include" />
           <e p="TenderGzwSP.cs" t="Include" />
           <e p="TenderKzGroup.cs" t="Include" />
+          <e p="TenderLotOnline.cs" t="Include" />
           <e p="TenderMaxi.cs" t="Include" />
           <e p="TenderMzVoron.cs" t="Include" />
           <e p="TenderNaftan.cs" t="Include" />
@@ -125,6 +128,7 @@
           <e p="TypeAgrokomplex.cs" t="Include" />
           <e p="TypeBoaz.cs" t="Include" />
           <e p="TypeKzGroup.cs" t="Include" />
+          <e p="TypeLotOnline.cs" t="Include" />
           <e p="TypeMaxi.cs" t="Include" />
           <e p="TypeMzVoron.cs" t="Include" />
           <e p="TypeNaftan.cs" t="Include" />

@@ -24,7 +24,7 @@ namespace ParserWebCore.Parser
             {
                 try
                 {
-                    GetPage(i);
+                    GetPage(i * 20);
                 }
                 catch (Exception e)
                 {

@@ -48,6 +48,7 @@
           <e p="ParserAkashevo.cs" t="Include" />
           <e p="ParserBoaz.cs" t="Include" />
           <e p="ParserDecoratorGzwSP.cs" t="Include" />
+          <e p="ParserEtpu.cs" t="Include" />
           <e p="ParserGzwSP.cs" t="Include" />
           <e p="ParserGzwSPSamar.cs" t="Include" />
           <e p="ParserKzGroup.cs" t="Include" />
@@ -94,6 +95,7 @@
           <e p="TenderAgrokomplex.cs" t="Include" />
           <e p="TenderAkashevo.cs" t="Include" />
           <e p="TenderBoaz.cs" t="Include" />
+          <e p="TenderEtpu.cs" t="Include" />
           <e p="TenderGzwSP.cs" t="Include" />
           <e p="TenderKzGroup.cs" t="Include" />
           <e p="TenderLotOnline.cs" t="Include" />
@@ -127,6 +129,7 @@
           <e p="TypeAgroTomsk.cs" t="Include" />
           <e p="TypeAgrokomplex.cs" t="Include" />
           <e p="TypeBoaz.cs" t="Include" />
+          <e p="TypeEtpu.cs" t="Include" />
           <e p="TypeKzGroup.cs" t="Include" />
           <e p="TypeLotOnline.cs" t="Include" />
           <e p="TypeMaxi.cs" t="Include" />

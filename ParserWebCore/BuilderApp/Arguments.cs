@@ -40,5 +40,7 @@
         RtsMarket,
         Uralmash,
         LotOnline,
+        Etpu,
+        
     }
 }

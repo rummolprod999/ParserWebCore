@@ -113,6 +113,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.LotOnline:
                     _parser = new ParserLotOnline();
                     break;
+                case Arguments.Etpu:
+                    _parser = new ParserEtpu();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

@@ -45,7 +45,7 @@ namespace ParserWebCore.Tender
                     return;
                 }
 
-                var s = DownloadString.DownLHttpPost(_tn.Href);
+                var s = DownloadString.DownLUserAgent(_tn.Href);
                 if (string.IsNullOrEmpty(s))
                 {
                     Log.Logger("Empty string in ParsingTender()", _tn.Href);

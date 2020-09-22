@@ -36,7 +36,7 @@ namespace ParserWebCore.Parser
 
         private void GetPage(int num)
         {var url =
-                $"https://torgi.etpu.ru/searchServlet?query={HttpUtility.UrlEncode($"{{\"types\":[\"RFI\",\"SMALL_PURCHASE\",\"ELECTRONIC_STORE\"]}}&filter={{\"state\":[\"ALL\"]}}&sort={{\"placementDate\":false}}&limit={{\"min\":{num},+\"max\":{num + 20}}}")}";
+                $"https://torgi.etpu.ru/searchServlet?query={HttpUtility.UrlEncode($"{{\"types\":[\"BUYING\",\"SALE\",\"RFI\"]}}&filter={{\"state\":[\"ALL\"]}}&sort={{\"placementDate\":false}}&limit={{\"min\":{num},+\"max\":{num + 20}}}")}";
             var result = DownloadString.DownLUserAgent(url);
             if (string.IsNullOrEmpty(result))
             {

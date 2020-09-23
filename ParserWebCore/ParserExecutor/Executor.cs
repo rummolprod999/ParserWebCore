@@ -116,6 +116,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Etpu:
                     _parser = new ParserEtpu();
                     break;
+                case Arguments.Dellin:
+                    _parser = new ParserDellin();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

@@ -41,6 +41,7 @@
         Uralmash,
         LotOnline,
         Etpu,
+        Dellin,
         
     }
 }

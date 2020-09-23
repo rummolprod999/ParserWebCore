@@ -158,6 +158,9 @@ namespace ParserWebCore.BuilderApp
                 case "etpu":
                     Arg = Arguments.Etpu;
                     break;
+                case "dellin":
+                    Arg = Arguments.Dellin;
+                    break;
                 default:
                     throw new Exception($"Неправильно указан аргумент {s}, используйте {ReqArguments}");
             }

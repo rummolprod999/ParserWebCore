@@ -119,6 +119,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Dellin:
                     _parser = new ParserDellin();
                     break;
+                case Arguments.Ismt:
+                    _parser = new ParserIsMt();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

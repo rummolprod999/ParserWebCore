@@ -4,13 +4,14 @@ using HtmlAgilityPack;
 using MySql.Data.MySqlClient;
 using ParserWebCore.BuilderApp;
 using ParserWebCore.Connections;
+using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.TenderType;
 
 namespace ParserWebCore.Tender
 {
-    public class TenderIsMt: TenderAbstract, ITender
+    public class TenderIsMt : TenderAbstract, ITender
     {
         private readonly TypeIsMt _tn;
 
@@ -40,6 +41,7 @@ namespace ParserWebCore.Tender
                 {
                     return;
                 }
+
                 var s = DownloadString.DownLUserAgent(_tn.Href);
                 if (string.IsNullOrEmpty(s))
                 {
@@ -117,7 +119,7 @@ namespace ParserWebCore.Tender
                         organiserId = (int) cmd4.LastInsertedId;
                     }
                 }
-                
+
                 GetEtp(connect, out var idEtp);
                 var insertTender =
                     $"INSERT INTO {Builder.Prefix}tender SET id_region = @id_region, id_xml = @id_xml, purchase_number = @purchase_number, doc_publish_date = @doc_publish_date, href = @href, purchase_object_info = @purchase_object_info, type_fz = @type_fz, id_organizer = @id_organizer, id_placing_way = @id_placing_way, id_etp = @id_etp, end_date = @end_date, scoring_date = @scoring_date, bidding_date = @bidding_date, cancel = @cancel, date_version = @date_version, num_version = @num_version, notice_version = @notice_version, xml = @xml, print_form = @print_form";
@@ -145,7 +147,59 @@ namespace ParserWebCore.Tender
                 var resInsertTender = cmd9.ExecuteNonQuery();
                 var idTender = (int) cmd9.LastInsertedId;
                 Counter(resInsertTender, updated);
-                
+                var fullCusName = htmlDoc.DocumentNode
+                    .SelectSingleNode(
+                        "//strong[contains(., 'Покупатели')]/following-sibling::a")
+                    ?.InnerText.Trim();
+                var cusName = fullCusName.GetDataFromRegex(@"(.+)\(\d+\)");
+                var cusInn = fullCusName.GetDataFromRegex(@"\((\d+)\)$");
+                if (!string.IsNullOrEmpty(cusName))
+                {
+                    var selectCustomer =
+                        $"SELECT id_customer FROM {Builder.Prefix}customer WHERE full_name = @full_name";
+                    var cmd13 = new MySqlCommand(selectCustomer, connect);
+                    cmd13.Prepare();
+                    cmd13.Parameters.AddWithValue("@full_name", cusName);
+                    var reader7 = cmd13.ExecuteReader();
+                    if (reader7.HasRows)
+                    {
+                        reader7.Read();
+                        customerId = (int) reader7["id_customer"];
+                        reader7.Close();
+                    }
+                    else
+                    {
+                        reader7.Close();
+                        var insertCustomer =
+                            $"INSERT INTO {Builder.Prefix}customer SET reg_num = @reg_num, full_name = @full_name, is223=1, inn = @inn";
+                        var cmd14 = new MySqlCommand(insertCustomer, connect);
+                        cmd14.Prepare();
+                        var customerRegNumber = Guid.NewGuid().ToString();
+                        cmd14.Parameters.AddWithValue("@reg_num", customerRegNumber);
+                        cmd14.Parameters.AddWithValue("@full_name", cusName);
+                        cmd14.Parameters.AddWithValue("@inn", cusInn);
+                        cmd14.ExecuteNonQuery();
+                        customerId = (int) cmd14.LastInsertedId;
+                    }
+                }
+                var nmck = htmlDoc.DocumentNode
+                    .SelectSingleNode(
+                        "//p[contains(., 'Начальная стоимость:')]")
+                    ?.InnerText.Trim();
+                nmck = nmck.GetDataFromRegex(@"([\d\s,]+)\sруб").Replace(",", ".").Trim().DelAllWhitespace();
+                var currency = "руб.";
+                var lotNum = 1;
+                var insertLot =
+                    $"INSERT INTO {Builder.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency, finance_source = @finance_source";
+                var cmd18 = new MySqlCommand(insertLot, connect);
+                cmd18.Prepare();
+                cmd18.Parameters.AddWithValue("@id_tender", idTender);
+                cmd18.Parameters.AddWithValue("@lot_number", lotNum);
+                cmd18.Parameters.AddWithValue("@max_price", nmck);
+                cmd18.Parameters.AddWithValue("@currency", currency);
+                cmd18.Parameters.AddWithValue("@finance_source", "");
+                cmd18.ExecuteNonQuery();
+                var idLot = (int) cmd18.LastInsertedId;
             }
         }
     }

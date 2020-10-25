@@ -4,6 +4,8 @@ using HtmlAgilityPack;
 using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
+using ParserWebCore.Tender;
+using ParserWebCore.TenderType;
 
 namespace ParserWebCore.Parser
 {
@@ -77,6 +79,14 @@ namespace ParserWebCore.Parser
             var purNum = href.GetDataFromRegex(@"id=(.+)$");
             var datePubT = n.SelectSingleNode(".//td[1]")?.InnerText?.Trim() ?? throw new Exception(
                 $"cannot find datePubT in {href}");
+            var datePub = datePubT.ParseDateUn("dd.MM.yyyy");
+            var dateEndT = n.SelectSingleNode(".//td[2]")?.InnerText?.Trim() ?? throw new Exception(
+                $"cannot find dateEndT in {href}");
+            var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm");
+            var status = n.SelectSingleNode(".//td[4]")?.InnerText?.Trim();
+            var tn = new TenderIsMt("«Маркетинговые технологии»", "http://is-mt.pro/", 278,
+                new TypeIsMt {PurName = purName, PurNum = purNum, DatePub = datePub, Href = href, DateEnd = dateEnd, Status = status});
+            ParserTender(tn);
         }
     }
 }

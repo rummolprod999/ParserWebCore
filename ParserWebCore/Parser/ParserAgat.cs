@@ -66,14 +66,14 @@ namespace ParserWebCore.Parser
         {
             var href = url;
             var purName = n.SelectSingleNode(".//div[@class = 'purchasing__list---type']")?.InnerText?.Trim() ?? throw new Exception(
-                $"Can not find purName in {href}");
+                $"cannot find purName in {href}");
             var purNum = purName.ToMd5();
             var status = n.SelectSingleNode(".//div[contains(@class, 'purchasing__list--state')]")?.InnerText?.Trim() ?? throw new Exception(
-                $"Can not find status in {href}");
+                $"cannot find status in {href}");
             var dates = n.SelectSingleNode(".//div[. = 'Подача заявок']/following-sibling::div")?.InnerText?.Trim() ?? throw new Exception(
-                $"Can not find dates in {href}");
+                $"cannot find dates in {href}");
             var year = n.SelectSingleNode(".//div[. = 'Подача заявок']/following-sibling::div[last()]")?.InnerText?.Trim() ?? throw new Exception(
-                $"Can not find year in {href}");
+                $"cannot find year in {href}");
             var yearStart = year.GetDataFromRegex(@"^(\d{4})");
             var yearEnd = year.GetDataFromRegex(@"(\d{4})$");
             var startDateT = dates.GetDataFromRegex(@"(.+)\s-");

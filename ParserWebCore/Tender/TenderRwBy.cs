@@ -48,7 +48,7 @@ namespace ParserWebCore.Tender
                 navigator
                     .SelectSingleNode("//td[contains(text(),  'Дата и время окончания приема предложений')]/following-sibling::td")
                     ?.Value?.ReplaceHtmlEntyty()?.DelDoubleWhitespace().Trim() ?? throw new Exception(
-                    $"Can not find dateEndT in {_tn.Href}");
+                    $"cannot find dateEndT in {_tn.Href}");
             var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm");
             if (dateEnd == DateTime.MinValue)
             {

@@ -63,11 +63,11 @@ namespace ParserWebCore.Parser
             var purName =
                 n.SelectSingleNode("./td[1]")?.InnerText?.Trim() ??
                 throw new Exception(
-                    $"Can not find purName in {href}");
+                    $"cannot find purName in {href}");
             var purNum = purName.ToMd5();
             var dates = n.SelectSingleNode("./td[3]")?.InnerText?.Trim() ??
                         throw new Exception(
-                            $"Can not find dates in {href}");
+                            $"cannot find dates in {href}");
             var datePubT = dates.GetDataFromRegex(@"(\d{2}\.\d{2}\.\d{4} \d{2}:\d{2})");
             var datePub = datePubT.ParseDateUn("dd.MM.yyyy HH:mm");
             var dateEndT = dates.GetDataFromRegex(@"(\d{2}\.\d{2}\.\d{4} \d{2}:\d{2})$");

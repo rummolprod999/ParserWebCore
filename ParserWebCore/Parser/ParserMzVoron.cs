@@ -149,16 +149,16 @@ namespace ParserWebCore.Parser
             var purName =
                 t.FindElementWithoutException(By.XPath(".//span[. = 'Объект закупки']/following-sibling::span"))?.Text
                     .Trim() ??
-                throw new Exception("Can not find purName ");
+                throw new Exception("cannot find purName ");
             var href = t.FindElementWithoutException(By.XPath(".//span[@class = 'regnumber']/a"))?.GetAttribute("href")
                            .Trim() ??
-                       throw new Exception("Can not find href");
+                       throw new Exception("cannot find href");
             var purNum = t.FindElementWithoutException(By.XPath(".//span[@class = 'regnumber']/a"))?.Text.Trim() ??
-                         throw new Exception("Can not find purNum ");
+                         throw new Exception("cannot find purNum ");
             var datePubT =
                 t.FindElementWithoutException(By.XPath(".//span[. = 'Дата публикации']/following-sibling::span"))?.Text
                     .Trim() ??
-                throw new Exception("Can not find datePubT");
+                throw new Exception("cannot find datePubT");
             var datePub = datePubT.ParseDateUn("dd.MM.yyyy");
             if (datePub == DateTime.MinValue)
             {
@@ -169,7 +169,7 @@ namespace ParserWebCore.Parser
             var dateEndT =
                 t.FindElementWithoutException(By.XPath(".//span[. = 'Период подачи заявок']/following-sibling::span"))
                     ?.Text.Trim() ??
-                throw new Exception("Can not find dateEndT");
+                throw new Exception("cannot find dateEndT");
             dateEndT = dateEndT.GetDataFromRegex(@"(\d{2}\.\d{2}\.\d{4}\s*\d{2}:\d{2})$").DelDoubleWhitespace();
             var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm");
             if (dateEnd == DateTime.MinValue)

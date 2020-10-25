@@ -66,28 +66,28 @@ namespace ParserWebCore.Parser
             var purName =
                 n.SelectSingleNode(".//span[. = 'Наименование:']/following-sibling::span")?.InnerText?.Trim() ??
                 throw new Exception(
-                    $"Can not find purName in {href}");
+                    $"cannot find purName in {href}");
             purName = HttpUtility.HtmlDecode(purName);
             var purNum =
                 n.SelectSingleNode(".//span[. = 'Номер заказа:']/following-sibling::span")?.InnerText?.Trim() ??
                 throw new Exception(
-                    $"Can not find purNum in {href}");
+                    $"cannot find purNum in {href}");
             var nmck =
                 n.SelectSingleNode(".//span[. = 'Начальная максимальная стоимость закупки:']/following-sibling::span")
                     ?.InnerText?.Trim() ?? throw new Exception(
-                    $"Can not find nmck in {href}");
+                    $"cannot find nmck in {href}");
             nmck = nmck.GetDataFromRegex(@"([\d.]+)");
             var datePubT =
                 n.SelectSingleNode(".//span[. = 'Дата публикации:']/following-sibling::span")?.InnerText?.Trim() ??
                 throw new Exception(
-                    $"Can not find datePubT in {href}");
+                    $"cannot find datePubT in {href}");
             datePubT = HttpUtility.HtmlDecode(datePubT).DelDoubleWhitespace();
             var myCultureInfo = new CultureInfo("ru-RU");
             var datePub = DateTime.Parse(datePubT, myCultureInfo);
             var dateEndT =
                 n.SelectSingleNode(".//span[. = 'Дата окончания приема заявок:']/following-sibling::span")?.InnerText
                     ?.Trim() ?? throw new Exception(
-                    $"Can not find dateEndT in {href}");
+                    $"cannot find dateEndT in {href}");
             dateEndT = HttpUtility.HtmlDecode(dateEndT).DelDoubleWhitespace();
             var dateEnd = DateTime.Parse(dateEndT, myCultureInfo);
             var attachments = new List<TypeSamCom.Attachment>();

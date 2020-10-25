@@ -69,10 +69,10 @@ namespace ParserWebCore.Parser
             }
 
             var purName = n.SelectSingleNode("./span")?.InnerText?.Trim() ?? throw new Exception(
-                $"Can not find purName in {href}");
+                $"cannot find purName in {href}");
             purName = HttpUtility.HtmlDecode(purName);
             var fullDateNum = n.SelectSingleNode("./h2")?.InnerText?.Trim() ?? throw new Exception(
-                $"Can not find fullDateNum in {href}");
+                $"cannot find fullDateNum in {href}");
             var purNum = fullDateNum.GetDataFromRegex(@"Извещение\s+№\s+(\d+)");
             if (string.IsNullOrEmpty(purNum))
             {

@@ -90,23 +90,23 @@ namespace ParserWebCore.Parser
                     .Trim() ?? "";
             var href = t.FindElementWithoutException(By.XPath(".//div[@onclick]"))?.GetAttribute("onclick")
                            .Trim() ??
-                       throw new Exception("Can not find href");
+                       throw new Exception("cannot find href");
             href = href.GetDataFromRegex(@"location='(http.+)'$");
             var purNum = href.GetDataFromRegex(@"ID=(\d+)");
             if (purNum == "")
             {
-                throw new Exception("Can not find purNum");
+                throw new Exception("cannot find purNum");
             }
 
             var datePubT =
                 t.FindElementWithoutException(By.XPath(".//td[3]/nobr"))?.Text
                     .Trim() ??
-                throw new Exception("Can not find datePubT");
+                throw new Exception("cannot find datePubT");
             var datePub = datePubT.ParseDateUn("dd.MM.yyyy");
             var dateEndTt =
                 t.FindElementWithoutException(By.XPath(".//td[4]/nobr"))
                     ?.Text.Trim() ??
-                throw new Exception("Can not find dateEndT");
+                throw new Exception("cannot find dateEndT");
             var dateEnd = dateEndTt.ParseDateUn("dd.MM.yyyy HH:mm");
             var tt = new TypeBoaz
             {

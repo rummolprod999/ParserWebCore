@@ -50,7 +50,7 @@ namespace ParserWebCore.Tender
 
             if (string.IsNullOrEmpty(_tn.PurNum))
             {
-                Log.Logger("Can not find purNum in ", _tn.Href);
+                Log.Logger("cannot find purNum in ", _tn.Href);
                 return;
             }
 

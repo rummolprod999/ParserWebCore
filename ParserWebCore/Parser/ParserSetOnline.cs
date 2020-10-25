@@ -95,11 +95,11 @@ namespace ParserWebCore.Parser
         {
             _driver.SwitchTo().DefaultContent();
             var purName = t.FindElementWithoutException(By.XPath("./td[3]/div/a"))?.Text.Trim() ??
-                          throw new Exception("Can not find purName " + t.Text);
+                          throw new Exception("cannot find purName " + t.Text);
             var href = t.FindElementWithoutException(By.XPath("./td[3]/div/a"))?.GetAttribute("href").Trim() ??
-                       throw new Exception("Can not find href");
+                       throw new Exception("cannot find href");
             var datePubT = t.FindElementWithoutException(By.XPath("./td[6]/div"))?.Text.Trim() ??
-                           throw new Exception("Can not find datePubT");
+                           throw new Exception("cannot find datePubT");
             var datePub = datePubT.ParseDateUn("dd.MM.yyyy");
             if (datePub == DateTime.MinValue)
             {
@@ -108,7 +108,7 @@ namespace ParserWebCore.Parser
             }
 
             var dateEndT = t.FindElementWithoutException(By.XPath("./td[7]/div"))?.Text.Trim() ??
-                           throw new Exception("Can not find dateEndT");
+                           throw new Exception("cannot find dateEndT");
             var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm");
             if (dateEnd == DateTime.MinValue)
             {

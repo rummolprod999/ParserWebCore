@@ -80,7 +80,7 @@ namespace ParserWebCore.Parser
             }
 
             var purName = n.SelectSingleNode(".//a")?.InnerText?.Trim() ?? throw new Exception(
-                              $"Can not find purName in {href}");
+                              $"cannot find purName in {href}");
             var datePubT =
                 (n.SelectSingleNode("./td[1]/span")
                      ?.InnerText ?? "").Trim();

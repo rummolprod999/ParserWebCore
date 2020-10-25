@@ -189,7 +189,7 @@ namespace ParserWebCore.BuilderApp
                     .Select(c => (string) c.SelectToken("..temp")).First();
                 if (string.IsNullOrEmpty(logDirTmp) || string.IsNullOrEmpty(tempDirTmp))
                 {
-                    throw new Exception("Can not find logDir or tempDir in settings.json");
+                    throw new Exception("cannot find logDir or tempDir in settings.json");
                 }
 
                 LogDir = $"{Path}{System.IO.Path.DirectorySeparatorChar}{logDirTmp}";

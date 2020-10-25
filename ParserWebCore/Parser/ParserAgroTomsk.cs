@@ -109,10 +109,10 @@ namespace ParserWebCore.Parser
         private void ParsingPage(IWebElement t)
         {
             _driver.SwitchTo().DefaultContent();
-            //var Num = t.FindElement(By.XPath("./td[1]"))?.Text.Trim() ?? throw new Exception("Can not find Num");
-            var purNum = t.FindElement(By.XPath("./td[3]"))?.Text.Trim() ?? throw new Exception("Can not find purNum");
+            //var Num = t.FindElement(By.XPath("./td[1]"))?.Text.Trim() ?? throw new Exception("cannot find Num");
+            var purNum = t.FindElement(By.XPath("./td[3]"))?.Text.Trim() ?? throw new Exception("cannot find purNum");
             var datePubT = t.FindElement(By.XPath("./td[4]"))?.Text.Trim() ??
-                           throw new Exception("Can not find datePubT");
+                           throw new Exception("cannot find datePubT");
             var datePub = datePubT.ParseDateUn("dd.MM.yyyy");
             if (datePub == DateTime.MinValue)
             {
@@ -121,7 +121,7 @@ namespace ParserWebCore.Parser
             }
 
             var dateEndT = t.FindElement(By.XPath("./td[6]"))?.Text.Trim() ??
-                           throw new Exception("Can not find dateEndT");
+                           throw new Exception("cannot find dateEndT");
             var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm");
             if (dateEnd == DateTime.MinValue)
             {
@@ -133,9 +133,9 @@ namespace ParserWebCore.Parser
             }
 
             var purName = t.FindElement(By.XPath("./td[5]/a/span"))?.Text.Trim() ??
-                          throw new Exception("Can not find purName");
+                          throw new Exception("cannot find purName");
             var href = t.FindElement(By.XPath("./td[5]/a"))?.GetAttribute("href").Trim() ??
-                       throw new Exception("Can not find href");
+                       throw new Exception("cannot find href");
             var orgName = t.FindElement(By.XPath("./td[7]/a/span"))?.Text.Trim() ?? "";
             var pwName = t.FindElement(By.XPath("./td[8]"))?.Text.Trim() ?? "";
             var status = t.FindElement(By.XPath("./td[9]"))?.Text.Trim() ?? "";

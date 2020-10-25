@@ -81,17 +81,17 @@ namespace ParserWebCore.Parser
             var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(s);
             var purName = htmlDoc.DocumentNode.SelectSingleNode("//h1")?.InnerText?.Trim() ?? throw new Exception(
-                              $"Can not find purName in {url}");
+                              $"cannot find purName in {url}");
             var purNum = htmlDoc.DocumentNode.SelectSingleNode("//td[. = 'Номер']/following-sibling::td")?.InnerText?.Trim() ?? throw new Exception(
-                              $"Can not find purNum in {url}");
+                              $"cannot find purNum in {url}");
             var datePubT = htmlDoc.DocumentNode.SelectSingleNode("//td[. = 'Дата публикации']/following-sibling::td")?.InnerText?.Trim() ?? throw new Exception(
-                               $"Can not find datePubT in {url}");
+                               $"cannot find datePubT in {url}");
             var datePub = datePubT.ParseDateUn("dd.MM.yyyy");
             var dateEndT = htmlDoc.DocumentNode.SelectSingleNode("//td[. = 'Дата окончания приёма заявок']/following-sibling::td")?.InnerText?.Trim() ?? throw new Exception(
-                               $"Can not find dateEndT in {url}");
+                               $"cannot find dateEndT in {url}");
             var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy");
             var status = htmlDoc.DocumentNode.SelectSingleNode("//td[. = 'Статус']/following-sibling::td")?.InnerText?.Trim() ?? throw new Exception(
-                             $"Can not find Status in {url}");
+                             $"cannot find Status in {url}");
             var hrefAttach = (htmlDoc.DocumentNode.SelectSingleNode("//td[. = 'Пакет документов']/following-sibling::td/a")?.Attributes["href"]?.Value ?? "")
                 .Trim();
             if (!string.IsNullOrEmpty(hrefAttach))

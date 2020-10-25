@@ -23,7 +23,7 @@ namespace ParserWebCore.MlConformity
             GetListConformity();
             if (_dt.Rows.Count == 0)
             {
-                Log.Logger("Can not empty conformity in table");
+                Log.Logger("cannot empty conformity in table");
                 return;
             }
 

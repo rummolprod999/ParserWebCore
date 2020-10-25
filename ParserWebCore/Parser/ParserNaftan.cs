@@ -68,7 +68,7 @@ namespace ParserWebCore.Parser
             }
             else
             {
-                Log.Logger("Can not find last pages num");
+                Log.Logger("cannot find last pages num");
             }
 
             ParsingListTendersNaftan();
@@ -140,7 +140,7 @@ namespace ParserWebCore.Parser
             var purNum = tmpPurNum.GetDataFromRegex(@"№\s*([\d-]+)\b");
             if (purNum == "")
             {
-                throw new Exception($"Can not find purNum {tmpPurNum}");
+                throw new Exception($"cannot find purNum {tmpPurNum}");
             }
 
             var datePubTmp = t.FindElement(By.XPath(".//div[contains(@class, 'dxncItemDate')]"))

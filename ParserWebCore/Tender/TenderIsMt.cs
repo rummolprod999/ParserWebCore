@@ -1,5 +1,7 @@
 using System;
 using System.Data;
+using System.Linq;
+using AngleSharp.Parser.Html;
 using HtmlAgilityPack;
 using MySql.Data.MySqlClient;
 using ParserWebCore.BuilderApp;
@@ -85,22 +87,14 @@ namespace ParserWebCore.Tender
         private static void AddPurObjects(string sPo, HtmlDocument htmlDoc, MySqlConnection connect, int idLot,
             int customerId)
         {
-            var htmlDocPo = new HtmlDocument();
-            htmlDocPo.LoadHtml(sPo);
-            var PurObjs = htmlDoc.DocumentNode.SelectNodes(
-                              "//table[@class = 'p_qval']//tr[@class = 'item']") ??
-                          new HtmlNodeCollection(null);
+            var parser = new HtmlParser();
+            var document = parser.Parse(sPo);
+            var PurObjs = document.All.Where(m => m.ClassList.Contains("item") && m.TagName == "TR");
             foreach (var po in PurObjs)
             {
-                var poName = po.SelectSingleNode(
-                        ".//td[1]/a")
-                    ?.InnerText.Trim();
-                var poOkei = po.SelectSingleNode(
-                        ".//td[3]")
-                    ?.InnerText.Trim();
-                var poQuant = po.SelectSingleNode(
-                        ".//td[2]")
-                    ?.InnerText.Trim();
+                var poName = (po.QuerySelector("td:nth-child(1) a")?.TextContent ?? "").Trim();
+                var poOkei = (po.QuerySelector("td:nth-child(3)")?.TextContent ?? "").Trim();
+                var poQuant = (po.QuerySelector("td:nth-child(2)")?.TextContent ?? "").Trim();
                 var insertLotitem =
                     $"INSERT INTO {Builder.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name, sum = @sum, okpd2_code = @okpd2_code, okpd2_group_code = @okpd2_group_code, okpd2_group_level1_code = @okpd2_group_level1_code, okpd_name = @okpd_name, quantity_value = @quantity_value, customer_quantity_value = @customer_quantity_value, okei = @okei, price = @price";
                 var cmd19 = new MySqlCommand(insertLotitem, connect);
@@ -148,6 +142,7 @@ namespace ParserWebCore.Tender
                 .SelectSingleNode(
                     "//p[contains(., 'Начальная стоимость:')]")
                 ?.InnerText.Trim();
+            nmck = nmck.ReplaceHtmlEntyty();
             nmck = nmck.GetDataFromRegex(@"([\d\s,]+)\sруб").Replace(",", ".").Trim().DelAllWhitespace();
             var currency = "руб.";
             var lotNum = 1;

@@ -182,6 +182,7 @@ namespace ParserWebCore.Tender
                         customerId = (int) cmd14.LastInsertedId;
                     }
                 }
+
                 var nmck = htmlDoc.DocumentNode
                     .SelectSingleNode(
                         "//p[contains(., 'Начальная стоимость:')]")
@@ -200,6 +201,68 @@ namespace ParserWebCore.Tender
                 cmd18.Parameters.AddWithValue("@finance_source", "");
                 cmd18.ExecuteNonQuery();
                 var idLot = (int) cmd18.LastInsertedId;
+                var delivTerm = htmlDoc.DocumentNode
+                    .SelectSingleNode(
+                        "//p[contains(., 'Условия договора')]")
+                    ?.InnerText.Replace("Условия договора", "").Replace(":", "").Trim();
+                if (!string.IsNullOrEmpty(delivTerm))
+                {
+                    var insertCustomerRequirement =
+                        $"INSERT INTO {Builder.Prefix}customer_requirement SET id_lot = @id_lot, id_customer = @id_customer, delivery_place = @delivery_place, max_price = @max_price, delivery_term = @delivery_term";
+                    var cmd16 = new MySqlCommand(insertCustomerRequirement, connect);
+                    cmd16.Prepare();
+                    cmd16.Parameters.AddWithValue("@id_lot", idLot);
+                    cmd16.Parameters.AddWithValue("@id_customer", customerId);
+                    cmd16.Parameters.AddWithValue("@delivery_place", "");
+                    cmd16.Parameters.AddWithValue("@max_price", "");
+                    cmd16.Parameters.AddWithValue("@delivery_term", delivTerm);
+                    cmd16.ExecuteNonQuery();
+                }
+
+                var sPo = DownloadString.DownLUserAgent($"http://is-mt.pro/Purchase/ListCgc?id={_tn.PurNum}");
+                if (string.IsNullOrEmpty(sPo))
+                {
+                    Log.Logger("Empty string in ParsingTender()", _tn.Href);
+                }
+
+                var htmlDocPo = new HtmlDocument();
+                htmlDocPo.LoadHtml(sPo);
+                var navigatorPo = (HtmlNodeNavigator) htmlDocPo.CreateNavigator();
+                var PurObjs = htmlDoc.DocumentNode.SelectNodes(
+                                  "//table[@class = 'p_qval']//tr[@class = 'item']") ??
+                              new HtmlNodeCollection(null);
+                foreach (var po in PurObjs)
+                {
+                    var poName = po.SelectSingleNode(
+                            ".//td[1]/a")
+                        ?.InnerText.Trim();
+                    var poOkei = po.SelectSingleNode(
+                            ".//td[3]")
+                        ?.InnerText.Trim();
+                    var poQuant = po.SelectSingleNode(
+                            ".//td[2]")
+                        ?.InnerText.Trim();
+                    var insertLotitem =
+                        $"INSERT INTO {Builder.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name, sum = @sum, okpd2_code = @okpd2_code, okpd2_group_code = @okpd2_group_code, okpd2_group_level1_code = @okpd2_group_level1_code, okpd_name = @okpd_name, quantity_value = @quantity_value, customer_quantity_value = @customer_quantity_value, okei = @okei, price = @price";
+                    var cmd19 = new MySqlCommand(insertLotitem, connect);
+                    cmd19.Prepare();
+                    cmd19.Parameters.AddWithValue("@id_lot", idLot);
+                    cmd19.Parameters.AddWithValue("@id_customer", customerId);
+                    cmd19.Parameters.AddWithValue("@name", poName);
+                    cmd19.Parameters.AddWithValue("@sum", "");
+                    cmd19.Parameters.AddWithValue("@okpd2_code", "");
+                    cmd19.Parameters.AddWithValue("@okpd2_group_code", "");
+                    cmd19.Parameters.AddWithValue("@okpd2_group_level1_code", "");
+                    cmd19.Parameters.AddWithValue("@okpd_name", "");
+                    cmd19.Parameters.AddWithValue("@quantity_value", poQuant);
+                    cmd19.Parameters.AddWithValue("@customer_quantity_value", poQuant);
+                    cmd19.Parameters.AddWithValue("@okei", poOkei);
+                    cmd19.Parameters.AddWithValue("@price", "");
+                    cmd19.ExecuteNonQuery();
+                }
+
+                TenderKwords(connect, idTender);
+                AddVerNumber(connect, _tn.PurNum, TypeFz);
             }
         }
     }

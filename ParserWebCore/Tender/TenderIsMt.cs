@@ -51,7 +51,6 @@ namespace ParserWebCore.Tender
 
                 var htmlDoc = new HtmlDocument();
                 htmlDoc.LoadHtml(s);
-                var navigator = (HtmlNodeNavigator) htmlDoc.CreateNavigator();
                 var dateUpd = DateTime.Now;
                 var cancelStatus = 0;
                 var updated = false;
@@ -227,7 +226,6 @@ namespace ParserWebCore.Tender
 
                 var htmlDocPo = new HtmlDocument();
                 htmlDocPo.LoadHtml(sPo);
-                var navigatorPo = (HtmlNodeNavigator) htmlDocPo.CreateNavigator();
                 var PurObjs = htmlDoc.DocumentNode.SelectNodes(
                                   "//table[@class = 'p_qval']//tr[@class = 'item']") ??
                               new HtmlNodeCollection(null);

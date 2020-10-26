@@ -63,7 +63,7 @@ namespace ParserWebCore.Parser
             var href = Urlpage;
             var purName =
                 n.SelectSingleNode(".//p[contains(., 'Наименование:')]")?.InnerText?.Replace("Наименование:", "")
-                    .Trim() ?? throw new Exception(
+                    .Trim().ReplaceHtmlEntyty() ?? throw new Exception(
                     $"cannot find purName in {href}");
             var purNumAndDate =
                 n.SelectSingleNode(".//p[contains(., 'Номер заявки:')]")?.InnerText?.Replace("Номер заявки:", "")
@@ -90,7 +90,7 @@ namespace ParserWebCore.Parser
             var pList = new List<TypeObjectTpta>();
             foreach (var poObject in poObjects)
             {
-                var pName = poObject.SelectSingleNode("./td[1]")?.InnerText?.Trim() ?? "";
+                var pName = poObject.SelectSingleNode("./td[1]")?.InnerText?.Trim().ReplaceHtmlEntyty() ?? "";
                 var pOkei = poObject.SelectSingleNode("./td[4]")?.InnerText?.Trim() ?? "";
                 var pQuant = poObject.SelectSingleNode("./td[3]")?.InnerText?.Trim() ?? "";
                 if (pName != "")

@@ -122,6 +122,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Ismt:
                     _parser = new ParserIsMt();
                     break;
+                case Arguments.Tpta:
+                    _parser = new ParserTpta();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

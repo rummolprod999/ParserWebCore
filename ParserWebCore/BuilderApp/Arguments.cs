@@ -43,5 +43,6 @@
         Etpu,
         Dellin,
         Ismt,
+        Tpta,
     }
 }

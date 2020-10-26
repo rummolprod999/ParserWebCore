@@ -99,7 +99,7 @@ namespace ParserWebCore.Parser
                 }
             }
 
-            var tn = new TenderTpta("«Маркетинговые технологии»", "http://is-mt.pro/", 278,
+            var tn = new TenderTpta("АО \"РИТМ\" ТПТА", "https://www.tpta.ru/", 279,
                 new TypeTpta
                 {
                     PurName = purName, PurNum = purNum, DatePub = datePub, Href = href, DateEnd = dateEnd,

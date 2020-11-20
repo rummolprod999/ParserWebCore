@@ -44,6 +44,7 @@
         </e>
         <e p="Parser" t="Include">
           <e p="IParser.cs" t="Include" />
+          <e p="ParserAbsGroup.cs" t="Include" />
           <e p="ParserAbstract.cs" t="Include" />
           <e p="ParserAgat.cs" t="Include" />
           <e p="ParserAgroTomsk.cs" t="Include" />
@@ -95,6 +96,7 @@
         </e>
         <e p="Tender" t="Include">
           <e p="ITender.cs" t="Include" />
+          <e p="TenderAbsGroup.cs" t="Include" />
           <e p="TenderAbstract.cs" t="Include" />
           <e p="TenderAgat.cs" t="Include" />
           <e p="TenderAgroTomsk.cs" t="Include" />
@@ -134,6 +136,7 @@
         </e>
         <e p="TenderType" t="Include">
           <e p="AbstractTypeT.cs" t="Include" />
+          <e p="TypeAbsGroup.cs" t="Include" />
           <e p="TypeAgat.cs" t="Include" />
           <e p="TypeAgroTomsk.cs" t="Include" />
           <e p="TypeAgrokomplex.cs" t="Include" />

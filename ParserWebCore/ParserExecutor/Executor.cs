@@ -125,6 +125,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Tpta:
                     _parser = new ParserTpta();
                     break;
+                case Arguments.AbsGroup:
+                    _parser = new ParserAbsGroup();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

@@ -44,5 +44,6 @@
         Dellin,
         Ismt,
         Tpta,
+        AbsGroup,
     }
 }

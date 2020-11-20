@@ -1,3 +1,4 @@
+using System;
 using ParserWebCore.TenderType;
 
 namespace ParserWebCore.Tender
@@ -14,6 +15,7 @@ namespace ParserWebCore.Tender
 
         public void ParsingTender()
         {
+            Console.WriteLine(_tn);
         }
     }
 }

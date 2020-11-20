@@ -1,4 +1,5 @@
 using System;
+using System.Web;
 using HtmlAgilityPack;
 using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
@@ -81,6 +82,7 @@ namespace ParserWebCore.Parser
             var purName = n.SelectSingleNode(".//div[contains(@class,'tenders__cell_name')]/a")?.InnerText?.Trim() ??
                           throw new Exception(
                               $"cannot find purName in {href}");
+            purName = HttpUtility.HtmlDecode(purName);
             var purNum = href.ToMd5();
             var status =
                 n.SelectSingleNode(".//div[contains(@class,'tenders__cell_to status_')]/span")?.InnerText?.Trim() ?? "";

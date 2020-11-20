@@ -3,8 +3,6 @@ using System.Data;
 using MySql.Data.MySqlClient;
 using ParserWebCore.BuilderApp;
 using ParserWebCore.Connections;
-using ParserWebCore.Logger;
-using ParserWebCore.NetworkLibrary;
 using ParserWebCore.TenderType;
 
 namespace ParserWebCore.Tender

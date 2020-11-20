@@ -2,7 +2,6 @@ using System;
 using System.Data;
 using System.Globalization;
 using System.IO;
-using System.Xml;
 using Microsoft.ML;
 using Microsoft.ML.Core.Data;
 using Microsoft.ML.Data;

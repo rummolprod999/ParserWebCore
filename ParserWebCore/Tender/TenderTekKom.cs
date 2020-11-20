@@ -38,6 +38,7 @@ namespace ParserWebCore.Tender
             var document = parser.Parse(s);
             
             var noticeVersion = _tn.Status;
+            var organiserId = 0;
             using (var connect = ConnectToDb.GetDbConnection())
             {
                 connect.Open();
@@ -63,7 +64,6 @@ namespace ParserWebCore.Tender
                 var (updated, cancelStatus) = UpdateTenderVersion(connect, _tn.PurNum, dateUpd);
                 var printForm = _tn.Href;
                 var customerId = 0;
-                var organiserId = 0;
                 organiserId = GetOrganizer(document, connect);
                 PlacingWay = (document.QuerySelector("td:contains('Способ закупки:') +  td")?.TextContent ?? "")
                     .Trim();

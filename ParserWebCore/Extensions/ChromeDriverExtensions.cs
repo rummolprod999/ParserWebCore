@@ -24,6 +24,7 @@ namespace ParserWebCore.Extensions
                 }
                 catch (Exception e)
                 {
+                    count++;
                     Log.Logger(e);
                     if (count > 10) return;
                 }
@@ -45,6 +46,7 @@ namespace ParserWebCore.Extensions
                 }
                 catch (Exception e)
                 {
+                    count++;
                     Log.Logger(e);
                     if (count > 10) return;
                 }

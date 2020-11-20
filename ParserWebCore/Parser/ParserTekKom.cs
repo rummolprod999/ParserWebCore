@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Security.Policy;
 using AngleSharp.Dom;
 using AngleSharp.Parser.Html;
 using ParserWebCore.Extensions;

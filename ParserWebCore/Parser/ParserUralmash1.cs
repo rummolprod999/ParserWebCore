@@ -1,8 +1,5 @@
 using System;
-using System.Linq;
 using System.Web;
-using AngleSharp.Dom;
-using AngleSharp.Parser.Html;
 using HtmlAgilityPack;
 using ParserWebCore.Extensions;
 using ParserWebCore.Logger;

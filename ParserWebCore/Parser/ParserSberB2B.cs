@@ -1,7 +1,4 @@
 using System;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
 using Newtonsoft.Json.Linq;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;

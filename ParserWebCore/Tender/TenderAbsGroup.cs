@@ -140,18 +140,7 @@ namespace ParserWebCore.Tender
 
                 AddDocs(htmlDoc, connect, idTender);
 
-                var lotNum = 1;
-                var insertLot =
-                    $"INSERT INTO {Builder.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency, finance_source = @finance_source";
-                var cmd18 = new MySqlCommand(insertLot, connect);
-                cmd18.Prepare();
-                cmd18.Parameters.AddWithValue("@id_tender", idTender);
-                cmd18.Parameters.AddWithValue("@lot_number", lotNum);
-                cmd18.Parameters.AddWithValue("@max_price", "");
-                cmd18.Parameters.AddWithValue("@currency", "");
-                cmd18.Parameters.AddWithValue("@finance_source", "");
-                cmd18.ExecuteNonQuery();
-                var idLot = (int) cmd18.LastInsertedId;
+                var idLot = AddLot(connect, idTender);
                 var insertLotitem =
                     $"INSERT INTO {Builder.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name";
                 var cmd19 = new MySqlCommand(insertLotitem, connect);
@@ -163,6 +152,23 @@ namespace ParserWebCore.Tender
                 TenderKwords(connect, idTender);
                 AddVerNumber(connect, _tn.PurNum, TypeFz);
             }
+        }
+
+        private int AddLot(MySqlConnection connect, int idTender)
+        {
+            var lotNum = 1;
+            var insertLot =
+                $"INSERT INTO {Builder.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency, finance_source = @finance_source";
+            var cmd18 = new MySqlCommand(insertLot, connect);
+            cmd18.Prepare();
+            cmd18.Parameters.AddWithValue("@id_tender", idTender);
+            cmd18.Parameters.AddWithValue("@lot_number", lotNum);
+            cmd18.Parameters.AddWithValue("@max_price", "");
+            cmd18.Parameters.AddWithValue("@currency", "");
+            cmd18.Parameters.AddWithValue("@finance_source", "");
+            cmd18.ExecuteNonQuery();
+            var idLot = (int) cmd18.LastInsertedId;
+            return idLot;
         }
 
         private static void AddDocs(HtmlDocument htmlDoc, MySqlConnection connect, int idTender)

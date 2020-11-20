@@ -45,6 +45,7 @@ namespace ParserWebCore.Tender
                     (document.QuerySelector("td:contains('Подведение итогов не позднее') + td")?.TextContent ??
                      "").Trim();
             }
+
             var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm 'GMT'z");
             if (datePub == DateTime.MinValue || dateEnd == DateTime.MinValue)
             {
@@ -289,7 +290,7 @@ namespace ParserWebCore.Tender
                                  "")
                         .Trim();
                     var email = (document.QuerySelector("td:contains('Адрес электронной почты:') +  td")
-                                     ?.TextContent ?? "")
+                            ?.TextContent ?? "")
                         .Trim();
                     var contactPerson =
                         (document.QuerySelector("td:contains('ФИО контактного лица:') +  td")?.TextContent ?? "")

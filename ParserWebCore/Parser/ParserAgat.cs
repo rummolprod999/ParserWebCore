@@ -65,14 +65,18 @@ namespace ParserWebCore.Parser
         private void ParserTender(HtmlNode n, string url)
         {
             var href = url;
-            var purName = n.SelectSingleNode(".//div[@class = 'purchasing__list---type']")?.InnerText?.Trim() ?? throw new Exception(
-                $"cannot find purName in {href}");
+            var purName = n.SelectSingleNode(".//div[@class = 'purchasing__list---type']")?.InnerText?.Trim() ??
+                          throw new Exception(
+                              $"cannot find purName in {href}");
             var purNum = purName.ToMd5();
-            var status = n.SelectSingleNode(".//div[contains(@class, 'purchasing__list--state')]")?.InnerText?.Trim() ?? throw new Exception(
-                $"cannot find status in {href}");
-            var dates = n.SelectSingleNode(".//div[. = 'Подача заявок']/following-sibling::div")?.InnerText?.Trim() ?? throw new Exception(
-                $"cannot find dates in {href}");
-            var year = n.SelectSingleNode(".//div[. = 'Подача заявок']/following-sibling::div[last()]")?.InnerText?.Trim() ?? throw new Exception(
+            var status = n.SelectSingleNode(".//div[contains(@class, 'purchasing__list--state')]")?.InnerText?.Trim() ??
+                         throw new Exception(
+                             $"cannot find status in {href}");
+            var dates = n.SelectSingleNode(".//div[. = 'Подача заявок']/following-sibling::div")?.InnerText?.Trim() ??
+                        throw new Exception(
+                            $"cannot find dates in {href}");
+            var year = n.SelectSingleNode(".//div[. = 'Подача заявок']/following-sibling::div[last()]")?.InnerText
+                ?.Trim() ?? throw new Exception(
                 $"cannot find year in {href}");
             var yearStart = year.GetDataFromRegex(@"^(\d{4})");
             var yearEnd = year.GetDataFromRegex(@"(\d{4})$");
@@ -87,6 +91,7 @@ namespace ParserWebCore.Parser
             {
                 requirements += $" {htmlNode.InnerText}\n";
             }
+
             requirements = HttpUtility.HtmlDecode(requirements).Trim();
             var tn = new TenderAgat("ООО «ТД «Агат»", "https://agat-group.com", 241,
                 new TypeAgat

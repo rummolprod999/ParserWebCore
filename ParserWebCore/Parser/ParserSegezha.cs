@@ -79,10 +79,10 @@ namespace ParserWebCore.Parser
             }
 
             var purName = n.SelectSingleNode(".//a/span[1]")?.InnerText?.Trim() ?? throw new Exception(
-                              $"cannot find purName in {href}");
+                $"cannot find purName in {href}");
             var datePubT =
                 (n.SelectSingleNode("./td[1]")
-                     ?.InnerText ?? "").Trim();
+                    ?.InnerText ?? "").Trim();
             var datePub = datePubT.ParseDateUn("dd/MM/yy");
             if (datePub == DateTime.MinValue)
             {
@@ -92,10 +92,10 @@ namespace ParserWebCore.Parser
 
             var dateEndT1 =
                 (n.SelectSingleNode("./td[2]/text()")
-                     ?.InnerText ?? "").Trim();
+                    ?.InnerText ?? "").Trim();
             var dateEndT2 =
                 (n.SelectSingleNode("./td[2]/span")
-                     ?.InnerText ?? "").Trim();
+                    ?.InnerText ?? "").Trim();
             var dateEndT = $"{dateEndT1} {dateEndT2}";
             var dateEnd = dateEndT.ParseDateUn("dd/MM/yy HH:mm");
             if (dateEnd == DateTime.MinValue)
@@ -105,12 +105,12 @@ namespace ParserWebCore.Parser
             }
 
             var status = (n.SelectSingleNode("./td[7]")
-                              ?.InnerText ?? "").Trim();
+                ?.InnerText ?? "").Trim();
 
             var cusName = (n.SelectSingleNode("./td[4]")
-                               ?.InnerText ?? "").Trim();
+                ?.InnerText ?? "").Trim();
             var orgName = (n.SelectSingleNode("./td[5]")
-                               ?.InnerText ?? "").Trim();
+                ?.InnerText ?? "").Trim();
             var tn = new TenderSegezha("ГК Сегежа", "https://segezha-group.com", 97,
                 new TypeSegezha
                 {

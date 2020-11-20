@@ -40,7 +40,7 @@ namespace ParserWebCore.Tender
         {
             CountTender?.Invoke(res, b);
         }
-        
+
         public List<JToken> GetElements(JToken j, string s)
         {
             var els = new List<JToken>();

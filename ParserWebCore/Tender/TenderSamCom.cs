@@ -37,6 +37,7 @@ namespace ParserWebCore.Tender
                 {
                     return;
                 }
+
                 var dateUpd = DateTime.Now;
                 var cancelStatus = 0;
                 var updated = false;
@@ -144,6 +145,7 @@ namespace ParserWebCore.Tender
                     cmd10.Parameters.AddWithValue("@url", att.Url);
                     cmd10.ExecuteNonQuery();
                 }
+
                 if (!string.IsNullOrEmpty(orgName))
                 {
                     var selectCustomer =

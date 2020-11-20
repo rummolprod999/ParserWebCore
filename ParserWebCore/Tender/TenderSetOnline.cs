@@ -37,15 +37,15 @@ namespace ParserWebCore.Tender
             var navigator = (HtmlNodeNavigator) htmlDoc.CreateNavigator();
             var dateUpd = DateTime.Now;
             _tn.PurNum = (navigator
-                              .SelectSingleNode(
-                                  "//td[contains(., 'Номер закупки') or contains(., 'Номер запроса') or contains(., 'Номер процедуры')]/following-sibling::td/a")
-                              ?.Value ?? "").Trim();
+                .SelectSingleNode(
+                    "//td[contains(., 'Номер закупки') or contains(., 'Номер запроса') or contains(., 'Номер процедуры')]/following-sibling::td/a")
+                ?.Value ?? "").Trim();
             if (string.IsNullOrEmpty(_tn.PurNum))
             {
                 _tn.PurNum =
                     (navigator.SelectSingleNode(
-                             "//td[contains(., 'Номер закупки') or contains(., 'Номер запроса') or contains(., 'Номер процедуры') or contains(., 'Номер&nbsp;закупки')]/following-sibling::td")
-                         ?.Value ?? "").Replace("ЕИС", "").Trim();
+                            "//td[contains(., 'Номер закупки') or contains(., 'Номер запроса') or contains(., 'Номер процедуры') or contains(., 'Номер&nbsp;закупки')]/following-sibling::td")
+                        ?.Value ?? "").Replace("ЕИС", "").Trim();
             }
 
             if (string.IsNullOrEmpty(_tn.PurNum))
@@ -55,9 +55,9 @@ namespace ParserWebCore.Tender
             }
 
             var eis = (navigator
-                           .SelectSingleNode(
-                               "//td[contains(., 'Номер закупки') or contains(., 'Номер запроса') or contains(., 'Номер процедуры')]/following-sibling::td/span/a/acronym")
-                           ?.Value ?? "").Trim();
+                .SelectSingleNode(
+                    "//td[contains(., 'Номер закупки') or contains(., 'Номер запроса') or contains(., 'Номер процедуры')]/following-sibling::td/span/a/acronym")
+                ?.Value ?? "").Trim();
             if (eis.Contains("ЕИС"))
             {
                 //Log.Logger("EIS tender", _tn.PurNum);
@@ -65,9 +65,9 @@ namespace ParserWebCore.Tender
             }
 
             var noticeVersion = (navigator
-                                     .SelectSingleNode(
-                                         "//td[contains(., 'Состояние лота')]/following-sibling::td")
-                                     ?.Value ?? "").Trim();
+                .SelectSingleNode(
+                    "//td[contains(., 'Состояние лота')]/following-sibling::td")
+                ?.Value ?? "").Trim();
             using (var connect = ConnectToDb.GetDbConnection())
             {
                 connect.Open();
@@ -157,9 +157,9 @@ namespace ParserWebCore.Tender
                 GetEtp(connect, out var idEtp);
                 GetPlacingWay(connect, out var idPlacingWay);
                 var biddingDateT = (navigator
-                                        .SelectSingleNode(
-                                            "//td[span[contains(., 'Начало') and contains(., 'проведения')]]/following-sibling::td/text()[1]")
-                                        ?.Value ?? "").Replace("&nbsp;", " ").Trim();
+                    .SelectSingleNode(
+                        "//td[span[contains(., 'Начало') and contains(., 'проведения')]]/following-sibling::td/text()[1]")
+                    ?.Value ?? "").Replace("&nbsp;", " ").Trim();
                 biddingDateT = Regex.Replace(biddingDateT, @"\s+", " ");
                 biddingDateT = biddingDateT.GetDateWithMonth();
                 var biddingDate = biddingDateT.ParseDateUn("dd MM yyyy HH:mm");
@@ -190,9 +190,9 @@ namespace ParserWebCore.Tender
                 var idTender = (int) cmd9.LastInsertedId;
                 Counter(resInsertTender, updated);
                 var cusName = (navigator
-                                   .SelectSingleNode(
-                                       "//td[contains(., 'Наименование') and contains(., 'заказчика')]/following-sibling::td")
-                                   ?.Value ?? "").Replace("&nbsp;", " ").Trim();
+                    .SelectSingleNode(
+                        "//td[contains(., 'Наименование') and contains(., 'заказчика')]/following-sibling::td")
+                    ?.Value ?? "").Replace("&nbsp;", " ").Trim();
                 if (!string.IsNullOrEmpty(cusName))
                 {
                     var selectCustomer =

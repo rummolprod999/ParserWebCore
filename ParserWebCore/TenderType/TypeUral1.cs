@@ -2,7 +2,7 @@ using System;
 
 namespace ParserWebCore.TenderType
 {
-    public class TypeUral1: AbstractTypeT
+    public class TypeUral1 : AbstractTypeT
     {
         public string PwName { get; set; }
         public string Currency { get; set; }

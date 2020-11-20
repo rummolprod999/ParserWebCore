@@ -1,7 +1,6 @@
 namespace ParserWebCore.TenderType
 {
-    public class TypeMaxi: AbstractTypeT
+    public class TypeMaxi : AbstractTypeT
     {
-        
     }
 }

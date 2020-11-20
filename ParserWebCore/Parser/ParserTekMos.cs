@@ -11,7 +11,7 @@ using ParserWebCore.TenderType;
 
 namespace ParserWebCore.Parser
 {
-    public class ParserTekMos: ParserAbstract, IParser
+    public class ParserTekMos : ParserAbstract, IParser
     {
         private int DateMinus => 35;
 
@@ -101,11 +101,13 @@ namespace ParserWebCore.Parser
 
             var tenderUrl = urlT;
             if (urlT != null && !urlT.Contains("https://")) tenderUrl = $"https://www.tektorg.ru{urlT}";
-            var status = (t.QuerySelector("div span:contains('Статус:')")?.TextContent?.Replace("Статус:", "") ?? "").Trim();
+            var status = (t.QuerySelector("div span:contains('Статус:')")?.TextContent?.Replace("Статус:", "") ?? "")
+                .Trim();
             if (status.Contains("Осталось:"))
             {
                 status = status.GetDataFromRegex("(.+)Осталось:.+").Trim();
             }
+
             var tn = new TenderTekMos("ТЭК Торг ТЭК Мосэнерго", "https://www.tektorg.ru/mosenergo/procedures", 140,
                 new TypeTekMos
                 {

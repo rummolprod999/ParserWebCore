@@ -182,7 +182,7 @@ namespace ParserWebCore.Parser
                 "";
             var cusName = t.FindElementWithoutException(By.XPath(".//span[@class = 'customer']/a"))?.Text.Trim() ?? "";
             var cusInn = t.FindElementWithoutException(By.XPath(".//span[@class = 'customer']/following-sibling::span"))
-                             ?.Text.Replace("ИНН", "").Trim() ?? "";
+                ?.Text.Replace("ИНН", "").Trim() ?? "";
             var nmck = t.FindElementWithoutException(By.XPath(".//td/span[contains(@class, 'nmck')]"))?.Text
                            .DelAllWhitespace().Trim() ??
                        "";

@@ -156,8 +156,15 @@ namespace ParserWebCore.Parser
                 Log.Logger("selling", id);
                 return;
             }
-            var tender = new TypeZmoRts{Id = id, LotId = lotId, CusName = cusName, DeliveryKladrRegionName = delivPlaces, EndDate = endDate, Host = host, Nmck = nmck, PublicationDate = publicationDate, PurName = purName, StateString = stateString};
-            ParserTender(new TenderZmoRts("РТС–тендер. Корпоративные магазины ЗМО", "https://www.rts-tender.ru/zmo/corporatemall", 261,
+
+            var tender = new TypeZmoRts
+            {
+                Id = id, LotId = lotId, CusName = cusName, DeliveryKladrRegionName = delivPlaces, EndDate = endDate,
+                Host = host, Nmck = nmck, PublicationDate = publicationDate, PurName = purName,
+                StateString = stateString
+            };
+            ParserTender(new TenderZmoRts("РТС–тендер. Корпоративные магазины ЗМО",
+                "https://www.rts-tender.ru/zmo/corporatemall", 261,
                 tender, sec));
         }
     }

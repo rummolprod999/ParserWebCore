@@ -107,7 +107,7 @@ namespace ParserWebCore.Parser
                 return;
             }
 
-            
+
             var purName = ((string) t.SelectToken("name") ?? "").Trim();
             var pubDateS = (string) t.SelectToken("beginDate") ?? "";
             var endDateS = (string) t.SelectToken("endDate") ?? "";
@@ -118,6 +118,7 @@ namespace ParserWebCore.Parser
                 Log.Logger("empty dates", t.ToString());
                 return;
             }
+
             var status = ((string) t.SelectToken("stateName") ?? "").Trim();
             var regionName = ((string) t.SelectToken("regionName") ?? "").Trim();
             var orgName = ((string) t.SelectToken("purchaseCreator.name") ?? "").Trim();

@@ -79,12 +79,12 @@ namespace ParserWebCore.Parser
             }
 
             var purName = (n.SelectSingleNode("./td[3]")
-                               ?.InnerText ?? "").Trim();
+                ?.InnerText ?? "").Trim();
             var orgName = (n.SelectSingleNode("./td[4]")
-                               ?.InnerText ?? "").Trim();
+                ?.InnerText ?? "").Trim();
             var datePubT =
                 (n.SelectSingleNode("./td[5]")
-                     ?.InnerText ?? "").Trim();
+                    ?.InnerText ?? "").Trim();
             datePubT = datePubT.GetDataFromRegex(@"(\d{2}\.\d{2}\.\d{4})");
             var datePub = datePubT.ParseDateUn("dd.MM.yyyy");
             if (datePub == DateTime.MinValue)
@@ -95,7 +95,7 @@ namespace ParserWebCore.Parser
 
             var dateEndT =
                 (n.SelectSingleNode("./td[7]")
-                     ?.InnerText ?? "").Trim();
+                    ?.InnerText ?? "").Trim();
             var dateEndT1 = dateEndT.GetDataFromRegex(@"(\d{2}\.\d{2}\.\d{4})");
             var timeEndT = dateEndT.GetDataFromRegex(@"(\d{2}:\d{2})");
             dateEndT = $"{dateEndT1} {timeEndT}".Trim();

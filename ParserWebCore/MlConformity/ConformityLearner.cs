@@ -110,7 +110,7 @@ namespace ParserWebCore.MlConformity
                 loadedModel = _mlContext.Model.Load(stream);
             }
 
-            
+
             _predEngine = loadedModel.CreatePredictionEngine<ConformChecker, CheckerPrediction>(_mlContext);
             UpdateConformity(dr, connect);
         }

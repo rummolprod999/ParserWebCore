@@ -45,6 +45,7 @@ namespace ParserWebCore.Tender
                     //Log.Logger("This tender is exist in base", PurNum);
                     return;
                 }
+
                 Thread.Sleep(5000);
                 var s = DownloadString.DownLUserAgent(_tn.Href);
                 if (string.IsNullOrEmpty(s))
@@ -91,9 +92,9 @@ namespace ParserWebCore.Tender
                 var customerId = 0;
                 var organiserId = 0;
                 var orgName = (navigator
-                                   .SelectSingleNode(
-                                       "//div[contains(strong, 'Предприятие')]/ul/li[1]/text()[1]")
-                                   ?.Value ?? "").Trim();
+                    .SelectSingleNode(
+                        "//div[contains(strong, 'Предприятие')]/ul/li[1]/text()[1]")
+                    ?.Value ?? "").Trim();
                 if (!string.IsNullOrEmpty(orgName))
                 {
                     var selectOrg =
@@ -111,25 +112,25 @@ namespace ParserWebCore.Tender
                     else
                     {
                         var phone = (navigator
-                                         .SelectSingleNode(
-                                             "//li[contains(., 'По процедурным и организационным вопросам:')]/following-sibling::ul/li[3]")
-                                         ?.Value.Replace("Тел.:", "").Replace("&nbsp;", "") ?? "").Trim();
+                            .SelectSingleNode(
+                                "//li[contains(., 'По процедурным и организационным вопросам:')]/following-sibling::ul/li[3]")
+                            ?.Value.Replace("Тел.:", "").Replace("&nbsp;", "") ?? "").Trim();
                         var email = (navigator
-                                         .SelectSingleNode(
-                                             "//li[contains(., 'По процедурным и организационным вопросам:')]/following-sibling::ul/li[2]/a")
-                                         ?.Value.Replace("Тел.:", "").Replace("&nbsp;", "") ?? "").Trim();
+                            .SelectSingleNode(
+                                "//li[contains(., 'По процедурным и организационным вопросам:')]/following-sibling::ul/li[2]/a")
+                            ?.Value.Replace("Тел.:", "").Replace("&nbsp;", "") ?? "").Trim();
                         var inn = (navigator
-                                       .SelectSingleNode(
-                                           "//div[contains(strong, 'Предприятие')]/ul/li[1]/text()[2]")
-                                       ?.Value.Replace("ИНН:", "") ?? "").Trim();
+                            .SelectSingleNode(
+                                "//div[contains(strong, 'Предприятие')]/ul/li[1]/text()[2]")
+                            ?.Value.Replace("ИНН:", "") ?? "").Trim();
                         var kpp = (navigator
-                                       .SelectSingleNode(
-                                           "//div[contains(strong, 'Предприятие')]/ul/li[1]/text()[3]")
-                                       ?.Value.Replace("КПП:", "") ?? "").Trim();
+                            .SelectSingleNode(
+                                "//div[contains(strong, 'Предприятие')]/ul/li[1]/text()[3]")
+                            ?.Value.Replace("КПП:", "") ?? "").Trim();
                         var contactPerson = (navigator
-                                                 .SelectSingleNode(
-                                                     "//li[contains(., 'По процедурным и организационным вопросам:')]/following-sibling::ul/li[1]/i")
-                                                 ?.Value.Replace("Тел.:", "").Replace("&nbsp;", "") ?? "").Trim();
+                            .SelectSingleNode(
+                                "//li[contains(., 'По процедурным и организационным вопросам:')]/following-sibling::ul/li[1]/i")
+                            ?.Value.Replace("Тел.:", "").Replace("&nbsp;", "") ?? "").Trim();
                         var addOrganizer =
                             $"INSERT INTO {Builder.Prefix}organizer SET full_name = @full_name, contact_phone = @contact_phone, contact_person = @contact_person, contact_email = @contact_email, inn = @inn, kpp = @kpp";
                         var cmd4 = new MySqlCommand(addOrganizer, connect);
@@ -224,9 +225,9 @@ namespace ParserWebCore.Tender
                 }
 
                 var nmck = (navigator
-                                .SelectSingleNode(
-                                    "//li[contains(b, 'Сведения о начальной цене договора (цене лота)')]/following-sibling::ul/li[1]")
-                                ?.Value ?? "").Trim();
+                    .SelectSingleNode(
+                        "//li[contains(b, 'Сведения о начальной цене договора (цене лота)')]/following-sibling::ul/li[1]")
+                    ?.Value ?? "").Trim();
                 nmck = nmck.GetDataFromRegex(@"([\d ,]+)\s");
                 nmck = nmck.Replace("&nbsp;", "").Replace(",", ".");
                 nmck = Regex.Replace(nmck, @"\s+", "");

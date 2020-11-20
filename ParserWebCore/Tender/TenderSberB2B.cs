@@ -208,10 +208,10 @@ namespace ParserWebCore.Tender
                 cmd19.ExecuteNonQuery();
                 var delivPl =
                     ((string) tender.SelectToken(
-                         "last_customer_published_condition.condition_deliveries[0].builded_string") ?? "").Trim();
+                        "last_customer_published_condition.condition_deliveries[0].builded_string") ?? "").Trim();
                 var delivTerm =
                     ((string) tender.SelectToken(
-                         "last_customer_published_condition.condition_payment.string_representation") ?? "").Trim();
+                        "last_customer_published_condition.condition_payment.string_representation") ?? "").Trim();
                 if (delivTerm != "" || delivPl != "")
                 {
                     var insertCustomerRequirement =

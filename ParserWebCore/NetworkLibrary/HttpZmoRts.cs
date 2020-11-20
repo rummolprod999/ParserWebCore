@@ -15,7 +15,8 @@ namespace ParserWebCore.NetworkLibrary
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Add("xxx-tenantid-header", section.ToString());
-                client.DefaultRequestHeaders.Add("user-agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.56 Safari/537.36");
+                client.DefaultRequestHeaders.Add("user-agent",
+                    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.56 Safari/537.36");
                 var response = client.PostAsync(
                     url,
                     new StringContent(data, Encoding.UTF8, "application/json"));
@@ -24,7 +25,7 @@ namespace ParserWebCore.NetworkLibrary
             }
         }
     }
-    
+
     public class HttpZmoRts
     {
         public HttpZmoRts()
@@ -37,7 +38,8 @@ namespace ParserWebCore.NetworkLibrary
             using (var client = new WebClient())
             {
                 client.Headers[HttpRequestHeader.ContentType] = "application/json";
-                client.Headers[HttpRequestHeader.UserAgent] = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.56 Safari/537.36";
+                client.Headers[HttpRequestHeader.UserAgent] =
+                    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.56 Safari/537.36";
                 client.Headers.Add("xxx-tenantid-header", section.ToString());
                 if (data is null)
                 {

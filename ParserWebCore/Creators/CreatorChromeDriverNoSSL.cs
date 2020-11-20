@@ -7,6 +7,7 @@ namespace ParserWebCore.Creators
     public static class CreatorChromeDriverNoSsl
     {
         private static ChromeDriver _driver;
+
         static CreatorChromeDriverNoSsl()
         {
             try

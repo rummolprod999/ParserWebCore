@@ -125,9 +125,9 @@ namespace ParserWebCore.Tender
                 GetPlacingWay(connect, out var idPlacingWay);
                 var navigator = (HtmlNodeNavigator) htmlDoc.CreateNavigator();
                 var biddingDateT = (navigator
-                                        .SelectSingleNode(
-                                            "//td[span[contains(., 'начала') and contains(., 'торгов')]]/following-sibling::td/span")
-                                        ?.Value ?? "").Trim();
+                    .SelectSingleNode(
+                        "//td[span[contains(., 'начала') and contains(., 'торгов')]]/following-sibling::td/span")
+                    ?.Value ?? "").Trim();
                 biddingDateT = Regex.Replace(biddingDateT, @"\s+", " ");
                 var biddingDate = biddingDateT.ParseDateUn("dd.MM.yyyy HH:mm");
                 if (biddingDate != DateTime.MinValue)
@@ -136,9 +136,9 @@ namespace ParserWebCore.Tender
                 }
 
                 var scoringDateT = (navigator
-                                        .SelectSingleNode(
-                                            "//td[span[contains(., 'вскрытия') and contains(., 'конвертов')]]/following-sibling::td/span")
-                                        ?.Value ?? "").Trim();
+                    .SelectSingleNode(
+                        "//td[span[contains(., 'вскрытия') and contains(., 'конвертов')]]/following-sibling::td/span")
+                    ?.Value ?? "").Trim();
                 scoringDateT = Regex.Replace(scoringDateT, @"\s+", " ");
                 var scoringDate = scoringDateT.ParseDateUn("dd.MM.yyyy");
                 if (scoringDate != DateTime.MinValue)
@@ -202,21 +202,21 @@ namespace ParserWebCore.Tender
                 }
 
                 var finSource = (navigator
-                                     .SelectSingleNode(
-                                         "//td[span[contains(., 'Источник финансирования')]]/following-sibling::td/span")
-                                     ?.Value ?? "").Trim();
+                    .SelectSingleNode(
+                        "//td[span[contains(., 'Источник финансирования')]]/following-sibling::td/span")
+                    ?.Value ?? "").Trim();
                 var deliveryPlace = (navigator
-                                         .SelectSingleNode(
-                                             "//td[span[contains(., 'Место') and contains(., 'поставки')]]/following-sibling::td/span")
-                                         ?.Value ?? "").Trim();
+                    .SelectSingleNode(
+                        "//td[span[contains(., 'Место') and contains(., 'поставки')]]/following-sibling::td/span")
+                    ?.Value ?? "").Trim();
                 var deliveryTerm = (navigator
-                                        .SelectSingleNode(
-                                            "//td[span[contains(., 'Сроки') and contains(., 'поставки')]]/following-sibling::td/span")
-                                        ?.Value ?? "").Trim();
+                    .SelectSingleNode(
+                        "//td[span[contains(., 'Сроки') and contains(., 'поставки')]]/following-sibling::td/span")
+                    ?.Value ?? "").Trim();
                 var nmck = (navigator
-                                .SelectSingleNode(
-                                    "//td[span[contains(., 'Начальная') and contains(., 'цена')]]/following-sibling::td/a")
-                                ?.Value ?? "").Trim();
+                    .SelectSingleNode(
+                        "//td[span[contains(., 'Начальная') and contains(., 'цена')]]/following-sibling::td/a")
+                    ?.Value ?? "").Trim();
                 nmck = nmck.Replace("&nbsp;", "").Replace(",", ".");
                 nmck = Regex.Replace(nmck, @"\s+", "");
                 var lots = htmlDoc.DocumentNode.SelectNodes(
@@ -267,19 +267,19 @@ namespace ParserWebCore.Tender
                         try
                         {
                             var numLotT = (lot.SelectSingleNode(".//td[1]")
-                                               ?.InnerText ?? "1").Trim();
+                                ?.InnerText ?? "1").Trim();
                             var lotNum = int.Parse(numLotT);
                             var nameLot = (lot.SelectSingleNode(".//td[2]/a")
-                                               ?.InnerText ?? "").Trim();
+                                ?.InnerText ?? "").Trim();
                             nameLot = nameLot.Replace("&nbsp;", " ");
                             var hrefLot = (lot.SelectSingleNode(".//td[2]/a")
-                                               ?.Attributes["href"]?.Value ?? "").Trim();
+                                ?.Attributes["href"]?.Value ?? "").Trim();
                             var okei = (lot.SelectSingleNode(".//td[3]")
-                                            ?.InnerText ?? "").Trim();
+                                ?.InnerText ?? "").Trim();
                             var quantity = (lot.SelectSingleNode(".//td[4]")
-                                                ?.InnerText ?? "").Trim();
+                                ?.InnerText ?? "").Trim();
                             var nmckLot = (lot.SelectSingleNode(".//td[5]")
-                                               ?.InnerText ?? "").Trim();
+                                ?.InnerText ?? "").Trim();
                             nmckLot = nmckLot.Replace("&nbsp;", "").Replace(",", ".");
                             nmckLot = Regex.Replace(nmckLot, @"\s+", "");
                             var insertLot =
@@ -321,7 +321,8 @@ namespace ParserWebCore.Tender
                                 var htmlPo = new HtmlDocument();
                                 htmlPo.LoadHtml(po);
                                 var poList =
-                                    htmlPo.DocumentNode.SelectNodes("//table[@rules = 'all' and @bordercolor = 'black']//tr") ??
+                                    htmlPo.DocumentNode.SelectNodes(
+                                        "//table[@rules = 'all' and @bordercolor = 'black']//tr") ??
                                     new HtmlNodeCollection(null);
                                 if (poList.Count != 0)
                                 {
@@ -329,14 +330,14 @@ namespace ParserWebCore.Tender
                                     foreach (var pp in poList)
                                     {
                                         var namePo = (pp.SelectSingleNode(".//td[1]/span")
-                                                          ?.InnerText ?? "").Trim();
+                                            ?.InnerText ?? "").Trim();
                                         namePo = $"{nameLot} {namePo}".Trim();
                                         namePo = namePo.Replace("&nbsp;", " ");
                                         var okeiP = (pp.SelectSingleNode(".//td[2]/span")
-                                                         ?.InnerText ?? "").Trim();
+                                            ?.InnerText ?? "").Trim();
                                         okeiP = okeiP.Replace("&nbsp;", " ");
                                         var quantityP = (pp.SelectSingleNode(".//td[3]/span")
-                                                             ?.InnerText ?? "").Trim();
+                                            ?.InnerText ?? "").Trim();
                                         quantityP = quantityP.Replace("&nbsp;", "").Replace(",", ".");
                                         quantityP = Regex.Replace(quantityP, @"\s+", "");
                                         var insertLotitem =

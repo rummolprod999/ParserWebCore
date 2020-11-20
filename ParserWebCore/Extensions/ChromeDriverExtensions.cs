@@ -53,7 +53,7 @@ namespace ParserWebCore.Extensions
             }
         }
 
-        public static IWebElement FindElementWithoutException<T>(this T driver, By by) where T:ISearchContext
+        public static IWebElement FindElementWithoutException<T>(this T driver, By by) where T : ISearchContext
         {
             try
             {

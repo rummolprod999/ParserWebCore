@@ -102,26 +102,36 @@ namespace ParserWebCore.Parser
 
             var tenderUrl = urlT;
             if (!urlT.Contains("https://")) tenderUrl = $"https://www.tektorg.ru{urlT}";
-            var status = (t.QuerySelector("div span:contains('Статус:')")?.TextContent?.Replace("Статус:", "") ?? "").Trim();
+            var status = (t.QuerySelector("div span:contains('Статус:')")?.TextContent?.Replace("Статус:", "") ?? "")
+                .Trim();
             if (status.Contains("Осталось:"))
             {
                 status = status.GetDataFromRegex("(.+)\n.+Осталось:.+").Trim();
             }
-            var datePubT = (t.QuerySelector("div.section-procurement__item-dateTo:contains('Дата публикации:')")?.TextContent ?? "").Replace("Дата публикации:", "").Trim();
-            var dateEndT = (t.QuerySelector("div.section-procurement__item-dateTo:contains('Дата окончания приема заявок')")?.TextContent ??
-                            "").Replace("Дата окончания приема заявок:", "").Replace("Дата окончания приема заявок", "").Trim();
+
+            var datePubT =
+                (t.QuerySelector("div.section-procurement__item-dateTo:contains('Дата публикации:')")?.TextContent ??
+                 "").Replace("Дата публикации:", "").Trim();
+            var dateEndT =
+                (t.QuerySelector("div.section-procurement__item-dateTo:contains('Дата окончания приема заявок')")
+                     ?.TextContent ??
+                 "").Replace("Дата окончания приема заявок:", "").Replace("Дата окончания приема заявок", "").Trim();
             if (dateEndT == "")
             {
                 dateEndT =
                     (t.QuerySelector("span:contains('Подведение итогов не позднее')")?.TextContent ??
                      "").Replace("Подведение итогов не позднее:", "").Trim();
             }
+
             if (dateEndT == "")
             {
                 dateEndT =
-                    (t.QuerySelector("div.section-procurement__item-dateTo:contains('Подведение итогов не позднее')")?.TextContent ??
-                     "").Replace("Подведение итогов не позднее:", "").Replace("Подведение итогов не позднее", "").Trim();
+                    (t.QuerySelector("div.section-procurement__item-dateTo:contains('Подведение итогов не позднее')")
+                         ?.TextContent ??
+                     "").Replace("Подведение итогов не позднее:", "").Replace("Подведение итогов не позднее", "")
+                    .Trim();
             }
+
             var datePub = datePubT.ParseDateUn("dd.MM.yyyy HH:mm 'GMT'z");
             var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm 'GMT'z");
             if (datePub == DateTime.MinValue || dateEnd == DateTime.MinValue)
@@ -130,6 +140,7 @@ namespace ParserWebCore.Parser
                     urlT, datePubT, dateEndT);
                 return;
             }
+
             var purNumT = (t.QuerySelector("div.section-procurement__item-numbers > span")?.TextContent ?? "").Trim();
             var purNum = purNumT.Replace("Номер закупки на сайте ЭТП:", "").Trim();
             if (string.IsNullOrEmpty(purNum))
@@ -138,14 +149,16 @@ namespace ParserWebCore.Parser
                     urlT, purNumT);
                 return;
             }
-            var tn = new TenderTekKom("ТЭК Торг Коммерческие закупки и 223-ФЗ", "https://www.tektorg.ru/223-fz/procedures", 138,
+
+            var tn = new TenderTekKom("ТЭК Торг Коммерческие закупки и 223-ФЗ",
+                "https://www.tektorg.ru/223-fz/procedures", 138,
                 new TypeTekKom
                 {
                     Href = tenderUrl,
                     Status = status,
-                     PurNum = purNum,
-                     DatePub = datePub,
-                     DateEnd = dateEnd
+                    PurNum = purNum,
+                    DatePub = datePub,
+                    DateEnd = dateEnd
                 });
             ParserTender(tn);
         }

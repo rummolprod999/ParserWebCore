@@ -9,10 +9,11 @@ using ParserWebCore.TenderType;
 
 namespace ParserWebCore.Parser
 {
-    public class ParserDellin: ParserAbstract, IParser
+    public class ParserDellin : ParserAbstract, IParser
     {
         private readonly int _countPage = 2;
         private readonly string _orgName = "ООО «Деловые линии»";
+
         public void Parsing()
         {
             Parse(ParsingDellin);
@@ -35,7 +36,8 @@ namespace ParserWebCore.Parser
         }
 
         private void GetPage(int num)
-        {var url =
+        {
+            var url =
                 $"https://etp.dellin.ru/searchServlet?query={HttpUtility.UrlEncode($"{{\"types\":[\"BUYING\"]}}&filter={{\"state\":[\"GD\"]}}&sort={{\"placementDate\":false}}&limit={{\"min\":{num},\"max\":{num + 20},\"updateTotalCount\":true}}")}";
             var result = DownloadString.DownLUserAgent(url);
             if (string.IsNullOrEmpty(result))
@@ -108,7 +110,8 @@ namespace ParserWebCore.Parser
                 CusName = cusName,
                 CusInn = cusInn
             };
-            ParserTender(new TenderDellin("Электронная тендерная площадка ООО «Деловые линии»", "https://etp.dellin.ru/", 277,
+            ParserTender(new TenderDellin("Электронная тендерная площадка ООО «Деловые линии»",
+                "https://etp.dellin.ru/", 277,
                 tender));
         }
     }

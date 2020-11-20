@@ -17,7 +17,8 @@ namespace ParserWebCore.TenderType
 
         public override string ToString()
         {
-            return $"{nameof(Id)}: {Id}, {nameof(LotId)}: {LotId}, {nameof(PurName)}: {PurName}, {nameof(Nmck)}: {Nmck}, {nameof(CusName)}: {CusName}, {nameof(StateString)}: {StateString}, {nameof(PublicationDate)}: {PublicationDate}, {nameof(EndDate)}: {EndDate}, {nameof(DeliveryKladrRegionName)}: {DeliveryKladrRegionName}, {nameof(Host)}: {Host}";
+            return
+                $"{nameof(Id)}: {Id}, {nameof(LotId)}: {LotId}, {nameof(PurName)}: {PurName}, {nameof(Nmck)}: {Nmck}, {nameof(CusName)}: {CusName}, {nameof(StateString)}: {StateString}, {nameof(PublicationDate)}: {PublicationDate}, {nameof(EndDate)}: {EndDate}, {nameof(DeliveryKladrRegionName)}: {DeliveryKladrRegionName}, {nameof(Host)}: {Host}";
         }
     }
 }

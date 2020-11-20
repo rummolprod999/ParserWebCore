@@ -107,6 +107,7 @@ namespace ParserWebCore.Parser
             {
                 status = status.GetDataFromRegex("(.+)Осталось:.+").Trim();
             }
+
             var purName = (t.QuerySelector("a.section-procurement__item-title")?.TextContent ?? "").Trim();
             if (string.IsNullOrEmpty(purName))
             {
@@ -116,20 +117,21 @@ namespace ParserWebCore.Parser
             }
 
             var datePubT = (t.QuerySelector("div span:contains('Дата публикации:')")?.TextContent
-                                ?.Replace("Дата публикации:", "") ?? "").Trim();
+                ?.Replace("Дата публикации:", "") ?? "").Trim();
             var datePub = datePubT.ParseDateUn("dd.MM.yyyy HH:mm 'GMT'z");
             var dateEndT = (t.QuerySelector("div span:contains('Дата окончания приема заявок')")?.TextContent
-                                ?.Replace("Дата окончания приема заявок", "") ?? "").Trim();
+                ?.Replace("Дата окончания приема заявок", "") ?? "").Trim();
             var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm 'GMT'z");
             if (datePub == DateTime.MinValue || dateEnd == DateTime.MinValue)
             {
-                Log.Logger($"Empty dates in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name} datePubT: {datePubT} dateEndT: {dateEndT}",
+                Log.Logger(
+                    $"Empty dates in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name} datePubT: {datePubT} dateEndT: {dateEndT}",
                     tenderUrl);
                 return;
             }
 
             var purNum = (t.QuerySelector("div span:contains('Номер процедуры на сайте ЭТП:')")?.TextContent
-                              ?.Replace("Номер процедуры на сайте ЭТП:", "") ?? "").Trim();
+                ?.Replace("Номер процедуры на сайте ЭТП:", "") ?? "").Trim();
             if (string.IsNullOrEmpty(purNum))
             {
                 purNum = tenderUrl.GetDataFromRegex(@"procedures/(\d+)$");

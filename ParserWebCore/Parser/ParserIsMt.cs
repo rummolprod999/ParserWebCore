@@ -85,7 +85,11 @@ namespace ParserWebCore.Parser
             var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm");
             var status = n.SelectSingleNode(".//td[4]")?.InnerText?.Trim();
             var tn = new TenderIsMt("«Маркетинговые технологии»", "http://is-mt.pro/", 278,
-                new TypeIsMt {PurName = purName, PurNum = purNum, DatePub = datePub, Href = href, DateEnd = dateEnd, Status = status});
+                new TypeIsMt
+                {
+                    PurName = purName, PurNum = purNum, DatePub = datePub, Href = href, DateEnd = dateEnd,
+                    Status = status
+                });
             ParserTender(tn);
         }
     }

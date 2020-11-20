@@ -210,7 +210,7 @@ namespace ParserWebCore.Tender
                                  "")
                         .Trim();
                     var email = (document.QuerySelector("td:contains('Адрес электронной почты:') +  td")
-                                     ?.TextContent ?? "")
+                            ?.TextContent ?? "")
                         .Trim();
                     var contactPerson =
                         (document.QuerySelector("td:contains('ФИО контактного лица:') +  td")?.TextContent ?? "")

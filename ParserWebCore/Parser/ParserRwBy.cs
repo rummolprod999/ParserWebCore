@@ -70,9 +70,9 @@ namespace ParserWebCore.Parser
 
             var purNum = href.ToMd5();
             var purName = n.SelectSingleNode(".//a")?.InnerText?.Trim() ?? throw new Exception(
-                              $"cannot find purName in {href}");
+                $"cannot find purName in {href}");
             var datePubT = n.SelectSingleNode("./span")?.InnerText?.Trim() ?? throw new Exception(
-                               $"cannot find datePubT in {href}");
+                $"cannot find datePubT in {href}");
             var datePub = datePubT.ParseDateUn("dd.MM.yyyy");
             if (datePub == DateTime.MinValue)
             {

@@ -193,10 +193,10 @@ namespace ParserWebCore.Tender
 
                 var delivPl =
                     ((string) tender.SelectToken(
-                         "deliveryPlace") ?? "").Trim();
+                        "deliveryPlace") ?? "").Trim();
                 var delivTerm =
                     ((string) tender.SelectToken(
-                         "paymentTerms") ?? "").Trim();
+                        "paymentTerms") ?? "").Trim();
                 if (delivTerm != "" || delivPl != "")
                 {
                     var insertCustomerRequirement =
@@ -215,19 +215,19 @@ namespace ParserWebCore.Tender
                 purObjects.ForEach(po =>
                 {
                     var okpdName = ((string) po.SelectToken(
-                                        "okpd.name") ?? "").Trim();
+                        "okpd.name") ?? "").Trim();
                     var okpdCode = ((string) po.SelectToken(
-                                        "okpd.code") ?? "").Trim();
+                        "okpd.code") ?? "").Trim();
                     var okei = ((string) po.SelectToken(
-                                    "okei.name") ?? "").Trim();
+                        "okei.name") ?? "").Trim();
                     var quantity = (decimal?) po.SelectToken(
-                                       "amount") ?? 0.0m;
+                        "amount") ?? 0.0m;
                     var price = (decimal?) po.SelectToken(
-                                    "cost") ?? 0.0m;
+                        "cost") ?? 0.0m;
                     var sum = (decimal?) po.SelectToken(
-                                  "totalCost") ?? 0.0m;
+                        "totalCost") ?? 0.0m;
                     var poName = ((string) po.SelectToken(
-                                      "name") ?? "").Trim();
+                        "name") ?? "").Trim();
                     var insertLotitem =
                         $"INSERT INTO {Builder.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name, sum = @sum, okpd2_code = @okpd2_code, okpd2_group_code = @okpd2_group_code, okpd2_group_level1_code = @okpd2_group_level1_code, okpd_name = @okpd_name, quantity_value = @quantity_value, customer_quantity_value = @customer_quantity_value, okei = @okei, price = @price";
                     var cmd19 = new MySqlCommand(insertLotitem, connect);
@@ -387,9 +387,9 @@ namespace ParserWebCore.Tender
             lots.ForEach(lot =>
             {
                 var nmck = (decimal?) lot.SelectToken(
-                               "initialSum") ?? _tn.Nmck;
+                    "initialSum") ?? _tn.Nmck;
                 var currency = ((string) lot.SelectToken(
-                                    "currency.shortName") ?? "").Trim();
+                    "currency.shortName") ?? "").Trim();
                 var insertLot =
                     $"INSERT INTO {Builder.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency";
                 var cmd18 = new MySqlCommand(insertLot, connect);
@@ -440,10 +440,10 @@ namespace ParserWebCore.Tender
                     {
                         var delivPl =
                             ((string) po.SelectToken(
-                                 "deliveryPlace") ?? "").Trim();
+                                "deliveryPlace") ?? "").Trim();
                         var delivTerm =
                             ((string) po.SelectToken(
-                                 "paymentTerms") ?? "").Trim();
+                                "paymentTerms") ?? "").Trim();
                         if (delivTerm != "" || delivPl != "")
                         {
                             var insertCustomerRequirement =
@@ -459,19 +459,19 @@ namespace ParserWebCore.Tender
                         }
 
                         var okpdName = ((string) po.SelectToken(
-                                            "production.okpds[0].okpd.name") ?? "").Trim();
+                            "production.okpds[0].okpd.name") ?? "").Trim();
                         var okpdCode = ((string) po.SelectToken(
-                                            "production.okpds[0].okpd.code") ?? "").Trim();
+                            "production.okpds[0].okpd.code") ?? "").Trim();
                         var okei = ((string) po.SelectToken(
-                                        "okei.name") ?? "").Trim();
+                            "okei.name") ?? "").Trim();
                         var quantity = (decimal?) po.SelectToken(
-                                           "quantity") ?? 0.0m;
+                            "quantity") ?? 0.0m;
                         var price = (decimal?) po.SelectToken(
-                                        "cost") ?? 0.0m;
+                            "cost") ?? 0.0m;
                         var sum = (decimal?) po.SelectToken(
-                                      "amount") ?? 0.0m;
+                            "amount") ?? 0.0m;
                         var poName = ((string) po.SelectToken(
-                                          "subject") ?? "").Trim();
+                            "subject") ?? "").Trim();
                         var insertLotitem =
                             $"INSERT INTO {Builder.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name, sum = @sum, okpd2_code = @okpd2_code, okpd2_group_code = @okpd2_group_code, okpd2_group_level1_code = @okpd2_group_level1_code, okpd_name = @okpd_name, quantity_value = @quantity_value, customer_quantity_value = @customer_quantity_value, okei = @okei, price = @price";
                         var cmd19 = new MySqlCommand(insertLotitem, connect);
@@ -630,10 +630,10 @@ namespace ParserWebCore.Tender
 
                 var delivPl =
                     ((string) tender.SelectToken(
-                         "deliveryPlace") ?? "").Trim();
+                        "deliveryPlace") ?? "").Trim();
                 var delivTerm =
                     ((string) tender.SelectToken(
-                         "paymentTerms") ?? "").Trim();
+                        "paymentTerms") ?? "").Trim();
                 if (delivTerm != "" || delivPl != "")
                 {
                     var insertCustomerRequirement =
@@ -652,19 +652,19 @@ namespace ParserWebCore.Tender
                 purObjects.ForEach(po =>
                 {
                     var okpdName = ((string) po.SelectToken(
-                                        "okpd.name") ?? "").Trim();
+                        "okpd.name") ?? "").Trim();
                     var okpdCode = ((string) po.SelectToken(
-                                        "okpd.code") ?? "").Trim();
+                        "okpd.code") ?? "").Trim();
                     var okei = ((string) po.SelectToken(
-                                    "okeiName") ?? "").Trim();
+                        "okeiName") ?? "").Trim();
                     var quantity = (decimal?) po.SelectToken(
-                                       "currentValue") ?? 0.0m;
+                        "currentValue") ?? 0.0m;
                     var price = (decimal?) po.SelectToken(
-                                    "costPerUnit") ?? 0.0m;
+                        "costPerUnit") ?? 0.0m;
                     var sum = (decimal?) po.SelectToken(
-                                  "totalCost") ?? 0.0m;
+                        "totalCost") ?? 0.0m;
                     var poName = ((string) po.SelectToken(
-                                      "name") ?? "").Trim();
+                        "name") ?? "").Trim();
                     var insertLotitem =
                         $"INSERT INTO {Builder.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name, sum = @sum, okpd2_code = @okpd2_code, okpd2_group_code = @okpd2_group_code, okpd2_group_level1_code = @okpd2_group_level1_code, okpd_name = @okpd_name, quantity_value = @quantity_value, customer_quantity_value = @customer_quantity_value, okei = @okei, price = @price";
                     var cmd19 = new MySqlCommand(insertLotitem, connect);

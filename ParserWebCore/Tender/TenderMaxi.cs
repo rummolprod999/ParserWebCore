@@ -224,13 +224,13 @@ namespace ParserWebCore.Tender
                 cmd19.Parameters.AddWithValue("@name", _tn.PurName);
                 cmd19.ExecuteNonQuery();
                 var deliveryPlace = (navigator
-                                         .SelectSingleNode(
-                                             "//td[contains(., 'Адрес объекта:')]/following-sibling::td")
-                                         ?.Value ?? "").Trim();
+                    .SelectSingleNode(
+                        "//td[contains(., 'Адрес объекта:')]/following-sibling::td")
+                    ?.Value ?? "").Trim();
                 var deliveryTerm = (navigator
-                                        .SelectSingleNode(
-                                            "//td[contains(., 'Условия поставки:')]/following-sibling::td")
-                                        ?.Value ?? "").Trim();
+                    .SelectSingleNode(
+                        "//td[contains(., 'Условия поставки:')]/following-sibling::td")
+                    ?.Value ?? "").Trim();
                 if (!string.IsNullOrEmpty(deliveryPlace) || !string.IsNullOrEmpty(deliveryTerm))
                 {
                     var insertCustomerRequirement =
@@ -244,6 +244,7 @@ namespace ParserWebCore.Tender
                     cmd16.Parameters.AddWithValue("@delivery_term", deliveryTerm);
                     cmd16.ExecuteNonQuery();
                 }
+
                 TenderKwords(connect, idTender);
                 AddVerNumber(connect, _tn.PurNum, TypeFz);
             }

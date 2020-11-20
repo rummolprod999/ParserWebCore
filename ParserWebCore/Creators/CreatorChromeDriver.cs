@@ -7,6 +7,7 @@ namespace ParserWebCore.Creators
     public static class CreatorChromeDriver
     {
         private static ChromeDriver _driver;
+
         static CreatorChromeDriver()
         {
             try

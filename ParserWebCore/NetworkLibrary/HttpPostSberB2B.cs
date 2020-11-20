@@ -15,7 +15,8 @@ namespace ParserWebCore.NetworkLibrary
         public string DownloadString(string url)
         {
             string myJson =
-                "{\"orderBy\":{\"r_published_at\":\"desc\"},\"selectBy\":{\"like_concat\":{\"r_name\":[\"\",[{\"name\":\"r.numericHash\",\"is_varchar\":false},{\"name\":\"r.name\",\"is_varchar\":true},{\"name\":\"customer_company.shortName\",\"is_varchar\":true}]]}},\"pagination\":{\"page\":" + _page + ",\"size\":20},\"extra\":{}}";
+                "{\"orderBy\":{\"r_published_at\":\"desc\"},\"selectBy\":{\"like_concat\":{\"r_name\":[\"\",[{\"name\":\"r.numericHash\",\"is_varchar\":false},{\"name\":\"r.name\",\"is_varchar\":true},{\"name\":\"customer_company.shortName\",\"is_varchar\":true}]]}},\"pagination\":{\"page\":" +
+                _page + ",\"size\":20},\"extra\":{}}";
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Add("x-requested-with", "XMLHttpRequest");

@@ -34,7 +34,7 @@ namespace ParserWebCore.SharedLibraries
 
             return i;
         }
-        
+
         public static decimal ParsePrice(string s)
         {
             s = WebUtility.HtmlDecode(s);

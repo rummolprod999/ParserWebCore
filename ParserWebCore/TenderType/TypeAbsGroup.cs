@@ -1,6 +1,6 @@
 namespace ParserWebCore.TenderType
 {
-    public class TypeAbsGroup: AbstractTypeT
+    public class TypeAbsGroup : AbstractTypeT
     {
         public string Status { get; set; }
 

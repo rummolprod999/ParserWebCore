@@ -1,5 +1,4 @@
-﻿
-namespace ParserWebCore.Tender
+﻿namespace ParserWebCore.Tender
 {
     public interface ITender
     {

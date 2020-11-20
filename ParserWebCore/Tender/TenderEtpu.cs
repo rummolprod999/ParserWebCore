@@ -11,7 +11,7 @@ using ParserWebCore.TenderType;
 
 namespace ParserWebCore.Tender
 {
-    public class TenderEtpu: TenderAbstract, ITender
+    public class TenderEtpu : TenderAbstract, ITender
     {
         private readonly TypeEtpu _tn;
 
@@ -70,7 +70,7 @@ namespace ParserWebCore.Tender
                 AddVerNumber(connect, _tn.PurNum, TypeFz);
             }
         }
-        
+
         private void CreateLot(MySqlConnection connect, int idTender, int customerId, HtmlDocument htmlDoc)
         {
             var lotNum = 1;
@@ -153,6 +153,7 @@ namespace ParserWebCore.Tender
                 cmd16.ExecuteNonQuery();
             }
         }
+
         private void AddAttachments(HtmlDocument htmlDoc, MySqlConnection connect, int idTender)
         {
             var docs = htmlDoc.DocumentNode.SelectNodes(
@@ -176,7 +177,7 @@ namespace ParserWebCore.Tender
                 }
             }
         }
-        
+
         private void CreateCustomer(MySqlConnection connect, out int customerId)
         {
             customerId = 0;
@@ -210,6 +211,7 @@ namespace ParserWebCore.Tender
                 }
             }
         }
+
         private int CreateTender(MySqlConnection connect, int idRegion, int organiserId, int idPlacingWay, int idEtp,
             int cancelStatus, DateTime dateUpd, bool updated)
         {
@@ -241,6 +243,7 @@ namespace ParserWebCore.Tender
             Counter(resInsertTender, updated);
             return idTender;
         }
+
         private void CreaateOrganizer(MySqlConnection connect, out int organiserId)
         {
             organiserId = 0;

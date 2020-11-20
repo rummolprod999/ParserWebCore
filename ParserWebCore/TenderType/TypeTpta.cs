@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace ParserWebCore.TenderType
 {
-    public class TypeTpta: AbstractTypeT
+    public class TypeTpta : AbstractTypeT
     {
         public List<TypeObjectTpta> ObjectsPurchase { get; set; }
 

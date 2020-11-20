@@ -141,7 +141,7 @@ namespace ParserWebCore.Parser
                     {
                         if (e.Message.Contains("Timed out after"))
                         {
-                            Log.Logger($"find the last tender number {i} on page {pageNum+2}");
+                            Log.Logger($"find the last tender number {i} on page {pageNum + 2}");
                             return;
                         }
 
@@ -163,10 +163,12 @@ namespace ParserWebCore.Parser
             if (string.IsNullOrEmpty(purName))
             {
                 purName =
-                    t.FindElementWithoutException(By.XPath(".//span[. = 'Объект исследования']/following-sibling::span"))?.Text
+                    t.FindElementWithoutException(
+                            By.XPath(".//span[. = 'Объект исследования']/following-sibling::span"))?.Text
                         .Trim() ??
                     throw new Exception("cannot find purName ");
             }
+
             var href = t.FindElementWithoutException(By.XPath(".//span[@class = 'regnumber']/a"))?.GetAttribute("href")
                            .Trim() ??
                        throw new Exception("cannot find href");
@@ -197,6 +199,7 @@ namespace ParserWebCore.Parser
             {
                 dateEndT = dateEndTt.GetDataFromRegex(@"(\d{2}\.\d{2}\.\d{4})$").DelDoubleWhitespace();
             }
+
             var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm");
             if (dateEnd == DateTime.MinValue)
             {
@@ -213,7 +216,7 @@ namespace ParserWebCore.Parser
                 "";
             var cusName = t.FindElementWithoutException(By.XPath(".//span[@class = 'customer']/a"))?.Text.Trim() ?? "";
             var cusInn = t.FindElementWithoutException(By.XPath(".//span[@class = 'customer']/following-sibling::span"))
-                             ?.Text.Replace("ИНН", "").Trim() ?? "";
+                ?.Text.Replace("ИНН", "").Trim() ?? "";
             var nmck = t.FindElementWithoutException(By.XPath(".//td/span[contains(@class, 'nmck')]"))?.Text
                            .DelAllWhitespace().Trim() ??
                        "";

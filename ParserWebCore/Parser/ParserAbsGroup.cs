@@ -89,7 +89,8 @@ namespace ParserWebCore.Parser
                 throw new Exception(
                     $"cannot find datePubT in {href}");
             var datePub = datePubT.ParseDateUn("dd.MM.yyyy");
-            var dateEndT = n.SelectSingleNode(".//div[contains(@class,'tenders__cell_to pure-u')]/span")?.InnerText?.Trim() ??
+            var dateEndT = n.SelectSingleNode(".//div[contains(@class,'tenders__cell_to pure-u')]/span")?.InnerText
+                               ?.Trim() ??
                            throw new Exception(
                                $"cannot find dateEndT in {href}");
             var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy");

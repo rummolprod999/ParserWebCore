@@ -36,7 +36,7 @@ namespace ParserWebCore.Tender
 
             var parser = new HtmlParser();
             var document = parser.Parse(s);
-            
+
             var noticeVersion = _tn.Status;
             var organiserId = 0;
             using (var connect = ConnectToDb.GetDbConnection())
@@ -115,7 +115,8 @@ namespace ParserWebCore.Tender
             }
         }
 
-        private void GetLots(IHtmlCollection<IElement> lots, MySqlConnection connect, int idTender, int customerId, string purObjInfo)
+        private void GetLots(IHtmlCollection<IElement> lots, MySqlConnection connect, int idTender, int customerId,
+            string purObjInfo)
         {
             foreach (var lot in lots)
             {
@@ -170,7 +171,7 @@ namespace ParserWebCore.Tender
                         customerId = (int) cmd14.LastInsertedId;
                     }
                 }
-                
+
                 var okpd2Temp =
                     (lot.QuerySelector("td:contains('Код классификатора ОКДП/ОКПД2') +  td")?.TextContent ?? "")
                     .Trim();
@@ -265,7 +266,7 @@ namespace ParserWebCore.Tender
                                  "")
                         .Trim();
                     var email = (document.QuerySelector("td:contains('Адрес электронной почты:') +  td")
-                                     ?.TextContent ?? "")
+                            ?.TextContent ?? "")
                         .Trim();
                     var contactPerson =
                         (document.QuerySelector("td:contains('ФИО контактного лица:') +  td")?.TextContent ?? "")

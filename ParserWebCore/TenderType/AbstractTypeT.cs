@@ -12,7 +12,8 @@ namespace ParserWebCore.TenderType
 
         public override string ToString()
         {
-            return $"{nameof(Href)}: {Href}, {nameof(PurNum)}: {PurNum}, {nameof(PurName)}: {PurName}, {nameof(DatePub)}: {DatePub}, {nameof(DateEnd)}: {DateEnd}";
+            return
+                $"{nameof(Href)}: {Href}, {nameof(PurNum)}: {PurNum}, {nameof(PurName)}: {PurName}, {nameof(DatePub)}: {DatePub}, {nameof(DateEnd)}: {DateEnd}";
         }
     }
 }

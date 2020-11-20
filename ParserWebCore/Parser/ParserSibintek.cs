@@ -80,10 +80,10 @@ namespace ParserWebCore.Parser
             }
 
             var purName = n.SelectSingleNode(".//a")?.InnerText?.Trim() ?? throw new Exception(
-                              $"cannot find purName in {href}");
+                $"cannot find purName in {href}");
             var datePubT =
                 (n.SelectSingleNode("./td[1]/span")
-                     ?.InnerText ?? "").Trim();
+                    ?.InnerText ?? "").Trim();
             var datePub = datePubT.ParseDateUn("dd.MM.yyyy");
             if (datePub == DateTime.MinValue)
             {
@@ -93,7 +93,7 @@ namespace ParserWebCore.Parser
 
             var dateEndT =
                 (n.SelectSingleNode("./td[4]/div")
-                     ?.InnerText ?? "").Trim();
+                    ?.InnerText ?? "").Trim();
             var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy");
             if (dateEnd == DateTime.MinValue)
             {
@@ -102,7 +102,7 @@ namespace ParserWebCore.Parser
             }
 
             var status = (n.SelectSingleNode("./td[5]")
-                              ?.InnerText ?? "").Trim();
+                ?.InnerText ?? "").Trim();
             var tn = new TenderSibintek("ООО ИК «СИБИНТЕК»", "http://sibintek.ru", 71,
                 new TypeSibIntek
                 {

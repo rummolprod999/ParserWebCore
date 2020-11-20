@@ -79,16 +79,16 @@ namespace ParserWebCore.Parser
             }
 
             var purName = (n.SelectSingleNode(".//a[contains(@class, 't_lot_title')]")
-                               ?.InnerText ?? "").Trim();
+                ?.InnerText ?? "").Trim();
             var orgName = (n.SelectSingleNode(".//span[b = 'Компания:']")
-                               ?.InnerText ?? "").Replace("Компания:", "").Trim();
+                ?.InnerText ?? "").Replace("Компания:", "").Trim();
             var contactPerson = (n.SelectSingleNode(".//span[b = 'Ответственный:']")
-                                     ?.InnerText ?? "").Replace("Ответственный:", "").Trim();
+                ?.InnerText ?? "").Replace("Ответственный:", "").Trim();
             var phone = (n.SelectSingleNode(".//span[b = 'Телефон:']")
-                             ?.InnerText ?? "").Replace("Телефон:", "").Trim();
+                ?.InnerText ?? "").Replace("Телефон:", "").Trim();
             var datePubT =
                 (n.SelectSingleNode(".//span[contains(b, 'Дата начала:')]")
-                     ?.InnerText ?? "").Replace("Дата начала:", "").Trim();
+                    ?.InnerText ?? "").Replace("Дата начала:", "").Trim();
             var datePub = datePubT.ParseDateUn("dd.MM.yyyy HH:mm:ss");
             if (datePub == DateTime.MinValue)
             {
@@ -98,7 +98,7 @@ namespace ParserWebCore.Parser
 
             var dateEndT =
                 (n.SelectSingleNode(".//span[contains(b, 'Дата окончания:')]")
-                     ?.InnerText ?? "").Replace("Дата окончания:", "").Trim();
+                    ?.InnerText ?? "").Replace("Дата окончания:", "").Trim();
             var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm:ss");
             if (dateEnd == DateTime.MinValue)
             {

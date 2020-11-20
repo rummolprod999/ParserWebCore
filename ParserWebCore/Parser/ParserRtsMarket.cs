@@ -59,6 +59,7 @@ namespace ParserWebCore.Parser
                     _apiUrl);
                 return;
             }
+
             if (s.ToLower().Contains("exception"))
             {
                 Log.Logger(s);
@@ -80,7 +81,7 @@ namespace ParserWebCore.Parser
                 }
             }
         }
-        
+
         private void ParserTenderObj(JToken t, int sec)
         {
             var id = ((string) t.SelectToken("Id") ?? "").Trim();
@@ -100,7 +101,13 @@ namespace ParserWebCore.Parser
                 Log.Logger("selling", id);
                 return;
             }
-            var tender = new TypeZmoRts{Id = id, LotId = lotId, CusName = cusName, DeliveryKladrRegionName = delivPlaces, EndDate = endDate, Host = host, Nmck = nmck, PublicationDate = publicationDate, PurName = purName, StateString = stateString};
+
+            var tender = new TypeZmoRts
+            {
+                Id = id, LotId = lotId, CusName = cusName, DeliveryKladrRegionName = delivPlaces, EndDate = endDate,
+                Host = host, Nmck = nmck, PublicationDate = publicationDate, PurName = purName,
+                StateString = stateString
+            };
             ParserTender(new TenderRtsMarket("ЭЛЕКТРОННЫЙ МАГАЗИН РТС-МАРКЕТ", "https://zmo.rts-tender.ru/", 95,
                 tender, sec));
         }

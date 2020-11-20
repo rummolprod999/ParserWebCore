@@ -136,7 +136,9 @@ namespace ParserWebCore.Parser
             var href = t
                 .FindElement(By.XPath(".//div[contains(@class, 'dxncItemContent')]/a[starts-with(@href, 'one')]"))
                 ?.GetAttribute("href").Trim();
-            var tmpPurNum = t.FindElementWithoutException(By.XPath(".//div[contains(@class, 'dxncItemHeader')]/span"))?.Text.Trim() ?? throw new Exception($"bad tmpPurNum {href}");
+            var tmpPurNum =
+                t.FindElementWithoutException(By.XPath(".//div[contains(@class, 'dxncItemHeader')]/span"))?.Text
+                    .Trim() ?? throw new Exception($"bad tmpPurNum {href}");
             var purNum = tmpPurNum.GetDataFromRegex(@"№\s*([\d-]+)\b");
             if (purNum == "")
             {

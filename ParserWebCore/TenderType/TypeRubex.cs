@@ -1,7 +1,6 @@
 namespace ParserWebCore.TenderType
 {
-    public class TypeRubex: AbstractTypeT
+    public class TypeRubex : AbstractTypeT
     {
-        
     }
 }

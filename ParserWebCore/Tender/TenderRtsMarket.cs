@@ -11,7 +11,7 @@ using ParserWebCore.TenderType;
 
 namespace ParserWebCore.Tender
 {
-    public class TenderRtsMarket: TenderAbstract, ITender
+    public class TenderRtsMarket : TenderAbstract, ITender
     {
         private readonly TypeZmoRts _tn;
         private readonly int _section;
@@ -45,6 +45,7 @@ namespace ParserWebCore.Tender
                 {
                     return;
                 }
+
                 var url = $"https://zmo-new-webapi.rts-tender.ru/market/api/v1/trades/{_tn.Id}";
                 var s = DownloadString.DownLRtsZmo(url, null, _section);
                 if (string.IsNullOrEmpty(s))
@@ -239,7 +240,7 @@ namespace ParserWebCore.Tender
                 AddVerNumber(connect, _tn.Id, TypeFz);
             }
         }
-        
+
         private void WriteAttachments(MySqlConnection connect, List<JToken> attachments, int idTender)
         {
             foreach (var att in attachments)

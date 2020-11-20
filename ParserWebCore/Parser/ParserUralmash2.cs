@@ -10,9 +10,10 @@ using ParserWebCore.TenderType;
 
 namespace ParserWebCore.Parser
 {
-    internal class ParserUralmash2: ParserAbstract, IParser
+    internal class ParserUralmash2 : ParserAbstract, IParser
     {
         private readonly string _href = "https://uralmash-kartex.ru/industrialnyij-park-uralmash-zakypki";
+
         public void Parsing()
         {
             Parse(ParsingUral2);
@@ -67,7 +68,9 @@ namespace ParserWebCore.Parser
                 url = $"https://uralmash-kartex.ru/{url}";
                 attachments.Add(new TypeUral2.Attachment {Name = name, Url = url});
             }
-            var tn = new TenderUralmash2("ИНПАРК \"УРАЛМАШ\"", "https://uralmash-kartex.ru/industrialnyij-park-uralmash-zakypki", 272,
+
+            var tn = new TenderUralmash2("ИНПАРК \"УРАЛМАШ\"",
+                "https://uralmash-kartex.ru/industrialnyij-park-uralmash-zakypki", 272,
                 new TypeUral2
                 {
                     PurName = purName, PurNum = purNum, DatePub = datePub, Href = _href, DateEnd = dateEnd,

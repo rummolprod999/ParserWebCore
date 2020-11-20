@@ -105,19 +105,19 @@ namespace ParserWebCore.Tender
                     else
                     {
                         var phone = (navigator
-                                         .SelectSingleNode(
-                                             "//div[contains(., 'Телефон')]/following-sibling::div")
-                                         ?.Value ?? "").Trim();
+                            .SelectSingleNode(
+                                "//div[contains(., 'Телефон')]/following-sibling::div")
+                            ?.Value ?? "").Trim();
                         var email = (navigator
-                                         .SelectSingleNode(
-                                             "//div[contains(., 'Электронная почта')]/following-sibling::div/a")
-                                         ?.Value ?? "").Trim();
+                            .SelectSingleNode(
+                                "//div[contains(., 'Электронная почта')]/following-sibling::div/a")
+                            ?.Value ?? "").Trim();
                         var inn = "";
                         var kpp = "";
                         var contactPerson = (navigator
-                                                 .SelectSingleNode(
-                                                     "//div[contains(., 'Контактное лицо')]/following-sibling::div")
-                                                 ?.Value ?? "").Trim();
+                            .SelectSingleNode(
+                                "//div[contains(., 'Контактное лицо')]/following-sibling::div")
+                            ?.Value ?? "").Trim();
                         var addOrganizer =
                             $"INSERT INTO {Builder.Prefix}organizer SET full_name = @full_name, contact_phone = @contact_phone, contact_person = @contact_person, contact_email = @contact_email, inn = @inn, kpp = @kpp";
                         var cmd4 = new MySqlCommand(addOrganizer, connect);
@@ -134,16 +134,16 @@ namespace ParserWebCore.Tender
                 }
 
                 PlacingWay = (navigator
-                                  .SelectSingleNode(
-                                      "//div[contains(., 'Способ закупки')]/following-sibling::div")
-                                  ?.Value ?? "").Trim();
+                    .SelectSingleNode(
+                        "//div[contains(., 'Способ закупки')]/following-sibling::div")
+                    ?.Value ?? "").Trim();
                 GetPlacingWay(connect, out var idPlacingWay);
                 GetEtp(connect, out var idEtp);
                 var idRegion = 0;
                 var regionName = (navigator
-                                      .SelectSingleNode(
-                                          "//div[contains(., 'Регион')]/following-sibling::div")
-                                      ?.Value ?? "").Trim();
+                    .SelectSingleNode(
+                        "//div[contains(., 'Регион')]/following-sibling::div")
+                    ?.Value ?? "").Trim();
                 if (!string.IsNullOrEmpty(regionName))
                 {
                     idRegion = GetRegionFromString(regionName, connect);
@@ -247,9 +247,9 @@ namespace ParserWebCore.Tender
                 cmd19.Parameters.AddWithValue("@sum", "");
                 cmd19.ExecuteNonQuery();
                 var delivTerm = (navigator
-                                     .SelectSingleNode(
-                                         "//h3[contains(., 'ПРЕДМЕТ ЗАКУПКИ')]/following-sibling::div[@class = 'page-text']/text()")
-                                     ?.Value ?? "").Trim();
+                    .SelectSingleNode(
+                        "//h3[contains(., 'ПРЕДМЕТ ЗАКУПКИ')]/following-sibling::div[@class = 'page-text']/text()")
+                    ?.Value ?? "").Trim();
                 if (!string.IsNullOrEmpty(delivTerm))
                 {
                     var insertCustomerRequirement =
@@ -260,7 +260,8 @@ namespace ParserWebCore.Tender
                     cmd16.Parameters.AddWithValue("@id_customer", customerId);
                     cmd16.Parameters.AddWithValue("@delivery_place", "");
                     cmd16.Parameters.AddWithValue("@max_price", "");
-                    cmd16.Parameters.AddWithValue("@delivery_term", System.Net.WebUtility.HtmlDecode(delivTerm).DelDoubleWhitespace());
+                    cmd16.Parameters.AddWithValue("@delivery_term",
+                        System.Net.WebUtility.HtmlDecode(delivTerm).DelDoubleWhitespace());
                     cmd16.ExecuteNonQuery();
                 }
 

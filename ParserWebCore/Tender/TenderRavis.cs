@@ -7,7 +7,7 @@ using ParserWebCore.TenderType;
 
 namespace ParserWebCore.Tender
 {
-    public class TenderRavis: TenderAbstract, ITender
+    public class TenderRavis : TenderAbstract, ITender
     {
         private readonly TypeRavis _tn;
 
@@ -37,6 +37,7 @@ namespace ParserWebCore.Tender
                 {
                     return;
                 }
+
                 var dateUpd = DateTime.Now;
                 var cancelStatus = 0;
                 var updated = false;
@@ -187,6 +188,5 @@ namespace ParserWebCore.Tender
                 AddVerNumber(connect, _tn.PurNum, TypeFz);
             }
         }
-        
     }
 }

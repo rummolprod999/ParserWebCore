@@ -101,15 +101,17 @@ namespace ParserWebCore.Parser
 
             var tenderUrl = urlT;
             if (urlT != null && !urlT.Contains("https://")) tenderUrl = $"https://www.tektorg.ru{urlT}";
-            var status = (t.QuerySelector("div.section-procurement__item-dateTo:contains('Статус:')")?.TextContent?.Replace("Статус:", "") ?? "")
+            var status = (t.QuerySelector("div.section-procurement__item-dateTo:contains('Статус:')")?.TextContent
+                    ?.Replace("Статус:", "") ?? "")
                 .Trim();
             if (status.Contains("Осталось:"))
             {
                 status = status.GetDataFromRegex("(.+)Осталось:.+").Trim();
             }
+
             var datePubT =
                 (t.QuerySelector("div.section-procurement__item-dateTo:contains('Дата публикации:')")?.TextContent
-                     ?.Replace("Дата публикации:", "") ?? "").Trim();
+                    ?.Replace("Дата публикации:", "") ?? "").Trim();
             var datePub = datePubT.ParseDateUn("dd.MM.yyyy HH:mm 'GMT'z");
             if (datePub == DateTime.MinValue)
             {
@@ -119,7 +121,7 @@ namespace ParserWebCore.Parser
             }
 
             var purNum = (t.QuerySelector("div > span:contains('Номер закупки на сайте ЭТП:')")?.TextContent
-                              ?.Replace("Номер закупки на сайте ЭТП:", "") ?? "").Trim();
+                ?.Replace("Номер закупки на сайте ЭТП:", "") ?? "").Trim();
             if (string.IsNullOrEmpty(purNum))
             {
                 Log.Logger($"Empty purNum in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
@@ -127,7 +129,8 @@ namespace ParserWebCore.Parser
                 return;
             }
 
-            var tn = new TenderTekSil("ТЭК Торг ПАО «Силовые машины»", "https://www.tektorg.ru/silovyi_machine/procedures", 218,
+            var tn = new TenderTekSil("ТЭК Торг ПАО «Силовые машины»",
+                "https://www.tektorg.ru/silovyi_machine/procedures", 218,
                 new TypeTekSil
                 {
                     Href = tenderUrl,

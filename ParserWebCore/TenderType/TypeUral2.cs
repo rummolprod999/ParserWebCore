@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace ParserWebCore.TenderType
 {
-    public class TypeUral2: AbstractTypeT
+    public class TypeUral2 : AbstractTypeT
     {
         public List<Attachment> Attachments { get; set; }
 

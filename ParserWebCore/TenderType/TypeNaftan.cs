@@ -1,7 +1,6 @@
 namespace ParserWebCore.TenderType
 {
-    public class TypeNaftan: AbstractTypeT
+    public class TypeNaftan : AbstractTypeT
     {
-        
     }
 }

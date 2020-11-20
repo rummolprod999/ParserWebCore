@@ -3,7 +3,7 @@ using ParserWebCore.TenderType;
 
 namespace ParserWebCore.Tender
 {
-    public class TenderAbsGroup: TenderAbstract, ITender
+    public class TenderAbsGroup : TenderAbstract, ITender
     {
         private readonly TypeAbsGroup _tn;
 

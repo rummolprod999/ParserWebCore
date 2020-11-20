@@ -129,9 +129,9 @@ namespace ParserWebCore.Tender
                 }
 
                 PlacingWay = (navigator
-                                  .SelectSingleNode(
-                                      "//td[b[contains(., 'Процедура закупки')]]/following-sibling::td/span")
-                                  ?.Value ?? "").Trim();
+                    .SelectSingleNode(
+                        "//td[b[contains(., 'Процедура закупки')]]/following-sibling::td/span")
+                    ?.Value ?? "").Trim();
                 GetPlacingWay(connect, out var idPlacingWay);
                 GetEtp(connect, out var idEtp);
                 var insertTender =

@@ -76,9 +76,9 @@ namespace ParserWebCore.Parser
             }
 
             var purName = n.SelectSingleNode(".//a")?.InnerText?.Trim() ?? throw new Exception(
-                              $"cannot find purName in {href}");
+                $"cannot find purName in {href}");
             var dates = n.SelectSingleNode("./td[2]")?.InnerText?.DelDoubleWhitespace().Trim() ?? throw new Exception(
-                            $"cannot find dates in {href}");
+                $"cannot find dates in {href}");
             var datePubT = dates.GetDataFromRegex(@"с\s*(\d{2}\.\d{2}\.\d{4})");
             var datePub = datePubT.ParseDateUn("dd.MM.yyyy");
             if (datePub == DateTime.MinValue)

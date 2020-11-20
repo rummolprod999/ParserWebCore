@@ -35,7 +35,7 @@ namespace ParserWebCore.Parser
         {
             return Regex.Replace(nmcK.GetDataFromRegex(@"^([\d \.]+)\s"), @"\s+", "");
         }
-        
+
         public List<JToken> GetElements(JToken j, string s)
         {
             var els = new List<JToken>();

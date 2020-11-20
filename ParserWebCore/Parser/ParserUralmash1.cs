@@ -102,6 +102,7 @@ namespace ParserWebCore.Parser
                 });
             ParserTender(tn);
         }
+
         protected override void Parse(Action op)
         {
             op?.Invoke();

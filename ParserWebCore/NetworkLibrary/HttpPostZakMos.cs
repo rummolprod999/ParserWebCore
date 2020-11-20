@@ -5,14 +5,12 @@ namespace ParserWebCore.NetworkLibrary
 {
     public class HttpPostZakMos
     {
-
         public HttpPostZakMos()
         {
         }
 
         public string DownloadString(string url, string data)
         {
-           
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Add("x-requested-with", "XMLHttpRequest");

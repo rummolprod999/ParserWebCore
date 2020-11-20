@@ -2,7 +2,7 @@ using System;
 
 namespace ParserWebCore.Parser
 {
-    public class ParserUralmash: ParserAbstract, IParser
+    public class ParserUralmash : ParserAbstract, IParser
     {
         public void Parsing()
         {

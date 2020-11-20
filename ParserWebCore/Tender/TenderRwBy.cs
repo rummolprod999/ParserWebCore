@@ -44,7 +44,8 @@ namespace ParserWebCore.Tender
             var dateUpd = DateTime.Now;
             var dateEndT =
                 navigator
-                    .SelectSingleNode("//td[contains(text(),  'Дата и время окончания приема предложений')]/following-sibling::td")
+                    .SelectSingleNode(
+                        "//td[contains(text(),  'Дата и время окончания приема предложений')]/following-sibling::td")
                     ?.Value?.ReplaceHtmlEntyty()?.DelDoubleWhitespace().Trim() ?? throw new Exception(
                     $"cannot find dateEndT in {_tn.Href}");
             var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm");
@@ -131,16 +132,16 @@ namespace ParserWebCore.Tender
                         var phone = "";
                         var email = "";
                         inn = navigator.SelectSingleNode(
-                                      "//td[contains(text(), 'Полное наименование заказчика, место нахождения организации, УНП')]/following-sibling::td/text()[3]")
-                                  ?.Value?.Trim() ?? "";
+                                "//td[contains(text(), 'Полное наименование заказчика, место нахождения организации, УНП')]/following-sibling::td/text()[3]")
+                            ?.Value?.Trim() ?? "";
                         inn = inn.GetDataFromRegex(@"(\d{9})");
                         var kpp = "";
                         var contactPerson = navigator.SelectSingleNode(
-                                                    "//td[contains(text(), 'Фамилии, имена и отчества, номера телефонов работников заказчика')]/following-sibling::td")
-                                                ?.Value?.Trim() ?? "";
+                                "//td[contains(text(), 'Фамилии, имена и отчества, номера телефонов работников заказчика')]/following-sibling::td")
+                            ?.Value?.Trim() ?? "";
                         var address = navigator.SelectSingleNode(
-                                              "//td[contains(text(), 'Полное наименование заказчика, место нахождения организации, УНП')]/following-sibling::td/text()[2]")
-                                          ?.Value?.Trim() ?? "";
+                                "//td[contains(text(), 'Полное наименование заказчика, место нахождения организации, УНП')]/following-sibling::td/text()[2]")
+                            ?.Value?.Trim() ?? "";
                         var addOrganizer =
                             $"INSERT INTO {Builder.Prefix}organizer SET full_name = @full_name, contact_phone = @contact_phone, contact_person = @contact_person, contact_email = @contact_email, inn = @inn, kpp = @kpp, fact_address = @fact_address";
                         var cmd4 = new MySqlCommand(addOrganizer, connect);
@@ -219,11 +220,11 @@ namespace ParserWebCore.Tender
 
                 var requirements = new List<Req>();
                 var req1 = navigator.SelectSingleNode(
-                                   "//td[contains(text(), 'Требования к составу участников')]/following-sibling::td")
-                               ?.Value?.Trim() ?? "";
+                        "//td[contains(text(), 'Требования к составу участников')]/following-sibling::td")
+                    ?.Value?.Trim() ?? "";
                 var req2 = navigator.SelectSingleNode(
-                                   "//td[contains(text(), 'Квалификационные требования')]/following-sibling::td")
-                               ?.Value?.Trim() ?? "";
+                        "//td[contains(text(), 'Квалификационные требования')]/following-sibling::td")
+                    ?.Value?.Trim() ?? "";
                 if (!string.IsNullOrEmpty(req1))
                     requirements.Add(new Req {Name = "Требования к составу участников", Content = req1});
                 if (!string.IsNullOrEmpty(req2))
@@ -244,12 +245,12 @@ namespace ParserWebCore.Tender
             {
                 var lotNav = (HtmlNodeNavigator) lot.CreateNavigator();
                 var lotNumT = lotNav.SelectSingleNode(
-                                      "./td[1]")
-                                  ?.Value?.Trim() ?? "1";
+                        "./td[1]")
+                    ?.Value?.Trim() ?? "1";
                 int.TryParse(lotNumT, out var lotNum);
                 var finSource = lotNav.SelectSingleNode(
-                                        "./following-sibling::tr/th[contains(text(), 'Источник финансирования')]/following-sibling::td/div")
-                                    ?.Value?.Trim() ?? "";
+                        "./following-sibling::tr/th[contains(text(), 'Источник финансирования')]/following-sibling::td/div")
+                    ?.Value?.Trim() ?? "";
                 var insertLot =
                     $"INSERT INTO {Builder.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency, finance_source = @finance_source";
                 var cmd18 = new MySqlCommand(insertLot, connect);
@@ -272,11 +273,11 @@ namespace ParserWebCore.Tender
             int customerId)
         {
             var okpd2 = (lotNav
-                             .SelectSingleNode(
-                                 "./following-sibling::tr/th[.contains(text(), 'Код ОКРБ')]/following-sibling::td")
-                             ?.Value ?? "").Trim();
+                .SelectSingleNode(
+                    "./following-sibling::tr/th[.contains(text(), 'Код ОКРБ')]/following-sibling::td")
+                ?.Value ?? "").Trim();
             var purObjects = lotNav.Select(
-                                 "./td[2]/text()");
+                "./td[2]/text()");
             if (purObjects is null) return;
             foreach (XPathNavigator po in purObjects)
             {
@@ -301,13 +302,13 @@ namespace ParserWebCore.Tender
         private void GetCusRequirements(HtmlNodeNavigator lotNav, MySqlConnection connect, int idLot, int customerId)
         {
             var delivPlace = (lotNav
-                                  .SelectSingleNode(
-                                      "./following-sibling::tr/th[contains(text(), 'Место поставки товара, выполнения работ, оказания услуг')]/following-sibling::td/div")
-                                  ?.Value ?? "").ReplaceHtmlEntyty().Trim();
+                .SelectSingleNode(
+                    "./following-sibling::tr/th[contains(text(), 'Место поставки товара, выполнения работ, оказания услуг')]/following-sibling::td/div")
+                ?.Value ?? "").ReplaceHtmlEntyty().Trim();
             var delivTerm = (lotNav
-                                 .SelectSingleNode(
-                                     "./following-sibling::tr/th[contains(text(), 'Срок поставки')]/following-sibling::td")
-                                 ?.Value ?? "").Trim();
+                .SelectSingleNode(
+                    "./following-sibling::tr/th[contains(text(), 'Срок поставки')]/following-sibling::td")
+                ?.Value ?? "").Trim();
             if (!string.IsNullOrEmpty(delivTerm) || !string.IsNullOrEmpty(delivPlace))
             {
                 var insertCustomerRequirement =

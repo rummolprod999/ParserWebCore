@@ -1,7 +1,6 @@
 namespace ParserWebCore.TenderType
 {
-    public class TypeRavis: AbstractTypeT
+    public class TypeRavis : AbstractTypeT
     {
-        
     }
 }

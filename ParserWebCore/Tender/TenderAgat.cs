@@ -164,6 +164,7 @@ namespace ParserWebCore.Tender
                         customerId = (int) cmd14.LastInsertedId;
                     }
                 }
+
                 var lotNum = 1;
                 var insertLot =
                     $"INSERT INTO {Builder.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency, finance_source = @finance_source";

@@ -107,17 +107,17 @@ namespace ParserWebCore.Tender
                     else
                     {
                         var phone = (navigator
-                                         .SelectSingleNode(
-                                             "//td[. = 'Телефон']/following-sibling::td")
-                                         ?.Value ?? "").Trim();
+                            .SelectSingleNode(
+                                "//td[. = 'Телефон']/following-sibling::td")
+                            ?.Value ?? "").Trim();
                         var email = (navigator
-                                         .SelectSingleNode(
-                                             "//td[. = 'Электронная почта']/following-sibling::td")
-                                         ?.Value ?? "").Trim();
+                            .SelectSingleNode(
+                                "//td[. = 'Электронная почта']/following-sibling::td")
+                            ?.Value ?? "").Trim();
                         var contactPerson = (navigator
-                                                 .SelectSingleNode(
-                                                     "//td[. = 'Контактное лицо']/following-sibling::td")
-                                                 ?.Value ?? "").Trim();
+                            .SelectSingleNode(
+                                "//td[. = 'Контактное лицо']/following-sibling::td")
+                            ?.Value ?? "").Trim();
                         var addOrganizer =
                             $"INSERT INTO {Builder.Prefix}organizer SET full_name = @full_name, contact_phone = @contact_phone, contact_person = @contact_person, contact_email = @contact_email, inn = @inn";
                         var cmd4 = new MySqlCommand(addOrganizer, connect);
@@ -134,9 +134,9 @@ namespace ParserWebCore.Tender
 
                 GetEtp(connect, out var idEtp);
                 PlacingWay = (navigator
-                                  .SelectSingleNode(
-                                      "//td[. = 'Способ закупки']/following-sibling::td")
-                                  ?.Value ?? "").Trim();
+                    .SelectSingleNode(
+                        "//td[. = 'Способ закупки']/following-sibling::td")
+                    ?.Value ?? "").Trim();
                 GetPlacingWay(connect, out var idPlacingWay);
                 var idRegion = GetRegionFromString("мурман", connect);
                 var insertTender =
@@ -229,21 +229,21 @@ namespace ParserWebCore.Tender
                 cmd18.ExecuteNonQuery();
                 var idLot = (int) cmd18.LastInsertedId;
                 var delivPlace = (navigator
-                                      .SelectSingleNode(
-                                          "//td[contains(., 'Место доставки')]/following-sibling::td")
-                                      ?.Value ?? "").Trim();
+                    .SelectSingleNode(
+                        "//td[contains(., 'Место доставки')]/following-sibling::td")
+                    ?.Value ?? "").Trim();
                 var delivTerm1 = (navigator
-                                      .SelectSingleNode(
-                                          "//td[contains(., 'Срок и условия')]/following-sibling::td")
-                                      ?.Value ?? "").Trim();
+                    .SelectSingleNode(
+                        "//td[contains(., 'Срок и условия')]/following-sibling::td")
+                    ?.Value ?? "").Trim();
                 var delivTerm2 = (navigator
-                                      .SelectSingleNode(
-                                          "//td[contains(., 'Сроки поставки товаров')]/following-sibling::td")
-                                      ?.Value ?? "").Trim();
+                    .SelectSingleNode(
+                        "//td[contains(., 'Сроки поставки товаров')]/following-sibling::td")
+                    ?.Value ?? "").Trim();
                 var delivTerm3 = (navigator
-                                      .SelectSingleNode(
-                                          "//td[contains(., 'Сведения о включенных')]/following-sibling::td")
-                                      ?.Value ?? "").Trim();
+                    .SelectSingleNode(
+                        "//td[contains(., 'Сведения о включенных')]/following-sibling::td")
+                    ?.Value ?? "").Trim();
                 var delivTerm = $"{delivTerm1}\n{delivTerm2}\n{delivTerm3}".Trim();
                 if (!string.IsNullOrEmpty(delivTerm) || !string.IsNullOrEmpty(delivPlace))
                 {
@@ -268,15 +268,15 @@ namespace ParserWebCore.Tender
                     foreach (var pp in poList)
                     {
                         var namePo = (pp.SelectSingleNode(".//td[2]")
-                                          ?.InnerText ?? "").Trim();
+                            ?.InnerText ?? "").Trim();
                         var okeiP = (pp.SelectSingleNode(".//td[3]")
-                                         ?.InnerText ?? "").Trim();
+                            ?.InnerText ?? "").Trim();
                         var priceP = (pp.SelectSingleNode(".//td[4]")
-                                          ?.InnerText.Replace(",", ".").DelAllWhitespace() ?? "").Trim();
+                            ?.InnerText.Replace(",", ".").DelAllWhitespace() ?? "").Trim();
                         var sumP = (pp.SelectSingleNode(".//td[6]")
-                                        ?.InnerText.Replace(",", ".").DelAllWhitespace() ?? "").Trim();
+                            ?.InnerText.Replace(",", ".").DelAllWhitespace() ?? "").Trim();
                         var quantityP = (pp.SelectSingleNode(".//td[5]")
-                                             ?.InnerText.Replace(",", ".").DelAllWhitespace() ?? "").Trim();
+                            ?.InnerText.Replace(",", ".").DelAllWhitespace() ?? "").Trim();
                         var insertLotitem =
                             $"INSERT INTO {Builder.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name, quantity_value = @quantity_value, okei = @okei, customer_quantity_value = @customer_quantity_value, price = @price, sum = @sum";
                         var cmd19 = new MySqlCommand(insertLotitem, connect);

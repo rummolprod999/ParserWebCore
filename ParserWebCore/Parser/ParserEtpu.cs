@@ -9,7 +9,7 @@ using ParserWebCore.TenderType;
 
 namespace ParserWebCore.Parser
 {
-    public class ParserEtpu: ParserAbstract, IParser
+    public class ParserEtpu : ParserAbstract, IParser
     {
         private readonly int _countPage = 10;
 
@@ -35,7 +35,8 @@ namespace ParserWebCore.Parser
         }
 
         private void GetPage(int num)
-        {var url =
+        {
+            var url =
                 $"https://torgi.etpu.ru/searchServlet?query={HttpUtility.UrlEncode($"{{\"types\":[\"BUYING\",\"SALE\",\"RFI\"]}}&filter={{\"state\":[\"ALL\"]}}&sort={{\"placementDate\":false}}&limit={{\"min\":{num},+\"max\":{num + 20}}}")}";
             var result = DownloadString.DownLUserAgent(url);
             if (string.IsNullOrEmpty(result))

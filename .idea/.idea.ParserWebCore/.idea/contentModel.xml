@@ -153,6 +153,7 @@
           <e p="TypeNaftan.cs" t="Include" />
           <e p="TypeObjectTpta.cs" t="Include" />
           <e p="TypeRavis.cs" t="Include" />
+          <e p="TypeRb2b.cs" t="Include" />
           <e p="TypeRubex.cs" t="Include" />
           <e p="TypeRwBy.cs" t="Include" />
           <e p="TypeSamCom.cs" t="Include" />
@@ -180,6 +181,7 @@
             </e>
           </e>
         </e>
+        <e p="rb2b.xml" t="Include" />
         <e p="settings.json" t="Include" />
         <e p="test.html" t="Include" />
         <e p="test.json" t="Include" />

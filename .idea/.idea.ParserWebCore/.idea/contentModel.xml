@@ -6,6 +6,7 @@
     <e p="$APPLICATION_CONFIG_DIR$/consoles/db" t="IncludeRecursive" />
     <e p="$APPLICATION_CONFIG_DIR$/extensions" t="IncludeRecursive" />
     <e p="$APPLICATION_CONFIG_DIR$/scratches" t="IncludeRecursive" />
+    <e p="$APPLICATION_PLUGINS_DIR$/bashsupport-pro/builtin" t="IncludeRecursive" />
     <e p="$PROJECT_DIR$" t="IncludeFlat">
       <e p=".git/info/exclude" t="IncludeRecursive" />
       <e p="ParserWebCore" t="IncludeRecursive">
@@ -63,6 +64,7 @@
           <e p="ParserMzVoron.cs" t="Include" />
           <e p="ParserNaftan.cs" t="Include" />
           <e p="ParserRavis.cs" t="Include" />
+          <e p="ParserRb2b.cs" t="Include" />
           <e p="ParserRtsMarket.cs" t="Include" />
           <e p="ParserRubex.cs" t="Include" />
           <e p="ParserRwBy.cs" t="Include" />
@@ -113,6 +115,7 @@
           <e p="TenderMzVoron.cs" t="Include" />
           <e p="TenderNaftan.cs" t="Include" />
           <e p="TenderRavis.cs" t="Include" />
+          <e p="TenderRb2b.cs" t="Include" />
           <e p="TenderRtsMarket.cs" t="Include" />
           <e p="TenderRubex.cs" t="Include" />
           <e p="TenderRwBy.cs" t="Include" />

@@ -128,6 +128,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.AbsGroup:
                     _parser = new ParserAbsGroup();
                     break;
+                case Arguments.Rb2b:
+                    _parser = new ParserRb2b();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

@@ -134,7 +134,7 @@ namespace ParserWebCore.Tender
                 var lotNum = 1;
                 foreach (var lot in lots)
                 {
-                    var nmck = (decimal?) lot.SelectToken("@Price") ?? 0.0m;
+                    var nmck = ((string) lot.SelectToken("@Price") ?? "").Trim();
                     var currency = ((string) lot.SelectToken("@Currency") ?? "").Trim();
                     var lotName = ((string) lot.SelectToken("@Name") ?? "").Trim();
                     var insertLot =

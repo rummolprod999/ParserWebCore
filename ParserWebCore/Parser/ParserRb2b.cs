@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Xml;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -12,7 +13,8 @@ namespace ParserWebCore.Parser
 {
     public class ParserRb2b : ParserAbstract, IParser
     {
-        private readonly string _url = "https://kkz1885.rb2b.ru/admin/ExportSeldon.aspx";
+        private readonly List<string> _urls = new List<string>
+            {"https://kkz1885.rb2b.ru/admin/ExportSeldon.aspx", "http://etptt.ru/admin/ExportSeldon.aspx"};
 
         public void Parsing()
         {
@@ -23,7 +25,10 @@ namespace ParserWebCore.Parser
         {
             try
             {
-                GetPage();
+                foreach (var url in _urls)
+                {
+                    GetPage(url);
+                }
             }
             catch (Exception e)
             {
@@ -31,9 +36,9 @@ namespace ParserWebCore.Parser
             }
         }
 
-        private void GetPage()
+        private void GetPage(string url)
         {
-            var s = DownloadString.DownL1251(_url);
+            var s = DownloadString.DownL1251(url);
             var doc = new XmlDocument();
             doc.LoadXml(s);
             var jsons = JsonConvert.SerializeXmlNode(doc);

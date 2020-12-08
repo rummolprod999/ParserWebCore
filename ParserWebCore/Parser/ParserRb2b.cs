@@ -14,7 +14,10 @@ namespace ParserWebCore.Parser
     public class ParserRb2b : ParserAbstract, IParser
     {
         private readonly List<string> _urls = new List<string>
-            {"https://kkz1885.rb2b.ru/admin/ExportSeldon.aspx", "http://etptt.ru/admin/ExportSeldon.aspx"};
+        {
+            "https://kkz1885.rb2b.ru/admin/ExportSeldon.aspx", "http://etptt.ru/admin/ExportSeldon.aspx",
+            "https://lama.rb2b.ru/admin/ExportSeldon.aspx"
+        };
 
         public void Parsing()
         {

@@ -7,6 +7,8 @@ namespace ParserWebCore.ParserExecutor
 {
     public class Executor
     {
+        private readonly IParser _parser;
+
         public Executor(Arguments arg)
         {
             switch (arg)
@@ -131,12 +133,13 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Rb2b:
                     _parser = new ParserRb2b();
                     break;
+                case Arguments.Federal:
+                    _parser = new ParserFederal();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }
         }
-
-        private readonly IParser _parser;
 
         public void ExecuteParser()
         {

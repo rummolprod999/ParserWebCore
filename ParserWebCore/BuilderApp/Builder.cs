@@ -1,31 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace ParserWebCore.BuilderApp
 {
     public class Builder
     {
-        [Required] public static string TempDir { get; set; }
-        [Required] public static string LogDir { get; set; }
-        [Required] public static string FileLog { get; set; }
-        [Required] public static string UserDb { get; set; }
-        [Required] public static string PassDb { get; set; }
-        [Required] public static string Server { get; set; }
-        [Required] public static string Database { get; set; }
-        [Required] public static string ConnectString { get; set; }
-        private static int _port;
-        public static string Prefix { get; private set; }
-        public static Arguments Arg { get; private set; }
-        private static Builder _b;
-
         public const string ReqArguments =
-            "agrocomplex, kzgroup, agrotomsk, sibintek, setonline, mzvoron, maxi, tver, murman, kalug, smol, samar, udmurt, segezha, akashevo, sitno, naftan, rwby, tekkom, tekmarket, tekmos, mlconf, tekrn, brn32, sportmaster, teksil, sberb2b, zakupmos, agat, rubex, samcom, ravis, boaz, tektkp, zmorts, rtsmarket, uralmash, lotonline, etpu, ismt, tpta, absgroup, rb2b";
+            "agrocomplex, kzgroup, agrotomsk, sibintek, setonline, mzvoron, maxi, tver, murman, kalug, smol, samar, udmurt, segezha, akashevo, sitno, naftan, rwby, tekkom, tekmarket, tekmos, mlconf, tekrn, brn32, sportmaster, teksil, sberb2b, zakupmos, agat, rubex, samcom, ravis, boaz, tektkp, zmorts, rtsmarket, uralmash, lotonline, etpu, ismt, tpta, absgroup, rb2b, federal";
+
+        private static int _port;
+        private static Builder _b;
 
         public static readonly string Path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName()
             .CodeBase.Substring(5));
@@ -36,6 +26,19 @@ namespace ParserWebCore.BuilderApp
             GetSettings();
             CreateDirs();
         }
+
+        [Required] public static string TempDir { get; set; }
+        [Required] public static string LogDir { get; set; }
+        [Required] public static string FileLog { get; set; }
+        [Required] public static string UserDb { get; set; }
+        [Required] public static string PassDb { get; set; }
+        [Required] public static string Server { get; set; }
+        [Required] public static string Database { get; set; }
+        [Required] public static string FederalPass { get; set; }
+        [Required] public static string FederalUser { get; set; }
+        [Required] public static string ConnectString { get; set; }
+        public static string Prefix { get; private set; }
+        public static Arguments Arg { get; private set; }
 
         private static void GetArgument(string s)
         {
@@ -173,6 +176,9 @@ namespace ParserWebCore.BuilderApp
                 case "rb2b":
                     Arg = Arguments.Rb2b;
                     break;
+                case "federal":
+                    Arg = Arguments.Federal;
+                    break;
                 default:
                     throw new Exception($"Неправильно указан аргумент {s}, используйте {ReqArguments}");
             }
@@ -188,6 +194,8 @@ namespace ParserWebCore.BuilderApp
                 UserDb = (string) o["userdb"];
                 PassDb = (string) o["passdb"];
                 Server = (string) o["server"];
+                FederalPass = (string) o["passfederal"];
+                FederalUser = (string) o["userfederal"];
                 _port = int.TryParse((string) o["port"], out _port) ? int.Parse((string) o["port"]) : 3306;
                 Database = (string) o["database"];
                 var logDirTmp = o["dirs"]

@@ -1,10 +1,13 @@
 using System;
 using ParserWebCore.Logger;
+using ParserWebCore.NetworkLibrary;
 
 namespace ParserWebCore.Parser
 {
     public class ParserFederal : ParserAbstract, IParser
     {
+        private readonly CookieService _cookieService = GetCookieServiceFederal.CreateInstance();
+
         public void Parsing()
         {
             Parse(ParsingFederal);
@@ -24,6 +27,7 @@ namespace ParserWebCore.Parser
 
         private void GetPage()
         {
+            _cookieService.Credential();
         }
     }
 }

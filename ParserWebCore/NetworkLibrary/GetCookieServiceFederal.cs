@@ -13,7 +13,7 @@ namespace ParserWebCore.NetworkLibrary
         {
         }
 
-        public Cookie Credential()
+        public Cookie CookieValue()
         {
             var cookieContainer = new CookieContainer();
             var handler = new HttpClientHandler {CookieContainer = cookieContainer};

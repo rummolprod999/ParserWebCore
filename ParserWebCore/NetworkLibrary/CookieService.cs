@@ -4,6 +4,6 @@ namespace ParserWebCore.NetworkLibrary
 {
     public interface CookieService
     {
-        Cookie Credential();
+        Cookie CookieValue();
     }
 }

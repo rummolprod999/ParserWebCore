@@ -27,7 +27,7 @@ namespace ParserWebCore.Parser
 
         private void GetPage()
         {
-            _cookieService.Credential();
+            _cookieService.CookieValue();
         }
     }
 }

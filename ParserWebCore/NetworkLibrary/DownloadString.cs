@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -482,7 +483,8 @@ namespace ParserWebCore.NetworkLibrary
         }
 
 
-        public static string DownLHttpPostWithCookies(string url, string baseUrl, Cookie cookie)
+        public static string DownLHttpPostWithCookies(string url, string baseUrl, Cookie cookie,
+            FormUrlEncodedContent postContent = null)
         {
             var tmp = "";
             var count = 0;
@@ -490,7 +492,8 @@ namespace ParserWebCore.NetworkLibrary
             {
                 try
                 {
-                    var task = Task.Run(() => (HttpPostCookies.CreateInstance()).DownloadString(url, baseUrl, cookie));
+                    var task = Task.Run(() =>
+                        (HttpPostCookies.CreateInstance()).DownloadString(url, baseUrl, cookie, postContent));
                     if (!task.Wait(TimeSpan.FromSeconds(60))) throw new TimeoutException();
                     tmp = task.Result;
                     break;
@@ -547,6 +550,54 @@ namespace ParserWebCore.NetworkLibrary
             }
 
             Finish:
+            return tmp;
+        }
+
+        public static string DownLFederal(string url)
+        {
+            var tmp = "";
+            var count = 0;
+            while (true)
+            {
+                try
+                {
+                    var task = Task.Run(() => (new TimedWebClientFederal()).DownloadString(url));
+                    if (!task.Wait(TimeSpan.FromSeconds(30))) throw new TimeoutException();
+                    tmp = task.Result;
+                    break;
+                }
+
+                catch (Exception e)
+                {
+                    if (count >= 2)
+                    {
+                        Log.Logger($"Не удалось скачать за {count} попыток", url);
+                        break;
+                    }
+
+                    switch (e)
+                    {
+                        case AggregateException a
+                            when a.InnerException != null && a.InnerException.Message.Contains("(404) Not Found"):
+                            Log.Logger("404 Exception", a.InnerException.Message, url);
+                            return tmp;
+                        case AggregateException a
+                            when a.InnerException != null && a.InnerException.Message.Contains("(403) Forbidden"):
+                            Log.Logger("403 Exception", a.InnerException.Message, url);
+                            return tmp;
+                        case AggregateException a when a.InnerException != null &&
+                                                       a.InnerException.Message.Contains(
+                                                           "The remote server returned an error: (434)"):
+                            Log.Logger("434 Exception", a.InnerException.Message, url);
+                            return tmp;
+                    }
+
+                    Log.Logger("Не удалось получить строку", e, url);
+                    count++;
+                    Thread.Sleep(5000);
+                }
+            }
+
             return tmp;
         }
     }

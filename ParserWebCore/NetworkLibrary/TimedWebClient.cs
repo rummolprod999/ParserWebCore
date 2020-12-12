@@ -106,8 +106,6 @@ namespace ParserWebCore.NetworkLibrary
 
     public class WebDownload : WebClient
     {
-        public int Timeout { get; set; }
-
         public WebDownload() : this(60000)
         {
         }
@@ -116,6 +114,8 @@ namespace ParserWebCore.NetworkLibrary
         {
             Timeout = timeout;
         }
+
+        public int Timeout { get; set; }
 
         protected override WebRequest GetWebRequest(Uri address)
         {
@@ -126,6 +126,27 @@ namespace ParserWebCore.NetworkLibrary
             }
 
             return request;
+        }
+    }
+
+    public class TimedWebClientFederal : WebClient
+    {
+        protected override WebRequest GetWebRequest(Uri address)
+        {
+            var wr = (HttpWebRequest) base.GetWebRequest(address);
+            if (wr != null)
+            {
+                wr.Timeout = 20000;
+                wr.UserAgent =
+                    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.99 Safari/537.36 Vivaldi/2.9.1705.41";
+                wr.Headers.Add(HttpRequestHeader.Cookie,
+                    "PHPSESSID=16sg2tfho0bi72hndo072ugvt3");
+                wr.AutomaticDecompression =
+                    DecompressionMethods.GZip | DecompressionMethods.Deflate | DecompressionMethods.None;
+                return wr;
+            }
+
+            return null;
         }
     }
 }

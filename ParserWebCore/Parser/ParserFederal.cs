@@ -11,7 +11,7 @@ namespace ParserWebCore.Parser
 {
     public class ParserFederal : ParserAbstract, IParser
     {
-        private static Cookie cookie;
+        public static Cookie Cookie;
         public static readonly string HttpsT2Federal1Ru = "https://t2.federal1.ru/";
         private readonly CookieService _cookieService = GetCookieServiceFederal.CreateInstance();
 
@@ -34,7 +34,7 @@ namespace ParserWebCore.Parser
 
         private void GetPage()
         {
-            cookie = _cookieService.CookieValue();
+            Cookie = _cookieService.CookieValue();
             for (var i = 1; i < 6; i++)
             {
                 GetPage($"https://t2.federal1.ru/registry/list/?page={i}");
@@ -43,7 +43,7 @@ namespace ParserWebCore.Parser
 
         private void GetPage(string url)
         {
-            var s = DownloadString.DownLHttpPostWithCookies(url, HttpsT2Federal1Ru, cookie);
+            var s = DownloadString.DownLHttpPostWithCookies(url, HttpsT2Federal1Ru, Cookie);
             if (string.IsNullOrEmpty(s))
             {
                 Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",

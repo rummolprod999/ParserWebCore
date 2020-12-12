@@ -37,7 +37,7 @@
         </e>
         <e p="NetworkLibrary" t="Include">
           <e p="CookieService.cs" t="Include" />
-          <e p="CurlLoader.cs" t="Include" />
+          <e p="CurlLoaderFederal.cs" t="Include" />
           <e p="DownloadString.cs" t="Include" />
           <e p="GetCookieServiceFederal.cs" t="Include" />
           <e p="HttpPostAll.cs" t="Include" />

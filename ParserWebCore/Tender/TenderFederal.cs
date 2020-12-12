@@ -20,6 +20,7 @@ namespace ParserWebCore.Tender
             typeFz)
         {
             _tn = tn;
+            PlacingWay = tn.PwName;
         }
 
         public void ParsingTender()
@@ -207,11 +208,12 @@ namespace ParserWebCore.Tender
                 var lotNumber = l.Attributes["lotid"]?.Value ?? "";
                 if (lotNumber == "") continue;
                 var docString =
-                    CurlLoader.DownL("https://t2.federal1.ru/includes/Auction/ajax/viewLot.php" + $"?id={lotNumber}",
+                    CurlLoaderFederal.DownL(
+                        "https://t2.federal1.ru/includes/Auction/ajax/viewLot.php" + $"?id={lotNumber}",
                         ParserFederal.Cookie.Value);
                 if (!docString.Contains("<table"))
                 {
-                    docString = CurlLoader.DownL(
+                    docString = CurlLoaderFederal.DownL(
                         "https://t2.federal1.ru/ajax/zQuotation/ajaxViewLotQuotation.php" + $"?id={lotNumber}",
                         ParserFederal.Cookie.Value);
                 }
@@ -279,12 +281,12 @@ namespace ParserWebCore.Tender
         private void AddAttachments(MySqlConnection connect, int idTender)
         {
             var tenderId = _tn.Href.GetDataFromRegex("&requestId=(\\d+)");
-            var docString = CurlLoader.DownL(
+            var docString = CurlLoaderFederal.DownL(
                 $"https://t2.federal1.ru/includes/Auction/ajax/viewFiles.php?table=request&typeId=1&id={tenderId}",
                 ParserFederal.Cookie.Value);
             if (!docString.Contains("viewLinkDoc"))
             {
-                docString = CurlLoader.DownL(
+                docString = CurlLoaderFederal.DownL(
                     $"https://t2.federal1.ru/ajax/zQuotation/ajaxViewFilesQuotation.php?table=request&typeId=1&id={tenderId}",
                     ParserFederal.Cookie.Value);
             }

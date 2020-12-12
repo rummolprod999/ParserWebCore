@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 namespace ParserWebCore.NetworkLibrary
 {
-    public class CurlLoader
+    public static class CurlLoaderFederal
     {
         public static string DownL(string url, string cookie)
         {

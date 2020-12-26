@@ -106,12 +106,12 @@ namespace ParserWebCore.Parser
                 .Trim();
             if (status.Contains("Осталось:"))
             {
-                status = status.GetDataFromRegex("(.+)Осталось:.+").Trim();
+                status = status.GetDataFromRegex(@"((.|\n)+)Осталось:.+").Trim();
             }
 
             var datePubT =
-                (t.QuerySelector("div.section-procurement__item-dateTo:contains('Дата публикации:')")?.TextContent
-                    ?.Replace("Дата публикации:", "") ?? "").Trim();
+                (t.QuerySelector("div.section-procurement__item-dateTo:contains('Начало приема заявок:')")?.TextContent
+                    ?.Replace("Начало приема заявок:", "") ?? "").Trim();
             var datePub = datePubT.ParseDateUn("dd.MM.yyyy HH:mm 'GMT'z");
             if (datePub == DateTime.MinValue)
             {

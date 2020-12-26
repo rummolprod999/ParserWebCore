@@ -58,12 +58,12 @@ namespace ParserWebCore.Tender
                 var document = parser.Parse(s);
                 var datePub = _tn.DatePub;
                 var dateEndT =
-                    (document.QuerySelector("td:contains('Дата окончания приема заявок') + td")?.TextContent ??
+                    (document.QuerySelector("td:contains('Окончание приема заявок:') + td")?.TextContent ??
                      "").Trim();
                 if (dateEndT == "")
                 {
                     dateEndT =
-                        (document.QuerySelector("td:contains('Подведение итогов не позднее') + td")?.TextContent ??
+                        (document.QuerySelector("td:contains('Подведение итогов:') + td")?.TextContent ??
                          "").Trim();
                 }
 

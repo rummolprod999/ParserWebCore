@@ -53,6 +53,7 @@
           <e p="ParserAgroTomsk.cs" t="Include" />
           <e p="ParserAgrokomplex.cs" t="Include" />
           <e p="ParserAkashevo.cs" t="Include" />
+          <e p="ParserB2BWeb.cs" t="Include" />
           <e p="ParserBoaz.cs" t="Include" />
           <e p="ParserDecoratorGzwSP.cs" t="Include" />
           <e p="ParserDellin.cs" t="Include" />
@@ -107,6 +108,7 @@
           <e p="TenderAgroTomsk.cs" t="Include" />
           <e p="TenderAgrokomplex.cs" t="Include" />
           <e p="TenderAkashevo.cs" t="Include" />
+          <e p="TenderB2BWeb.cs" t="Include" />
           <e p="TenderBoaz.cs" t="Include" />
           <e p="TenderDellin.cs" t="Include" />
           <e p="TenderEtpu.cs" t="Include" />
@@ -147,6 +149,7 @@
           <e p="TypeAgat.cs" t="Include" />
           <e p="TypeAgroTomsk.cs" t="Include" />
           <e p="TypeAgrokomplex.cs" t="Include" />
+          <e p="TypeB2B.cs" t="Include" />
           <e p="TypeBoaz.cs" t="Include" />
           <e p="TypeEtpu.cs" t="Include" />
           <e p="TypeFederal.cs" t="Include" />

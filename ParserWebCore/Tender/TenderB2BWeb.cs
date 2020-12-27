@@ -4,6 +4,7 @@ using HtmlAgilityPack;
 using MySql.Data.MySqlClient;
 using ParserWebCore.BuilderApp;
 using ParserWebCore.Connections;
+using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.TenderType;
@@ -45,7 +46,24 @@ namespace ParserWebCore.Tender
                 GetEtp(connect, out var idEtp);
                 GetPlacingWay(connect, out var idPlacingWay);
                 FillPurName(navigator);
+                FillBidAndScorDates(navigator, out var scoringDate, out var biddingDate);
             }
+        }
+
+        private static void FillBidAndScorDates(HtmlNodeNavigator navigator, out DateTime scoringDate,
+            out DateTime biddingDate)
+        {
+            var scoringDateT =
+                navigator.SelectSingleNode(
+                        "//td[contains(., 'Дата и время рассмотрения заявок:') or contains(., 'Дата рассмотрения заявок:')]/following-sibling::td")
+                    ?.Value?.Trim() ??
+                "";
+            scoringDate = scoringDateT.ParseDateUn("dd.MM.yyyy HH:mm");
+            var biddingDateT =
+                navigator.SelectSingleNode(
+                    "//td[contains(., 'Дата начала аукциона')]/following-sibling::td")?.Value?.Trim() ??
+                "";
+            biddingDate = biddingDateT.ParseDateUn("dd.MM.yyyy HH:mm");
         }
 
         private void FillPurName(HtmlNodeNavigator navigator)

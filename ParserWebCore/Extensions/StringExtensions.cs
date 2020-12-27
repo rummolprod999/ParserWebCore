@@ -124,5 +124,13 @@ namespace ParserWebCore.Extensions
         {
             return HttpUtility.HtmlDecode(s);
         }
+
+        public static string ExtractPrice(this string s)
+        {
+            var price = "";
+            price = HttpUtility.HtmlDecode(s);
+            price = price.GetDataFromRegex(@"([\d.,\s]+)").DelAllWhitespace().Replace(",", "").Trim();
+            return price;
+        }
     }
 }

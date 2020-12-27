@@ -51,7 +51,190 @@ namespace ParserWebCore.Tender
                 AddTender(connect, organiserId, idPlacingWay, idEtp, scoringDate, biddingDate, cancelStatus, dateUpd,
                     noticeVer, printForm, updated, out var idTender);
                 AddAttachments(htmlDoc, connect, idTender);
+                AddLots(htmlDoc, navigator, connect, idTender, customerId);
+                TenderKwords(connect, idTender);
+                AddVerNumber(connect, _tn.PurNum, TypeFz);
             }
+        }
+
+        private static void AddLots(HtmlDocument htmlDoc, HtmlNodeNavigator navigator, MySqlConnection connect,
+            int idTender,
+            int customerId)
+        {
+            var lots = htmlDoc.DocumentNode.SelectNodes(
+                           "//div[@class = 'expandable-text short']//a[contains(., 'Лот №')]") ??
+                       new HtmlNodeCollection(null);
+            foreach (var lot in lots)
+            {
+                AddLot(navigator, connect, idTender, customerId, lot, out var lotWasAdded);
+            }
+        }
+
+        private static void AddLot(HtmlNodeNavigator navigator, MySqlConnection connect, int idTender, int customerId,
+            HtmlNode lot, out bool lotWasAdded)
+        {
+            lotWasAdded = false;
+            var lotNumT = lot.InnerText?.Trim().GetDataFromRegex(@"Лот № (\d+)");
+            var succesLotNum = int.TryParse(lotNumT, out var lotNum);
+            if (!succesLotNum) lotNum = 1;
+            var lotHref = lot.Attributes["href"]?.Value ?? "";
+            if (!string.IsNullOrEmpty(lotHref)) return;
+            lotHref = $"https://www.b2b-center.ru{lotHref}";
+            var sLot = DownloadString.DownLUserAgent(lotHref);
+            if (string.IsNullOrEmpty(sLot))
+            {
+                Log.Logger("Empty string in lot ParsingTender()", lotHref);
+                return;
+            }
+
+            var htmlLot = new HtmlDocument();
+            htmlLot.LoadHtml(sLot);
+            var navLot = (HtmlNodeNavigator) htmlLot.CreateNavigator();
+            var priceT = navLot.SelectSingleNode(
+                                 "//td[contains(., 'Цена за единицу продукции:')]/following-sibling::td/b")
+                             ?.Value?.Trim() ??
+                         "";
+            var currency = navigator.SelectSingleNode(
+                                   "//td[contains(., 'Вид валюты:')]/following-sibling::td")
+                               ?.Value?.Trim() ??
+                           "руб.";
+            var price = priceT.ExtractPrice();
+            var nmckT = navigator.SelectSingleNode(
+                                "//td[contains(., 'Начальная (максимальная) цена договора:' ) or contains(., 'Начальная цена всего лота:') or contains(., 'Общая стоимость')]/following-sibling::td/b")
+                            ?.Value?.Trim() ??
+                        "";
+            var nmck = nmckT.ExtractPrice();
+            var lotName = navLot.SelectSingleNode(
+                                  "//div[@class = 'expandable-text short']/span")
+                              ?.Value?.Trim() ??
+                          "";
+            var insertLot =
+                $"INSERT INTO {Builder.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency, finance_source = @finance_source, lot_name = @lot_name";
+            var cmd18 = new MySqlCommand(insertLot, connect);
+            cmd18.Prepare();
+            cmd18.Parameters.AddWithValue("@id_tender", idTender);
+            cmd18.Parameters.AddWithValue("@lot_number", lotNum);
+            cmd18.Parameters.AddWithValue("@max_price", nmck);
+            cmd18.Parameters.AddWithValue("@currency", currency);
+            cmd18.Parameters.AddWithValue("@finance_source", "");
+            cmd18.Parameters.AddWithValue("@lot_name", lotName);
+            cmd18.ExecuteNonQuery();
+            var idLot = (int) cmd18.LastInsertedId;
+            lotWasAdded = true;
+            AddPurObject(connect, customerId, navLot, idLot, lotName, price);
+            AddCustRequirements(connect, customerId, navLot, idLot, nmck);
+        }
+
+        private static void AddCustRequirements(MySqlConnection connect, int customerId, HtmlNodeNavigator navLot,
+            int idLot,
+            string nmck)
+        {
+            var delivPlace = navLot.SelectSingleNode(
+                                     "//td[contains(., 'Адрес места поставки товара, проведения работ или оказания услуг:')]/following-sibling::td")
+                                 ?.Value?.Trim() ??
+                             "";
+            var delivTerm1 = navLot.SelectSingleNode(
+                                     "//td[contains(., 'Условия поставки:')]/following-sibling::td")
+                                 ?.Value?.Trim() ??
+                             "";
+            var delivTerm2 = navLot.SelectSingleNode(
+                                     "//td[contains(., 'Условия оплаты:')]/following-sibling::td")
+                                 ?.Value?.Trim() ??
+                             "";
+            var delivTerm3 = navLot.SelectSingleNode(
+                                     "//td[contains(., 'При выборе победителя учитывается:')]/following-sibling::td")
+                                 ?.Value?.Trim() ??
+                             "";
+            var delivTerm4 = navLot.SelectSingleNode(
+                                     "//td[contains(., 'Требуется обеспечение заявки:')]/following-sibling::td")
+                                 ?.Value?.Trim() ??
+                             "";
+            var delivTerm5 = navLot.SelectSingleNode(
+                                     "//td[contains(., 'Банковская гарантия:')]/following-sibling::td")
+                                 ?.Value?.Trim() ??
+                             "";
+            var delivTerm6 = navLot.SelectSingleNode(
+                                     "//td[contains(., 'Иной вид обеспечения:')]/following-sibling::td")
+                                 ?.Value?.Trim() ??
+                             "";
+            var delivTerm = "";
+            if (!string.IsNullOrEmpty(delivTerm1))
+            {
+                delivTerm = $"{delivTerm}\nУсловия поставки: {delivTerm1}";
+            }
+
+            if (!string.IsNullOrEmpty(delivTerm2))
+            {
+                delivTerm = $"{delivTerm}\nУсловия оплаты: {delivTerm2}";
+            }
+
+            if (!string.IsNullOrEmpty(delivTerm3))
+            {
+                delivTerm = $"{delivTerm}\nПри выборе победителя учитывается: {delivTerm3}";
+            }
+
+            if (!string.IsNullOrEmpty(delivTerm4))
+            {
+                delivTerm = $"{delivTerm}\nТребуется обеспечение заявки: {delivTerm4}";
+            }
+
+            if (!string.IsNullOrEmpty(delivTerm5))
+            {
+                delivTerm = $"{delivTerm}\nБанковская гарантия: {delivTerm5}";
+            }
+
+            if (!string.IsNullOrEmpty(delivTerm6))
+            {
+                delivTerm = $"{delivTerm}\nИной вид обеспечения: {delivTerm6}";
+            }
+
+            if (!string.IsNullOrEmpty(delivPlace) || !string.IsNullOrEmpty(delivTerm))
+            {
+                var insertCustomerRequirement =
+                    $"INSERT INTO {Builder.Prefix}customer_requirement SET id_lot = @id_lot, id_customer = @id_customer, delivery_place = @delivery_place, max_price = @max_price, delivery_term = @delivery_term";
+                var cmd16 = new MySqlCommand(insertCustomerRequirement, connect);
+                cmd16.Prepare();
+                cmd16.Parameters.AddWithValue("@id_lot", idLot);
+                cmd16.Parameters.AddWithValue("@id_customer", customerId);
+                cmd16.Parameters.AddWithValue("@delivery_place", delivPlace);
+                cmd16.Parameters.AddWithValue("@max_price", nmck);
+                cmd16.Parameters.AddWithValue("@delivery_term", delivTerm.Trim());
+                cmd16.ExecuteNonQuery();
+            }
+        }
+
+        private static void AddPurObject(MySqlConnection connect, int customerId, HtmlNodeNavigator navLot, int idLot,
+            string lotName, string price)
+        {
+            var okpd2 = navLot.SelectSingleNode(
+                                "//td[contains(., 'Категория ОКПД2:')]/following-sibling::td/div/b")
+                            ?.Value?.Trim() ??
+                        "";
+            var okpdName = navLot.SelectSingleNode(
+                                   "//td[contains(., 'Категория ОКПД2:')]/following-sibling::td/div")
+                               ?.Value?.ReplaceHtmlEntyty().Replace(okpd2, "").Trim() ??
+                           "";
+            var quantity = navLot.SelectSingleNode(
+                                   "//td[contains(., 'Количество:')]/following-sibling::td")
+                               ?.Value?.Trim().ExtractPrice() ??
+                           "";
+            var insertLotitem =
+                $"INSERT INTO {Builder.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name, sum = @sum, okpd2_code = @okpd2_code, okpd2_group_code = @okpd2_group_code, okpd2_group_level1_code = @okpd2_group_level1_code, okpd_name = @okpd_name, quantity_value = @quantity_value, customer_quantity_value = @customer_quantity_value, okei = @okei, price = @price";
+            var cmd19 = new MySqlCommand(insertLotitem, connect);
+            cmd19.Prepare();
+            cmd19.Parameters.AddWithValue("@id_lot", idLot);
+            cmd19.Parameters.AddWithValue("@id_customer", customerId);
+            cmd19.Parameters.AddWithValue("@name", lotName);
+            cmd19.Parameters.AddWithValue("@sum", "");
+            cmd19.Parameters.AddWithValue("@okpd2_code", okpd2);
+            cmd19.Parameters.AddWithValue("@okpd2_group_code", "");
+            cmd19.Parameters.AddWithValue("@okpd2_group_level1_code", "");
+            cmd19.Parameters.AddWithValue("@okpd_name", okpdName);
+            cmd19.Parameters.AddWithValue("@quantity_value", quantity);
+            cmd19.Parameters.AddWithValue("@customer_quantity_value", quantity);
+            cmd19.Parameters.AddWithValue("@okei", "");
+            cmd19.Parameters.AddWithValue("@price", price);
+            cmd19.ExecuteNonQuery();
         }
 
         private static void AddAttachments(HtmlDocument htmlDoc, MySqlConnection connect, int idTender)

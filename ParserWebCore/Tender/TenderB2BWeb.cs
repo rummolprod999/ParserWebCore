@@ -38,13 +38,45 @@ namespace ParserWebCore.Tender
                 var htmlDoc = new HtmlDocument();
                 htmlDoc.LoadHtml(s);
                 var navigator = (HtmlNodeNavigator) htmlDoc.CreateNavigator();
-                UpdateCancelStatus(connect, dateUpd, out bool updated, out int cancelStatus);
+                UpdateCancelStatus(connect, dateUpd, out var updated, out var cancelStatus);
                 var printForm = _tn.Href;
-                var customerId = 0;
-                AddOrganizer(connect, navigator, out int organiserId);
-
+                AddOrganizer(connect, navigator, out var organiserId);
+                AddCustomer(connect, out var customerId);
                 GetEtp(connect, out var idEtp);
                 GetPlacingWay(connect, out var idPlacingWay);
+            }
+        }
+
+        private void AddCustomer(MySqlConnection connect, out int customerId)
+        {
+            customerId = 0;
+            if (!string.IsNullOrEmpty(_tn.OrgName))
+            {
+                var selectCustomer =
+                    $"SELECT id_customer FROM {Builder.Prefix}customer WHERE full_name = @full_name";
+                var cmd13 = new MySqlCommand(selectCustomer, connect);
+                cmd13.Prepare();
+                cmd13.Parameters.AddWithValue("@full_name", _tn.OrgName);
+                var reader7 = cmd13.ExecuteReader();
+                if (reader7.HasRows)
+                {
+                    reader7.Read();
+                    customerId = (int) reader7["id_customer"];
+                    reader7.Close();
+                }
+                else
+                {
+                    reader7.Close();
+                    var insertCustomer =
+                        $"INSERT INTO {Builder.Prefix}customer SET reg_num = @reg_num, full_name = @full_name, is223=1";
+                    var cmd14 = new MySqlCommand(insertCustomer, connect);
+                    cmd14.Prepare();
+                    var customerRegNumber = Guid.NewGuid().ToString();
+                    cmd14.Parameters.AddWithValue("@reg_num", customerRegNumber);
+                    cmd14.Parameters.AddWithValue("@full_name", _tn.OrgName);
+                    cmd14.ExecuteNonQuery();
+                    customerId = (int) cmd14.LastInsertedId;
+                }
             }
         }
 

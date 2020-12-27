@@ -15,7 +15,7 @@ namespace ParserWebCore.NetworkLibrary
                 }
             };
             cliProcess.Start();
-            string cliOut = cliProcess.StandardOutput.ReadToEnd();
+            var cliOut = cliProcess.StandardOutput.ReadToEnd();
             cliProcess.WaitForExit();
             cliProcess.Close();
 

@@ -21,7 +21,7 @@ namespace ParserWebCore.Parser
 
         private void ParsingZakupMos()
         {
-            for (int i = 0; i < _countPage; i++)
+            for (var i = 0; i < _countPage; i++)
             {
                 try
                 {

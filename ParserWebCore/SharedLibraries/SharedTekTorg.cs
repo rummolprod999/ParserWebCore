@@ -14,8 +14,8 @@ namespace ParserWebCore.SharedLibraries
     {
         public static int GetCountPage(string url)
         {
-            int i = 1;
-            string s = DownloadString.DownL(url);
+            var i = 1;
+            var s = DownloadString.DownL(url);
             if (String.IsNullOrEmpty(s))
             {
                 Log.Logger(

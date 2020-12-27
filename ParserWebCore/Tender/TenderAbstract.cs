@@ -12,6 +12,8 @@ namespace ParserWebCore.Tender
 {
     public abstract class TenderAbstract
     {
+        protected string PlacingWay;
+
         protected TenderAbstract(string etpName, string etpUrl, int typeFz)
         {
             EtpName = etpName ?? throw new ArgumentNullException(nameof(etpName));
@@ -28,7 +30,6 @@ namespace ParserWebCore.Tender
             };
         }
 
-        protected string PlacingWay;
         protected string EtpName { get; set; }
         protected string EtpUrl { get; set; }
         protected int TypeFz { get; set; }
@@ -484,16 +485,16 @@ namespace ParserWebCore.Tender
         protected (bool update, int cancelStatus) UpdateTenderVersion(MySqlConnection connect, string purNum,
             DateTime dateUpd)
         {
-            int cancelStatus = 0;
+            var cancelStatus = 0;
             var update = false;
-            string selectDateT =
+            var selectDateT =
                 $"SELECT id_tender, date_version, cancel FROM {Builder.Prefix}tender WHERE purchase_number = @purchase_number AND type_fz = @type_fz";
-            MySqlCommand cmd2 = new MySqlCommand(selectDateT, connect);
+            var cmd2 = new MySqlCommand(selectDateT, connect);
             cmd2.Prepare();
             cmd2.Parameters.AddWithValue("@purchase_number", purNum);
             cmd2.Parameters.AddWithValue("@type_fz", TypeFz);
-            MySqlDataAdapter adapter2 = new MySqlDataAdapter {SelectCommand = cmd2};
-            DataTable dt2 = new DataTable();
+            var adapter2 = new MySqlDataAdapter {SelectCommand = cmd2};
+            var dt2 = new DataTable();
             adapter2.Fill(dt2);
             foreach (DataRow row in dt2.Rows)
             {
@@ -511,7 +512,7 @@ namespace ParserWebCore.Tender
                 }
             }
 
-            MySqlCommandBuilder commandBuilder =
+            var commandBuilder =
                 new MySqlCommandBuilder(adapter2) {ConflictOption = ConflictOption.OverwriteChanges};
             adapter2.Update(dt2);
             return (update, cancelStatus);

@@ -11,8 +11,8 @@ namespace ParserWebCore.Parser
 {
     public class ParserRtsMarket : ParserAbstract, IParser
     {
-        private readonly int _countPage = 60;
         private readonly string _apiUrl = "https://zmo-new-webapi.rts-tender.ru/market/api/v1/trades/publicsearch2";
+        private readonly int _countPage = 60;
 
         private readonly Dictionary<string, int>[] _sections =
         {
@@ -32,7 +32,7 @@ namespace ParserWebCore.Parser
         {
             _sections.ToList().ForEach(x =>
             {
-                for (int i = 1; i < _countPage; i++)
+                for (var i = 1; i < _countPage; i++)
                 {
                     try
                     {

@@ -20,7 +20,7 @@ namespace ParserWebCore.Parser
 
         private void ParsingEtpu()
         {
-            for (int i = 0; i < _countPage; i++)
+            for (var i = 0; i < _countPage; i++)
             {
                 try
                 {

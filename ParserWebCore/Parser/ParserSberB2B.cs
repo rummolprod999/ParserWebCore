@@ -19,7 +19,7 @@ namespace ParserWebCore.Parser
 
         private void ParsingSber()
         {
-            for (int i = 1; i < _countPage; i++)
+            for (var i = 1; i < _countPage; i++)
             {
                 try
                 {

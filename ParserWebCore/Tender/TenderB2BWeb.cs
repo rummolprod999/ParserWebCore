@@ -1,3 +1,4 @@
+using System;
 using ParserWebCore.Connections;
 using ParserWebCore.TenderType;
 
@@ -17,6 +18,7 @@ namespace ParserWebCore.Tender
         {
             using (var connect = ConnectToDb.GetDbConnection())
             {
+                Console.WriteLine(_tn);
             }
         }
     }

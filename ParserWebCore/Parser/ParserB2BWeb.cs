@@ -1,6 +1,11 @@
 using System;
+using System.Threading;
+using HtmlAgilityPack;
+using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
+using ParserWebCore.Tender;
+using ParserWebCore.TenderType;
 
 namespace ParserWebCore.Parser
 {
@@ -31,7 +36,81 @@ namespace ParserWebCore.Parser
         private void GetPage(string url)
         {
             var result = DownloadString.DownLUserAgent(url);
-            Console.WriteLine(result);
+            if (string.IsNullOrEmpty(result))
+            {
+                Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                    url);
+                return;
+            }
+
+            var htmlDoc = new HtmlDocument();
+            htmlDoc.LoadHtml(result);
+            var tens =
+                htmlDoc.DocumentNode.SelectNodes(
+                    "//table[contains(@class, 'search-results')]/tbody/tr") ??
+                new HtmlNodeCollection(null);
+            foreach (var a in tens)
+            {
+                try
+                {
+                    ParserTender(a, url);
+                }
+                catch (Exception e)
+                {
+                    Log.Logger(e);
+                }
+            }
+        }
+
+        private void ParserTender(HtmlNode n, string _href)
+        {
+            var purName =
+                n.SelectSingleNode("./td[1]/a/div")?.InnerText?.Trim().ReplaceHtmlEntyty() ??
+                throw new Exception(
+                    $"Cannot find purName in {_href}");
+            var fullPw =
+                n.SelectSingleNode("./td[1]/a")?.InnerText?.Trim().ReplaceHtmlEntyty() ??
+                throw new Exception(
+                    $"Cannot find fullPw in {_href}");
+            var href = (n.SelectSingleNode("./td[1]/a")?.Attributes["href"]?.Value ?? "")
+                .Trim();
+            if (string.IsNullOrEmpty(href))
+            {
+                Log.Logger("Empty href", purName);
+                return;
+            }
+
+            href = $"https://www.b2b-center.ru/{href}";
+            var pwName = fullPw.GetDataFromRegex(@"(.+) №\s+\d+");
+            var purNum = fullPw.GetDataFromRegex(@"№\s+(\d+)");
+            if (string.IsNullOrEmpty(href))
+            {
+                Log.Logger("Empty purNum", href);
+                return;
+            }
+
+            var orgName =
+                n.SelectSingleNode("./td[2]/a")?.InnerText?.Trim().ReplaceHtmlEntyty() ??
+                throw new Exception(
+                    $"Cannot find orgName in {href}");
+            var pubDateT =
+                n.SelectSingleNode("./td[3]")?.InnerText?.Trim().ReplaceHtmlEntyty() ??
+                throw new Exception(
+                    $"Cannot find pubDateT in {href}");
+            var datePub = pubDateT.ParseDateUn("dd.MM.yyyy HH:mm");
+            var endDateT =
+                n.SelectSingleNode("./td[4]")?.InnerText?.Trim().ReplaceHtmlEntyty() ??
+                throw new Exception(
+                    $"Cannot find endDateT in {href}");
+            var dateEnd = endDateT.ParseDateUn("dd.MM.yyyy HH:mm");
+            var tn = new TenderB2BWeb("Электронная торговая площадка B2B-Center", "https://www.b2b-center.ru/", 299,
+                new TypeB2B
+                {
+                    PurName = purName, PurNum = purNum, DatePub = datePub, Href = href, DateEnd = dateEnd,
+                    PwName = pwName, FullPw = fullPw, OrgName = orgName
+                });
+            Thread.Sleep(5000);
+            ParserTender(tn);
         }
     }
 }

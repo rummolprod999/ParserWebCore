@@ -44,6 +44,19 @@ namespace ParserWebCore.Tender
                 AddCustomer(connect, out var customerId);
                 GetEtp(connect, out var idEtp);
                 GetPlacingWay(connect, out var idPlacingWay);
+                FillPurName(navigator);
+            }
+        }
+
+        private void FillPurName(HtmlNodeNavigator navigator)
+        {
+            if (string.IsNullOrEmpty(_tn.PurName))
+            {
+                var firstPurName = navigator.SelectSingleNode(
+                                           "//div[@class = 's2']")
+                                       ?.Value?.Trim() ??
+                                   "";
+                _tn.PurName = $"{_tn.FullPw} {firstPurName}";
             }
         }
 

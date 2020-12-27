@@ -47,7 +47,56 @@ namespace ParserWebCore.Tender
                 GetPlacingWay(connect, out var idPlacingWay);
                 FillPurName(navigator);
                 FillBidAndScorDates(navigator, out var scoringDate, out var biddingDate);
+                FillNoticeVer(navigator, out var noticeVer);
+                AddTender(connect, organiserId, idPlacingWay, idEtp, scoringDate, biddingDate, cancelStatus, dateUpd,
+                    noticeVer, printForm, updated, out var idTender);
             }
+        }
+
+        private void AddTender(MySqlConnection connect, int organiserId, int idPlacingWay, int idEtp,
+            DateTime scoringDate,
+            DateTime biddingDate, int cancelStatus, DateTime dateUpd, string noticeVer, string printForm, bool updated,
+            out int idTender)
+        {
+            var insertTender =
+                $"INSERT INTO {Builder.Prefix}tender SET id_region = @id_region, id_xml = @id_xml, purchase_number = @purchase_number, doc_publish_date = @doc_publish_date, href = @href, purchase_object_info = @purchase_object_info, type_fz = @type_fz, id_organizer = @id_organizer, id_placing_way = @id_placing_way, id_etp = @id_etp, end_date = @end_date, scoring_date = @scoring_date, bidding_date = @bidding_date, cancel = @cancel, date_version = @date_version, num_version = @num_version, notice_version = @notice_version, xml = @xml, print_form = @print_form";
+            var cmd9 = new MySqlCommand(insertTender, connect);
+            cmd9.Prepare();
+            cmd9.Parameters.AddWithValue("@id_region", 0);
+            cmd9.Parameters.AddWithValue("@id_xml", _tn.PurNum);
+            cmd9.Parameters.AddWithValue("@purchase_number", _tn.PurNum);
+            cmd9.Parameters.AddWithValue("@doc_publish_date", _tn.DatePub);
+            cmd9.Parameters.AddWithValue("@href", _tn.Href);
+            cmd9.Parameters.AddWithValue("@purchase_object_info", _tn.PurName);
+            cmd9.Parameters.AddWithValue("@type_fz", TypeFz);
+            cmd9.Parameters.AddWithValue("@id_organizer", organiserId);
+            cmd9.Parameters.AddWithValue("@id_placing_way", idPlacingWay);
+            cmd9.Parameters.AddWithValue("@id_etp", idEtp);
+            cmd9.Parameters.AddWithValue("@end_date", _tn.DateEnd);
+            cmd9.Parameters.AddWithValue("@scoring_date", scoringDate);
+            cmd9.Parameters.AddWithValue("@bidding_date", biddingDate);
+            cmd9.Parameters.AddWithValue("@cancel", cancelStatus);
+            cmd9.Parameters.AddWithValue("@date_version", dateUpd);
+            cmd9.Parameters.AddWithValue("@num_version", 1);
+            cmd9.Parameters.AddWithValue("@notice_version", noticeVer);
+            cmd9.Parameters.AddWithValue("@xml", _tn.Href);
+            cmd9.Parameters.AddWithValue("@print_form", printForm);
+            var resInsertTender = cmd9.ExecuteNonQuery();
+            idTender = (int) cmd9.LastInsertedId;
+            Counter(resInsertTender, updated);
+        }
+
+        private static void FillNoticeVer(HtmlNodeNavigator navigator, out string noticeVer)
+        {
+            var comments = navigator.SelectSingleNode(
+                                   "//td[b[. = 'Комментарии:']]")
+                               ?.Value?.Trim() ??
+                           "";
+            var providingDocumentation = navigator.SelectSingleNode(
+                                                 "//td[contains(., 'Порядок предоставления документации по закупке:')]/following-sibling::td")
+                                             ?.Value?.Trim() ??
+                                         "";
+            noticeVer = $"{comments}\nПорядок предоставления документации по закупке: {providingDocumentation}".Trim();
         }
 
         private static void FillBidAndScorDates(HtmlNodeNavigator navigator, out DateTime scoringDate,

@@ -50,6 +50,28 @@ namespace ParserWebCore.Tender
                 FillNoticeVer(navigator, out var noticeVer);
                 AddTender(connect, organiserId, idPlacingWay, idEtp, scoringDate, biddingDate, cancelStatus, dateUpd,
                     noticeVer, printForm, updated, out var idTender);
+                AddAttachments(htmlDoc, connect, idTender);
+            }
+        }
+
+        private static void AddAttachments(HtmlDocument htmlDoc, MySqlConnection connect, int idTender)
+        {
+            var docs = htmlDoc.DocumentNode.SelectNodes(
+                           "//a[contains(@href, 'https://www.b2b-center.ru/download.html')]") ??
+                       new HtmlNodeCollection(null);
+            foreach (var dd in docs)
+            {
+                var urlAtt = (dd?.Attributes["href"]?.Value ?? "").Trim();
+                var fName = (dd?.InnerText ?? "").Trim();
+                if (string.IsNullOrEmpty(fName)) continue;
+                var insertAttach =
+                    $"INSERT INTO {Builder.Prefix}attachment SET id_tender = @id_tender, file_name = @file_name, url = @url";
+                var cmd10 = new MySqlCommand(insertAttach, connect);
+                cmd10.Prepare();
+                cmd10.Parameters.AddWithValue("@id_tender", idTender);
+                cmd10.Parameters.AddWithValue("@file_name", fName);
+                cmd10.Parameters.AddWithValue("@url", urlAtt);
+                cmd10.ExecuteNonQuery();
             }
         }
 

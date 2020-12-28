@@ -80,7 +80,7 @@ namespace ParserWebCore.Parser
                 return;
             }
 
-            href = $"https://www.b2b-center.ru/{href}";
+            href = $"https://www.b2b-center.ru{href}";
             var pwName = fullPw.GetDataFromRegex(@"(.+) №\s+\d+");
             var purNum = fullPw.GetDataFromRegex(@"№\s+(\d+)");
             if (string.IsNullOrEmpty(href))

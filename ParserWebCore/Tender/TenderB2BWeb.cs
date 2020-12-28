@@ -57,7 +57,7 @@ namespace ParserWebCore.Tender
             }
         }
 
-        private static void AddLots(HtmlDocument htmlDoc, HtmlNodeNavigator navigator, MySqlConnection connect,
+        private void AddLots(HtmlDocument htmlDoc, HtmlNodeNavigator navigator, MySqlConnection connect,
             int idTender,
             int customerId)
         {
@@ -77,7 +77,7 @@ namespace ParserWebCore.Tender
             }
         }
 
-        private static void AddOneLot(HtmlNodeNavigator navigator, MySqlConnection connect, int idTender,
+        private void AddOneLot(HtmlNodeNavigator navigator, MySqlConnection connect, int idTender,
             int customerId)
         {
             var currency = navigator.SelectSingleNode(
@@ -93,6 +93,11 @@ namespace ParserWebCore.Tender
                                   "//div[@class = 'expandable-text short' or @class = 'expandable-text full']/span")
                               ?.Value?.Trim() ??
                           "";
+            if (!string.IsNullOrEmpty(lotName))
+            {
+                lotName = _tn.FullPw;
+            }
+
             var lotNum = 1;
             var insertLot =
                 $"INSERT INTO {Builder.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency, finance_source = @finance_source, lot_name = @lot_name";
@@ -110,7 +115,7 @@ namespace ParserWebCore.Tender
             AddFirstCustRequirements(connect, customerId, navigator, idLot, nmck);
         }
 
-        private static void AddFirstCustRequirements(MySqlConnection connect, int customerId, HtmlNodeNavigator nav,
+        private void AddFirstCustRequirements(MySqlConnection connect, int customerId, HtmlNodeNavigator nav,
             int idLot,
             string nmck)
         {
@@ -188,7 +193,7 @@ namespace ParserWebCore.Tender
             }
         }
 
-        private static void AddPurObjectFirst(MySqlConnection connect, int customerId, HtmlNodeNavigator nav, int idLot,
+        private void AddPurObjectFirst(MySqlConnection connect, int customerId, HtmlNodeNavigator nav, int idLot,
             string lotName, string sum)
         {
             var okpd2 = nav.SelectSingleNode(
@@ -227,7 +232,7 @@ namespace ParserWebCore.Tender
             cmd19.ExecuteNonQuery();
         }
 
-        private static void AddLot(HtmlNodeNavigator navigator, MySqlConnection connect, int idTender, int customerId,
+        private void AddLot(HtmlNodeNavigator navigator, MySqlConnection connect, int idTender, int customerId,
             HtmlNode lot, out bool lotWasAdded)
         {
             lotWasAdded = false;
@@ -265,6 +270,11 @@ namespace ParserWebCore.Tender
                                   "//div[@class = 'expandable-text short']/span")
                               ?.Value?.Trim() ??
                           "";
+            if (!string.IsNullOrEmpty(lotName))
+            {
+                lotName = _tn.FullPw;
+            }
+
             var insertLot =
                 $"INSERT INTO {Builder.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency, finance_source = @finance_source, lot_name = @lot_name";
             var cmd18 = new MySqlCommand(insertLot, connect);
@@ -282,7 +292,7 @@ namespace ParserWebCore.Tender
             AddCustRequirements(connect, customerId, navLot, idLot, nmck);
         }
 
-        private static void AddCustRequirements(MySqlConnection connect, int customerId, HtmlNodeNavigator navLot,
+        private void AddCustRequirements(MySqlConnection connect, int customerId, HtmlNodeNavigator navLot,
             int idLot,
             string nmck)
         {
@@ -360,7 +370,7 @@ namespace ParserWebCore.Tender
             }
         }
 
-        private static void AddPurObject(MySqlConnection connect, int customerId, HtmlNodeNavigator navLot, int idLot,
+        private void AddPurObject(MySqlConnection connect, int customerId, HtmlNodeNavigator navLot, int idLot,
             string lotName, string price)
         {
             var okpd2 = navLot.SelectSingleNode(
@@ -394,7 +404,7 @@ namespace ParserWebCore.Tender
             cmd19.ExecuteNonQuery();
         }
 
-        private static void AddAttachments(HtmlDocument htmlDoc, MySqlConnection connect, int idTender)
+        private void AddAttachments(HtmlDocument htmlDoc, MySqlConnection connect, int idTender)
         {
             var docs = htmlDoc.DocumentNode.SelectNodes(
                            "//a[contains(@href, 'https://www.b2b-center.ru/download.html')]") ??
@@ -448,7 +458,7 @@ namespace ParserWebCore.Tender
             Counter(resInsertTender, updated);
         }
 
-        private static void FillNoticeVer(HtmlNodeNavigator navigator, out string noticeVer)
+        private void FillNoticeVer(HtmlNodeNavigator navigator, out string noticeVer)
         {
             var comments = navigator.SelectSingleNode(
                                    "//td[b[. = 'Комментарии:']]")
@@ -461,7 +471,7 @@ namespace ParserWebCore.Tender
             noticeVer = $"{comments}\nПорядок предоставления документации по закупке: {providingDocumentation}".Trim();
         }
 
-        private static void FillBidAndScorDates(HtmlNodeNavigator navigator, out DateTime scoringDate,
+        private void FillBidAndScorDates(HtmlNodeNavigator navigator, out DateTime scoringDate,
             out DateTime biddingDate)
         {
             var scoringDateT =

@@ -197,8 +197,13 @@ namespace ParserWebCore.Tender
                         "";
             var okpdName = nav.SelectSingleNode(
                                    "//td[contains(., 'Категория ОКПД2:')]/following-sibling::td/div")
-                               ?.Value?.ReplaceHtmlEntyty().Replace(okpd2, "").Trim() ??
+                               ?.Value?.ReplaceHtmlEntyty().Trim() ??
                            "";
+            if (!string.IsNullOrEmpty(okpd2))
+            {
+                okpdName = okpdName.Replace(okpd2, "");
+            }
+
             var quantity = nav.SelectSingleNode(
                                    "//td[contains(., 'Количество:')]/following-sibling::td")
                                ?.Value?.Trim().ExtractPrice() ??
@@ -557,7 +562,7 @@ namespace ParserWebCore.Tender
                             "//td[contains(., 'Местонахождение заказчика:')]/following-sibling::td")
                         ?.Value?.Trim() ?? "";
                     var addOrganizer =
-                        $"INSERT INTO {Builder.Prefix}organizer SET full_name = @full_name, contact_phone = @contact_phone, contact_person = @contact_person, contact_email = @contact_email, post_address = @post_addres, fact_address = @fact_address";
+                        $"INSERT INTO {Builder.Prefix}organizer SET full_name = @full_name, contact_phone = @contact_phone, contact_person = @contact_person, contact_email = @contact_email, post_address = @post_address, fact_address = @fact_address";
                     var cmd4 = new MySqlCommand(addOrganizer, connect);
                     cmd4.Prepare();
                     cmd4.Parameters.AddWithValue("@full_name", _tn.OrgName);

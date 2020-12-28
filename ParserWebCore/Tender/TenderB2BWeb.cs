@@ -93,7 +93,7 @@ namespace ParserWebCore.Tender
                                   "//div[@class = 'expandable-text short' or @class = 'expandable-text full']/span")
                               ?.Value?.Trim() ??
                           "";
-            if (!string.IsNullOrEmpty(lotName))
+            if (string.IsNullOrEmpty(lotName.DelAllWhitespace()))
             {
                 lotName = _tn.PurName;
             }
@@ -275,7 +275,7 @@ namespace ParserWebCore.Tender
                                   "//div[@class = 'expandable-text short']/span")
                               ?.Value?.Trim() ??
                           "";
-            if (!string.IsNullOrEmpty(lotName))
+            if (string.IsNullOrEmpty(lotName.DelAllWhitespace()))
             {
                 lotName = _tn.PurName;
             }

@@ -48,6 +48,36 @@ namespace ParserWebCore.NetworkLibrary
         }
     }
 
+    public class TimedWebClientUaB2B : WebClient
+    {
+        private readonly bool _randomUa;
+
+        public TimedWebClientUaB2B(bool randomUa)
+        {
+            _randomUa = randomUa;
+        }
+
+        protected override WebRequest GetWebRequest(Uri address)
+        {
+            var wr = (HttpWebRequest) base.GetWebRequest(address);
+            if (wr != null)
+            {
+                wr.Timeout = 20000;
+                wr.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => true;
+                wr.UserAgent = _randomUa
+                    ? RandomUa.RandomUserAgent
+                    : "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:55.0) Gecko/20100101 Firefox/55.0";
+                wr.Headers["Cookie"] =
+                    "testcookie=1; lang=rus; PHPSESSID=133e1c0feb152ef7dff944773c279ab9; clrs=p9E1BDJAKxQCgijEXjMvUmNDFzyzy3Yc5JXAwWWE; ipp_uid2=v4dansSMNejTiLhW/mn20KQOizTkCYUE4PHgv1w==; ipp_uid1=1608992579134; ssrs=qJZswDpbGXI9cr1ARk7ObdAc5a8at0JhZhxX90B3; cookie_id=39dccf18; poll_participant_guest_key=5fe7474451c86811262084; tuk=db7ce121-4785-11eb-8a36-002590f3a36c; p_hint=; n_srch=0; s_srch=0; search_start_time=0; _ym_uid=1609057330747045305; _ym_d=1609057330; _fbp=fb.1.1609057333220.58399424; _gid=GA1.2.2043272305.1609167644; _ga=GA1.1.588834613.1609057330; _ym_isad=2; _ga_J6RXK7E8Q3=GS1.1.1609167643.3.0.1609167647.0; seen-cookie-message=yes; last_viewed_procedures_cookie_key_v2=2542502004%3B2535804020%3B2536227040%3B2536225040%3B50278051%3B54410053%3B54393052%3B2464189042%3B2541585038%3B2535803020%3B2536224040%3B2539948014%3B2527422004%3B2541327004%3B2541596004%3B2454329002%3B2541647026%3B2541608038%3B2541167004%3B2541142040; vc=1609171358";
+                wr.AutomaticDecompression =
+                    DecompressionMethods.GZip | DecompressionMethods.Deflate | DecompressionMethods.None;
+                return wr;
+            }
+
+            return null;
+        }
+    }
+
     public class TimedWebClientTektorg : WebClient
     {
         protected override WebRequest GetWebRequest(Uri address)

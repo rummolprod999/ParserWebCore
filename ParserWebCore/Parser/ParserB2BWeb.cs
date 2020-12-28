@@ -35,11 +35,17 @@ namespace ParserWebCore.Parser
 
         private void GetPage(string url)
         {
-            var result = DownloadString.DownLUserAgent(url);
+            var result = DownloadString.DownLUserAgent(url, randomUa: true);
             if (string.IsNullOrEmpty(result))
             {
                 Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
                     url);
+                return;
+            }
+
+            if (result.Contains("не допускает использование ботов"))
+            {
+                Log.Logger("Google Captcha");
                 return;
             }
 

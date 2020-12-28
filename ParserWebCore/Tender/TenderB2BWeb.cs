@@ -29,10 +29,16 @@ namespace ParserWebCore.Tender
                 var dateUpd = DateTime.Now;
                 connect.Open();
                 if (TenderExist(connect)) return;
-                var s = DownloadString.DownLUserAgent(_tn.Href);
+                var s = DownloadString.DownLUserAgent(_tn.Href, randomUa: true);
                 if (string.IsNullOrEmpty(s))
                 {
                     Log.Logger("Empty string in ParsingTender()", _tn.Href);
+                    return;
+                }
+
+                if (s.Contains("не допускает использование ботов"))
+                {
+                    Log.Logger("Google Captcha");
                     return;
                 }
 

@@ -43,6 +43,7 @@
           <e p="HttpPostSberB2B.cs" t="Include" />
           <e p="HttpPostZakMos.cs" t="Include" />
           <e p="HttpZmoRts.cs" t="Include" />
+          <e p="RandomUA.cs" t="Include" />
           <e p="TimedWebClient.cs" t="Include" />
         </e>
         <e p="Parser" t="Include">

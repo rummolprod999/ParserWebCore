@@ -106,7 +106,7 @@ namespace ParserWebCore.NetworkLibrary
             return tmp;
         }
 
-        public static string DownLUserAgent(string url)
+        public static string DownLUserAgent(string url, bool randomUa = false)
         {
             var tmp = "";
             var count = 0;
@@ -114,7 +114,7 @@ namespace ParserWebCore.NetworkLibrary
             {
                 try
                 {
-                    var task = Task.Run(() => (new TimedWebClientUa()).DownloadString(url));
+                    var task = Task.Run(() => (new TimedWebClientUa(randomUa)).DownloadString(url));
                     if (!task.Wait(TimeSpan.FromSeconds(60))) throw new TimeoutException();
                     tmp = task.Result;
                     break;

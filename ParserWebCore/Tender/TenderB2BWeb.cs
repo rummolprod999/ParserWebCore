@@ -183,7 +183,7 @@ namespace ParserWebCore.Tender
                 cmd16.Parameters.AddWithValue("@id_customer", customerId);
                 cmd16.Parameters.AddWithValue("@delivery_place", delivPlace);
                 cmd16.Parameters.AddWithValue("@max_price", nmck);
-                cmd16.Parameters.AddWithValue("@delivery_term", delivTerm.Trim());
+                cmd16.Parameters.AddWithValue("@delivery_term", delivTerm.ReplaceHtmlEntyty().Trim());
                 cmd16.ExecuteNonQuery();
             }
         }
@@ -355,7 +355,7 @@ namespace ParserWebCore.Tender
                 cmd16.Parameters.AddWithValue("@id_customer", customerId);
                 cmd16.Parameters.AddWithValue("@delivery_place", delivPlace);
                 cmd16.Parameters.AddWithValue("@max_price", nmck);
-                cmd16.Parameters.AddWithValue("@delivery_term", delivTerm.Trim());
+                cmd16.Parameters.AddWithValue("@delivery_term", delivTerm.ReplaceHtmlEntyty().Trim());
                 cmd16.ExecuteNonQuery();
             }
         }

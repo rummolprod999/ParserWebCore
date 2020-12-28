@@ -95,7 +95,7 @@ namespace ParserWebCore.Tender
                           "";
             if (!string.IsNullOrEmpty(lotName))
             {
-                lotName = _tn.FullPw;
+                lotName = _tn.PurName;
             }
 
             var lotNum = 1;
@@ -277,7 +277,7 @@ namespace ParserWebCore.Tender
                           "";
             if (!string.IsNullOrEmpty(lotName))
             {
-                lotName = _tn.FullPw;
+                lotName = _tn.PurName;
             }
 
             var insertLot =

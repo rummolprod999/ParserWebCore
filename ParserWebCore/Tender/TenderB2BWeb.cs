@@ -209,6 +209,11 @@ namespace ParserWebCore.Tender
                 okpdName = okpdName.Replace(okpd2, "");
             }
 
+            if (okpdName.Contains("Показать все"))
+            {
+                okpdName = "";
+            }
+
             var quantity = nav.SelectSingleNode(
                                    "//td[contains(., 'Количество:')]/following-sibling::td")
                                ?.Value?.Trim().ExtractPrice() ??
@@ -381,6 +386,11 @@ namespace ParserWebCore.Tender
                                    "//td[contains(., 'Категория ОКПД2:')]/following-sibling::td/div")
                                ?.Value?.ReplaceHtmlEntyty().Replace(okpd2, "").Trim() ??
                            "";
+            if (okpdName.Contains("Показать все"))
+            {
+                okpdName = "";
+            }
+
             var quantity = navLot.SelectSingleNode(
                                    "//td[contains(., 'Количество:')]/following-sibling::td")
                                ?.Value?.Trim().ExtractPrice() ??

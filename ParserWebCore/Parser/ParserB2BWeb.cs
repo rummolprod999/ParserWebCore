@@ -11,7 +11,7 @@ namespace ParserWebCore.Parser
 {
     public class ParserB2BWeb : ParserAbstract, IParser
     {
-        private const int MaxPage = 20;
+        private const int MaxPage = 40;
 
         public void Parsing()
         {

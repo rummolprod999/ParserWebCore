@@ -119,7 +119,7 @@ namespace ParserWebCore.Parser
                     PurName = purName, PurNum = purNum, DatePub = datePub, Href = href, DateEnd = dateEnd,
                     PwName = pwName, FullPw = fullPw, OrgName = orgName
                 });
-            Thread.Sleep(5000);
+            Thread.Sleep(10000);
             ParserTender(tn);
         }
     }

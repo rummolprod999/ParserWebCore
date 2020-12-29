@@ -7,6 +7,7 @@ using ParserWebCore.Connections;
 using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
+using ParserWebCore.Parser;
 using ParserWebCore.TenderType;
 
 namespace ParserWebCore.Tender
@@ -29,7 +30,7 @@ namespace ParserWebCore.Tender
                 var dateUpd = DateTime.Now;
                 connect.Open();
                 if (TenderExist(connect)) return;
-                var s = DownloadString.DownLUserAgentB2B(_tn.Href, randomUa: true);
+                var s = DownloadString.DownLHttpPostWithCookiesB2b(_tn.Href, ParserB2BWeb.CookieCollection);
                 if (string.IsNullOrEmpty(s))
                 {
                     Log.Logger("Empty string in ParsingTender()", _tn.Href);
@@ -253,7 +254,7 @@ namespace ParserWebCore.Tender
             var lotHref = lot.Attributes["href"]?.Value ?? "";
             if (!string.IsNullOrEmpty(lotHref)) return;
             lotHref = $"https://www.b2b-center.ru{lotHref}";
-            var sLot = DownloadString.DownLUserAgentB2B(lotHref, randomUa: true);
+            var sLot = DownloadString.DownLHttpPostWithCookiesB2b(lotHref, ParserB2BWeb.CookieCollection);
             if (string.IsNullOrEmpty(sLot))
             {
                 Log.Logger("Empty string in lot ParsingTender()", lotHref);

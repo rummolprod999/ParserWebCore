@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using System.Threading;
 using HtmlAgilityPack;
 using ParserWebCore.Extensions;
@@ -12,6 +13,8 @@ namespace ParserWebCore.Parser
     public class ParserB2BWeb : ParserAbstract, IParser
     {
         private const int MaxPage = 5;
+        public static CookieCollection CookieCollection;
+        private readonly CookiesB2B _cookieService = CookiesB2B.CreateInstance();
 
         public void Parsing()
         {
@@ -24,6 +27,7 @@ namespace ParserWebCore.Parser
             {
                 try
                 {
+                    CookieCollection = _cookieService.CookieValue();
                     GetPage($"https://www.b2b-center.ru/market/?from={i * 20}");
                 }
                 catch (Exception e)
@@ -35,7 +39,7 @@ namespace ParserWebCore.Parser
 
         private void GetPage(string url)
         {
-            var result = DownloadString.DownLUserAgentB2B(url, randomUa: true);
+            var result = DownloadString.DownLHttpPostWithCookiesB2b(url, CookieCollection);
             if (string.IsNullOrEmpty(result))
             {
                 Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",

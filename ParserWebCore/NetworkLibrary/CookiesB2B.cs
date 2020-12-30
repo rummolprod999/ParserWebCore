@@ -18,6 +18,7 @@ namespace ParserWebCore.NetworkLibrary
             var cookieContainer = new CookieContainer();
             var handler = new HttpClientHandler {CookieContainer = cookieContainer};
             var client = new HttpClient(handler);
+            HttpPostCookiesB2b.FillUserAgent(client);
             var response = client.GetAsync(BaseUrl);
             var res = response.Result;
             _ = res.Content.ReadAsStringAsync().Result;

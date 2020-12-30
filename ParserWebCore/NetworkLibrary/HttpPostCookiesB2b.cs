@@ -24,8 +24,7 @@ namespace ParserWebCore.NetworkLibrary
             }))
             {
                 //client.DefaultRequestHeaders.Clear();
-                client.DefaultRequestHeaders.Add("User-Agent",
-                    RandomUa.RandomUserAgent);
+                FillUserAgent(client);
                 var response = client.GetAsync(url);
                 var res = response.Result;
                 if (res.StatusCode == HttpStatusCode.NotFound)
@@ -34,6 +33,20 @@ namespace ParserWebCore.NetworkLibrary
                 }
 
                 return res.Content.ReadAsStringAsync().Result;
+            }
+        }
+
+        protected internal static void FillUserAgent(HttpClient client)
+        {
+            try
+            {
+                client.DefaultRequestHeaders.Add("User-Agent",
+                    RandomUa.RandomUserAgent);
+            }
+            catch (Exception)
+            {
+                client.DefaultRequestHeaders.Add("User-Agent",
+                    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.50 Safari/537.36");
             }
         }
     }

@@ -45,6 +45,8 @@
           <e p="HttpPostSberB2B.cs" t="Include" />
           <e p="HttpPostZakMos.cs" t="Include" />
           <e p="HttpZmoRts.cs" t="Include" />
+          <e p="ProxyEntity.cs" t="Include" />
+          <e p="ProxyLoader.cs" t="Include" />
           <e p="RandomUA.cs" t="Include" />
           <e p="TimedWebClient.cs" t="Include" />
         </e>

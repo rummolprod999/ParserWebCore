@@ -2,6 +2,7 @@ using System;
 using System.Net;
 using System.Threading;
 using HtmlAgilityPack;
+using ParserWebCore.BuilderApp;
 using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
@@ -39,7 +40,7 @@ namespace ParserWebCore.Parser
 
         private void GetPage(string url)
         {
-            var result = DownloadString.DownLHttpPostWithCookiesB2b(url, CookieCollection);
+            var result = DownloadString.DownLHttpPostWithCookiesB2b(url, CookieCollection, useProxy: Builder.UserProxy);
             if (string.IsNullOrEmpty(result))
             {
                 Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",

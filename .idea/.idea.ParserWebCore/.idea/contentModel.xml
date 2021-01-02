@@ -42,6 +42,7 @@
           <e p="HttpPostAll.cs" t="Include" />
           <e p="HttpPostCookies.cs" t="Include" />
           <e p="HttpPostCookiesB2b.cs" t="Include" />
+          <e p="HttpPostMedsi.cs" t="Include" />
           <e p="HttpPostSberB2B.cs" t="Include" />
           <e p="HttpPostZakMos.cs" t="Include" />
           <e p="HttpZmoRts.cs" t="Include" />
@@ -70,6 +71,7 @@
           <e p="ParserKzGroup.cs" t="Include" />
           <e p="ParserLotOnline.cs" t="Include" />
           <e p="ParserMaxi.cs" t="Include" />
+          <e p="ParserMedsi.cs" t="Include" />
           <e p="ParserMzVoron.cs" t="Include" />
           <e p="ParserNaftan.cs" t="Include" />
           <e p="ParserRavis.cs" t="Include" />
@@ -123,6 +125,7 @@
           <e p="TenderKzGroup.cs" t="Include" />
           <e p="TenderLotOnline.cs" t="Include" />
           <e p="TenderMaxi.cs" t="Include" />
+          <e p="TenderMedsi.cs" t="Include" />
           <e p="TenderMzVoron.cs" t="Include" />
           <e p="TenderNaftan.cs" t="Include" />
           <e p="TenderRavis.cs" t="Include" />
@@ -162,6 +165,7 @@
           <e p="TypeKzGroup.cs" t="Include" />
           <e p="TypeLotOnline.cs" t="Include" />
           <e p="TypeMaxi.cs" t="Include" />
+          <e p="TypeMedsi.cs" t="Include" />
           <e p="TypeMzVoron.cs" t="Include" />
           <e p="TypeNaftan.cs" t="Include" />
           <e p="TypeObjectTpta.cs" t="Include" />

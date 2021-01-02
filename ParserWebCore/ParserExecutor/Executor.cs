@@ -139,6 +139,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.B2BWeb:
                     _parser = new ParserB2BWeb();
                     break;
+                case Arguments.Medsi:
+                    _parser = new ParserMedsi();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

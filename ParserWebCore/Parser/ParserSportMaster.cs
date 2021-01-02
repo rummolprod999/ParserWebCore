@@ -11,7 +11,7 @@ namespace ParserWebCore.Parser
 {
     public class ParserSportMaster : ParserAbstract, IParser
     {
-        private readonly string _urlpage = "http://zakupki.sportmaster.ru/list/";
+        private readonly string _urlpage = "https://zakupki.sportmaster.ru/tender_list.php";
 
         public void Parsing()
         {

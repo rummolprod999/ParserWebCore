@@ -128,7 +128,7 @@ namespace ParserWebCore.Tender
                         "//td[contains(text(), 'Для вопросов по содержанию закупочной документации')]/following-sibling::td")
                     ?.Value?.Trim() ?? "";
                 var notice2 = navigator.SelectSingleNode(
-                        "//td[contains(text(), '//td[contains(text(), 'Для вопросов по порядку предоставления предложений')]/following-sibling::td')]/following-sibling::td")
+                        "//td[contains(text(), 'Для вопросов по порядку предоставления предложений')]/following-sibling::td")
                     ?.Value?.Trim() ?? "";
                 var noticeVer =
                     $"Для вопросов по содержанию закупочной документации: {notice1}\nДля вопросов по порядку предоставления предложений: {notice2}";

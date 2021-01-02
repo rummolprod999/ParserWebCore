@@ -113,11 +113,11 @@ namespace ParserWebCore.Parser
             var endDateS = (string) t.SelectToken("endDate") ?? "";
             var datePub = pubDateS.ParseDateUn("dd.MM.yyyy HH:mm:ss");
             var dateEnd = endDateS.ParseDateUn("dd.MM.yyyy HH:mm:ss");
-            if (datePub == DateTime.MinValue && dateEnd == DateTime.MinValue)
+            /*if (datePub == DateTime.MinValue && dateEnd == DateTime.MinValue)
             {
                 Log.Logger("empty dates", t.ToString());
                 return;
-            }
+            }*/
 
             var status = ((string) t.SelectToken("stateName") ?? "").Trim();
             var regionName = ((string) t.SelectToken("regionName") ?? "").Trim();

@@ -74,7 +74,7 @@ namespace ParserWebCore.ParserExecutor
                     _parser = new ParserTekRn();
                     break;
                 case Arguments.SportMaster:
-                    _parser = new ParserSportMaster();
+                    _parser = new ParserSportMasterNew();
                     break;
                 case Arguments.Teksil:
                     _parser = new ParserTekSil();

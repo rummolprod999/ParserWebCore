@@ -36,6 +36,7 @@
         <e p="NetworkLibrary" t="Include">
           <e p="CookieService.cs" t="Include" />
           <e p="CookiesB2B.cs" t="Include" />
+          <e p="CurlDownloadSportMaster.cs" t="Include" />
           <e p="CurlLoaderFederal.cs" t="Include" />
           <e p="DownloadString.cs" t="Include" />
           <e p="GetCookieServiceFederal.cs" t="Include" />
@@ -86,6 +87,7 @@
           <e p="ParserSibintek.cs" t="Include" />
           <e p="ParserSitno.cs" t="Include" />
           <e p="ParserSportMaster.cs" t="Include" />
+          <e p="ParserSportMasterNew.cs" t="Include" />
           <e p="ParserTekKom.cs" t="Include" />
           <e p="ParserTekMarket.cs" t="Include" />
           <e p="ParserTekMos.cs" t="Include" />
@@ -139,6 +141,7 @@
           <e p="TenderSetOnline.cs" t="Include" />
           <e p="TenderSibintek.cs" t="Include" />
           <e p="TenderSportMaster.cs" t="Include" />
+          <e p="TenderSportMasterNew.cs" t="Include" />
           <e p="TenderTekKom.cs" t="Include" />
           <e p="TenderTekMarket.cs" t="Include" />
           <e p="TenderTekMos.cs" t="Include" />
@@ -178,6 +181,7 @@
           <e p="TypeSegezha.cs" t="Include" />
           <e p="TypeSetOnline.cs" t="Include" />
           <e p="TypeSibIntek.cs" t="Include" />
+          <e p="TypeSport1.cs" t="Include" />
           <e p="TypeSportmaster.cs" t="Include" />
           <e p="TypeTekKom.cs" t="Include" />
           <e p="TypeTekMarket.cs" t="Include" />

@@ -36,6 +36,8 @@ namespace ParserWebCore.BuilderApp
         [Required] public static string Database { get; set; }
         [Required] public static string FederalPass { get; set; }
         [Required] public static string FederalUser { get; set; }
+        [Required] public static string SportPass { get; set; }
+        [Required] public static string SportUser { get; set; }
         [Required] public static string ConnectString { get; set; }
         [Required] public static bool UserProxy { get; set; }
         [Required] public static string ProxyFile { get; set; }
@@ -204,6 +206,8 @@ namespace ParserWebCore.BuilderApp
                 Server = (string) o["server"];
                 FederalPass = (string) o["passfederal"];
                 FederalUser = (string) o["userfederal"];
+                SportPass = (string) o["passsport"];
+                SportUser = (string) o["usersport"];
                 UserProxy = (bool) o["use_proxy"];
                 ProxyFile = (string) o["proxy_file"];
                 _port = int.TryParse((string) o["port"], out _port) ? int.Parse((string) o["port"]) : 3306;

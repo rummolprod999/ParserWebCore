@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using System.Net.Http;
+using ParserWebCore.BuilderApp;
 
 namespace ParserWebCore.NetworkLibrary
 {
@@ -16,7 +17,22 @@ namespace ParserWebCore.NetworkLibrary
         public CookieCollection CookieValue()
         {
             var cookieContainer = new CookieContainer();
-            var handler = new HttpClientHandler {CookieContainer = cookieContainer};
+            var handler = new HttpClientHandler {CookieContainer = cookieContainer, AllowAutoRedirect = true};
+            if (Builder.UserProxy)
+            {
+                var prixyEntity = ProxyLoader.getRandomProxy();
+                var proxy = new WebProxy
+                {
+                    Address = new Uri($"http://{prixyEntity.Ip}:{prixyEntity.Port}"),
+                    BypassProxyOnLocal = false,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential(
+                        userName: prixyEntity.User,
+                        password: prixyEntity.Pass)
+                };
+                handler.Proxy = proxy;
+            }
+
             var client = new HttpClient(handler);
             HttpPostCookiesB2b.FillUserAgent(client);
             var response = client.GetAsync(BaseUrl);

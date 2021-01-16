@@ -142,6 +142,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Medsi:
                     _parser = new ParserMedsi();
                     break;
+                case Arguments.Gpb:
+                    _parser = new ParserGpb();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

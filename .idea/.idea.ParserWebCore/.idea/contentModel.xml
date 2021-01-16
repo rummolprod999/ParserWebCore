@@ -66,6 +66,7 @@
           <e p="ParserDellin.cs" t="Include" />
           <e p="ParserEtpu.cs" t="Include" />
           <e p="ParserFederal.cs" t="Include" />
+          <e p="ParserGpb.cs" t="Include" />
           <e p="ParserGzwSP.cs" t="Include" />
           <e p="ParserGzwSPSamar.cs" t="Include" />
           <e p="ParserIsMt.cs" t="Include" />
@@ -122,6 +123,7 @@
           <e p="TenderDellin.cs" t="Include" />
           <e p="TenderEtpu.cs" t="Include" />
           <e p="TenderFederal.cs" t="Include" />
+          <e p="TenderGpb.cs" t="Include" />
           <e p="TenderGzwSP.cs" t="Include" />
           <e p="TenderIsMt.cs" t="Include" />
           <e p="TenderKzGroup.cs" t="Include" />
@@ -164,6 +166,7 @@
           <e p="TypeBoaz.cs" t="Include" />
           <e p="TypeEtpu.cs" t="Include" />
           <e p="TypeFederal.cs" t="Include" />
+          <e p="TypeGpb.cs" t="Include" />
           <e p="TypeIsMt.cs" t="Include" />
           <e p="TypeKzGroup.cs" t="Include" />
           <e p="TypeLotOnline.cs" t="Include" />

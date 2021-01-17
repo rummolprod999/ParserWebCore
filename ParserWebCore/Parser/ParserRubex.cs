@@ -43,7 +43,7 @@ namespace ParserWebCore.Parser
             htmlDoc.LoadHtml(s);
             var tens =
                 htmlDoc.DocumentNode.SelectNodes(
-                    "//div[@class = 'tendorElem']") ??
+                    "//div[@class = 'tenders-item']") ??
                 new HtmlNodeCollection(null);
             foreach (var a in tens)
             {
@@ -68,11 +68,13 @@ namespace ParserWebCore.Parser
                 return;
             }
 
-            var purName = n.SelectSingleNode("./span")?.InnerText?.Trim() ?? throw new Exception(
-                $"cannot find purName in {href}");
+            var purName = n.SelectSingleNode(".//div[@class = 'tenders-item__text']")?.InnerText?.Trim() ??
+                          throw new Exception(
+                              $"cannot find purName in {href}");
             purName = HttpUtility.HtmlDecode(purName);
-            var fullDateNum = n.SelectSingleNode("./h2")?.InnerText?.Trim() ?? throw new Exception(
-                $"cannot find fullDateNum in {href}");
+            var fullDateNum = n.SelectSingleNode(".//div[@class = 'tenders-item__title']")?.InnerText?.Trim() ??
+                              throw new Exception(
+                                  $"cannot find fullDateNum in {href}");
             var purNum = fullDateNum.GetDataFromRegex(@"Извещение\s+№\s+(\d+)");
             if (string.IsNullOrEmpty(purNum))
             {

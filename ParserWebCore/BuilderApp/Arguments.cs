@@ -49,6 +49,7 @@
         Federal,
         B2BWeb,
         Medsi,
-        Gpb
+        Gpb,
+        Strateg,
     }
 }

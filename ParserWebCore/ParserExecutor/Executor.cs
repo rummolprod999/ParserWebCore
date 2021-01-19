@@ -145,6 +145,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Gpb:
                     _parser = new ParserGpb();
                     break;
+                case Arguments.Strateg:
+                    _parser = new ParserStrateg();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

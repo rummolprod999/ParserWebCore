@@ -89,6 +89,7 @@
           <e p="ParserSitno.cs" t="Include" />
           <e p="ParserSportMaster.cs" t="Include" />
           <e p="ParserSportMasterNew.cs" t="Include" />
+          <e p="ParserStrateg.cs" t="Include" />
           <e p="ParserTekKom.cs" t="Include" />
           <e p="ParserTekMarket.cs" t="Include" />
           <e p="ParserTekMos.cs" t="Include" />
@@ -144,6 +145,7 @@
           <e p="TenderSibintek.cs" t="Include" />
           <e p="TenderSportMaster.cs" t="Include" />
           <e p="TenderSportMasterNew.cs" t="Include" />
+          <e p="TenderStrateg.cs" t="Include" />
           <e p="TenderTekKom.cs" t="Include" />
           <e p="TenderTekMarket.cs" t="Include" />
           <e p="TenderTekMos.cs" t="Include" />

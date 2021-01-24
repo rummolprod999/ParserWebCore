@@ -211,14 +211,14 @@ namespace ParserWebCore.Tender
             var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(s);
             var docs =
-                htmlDoc.DocumentNode.SelectNodes("//ul[contains(@class, 'disclList')]/li") ??
+                htmlDoc.DocumentNode.SelectNodes("//ul[contains(@class, 'tenders-d__list')]/li") ??
                 new HtmlNodeCollection(null);
             foreach (var doc in docs)
             {
                 var urlAttT = (doc.SelectSingleNode("./a")?.Attributes["href"]?.Value ?? "")
                     .Trim();
-                var fName = (doc.SelectSingleNode("./a").InnerText ?? "").Trim();
-                var urlAtt = $"http://kzgroup.ru{urlAttT}";
+                var fName = (doc.SelectSingleNode("./p").InnerText ?? "Закупочная документация").Trim();
+                var urlAtt = $"https://kzgroup.ru{urlAttT}";
                 if (!string.IsNullOrEmpty(fName))
                 {
                     var insertAttach =

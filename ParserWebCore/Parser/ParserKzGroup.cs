@@ -10,7 +10,7 @@ namespace ParserWebCore.Parser
 {
     public class ParserKzGroup : ParserAbstract, IParser
     {
-        private const int Count = 5;
+        private const int Count = 3;
 
         public void Parsing()
         {
@@ -19,9 +19,10 @@ namespace ParserWebCore.Parser
 
         private void ParsingKzGroup()
         {
+            ParsingPage("https://kzgroup.ru/tendery/");
             for (var i = 1; i <= Count; i++)
             {
-                var urlpage = $"http://kzgroup.ru/rus/tenders?page={i}&text=";
+                var urlpage = $"https://kzgroup.ru/tendery/?PAGEN_1={i}";
                 try
                 {
                     ParsingPage(urlpage);
@@ -45,7 +46,7 @@ namespace ParserWebCore.Parser
             var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(s);
             var tens =
-                htmlDoc.DocumentNode.SelectNodes("//div[contains(@class, 'tableBox')]/table/tr[position() > 1]") ??
+                htmlDoc.DocumentNode.SelectNodes("//div[contains(@class, 'b-table__container')]") ??
                 new HtmlNodeCollection(null);
             foreach (var a in tens)
             {
@@ -62,7 +63,7 @@ namespace ParserWebCore.Parser
 
         private void ParserTender(HtmlNode n)
         {
-            var href = (n.SelectSingleNode("./td[1]/a")?.Attributes["href"]?.Value ?? "")
+            var href = (n.SelectSingleNode("./div[1]/a")?.Attributes["href"]?.Value ?? "")
                 .Trim();
             if (string.IsNullOrEmpty(href))
             {
@@ -70,23 +71,25 @@ namespace ParserWebCore.Parser
                 return;
             }
 
-            href = $"http://kzgroup.ru{href}";
-            var purNum = href.GetDataFromRegex(@"/(\d+)/$");
+            href = $"https://kzgroup.ru{href}";
+            var purNum = href.ToMd5();
             if (string.IsNullOrEmpty(purNum))
             {
                 Log.Logger("Empty purNum", href);
                 return;
             }
 
-            var purName = (n.SelectSingleNode("./td[3]")
+            var purName = (n.SelectSingleNode("./div[1]/a")
                 ?.InnerText ?? "").Trim();
-            var orgName = (n.SelectSingleNode("./td[4]")
+            var orgName = (n.SelectSingleNode("./div[2]")
                 ?.InnerText ?? "").Trim();
             var datePubT =
-                (n.SelectSingleNode("./td[5]")
+                (n.SelectSingleNode("./div[3]")
                     ?.InnerText ?? "").Trim();
-            datePubT = datePubT.GetDataFromRegex(@"(\d{2}\.\d{2}\.\d{4})");
-            var datePub = datePubT.ParseDateUn("dd.MM.yyyy");
+            var datePubT1 = datePubT.GetDataFromRegex(@"(\d{2}\.\d{2}\.\d{4})");
+            var timePubT = datePubT.GetDataFromRegex(@"(\d{2}:\d{2})");
+            datePubT = $"{datePubT1} {timePubT}".Trim();
+            var datePub = datePubT.ParseDateUn("dd.MM.yyyy HH:mm");
             if (datePub == DateTime.MinValue)
             {
                 Log.Logger("Empty datePub", href);
@@ -94,7 +97,7 @@ namespace ParserWebCore.Parser
             }
 
             var dateEndT =
-                (n.SelectSingleNode("./td[7]")
+                (n.SelectSingleNode("./div[5]")
                     ?.InnerText ?? "").Trim();
             var dateEndT1 = dateEndT.GetDataFromRegex(@"(\d{2}\.\d{2}\.\d{4})");
             var timeEndT = dateEndT.GetDataFromRegex(@"(\d{2}:\d{2})");

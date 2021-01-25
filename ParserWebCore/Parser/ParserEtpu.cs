@@ -11,7 +11,7 @@ namespace ParserWebCore.Parser
 {
     public class ParserEtpu : ParserAbstract, IParser
     {
-        private readonly int _countPage = 10;
+        private readonly int _countPage = 20;
 
         public void Parsing()
         {
@@ -67,7 +67,8 @@ namespace ParserWebCore.Parser
             var id = ((string) t.SelectToken("identifier") ?? "").Trim();
             var purName = ((string) t.SelectToken("title") ?? "").Trim();
             var publicationDateT = ((string) t.SelectToken("gdStartDate") ?? "").Trim();
-            var endDateT = ((string) t.SelectToken("gdEndDate") ?? "").Trim();
+            var endDateT = ((string) t.SelectToken("gdEndDate") ?? (string) t.SelectToken("gdEndDate") ?? "").Trim();
+            endDateT = endDateT.GetDataFromRegex(@"(\d{2}\.\d{2}\.\d{4}\s+\d{2}:\d{2})");
             var publicationDate = publicationDateT.ParseDateUn("dd.MM.yyyy HH:mm");
             var endDate = endDateT.ParseDateUn("dd.MM.yyyy HH:mm");
             var href = ((string) t.SelectToken("lotLink") ?? "").Trim();

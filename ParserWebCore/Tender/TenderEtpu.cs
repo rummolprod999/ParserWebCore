@@ -163,7 +163,7 @@ namespace ParserWebCore.Tender
             {
                 var urlAttT = (doc?.Attributes["href"]?.Value ?? "").Trim();
                 var fName = doc.InnerHtml.Trim();
-                var urlAtt = $"{urlAttT}";
+                var urlAtt = $"https://torgi.etpu.ru{urlAttT}";
                 if (!string.IsNullOrEmpty(fName))
                 {
                     var insertAttach =

@@ -17,9 +17,10 @@ namespace ParserWebCore.Parser
             switch (_arguments)
             {
                 case Arguments.Tver:
-                    new ParserGzwSp("http://www.tver.ru/zakaz/GzwSP/NoticesGrid", "http://www.tver.ru",
+                    new ParserGzwSp("http://gostorgi.tver.ru/smallpurchases/GzwSP/NoticesGrid",
+                        "http://gostorgi.tver.ru",
                         "МКУ Центр организации торгов города Твери",
-                        "http://www.tver.ru/zakaz/GzwSP/NoticesGrid", 85, _arguments).Parsing();
+                        "http://gostorgi.tver.ru/smallpurchases/GzwSP/NoticesGrid", 85, _arguments).Parsing();
                     break;
                 case Arguments.Murman:
                     new ParserGzwSp("http://gz-murman.ru/site/GzwSP/NoticesGrid", "http://gz-murman.ru",

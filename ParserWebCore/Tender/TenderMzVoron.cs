@@ -202,7 +202,7 @@ namespace ParserWebCore.Tender
                 {
                     var urlAttT = (dd?.Attributes["href"]?.Value ?? "").Trim();
                     var fName = (dd?.InnerText ?? "").Trim();
-                    var urlAtt = $"http://mx3.keysystems.ru{urlAttT}";
+                    var urlAtt = $"https://goszakupki.govvrn.ru{urlAttT}";
                     if (!string.IsNullOrEmpty(fName))
                     {
                         var insertAttach =

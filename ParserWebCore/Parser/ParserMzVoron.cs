@@ -14,11 +14,14 @@ namespace ParserWebCore.Parser
 {
     public class ParserMzVoron : ParserAbstract, IParser
     {
-        private const int Count = 10;
-        private TimeSpan _timeoutB = TimeSpan.FromSeconds(30);
-        private const string Url = "http://mx3.keysystems.ru/mzvoron/GzwSP/NoticesGrid";
+        private const int Count = 6;
+
+        private const string Url =
+            "https://goszakupki.govvrn.ru/mzvoron/GzwSP/NoticesGrid?ItemId=16&show_title=on&expanded=0";
+
         private readonly ChromeDriver _driver = CreatorChromeDriver.GetChromeDriver();
         private List<TypeMzVoron> _tendersList = new List<TypeMzVoron>();
+        private TimeSpan _timeoutB = TimeSpan.FromSeconds(30);
 
         public void Parsing()
         {
@@ -80,7 +83,7 @@ namespace ParserWebCore.Parser
             foreach (var tt in _tendersList)
             {
                 var tn = new TenderMzVoron("ПОРТАЛ МАЛЫХ ЗАКУПОК Воронежской области",
-                    "http://mx3.keysystems.ru/mzvoron/GzwSP/NoticesGrid", 80,
+                    "https://goszakupki.govvrn.ru/", 80,
                     tt);
                 ParserTender(tn);
             }

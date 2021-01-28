@@ -98,7 +98,7 @@ namespace ParserWebCore.Parser
             if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(lotId) || publicationDate == DateTime.MinValue ||
                 endDate == DateTime.MinValue)
             {
-                Log.Logger("selling", id);
+                Log.Logger("tender id or dates is empty", id);
                 return;
             }
 

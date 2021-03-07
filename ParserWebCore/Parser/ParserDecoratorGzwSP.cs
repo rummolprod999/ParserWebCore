@@ -47,10 +47,10 @@ namespace ParserWebCore.Parser
                         "https://webtorgi.samregion.ru/smallpurchases/GzwSP/NoticesGrid", 89, _arguments).Parsing();
                     break;
                 case Arguments.Udmurt:
-                    new ParserGzwSp("http://wt.mfur.ru/smallpurchases/GzwSP/NoticesGrid",
+                    new ParserGzwSp("https://wt.udmr.ru/smallpurchases/GzwSP/NoticesGrid",
                             "http://wt.mfur.ru",
                             "Малые закупки Удмуртской Республики",
-                            "http://wt.mfur.ru/smallpurchases/GzwSP/NoticesGrid", 90, _arguments)
+                            "https://wt.udmr.ru/smallpurchases/GzwSP/NoticesGrid", 90, _arguments)
                         .Parsing();
                     break;
                 case Arguments.Brn32:

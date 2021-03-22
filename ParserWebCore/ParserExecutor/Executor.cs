@@ -148,6 +148,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Strateg:
                     _parser = new ParserStrateg();
                     break;
+                case Arguments.Tenderit:
+                    _parser = new ParserTenderIt();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

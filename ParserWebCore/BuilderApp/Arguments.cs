@@ -51,5 +51,6 @@
         Medsi,
         Gpb,
         Strateg,
+        Tenderit,
     }
 }

@@ -96,6 +96,7 @@
           <e p="ParserTekRn.cs" t="Include" />
           <e p="ParserTekSil.cs" t="Include" />
           <e p="ParserTekTkp.cs" t="Include" />
+          <e p="ParserTenderIt.cs" t="Include" />
           <e p="ParserTpta.cs" t="Include" />
           <e p="ParserUralmash.cs" t="Include" />
           <e p="ParserUralmash1.cs" t="Include" />
@@ -152,6 +153,7 @@
           <e p="TenderTekRn.cs" t="Include" />
           <e p="TenderTekSil.cs" t="Include" />
           <e p="TenderTekTkp.cs" t="Include" />
+          <e p="TenderTenderIt.cs" t="Include" />
           <e p="TenderTpta.cs" t="Include" />
           <e p="TenderUralmash1.cs" t="Include" />
           <e p="TenderUralmash2.cs" t="Include" />
@@ -193,6 +195,7 @@
           <e p="TypeTekMos.cs" t="Include" />
           <e p="TypeTekRn.cs" t="Include" />
           <e p="TypeTekSil.cs" t="Include" />
+          <e p="TypeTenderIt.cs" t="Include" />
           <e p="TypeTpta.cs" t="Include" />
           <e p="TypeUral1.cs" t="Include" />
           <e p="TypeUral2.cs" t="Include" />

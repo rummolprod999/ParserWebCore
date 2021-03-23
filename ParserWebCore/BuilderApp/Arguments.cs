@@ -52,5 +52,6 @@
         Gpb,
         Strateg,
         Tenderit,
+        Kuzocm,
     }
 }

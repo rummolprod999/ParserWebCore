@@ -70,6 +70,7 @@
           <e p="ParserGzwSP.cs" t="Include" />
           <e p="ParserGzwSPSamar.cs" t="Include" />
           <e p="ParserIsMt.cs" t="Include" />
+          <e p="ParserKuzocm.cs" t="Include" />
           <e p="ParserKzGroup.cs" t="Include" />
           <e p="ParserLotOnline.cs" t="Include" />
           <e p="ParserMaxi.cs" t="Include" />
@@ -128,6 +129,7 @@
           <e p="TenderGpb.cs" t="Include" />
           <e p="TenderGzwSP.cs" t="Include" />
           <e p="TenderIsMt.cs" t="Include" />
+          <e p="TenderKuzocm.cs" t="Include" />
           <e p="TenderKzGroup.cs" t="Include" />
           <e p="TenderLotOnline.cs" t="Include" />
           <e p="TenderMaxi.cs" t="Include" />
@@ -172,6 +174,7 @@
           <e p="TypeFederal.cs" t="Include" />
           <e p="TypeGpb.cs" t="Include" />
           <e p="TypeIsMt.cs" t="Include" />
+          <e p="TypeKuzocm.cs" t="Include" />
           <e p="TypeKzGroup.cs" t="Include" />
           <e p="TypeLotOnline.cs" t="Include" />
           <e p="TypeMaxi.cs" t="Include" />

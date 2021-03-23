@@ -151,6 +151,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Tenderit:
                     _parser = new ParserTenderIt();
                     break;
+                case Arguments.Kuzocm:
+                    _parser = new ParserKuzocm();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

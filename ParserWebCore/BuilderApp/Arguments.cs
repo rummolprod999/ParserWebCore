@@ -53,5 +53,6 @@
         Strateg,
         Tenderit,
         Kuzocm,
+        Zdship,
     }
 }

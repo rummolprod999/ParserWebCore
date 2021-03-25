@@ -11,11 +11,11 @@ using ParserWebCore.TenderType;
 
 namespace ParserWebCore.Tender
 {
-    public class TenderKuzocm : TenderAbstract, ITender
+    public class TenderZdship : TenderAbstract, ITender
     {
-        private readonly TypeKuzocm _tn;
+        private readonly TypeZdShip _tn;
 
-        public TenderKuzocm(string etpName, string etpUrl, int typeFz, TypeKuzocm tn) : base(etpName, etpUrl,
+        public TenderZdship(string etpName, string etpUrl, int typeFz, TypeZdShip tn) : base(etpName, etpUrl,
             typeFz)
         {
             _tn = tn;
@@ -23,42 +23,6 @@ namespace ParserWebCore.Tender
 
         public void ParsingTender()
         {
-            var s = DownloadString.DownLUserAgent(_tn.Href);
-            if (string.IsNullOrEmpty(s))
-            {
-                Log.Logger("Empty string in ParsingTender()", _tn.Href);
-                return;
-            }
-
-            var htmlDoc = new HtmlDocument();
-            htmlDoc.LoadHtml(s);
-            var navigator = (HtmlNodeNavigator) htmlDoc.CreateNavigator();
-            var datePubT =
-                (navigator.SelectSingleNode("//td[span[contains(., 'Начало подачи заявок')]]/following-sibling::td")
-                    ?.Value ?? "").ReplaceHtmlEntyty().Trim();
-            datePubT = datePubT.GetDateWithMonth();
-            _tn.DatePub = datePubT.DelDoubleWhitespace().ParseDateUn("dd MM yyyy HH:mm");
-            var dateEndT =
-                (navigator.SelectSingleNode("//td[span[contains(., 'Окончание подачи заявок')]]/following-sibling::td")
-                    ?.Value ?? "").ReplaceHtmlEntyty().Trim();
-            dateEndT = dateEndT.GetDateWithMonth();
-            _tn.DateEnd = dateEndT.DelDoubleWhitespace().GetDataFromRegex(@"(\d{2}\s\d{2}\s\d{4}\s\d{2}:\d{2})")
-                .ParseDateUn("dd MM yyyy HH:mm");
-            if (_tn.DatePub == DateTime.MinValue)
-            {
-                Log.Logger("Empty datePub", _tn.Href);
-                return;
-            }
-
-            if (_tn.DateEnd == DateTime.MinValue)
-            {
-                Log.Logger("Empty dateEnd", _tn.Href);
-                return;
-            }
-
-            var status =
-                (navigator.SelectSingleNode("//td[contains(., 'Состояние лота')]/following-sibling::td")
-                    ?.Value ?? "").ReplaceHtmlEntyty().Trim();
             using (var connect = ConnectToDb.GetDbConnection())
             {
                 connect.Open();
@@ -70,7 +34,7 @@ namespace ParserWebCore.Tender
                 cmd.Parameters.AddWithValue("@type_fz", TypeFz);
                 cmd.Parameters.AddWithValue("@doc_publish_date", _tn.DatePub);
                 cmd.Parameters.AddWithValue("@end_date", _tn.DateEnd);
-                cmd.Parameters.AddWithValue("@notice_version", status);
+                cmd.Parameters.AddWithValue("@notice_version", _tn.Status);
                 var dt = new DataTable();
                 var adapter = new MySqlDataAdapter {SelectCommand = cmd};
                 adapter.Fill(dt);
@@ -79,17 +43,32 @@ namespace ParserWebCore.Tender
                     return;
                 }
 
+                var s = DownloadString.DownLUserAgent(_tn.Href);
+                if (string.IsNullOrEmpty(s))
+                {
+                    Log.Logger("Empty string in ParsingTender()", _tn.Href);
+                    return;
+                }
+
+                var htmlDoc = new HtmlDocument();
+                htmlDoc.LoadHtml(s);
+                var navigator = (HtmlNodeNavigator) htmlDoc.CreateNavigator();
                 var dateUpd = DateTime.Now;
                 var (updated, cancelStatus) = UpdateTenderVersion(connect, _tn.PurNum, dateUpd);
                 var printForm = _tn.Href;
                 var customerId = 0;
                 var organiserId = 0;
                 var orgName = EtpName;
-                organiserId = AddOrganizer(orgName, connect, organiserId);
-                PlacingWay = (navigator.SelectSingleNode("//td[contains(., 'Способ')]/following-sibling::td")
+                PlacingWay = (navigator.SelectSingleNode("//div[contains(., 'Способ проведения тендера: ')]/span")
                     ?.Value ?? "").ReplaceHtmlEntyty().Trim();
                 GetPlacingWay(connect, out var idPlacingWay);
                 GetEtp(connect, out var idEtp);
+                organiserId = AddOrganizer(orgName, connect, organiserId);
+                var biddingDateT = (navigator
+                    .SelectSingleNode(
+                        "//div[contains(., 'Дата подведения окончательных итогов:')]/span")
+                    ?.Value ?? "").Trim();
+                var biddingDate = biddingDateT.ParseDateUn("dd.MM.yyyy");
                 var insertTender =
                     $"INSERT INTO {Builder.Prefix}tender SET id_region = @id_region, id_xml = @id_xml, purchase_number = @purchase_number, doc_publish_date = @doc_publish_date, href = @href, purchase_object_info = @purchase_object_info, type_fz = @type_fz, id_organizer = @id_organizer, id_placing_way = @id_placing_way, id_etp = @id_etp, end_date = @end_date, scoring_date = @scoring_date, bidding_date = @bidding_date, cancel = @cancel, date_version = @date_version, num_version = @num_version, notice_version = @notice_version, xml = @xml, print_form = @print_form";
                 var cmd9 = new MySqlCommand(insertTender, connect);
@@ -106,23 +85,23 @@ namespace ParserWebCore.Tender
                 cmd9.Parameters.AddWithValue("@id_etp", idEtp);
                 cmd9.Parameters.AddWithValue("@end_date", _tn.DateEnd);
                 cmd9.Parameters.AddWithValue("@scoring_date", DateTime.MinValue);
-                cmd9.Parameters.AddWithValue("@bidding_date", DateTime.MinValue);
+                cmd9.Parameters.AddWithValue("@bidding_date", biddingDate);
                 cmd9.Parameters.AddWithValue("@cancel", cancelStatus);
                 cmd9.Parameters.AddWithValue("@date_version", dateUpd);
                 cmd9.Parameters.AddWithValue("@num_version", 1);
-                cmd9.Parameters.AddWithValue("@notice_version", status);
+                cmd9.Parameters.AddWithValue("@notice_version", _tn.Status);
                 cmd9.Parameters.AddWithValue("@xml", _tn.Href);
                 cmd9.Parameters.AddWithValue("@print_form", printForm);
                 var resInsertTender = cmd9.ExecuteNonQuery();
                 var idTender = (int) cmd9.LastInsertedId;
                 Counter(resInsertTender, updated);
-                if (!string.IsNullOrEmpty(_tn.CusName))
+                if (!string.IsNullOrEmpty(orgName))
                 {
                     var selectCustomer =
                         $"SELECT id_customer FROM {Builder.Prefix}customer WHERE full_name = @full_name";
                     var cmd13 = new MySqlCommand(selectCustomer, connect);
                     cmd13.Prepare();
-                    cmd13.Parameters.AddWithValue("@full_name", _tn.CusName);
+                    cmd13.Parameters.AddWithValue("@full_name", orgName);
                     var reader7 = cmd13.ExecuteReader();
                     if (reader7.HasRows)
                     {
@@ -139,7 +118,7 @@ namespace ParserWebCore.Tender
                         cmd14.Prepare();
                         var customerRegNumber = Guid.NewGuid().ToString();
                         cmd14.Parameters.AddWithValue("@reg_num", customerRegNumber);
-                        cmd14.Parameters.AddWithValue("@full_name", _tn.CusName);
+                        cmd14.Parameters.AddWithValue("@full_name", orgName);
                         cmd14.Parameters.AddWithValue("@inn", "");
                         cmd14.ExecuteNonQuery();
                         customerId = (int) cmd14.LastInsertedId;
@@ -147,13 +126,13 @@ namespace ParserWebCore.Tender
                 }
 
                 var docs = htmlDoc.DocumentNode.SelectNodes(
-                               "//a[contains(@id, 'GenericLink') and @class = 'simpleLink']") ??
+                               "//div[contains(., 'Приложенные документы: ')]/span/a") ??
                            new HtmlNodeCollection(null);
                 foreach (var doc in docs)
                 {
                     var urlAttT = (doc?.Attributes["href"]?.Value ?? "").Trim();
                     var fName = doc.InnerHtml.Trim();
-                    var urlAtt = $"https://etp.kuzocm.ru{urlAttT}";
+                    var urlAtt = $"http://tender.zdship.ru{urlAttT}";
                     if (!string.IsNullOrEmpty(fName))
                     {
                         var insertAttach =
@@ -167,6 +146,8 @@ namespace ParserWebCore.Tender
                     }
                 }
 
+                var price = (navigator.SelectSingleNode("//div[contains(., 'Начальная цена: ')]/span")
+                    ?.Value ?? "").ReplaceHtmlEntyty().ExtractPriceNew().Trim();
                 var lotNum = 1;
                 var insertLot =
                     $"INSERT INTO {Builder.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency, finance_source = @finance_source";
@@ -174,7 +155,7 @@ namespace ParserWebCore.Tender
                 cmd18.Prepare();
                 cmd18.Parameters.AddWithValue("@id_tender", idTender);
                 cmd18.Parameters.AddWithValue("@lot_number", lotNum);
-                cmd18.Parameters.AddWithValue("@max_price", "");
+                cmd18.Parameters.AddWithValue("@max_price", price);
                 cmd18.Parameters.AddWithValue("@currency", "");
                 cmd18.Parameters.AddWithValue("@finance_source", "");
                 cmd18.ExecuteNonQuery();
@@ -190,19 +171,10 @@ namespace ParserWebCore.Tender
                 cmd20.Parameters.AddWithValue("@okei", "");
                 cmd20.Parameters.AddWithValue("@customer_quantity_value", "");
                 cmd20.Parameters.AddWithValue("@price", "");
-                cmd20.Parameters.AddWithValue("@sum", "");
+                cmd20.Parameters.AddWithValue("@sum", price);
                 cmd20.ExecuteNonQuery();
-                var delivTerm1 = (navigator
-                    .SelectSingleNode(
-                        "//td[contains(., 'Требование обеспечения заявки на участие')]/following-sibling::td")
-                    ?.Value ?? "").Trim();
-                var delivTerm2 = (navigator
-                    .SelectSingleNode(
-                        "//td[contains(., 'Требование обеспечения исполнения договора')]/following-sibling::td")
-                    ?.Value ?? "").Trim();
-                var delivTerm =
-                    $"Требование обеспечения заявки на участие: {delivTerm1}\nТребование обеспечения исполнения договора: {delivTerm2}"
-                        .Trim();
+                var delivTerm = (navigator.SelectSingleNode("//div[contains(., 'Cрок:')]/span")
+                    ?.Value ?? "").ReplaceHtmlEntyty().Trim();
                 if (!string.IsNullOrEmpty(delivTerm))
                 {
                     var insertCustomerRequirement =

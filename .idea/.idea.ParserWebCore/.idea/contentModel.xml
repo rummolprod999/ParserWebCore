@@ -103,6 +103,7 @@
           <e p="ParserUralmash1.cs" t="Include" />
           <e p="ParserUralmash2.cs" t="Include" />
           <e p="ParserZakupMos.cs" t="Include" />
+          <e p="ParserZdShip.cs" t="Include" />
           <e p="ParserZmoRts.cs" t="Include" />
         </e>
         <e p="ParserExecutor" t="Include">
@@ -160,6 +161,7 @@
           <e p="TenderUralmash1.cs" t="Include" />
           <e p="TenderUralmash2.cs" t="Include" />
           <e p="TenderZakupMos.cs" t="Include" />
+          <e p="TenderZdship.cs" t="Include" />
           <e p="TenderZmoRts.cs" t="Include" />
         </e>
         <e p="TenderType" t="Include">
@@ -203,6 +205,7 @@
           <e p="TypeUral1.cs" t="Include" />
           <e p="TypeUral2.cs" t="Include" />
           <e p="TypeZakupMos.cs" t="Include" />
+          <e p="TypeZdShip.cs" t="Include" />
           <e p="TypeZmoRts.cs" t="Include" />
         </e>
         <e p="bin" t="ExcludeRecursive" />

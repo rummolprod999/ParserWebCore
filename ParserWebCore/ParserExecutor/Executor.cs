@@ -157,6 +157,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Zdship:
                     _parser = new ParserZdShip();
                     break;
+                case Arguments.Ocontract:
+                    _parser = new ParserOcontract();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

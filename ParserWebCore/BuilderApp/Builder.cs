@@ -204,6 +204,9 @@ namespace ParserWebCore.BuilderApp
                 case "zdship":
                     Arg = Arguments.Zdship;
                     break;
+                case "ocontract":
+                    Arg = Arguments.Ocontract;
+                    break;
                 default:
                     throw new Exception($"Неправильно указан аргумент {s}, используйте {ReqArguments}");
             }

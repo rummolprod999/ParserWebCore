@@ -207,6 +207,9 @@ namespace ParserWebCore.BuilderApp
                 case "ocontract":
                     Arg = Arguments.Ocontract;
                     break;
+                case "pptk":
+                    Arg = Arguments.Pptk;
+                    break;
                 default:
                     throw new Exception($"Неправильно указан аргумент {s}, используйте {ReqArguments}");
             }

@@ -160,6 +160,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Ocontract:
                     _parser = new ParserOcontract();
                     break;
+                case Arguments.Pptk:
+                    _parser = new ParserPptk();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

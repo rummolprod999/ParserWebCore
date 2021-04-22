@@ -19,7 +19,7 @@ namespace ParserWebCore.Parser
 
         private void ParsingPptk()
         {
-            for (var i = 1; i <= _count; i++)
+            for (var i = _count; i >= 1; i--)
             {
                 try
                 {

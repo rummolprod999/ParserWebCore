@@ -210,6 +210,9 @@ namespace ParserWebCore.BuilderApp
                 case "pptk":
                     Arg = Arguments.Pptk;
                     break;
+                case "dpd":
+                    Arg = Arguments.Dpd;
+                    break;
                 default:
                     throw new Exception($"Неправильно указан аргумент {s}, используйте {ReqArguments}");
             }

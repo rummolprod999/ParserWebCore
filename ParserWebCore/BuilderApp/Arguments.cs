@@ -56,5 +56,6 @@
         Zdship,
         Ocontract,
         Pptk,
+        Dpd,
     }
 }

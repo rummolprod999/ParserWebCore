@@ -111,6 +111,11 @@ namespace ParserWebCore.Parser
                 (n.SelectSingleNode("./b[. = 'Дата закрытия торгов:']/following-sibling::text()")
                     ?.InnerText ?? "").Trim();
             var dateEnd = dateEndT.ParseDateUn("yyyy-MM-dd");
+            if (dateEnd == DateTime.MinValue)
+            {
+                dateEnd = datePub.AddDays(2);
+            }
+
             var tn = new TenderDpd("DPDgroup",
                 "https://www1.dpd.ru/", 311,
                 new TypeDpd

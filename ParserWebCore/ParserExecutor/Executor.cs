@@ -166,6 +166,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Dpd:
                     _parser = new ParserDpd();
                     break;
+                case Arguments.Kkbank:
+                    _parser = new ParserKkbank();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

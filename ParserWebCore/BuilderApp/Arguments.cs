@@ -57,5 +57,6 @@
         Ocontract,
         Pptk,
         Dpd,
+        Kkbank,
     }
 }

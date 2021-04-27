@@ -58,5 +58,6 @@
         Pptk,
         Dpd,
         Kkbank,
+        GipVn,
     }
 }

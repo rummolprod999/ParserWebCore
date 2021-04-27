@@ -216,6 +216,9 @@ namespace ParserWebCore.BuilderApp
                 case "kkbank":
                     Arg = Arguments.Kkbank;
                     break;
+                case "gipvn":
+                    Arg = Arguments.GipVn;
+                    break;
                 default:
                     throw new Exception($"Неправильно указан аргумент {s}, используйте {ReqArguments}");
             }

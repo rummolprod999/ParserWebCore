@@ -169,6 +169,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Kkbank:
                     _parser = new ParserKkbank();
                     break;
+                case Arguments.GipVn:
+                    _parser = new ParserGipVn();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

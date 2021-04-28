@@ -172,6 +172,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.GipVn:
                     _parser = new ParserGipVn();
                     break;
+                case Arguments.Bngf:
+                    _parser = new ParserBngf();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

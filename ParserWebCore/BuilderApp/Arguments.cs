@@ -59,5 +59,6 @@
         Dpd,
         Kkbank,
         GipVn,
+        Bngf,
     }
 }

@@ -219,6 +219,9 @@ namespace ParserWebCore.BuilderApp
                 case "gipvn":
                     Arg = Arguments.GipVn;
                     break;
+                case "bngf":
+                    Arg = Arguments.Bngf;
+                    break;
                 default:
                     throw new Exception($"Неправильно указан аргумент {s}, используйте {ReqArguments}");
             }

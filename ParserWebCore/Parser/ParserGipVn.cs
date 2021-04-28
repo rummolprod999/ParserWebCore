@@ -69,7 +69,7 @@ namespace ParserWebCore.Parser
             {
                 datePub = DateTime.Parse(datePubT, myCultureInfo);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // ignored
             }

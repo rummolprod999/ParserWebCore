@@ -36,12 +36,12 @@ namespace ParserWebCore.Tender
             var datePubT =
                 (navigator.SelectSingleNode("//td[span[contains(., 'Начало подачи заявок')]]/following-sibling::td")
                     ?.Value ?? "").ReplaceHtmlEntyty().Trim();
-            datePubT = datePubT.GetDateWithMonth();
+            datePubT = datePubT.GetDateWithMonthNew();
             _tn.DatePub = datePubT.DelDoubleWhitespace().ParseDateUn("dd MM yyyy HH:mm");
             var dateEndT =
                 (navigator.SelectSingleNode("//td[span[contains(., 'Окончание подачи заявок')]]/following-sibling::td")
                     ?.Value ?? "").ReplaceHtmlEntyty().Trim();
-            dateEndT = dateEndT.GetDateWithMonth();
+            dateEndT = dateEndT.GetDateWithMonthNew();
             _tn.DateEnd = dateEndT.DelDoubleWhitespace().GetDataFromRegex(@"(\d{2}\s\d{2}\s\d{4}\s\d{2}:\d{2})")
                 .ParseDateUn("dd MM yyyy HH:mm");
             if (_tn.DatePub == DateTime.MinValue)

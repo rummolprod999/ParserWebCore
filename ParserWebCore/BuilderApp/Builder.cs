@@ -222,6 +222,9 @@ namespace ParserWebCore.BuilderApp
                 case "bngf":
                     Arg = Arguments.Bngf;
                     break;
+                case "workspace":
+                    Arg = Arguments.Workspace;
+                    break;
                 default:
                     throw new Exception($"Неправильно указан аргумент {s}, используйте {ReqArguments}");
             }

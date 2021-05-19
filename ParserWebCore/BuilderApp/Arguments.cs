@@ -60,5 +60,6 @@
         Kkbank,
         GipVn,
         Bngf,
+        Workspace,
     }
 }

@@ -175,6 +175,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Bngf:
                     _parser = new ParserBngf();
                     break;
+                case Arguments.Workspace:
+                    _parser = new ParserWorkspace();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

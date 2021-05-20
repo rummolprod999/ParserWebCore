@@ -109,11 +109,21 @@ namespace ParserWebCore.Parser
                 throw new Exception(
                     $"Cannot find pubDateT in {href}");
             var datePub = pubDateT.ParseDateUn("dd.MM.yyyy HH:mm");
+            if (datePub == DateTime.MinValue)
+            {
+                datePub = DateTime.Today;
+            }
+
             var endDateT =
                 n.SelectSingleNode("./td[4]")?.InnerText?.Trim().ReplaceHtmlEntyty() ??
                 throw new Exception(
                     $"Cannot find endDateT in {href}");
             var dateEnd = endDateT.ParseDateUn("dd.MM.yyyy HH:mm");
+            if (dateEnd == DateTime.MinValue)
+            {
+                dateEnd = DateTime.Today.AddDays(2);
+            }
+
             var tn = new TenderB2BWeb("Электронная торговая площадка B2B-Center", "https://www.b2b-center.ru/", 299,
                 new TypeB2B
                 {

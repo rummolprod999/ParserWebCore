@@ -61,5 +61,6 @@
         GipVn,
         Bngf,
         Workspace,
+        Kopemash,
     }
 }

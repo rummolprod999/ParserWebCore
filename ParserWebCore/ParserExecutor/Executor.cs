@@ -178,6 +178,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Workspace:
                     _parser = new ParserWorkspace();
                     break;
+                case Arguments.Kopemash:
+                    _parser = new ParserKopeMash();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

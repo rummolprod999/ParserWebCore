@@ -10,7 +10,7 @@ namespace ParserWebCore.Parser
 {
     public class ParserSitno : ParserAbstract, IParser
     {
-        private const int Count = 5;
+        private const int Count = 2;
 
         public void Parsing()
         {
@@ -21,7 +21,7 @@ namespace ParserWebCore.Parser
         {
             for (var i = 1; i <= Count; i++)
             {
-                var urlpage = $"http://sitno.ru/tender/?PAGEN_1={i}";
+                var urlpage = $"http://tender.sitno.ru/?PAGEN_1={i}";
                 try
                 {
                     ParsingPage(urlpage);
@@ -70,7 +70,7 @@ namespace ParserWebCore.Parser
                 return;
             }
 
-            href = $"http://sitno.ru/tender/{href}";
+            href = $"http://tender.sitno.ru/{href}";
             var purNum = href.GetDataFromRegex(@"LOT_ID=(\d+)");
             if (string.IsNullOrEmpty(purNum))
             {
@@ -102,8 +102,7 @@ namespace ParserWebCore.Parser
             var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm:ss");
             if (dateEnd == DateTime.MinValue)
             {
-                Log.Logger("Empty dateEnd", href);
-                return;
+                dateEnd = datePub.AddDays(2);
             }
 
             var tn = new TenderAgrokomplex("Компания СИТНО", "http://sitno.ru/tender/", 103,

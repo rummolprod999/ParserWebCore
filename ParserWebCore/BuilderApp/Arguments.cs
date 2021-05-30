@@ -63,5 +63,6 @@
         Workspace,
         Kopemash,
         Rusfish,
+        Uralair,
     }
 }

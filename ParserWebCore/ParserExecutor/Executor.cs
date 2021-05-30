@@ -184,6 +184,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Rusfish:
                     _parser = new ParserRusfish();
                     break;
+                case Arguments.Uralair:
+                    _parser = new ParserUralair();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

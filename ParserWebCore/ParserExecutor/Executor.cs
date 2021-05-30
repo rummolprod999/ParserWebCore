@@ -181,6 +181,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Kopemash:
                     _parser = new ParserKopeMash();
                     break;
+                case Arguments.Rusfish:
+                    _parser = new ParserRusfish();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

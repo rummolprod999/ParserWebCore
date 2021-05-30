@@ -62,5 +62,6 @@
         Bngf,
         Workspace,
         Kopemash,
+        Rusfish,
     }
 }

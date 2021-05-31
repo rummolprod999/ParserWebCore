@@ -187,6 +187,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Uralair:
                     _parser = new ParserUralair();
                     break;
+                case Arguments.Sochipark:
+                    _parser = new ParserSochipark();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

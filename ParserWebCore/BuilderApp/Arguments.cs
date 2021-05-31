@@ -64,5 +64,6 @@
         Kopemash,
         Rusfish,
         Uralair,
+        Sochipark,
     }
 }

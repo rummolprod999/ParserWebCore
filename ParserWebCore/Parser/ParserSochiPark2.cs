@@ -53,13 +53,6 @@ namespace ParserWebCore.Parser
                 return;
             }
 
-            var s = DownloadString.DownL1251(page);
-            if (string.IsNullOrEmpty(s))
-            {
-                Log.Logger("Empty string in ParserPage()", page);
-                return;
-            }
-
             var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(docString);
             var tens =

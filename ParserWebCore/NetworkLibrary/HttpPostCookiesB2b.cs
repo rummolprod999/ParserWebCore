@@ -11,11 +11,15 @@ namespace ParserWebCore.NetworkLibrary
             return new HttpPostCookiesB2b();
         }
 
-        public string DownloadString(string url, CookieCollection cookie,
+        public string DownloadString(string url, CookieCollection cookie = null,
             FormUrlEncodedContent postContent = null, bool useProxy = false)
         {
             var cookieContainer = new CookieContainer();
-            cookieContainer.Add(new Uri("https://www.b2b-center.ru/"), cookie);
+            if (cookie != null)
+            {
+                cookieContainer.Add(new Uri("https://www.b2b-center.ru/"), cookie);
+            }
+
             var httpClientHandler = new HttpClientHandler
             {
                 AllowAutoRedirect = true,

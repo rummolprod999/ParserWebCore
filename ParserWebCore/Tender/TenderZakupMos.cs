@@ -61,7 +61,7 @@ namespace ParserWebCore.Tender
         private void ParserNeed(MySqlConnection connect)
         {
             var url = $"https://old.zakupki.mos.ru/api/Cssp/Need/GetEntity?id={_tn.NeedId}";
-            var s = DownloadString.DownL(url);
+            var s = DownloadString.DownLHttpPostWithCookiesB2b(url, cookie: null, useProxy: Builder.UserProxy);
             if (string.IsNullOrEmpty(s))
             {
                 Log.Logger(
@@ -295,7 +295,7 @@ namespace ParserWebCore.Tender
         private void ParserTender(MySqlConnection connect)
         {
             var url = $"https://old.zakupki.mos.ru/api/Cssp/Tender/GetEntity?id={_tn.TenderId}";
-            var s = DownloadString.DownL(url);
+            var s = DownloadString.DownLHttpPostWithCookiesB2b(url, cookie: null, useProxy: Builder.UserProxy);
             if (string.IsNullOrEmpty(s))
             {
                 Log.Logger(
@@ -499,7 +499,7 @@ namespace ParserWebCore.Tender
         private void ParserAuction(MySqlConnection connect)
         {
             var url = $"https://zakupki.mos.ru/newapi/api/Auction/Get?auctionId={_tn.AuctionId}";
-            var s = DownloadString.DownL(url);
+            var s = DownloadString.DownLHttpPostWithCookiesB2b(url, cookie: null, useProxy: Builder.UserProxy);
             if (string.IsNullOrEmpty(s))
             {
                 Log.Logger(

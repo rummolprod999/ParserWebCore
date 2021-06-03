@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
+using ParserWebCore.BuilderApp;
 using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
@@ -41,7 +42,8 @@ namespace ParserWebCore.Parser
             var url =
                 $"https://old.zakupki.mos.ru/api/Cssp/Purchase/Query?queryDto={{\"filter\":{{\"auctionSpecificFilter\":{{}},\"needSpecificFilter\":{{}},\"tenderSpecificFilter\":{{}}}},\"order\":[{{\"field\":\"PublishDate\",\"desc\":true}}],\"withCount\":true,\"take\":50,\"skip\":{num * 50}}}";
             url = Uri.EscapeUriString(url);
-            var s = DownloadString.DownLUserAgent(url);
+
+            var s = DownloadString.DownLHttpPostWithCookiesB2b(url, cookie: null, useProxy: Builder.UserProxy);
             if (string.IsNullOrEmpty(s))
             {
                 Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",

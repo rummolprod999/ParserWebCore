@@ -74,7 +74,7 @@ namespace ParserWebCore.Parser
                         "var elem = document.querySelectorAll('span.page-item-arrow__next'); elem[0].click()");
                     Thread.Sleep(5000);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     Log.Logger("This is last page, return");
                 }
@@ -143,7 +143,7 @@ namespace ParserWebCore.Parser
                 return;
             }
 
-            _urls.Add(new Tender {PurName = purName, Url = href});
+            _urls.Add(new Tender { PurName = purName, Url = href });
         }
 
         private protected void CreateTender(Tender tender)

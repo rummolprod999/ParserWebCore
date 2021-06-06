@@ -15,7 +15,7 @@ namespace ParserWebCore.SharedLibraries
         public static int GetCountPage(string url)
         {
             var i = 1;
-            var s = DownloadString.DownL(url);
+            var s = DownloadString.DownLTektorg(url);
             if (String.IsNullOrEmpty(s))
             {
                 Log.Logger(
@@ -44,7 +44,7 @@ namespace ParserWebCore.SharedLibraries
             var d = 0.0m;
             try
             {
-                IFormatProvider formatter = new NumberFormatInfo {NumberDecimalSeparator = ","};
+                IFormatProvider formatter = new NumberFormatInfo { NumberDecimalSeparator = "," };
                 d = Decimal.Parse(s, formatter);
             }
             catch (Exception)

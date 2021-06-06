@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading;
 using AngleSharp.Dom;
 using AngleSharp.Parser.Html;
 using ParserWebCore.Extensions;
@@ -120,6 +121,7 @@ namespace ParserWebCore.Parser
 
         private void ParsingTender(IElement t, string url, bool tektkp = false)
         {
+            Thread.Sleep(4000);
             var urlT = (t.QuerySelector("a.section-procurement__item-title")?.GetAttribute("href") ?? "").Trim();
             if (string.IsNullOrEmpty(urlT))
             {

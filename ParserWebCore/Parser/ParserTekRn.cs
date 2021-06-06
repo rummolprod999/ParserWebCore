@@ -127,6 +127,9 @@ namespace ParserWebCore.Parser
                     url);
             }
 
+            var purName = (t.QuerySelector("a.section-procurement__item-title")?.TextContent ??
+                           "");
+
             var tenderUrl = urlT;
             if (!urlT.Contains("https://")) tenderUrl = $"https://www.tektorg.ru{urlT}";
             var status = (t.QuerySelector("div.section-procurement__item-dateTo:contains('Статус:')")?.TextContent
@@ -219,7 +222,8 @@ namespace ParserWebCore.Parser
                         Scoring = dateScoring,
                         OrgName = orgName,
                         DateEnd = dateEnd,
-                        Nmck = nmck
+                        Nmck = nmck,
+                        PurName = purName,
                     });
                 ParserTender(tn);
             }
@@ -235,7 +239,8 @@ namespace ParserWebCore.Parser
                         Scoring = dateScoring,
                         OrgName = orgName,
                         DateEnd = dateEnd,
-                        Nmck = nmck
+                        Nmck = nmck,
+                        PurName = purName,
                     });
                 ParserTender(tn);
             }

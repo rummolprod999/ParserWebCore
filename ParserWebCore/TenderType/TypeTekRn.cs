@@ -6,6 +6,7 @@ namespace ParserWebCore.TenderType
     {
         public string PurNum { get; set; }
         public string OrgName { get; set; }
+        public string PurName { get; set; }
         public string Href { get; set; }
         public string Nmck { get; set; }
         public string Status { get; set; }
@@ -16,7 +17,7 @@ namespace ParserWebCore.TenderType
         public override string ToString()
         {
             return
-                $"{nameof(PurNum)}: {PurNum}, {nameof(OrgName)}: {OrgName}, {nameof(Href)}: {Href}, {nameof(Nmck)}: {Nmck}, {nameof(Status)}: {Status}, {nameof(DatePub)}: {DatePub}, {nameof(DateEnd)}: {DateEnd}, {nameof(Scoring)}: {Scoring}";
+                $"{nameof(PurNum)}: {PurNum}, {nameof(OrgName)}: {OrgName}, {nameof(PurName)}: {PurName}, {nameof(Href)}: {Href}, {nameof(Nmck)}: {Nmck}, {nameof(Status)}: {Status}, {nameof(DatePub)}: {DatePub}, {nameof(DateEnd)}: {DateEnd}, {nameof(Scoring)}: {Scoring}";
         }
     }
 }

@@ -70,6 +70,18 @@ namespace ParserWebCore.Tender
                 var purObjInfo =
                     (document.QuerySelector("span:contains('Наименование закупки:') +  span")?.TextContent ?? "")
                     .Trim();
+                if (purObjInfo == "")
+                {
+                    purObjInfo =
+                        (document.QuerySelector("span:contains('Наименование продукции:') +  span")?.TextContent ?? "")
+                        .Trim();
+                }
+
+                if (purObjInfo == "")
+                {
+                    purObjInfo = _tn.PurName;
+                }
+
                 var insertTender =
                     $"INSERT INTO {Builder.Prefix}tender SET id_region = @id_region, id_xml = @id_xml, purchase_number = @purchase_number, doc_publish_date = @doc_publish_date, href = @href, purchase_object_info = @purchase_object_info, type_fz = @type_fz, id_organizer = @id_organizer, id_placing_way = @id_placing_way, id_etp = @id_etp, end_date = @end_date, scoring_date = @scoring_date, bidding_date = @bidding_date, cancel = @cancel, date_version = @date_version, num_version = @num_version, notice_version = @notice_version, xml = @xml, print_form = @print_form";
                 var cmd9 = new MySqlCommand(insertTender, connect);

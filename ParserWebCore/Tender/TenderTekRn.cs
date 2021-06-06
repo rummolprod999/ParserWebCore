@@ -30,15 +30,16 @@ namespace ParserWebCore.Tender
             {
                 connect.Open();
                 var selectTend =
-                    $"SELECT id_tender FROM {Builder.Prefix}tender WHERE purchase_number = @purchase_number AND doc_publish_date = @doc_publish_date AND type_fz = @type_fz AND notice_version = @notice_version";
+                    $"SELECT id_tender FROM {Builder.Prefix}tender WHERE purchase_number = @purchase_number AND doc_publish_date = @doc_publish_date AND type_fz = @type_fz AND notice_version = @notice_version AND end_date = @end_date";
                 var cmd = new MySqlCommand(selectTend, connect);
                 cmd.Prepare();
                 cmd.Parameters.AddWithValue("@purchase_number", _tn.PurNum);
                 cmd.Parameters.AddWithValue("@doc_publish_date", _tn.DatePub);
                 cmd.Parameters.AddWithValue("@type_fz", TypeFz);
                 cmd.Parameters.AddWithValue("@notice_version", _tn.Status);
+                cmd.Parameters.AddWithValue("@end_date", _tn.DateEnd);
                 var dt = new DataTable();
-                var adapter = new MySqlDataAdapter {SelectCommand = cmd};
+                var adapter = new MySqlDataAdapter { SelectCommand = cmd };
                 adapter.Fill(dt);
                 if (dt.Rows.Count > 0)
                 {
@@ -56,28 +57,9 @@ namespace ParserWebCore.Tender
 
                 var parser = new HtmlParser();
                 var document = parser.Parse(s);
-                var datePub = _tn.DatePub;
-                var dateEndT =
-                    (document.QuerySelector("td:contains('Дата окончания приема заявок') + td")?.TextContent ??
-                     "").Trim();
-                if (dateEndT == "")
-                {
-                    dateEndT =
-                        (document.QuerySelector("td:contains('Подведение итогов не позднее') + td")?.TextContent ??
-                         "").Trim();
-                }
-
-                var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm 'GMT'z");
-                if (dateEnd == DateTime.MinValue)
-                {
-                    dateEnd = datePub;
-                }
-
-                var purNum = _tn.PurNum;
-                var noticeVersion = _tn.Status;
                 var dateUpd = DateTime.Now;
 
-                var (updated, cancelStatus) = UpdateTenderVersion(connect, purNum, dateUpd);
+                var (updated, cancelStatus) = UpdateTenderVersion(connect, _tn.PurNum, dateUpd);
                 var printForm = _tn.Href;
                 var customerId = 0;
                 var organiserId = GetOrganizer(document, connect);
@@ -93,29 +75,29 @@ namespace ParserWebCore.Tender
                 var cmd9 = new MySqlCommand(insertTender, connect);
                 cmd9.Prepare();
                 cmd9.Parameters.AddWithValue("@id_region", 0);
-                cmd9.Parameters.AddWithValue("@id_xml", purNum);
-                cmd9.Parameters.AddWithValue("@purchase_number", purNum);
-                cmd9.Parameters.AddWithValue("@doc_publish_date", datePub);
+                cmd9.Parameters.AddWithValue("@id_xml", _tn.PurNum);
+                cmd9.Parameters.AddWithValue("@purchase_number", _tn.PurNum);
+                cmd9.Parameters.AddWithValue("@doc_publish_date", _tn.DatePub);
                 cmd9.Parameters.AddWithValue("@href", _tn.Href);
                 cmd9.Parameters.AddWithValue("@purchase_object_info", purObjInfo);
                 cmd9.Parameters.AddWithValue("@type_fz", TypeFz);
                 cmd9.Parameters.AddWithValue("@id_organizer", organiserId);
                 cmd9.Parameters.AddWithValue("@id_placing_way", idPlacingWay);
                 cmd9.Parameters.AddWithValue("@id_etp", idEtp);
-                cmd9.Parameters.AddWithValue("@end_date", dateEnd);
-                cmd9.Parameters.AddWithValue("@scoring_date", DateTime.MinValue);
+                cmd9.Parameters.AddWithValue("@end_date", _tn.DateEnd);
+                cmd9.Parameters.AddWithValue("@scoring_date", _tn.Scoring);
                 cmd9.Parameters.AddWithValue("@bidding_date", DateTime.MinValue);
                 cmd9.Parameters.AddWithValue("@cancel", cancelStatus);
                 cmd9.Parameters.AddWithValue("@date_version", dateUpd);
                 cmd9.Parameters.AddWithValue("@num_version", 1);
-                cmd9.Parameters.AddWithValue("@notice_version", noticeVersion);
+                cmd9.Parameters.AddWithValue("@notice_version", _tn.Status);
                 cmd9.Parameters.AddWithValue("@xml", _tn.Href);
                 cmd9.Parameters.AddWithValue("@print_form", printForm);
                 var resInsertTender = cmd9.ExecuteNonQuery();
-                var idTender = (int) cmd9.LastInsertedId;
+                var idTender = (int)cmd9.LastInsertedId;
                 Counter(resInsertTender, updated);
                 var docs = document.QuerySelectorAll(
-                    "#documentation > a");
+                    "a[href^='/document.php?']");
                 if (docs.Length == 0)
                 {
                     docs = document.QuerySelectorAll(
@@ -127,7 +109,7 @@ namespace ParserWebCore.Tender
                     "div.procedure__lots > div.procedure__lot");
                 GetLots(lots, connect, idTender, customerId, purObjInfo);
                 TenderKwords(connect, idTender);
-                AddVerNumber(connect, purNum, TypeFz);
+                AddVerNumber(connect, _tn.PurNum, TypeFz);
             }
         }
 
@@ -137,26 +119,37 @@ namespace ParserWebCore.Tender
             foreach (var lot in lots)
             {
                 var lotNumT = (lot.QuerySelector("div.procedure__lot-header span")?.TextContent ?? "").Trim();
-                lotNumT = lotNumT.GetDataFromRegex(@"Лот (\d+)");
+                lotNumT = lotNumT.GetDataFromRegex(@"Лот\s+(\d+)");
                 int.TryParse(lotNumT, out var lotNum);
                 if (lotNum == 0) lotNum = 1;
-                var currency = (lot.QuerySelector("td:contains('Валюта:') +  td")?.TextContent ?? "").Trim();
                 var nmckT = (lot.QuerySelector("td:contains('Начальная цена:') +  td")?.TextContent ?? "0.0")
                     .Trim();
-                var nmck = SharedTekTorg.ParsePrice(nmckT);
+                var currency = nmckT.GetDataFromRegex(@"[\D]$");
+                if (currency == "")
+                {
+                    currency = "₽";
+                }
+
+                var nmck = nmckT.ExtractPriceNew();
+                if (nmck == "")
+                {
+                    nmck = _tn.Nmck;
+                }
+
                 var purName =
                     (lot.QuerySelector("td:contains('Предмет договора:') +  td")?.TextContent ?? "").Trim();
                 if (string.IsNullOrEmpty(purName)) purName = purObjInfo;
                 var insertLot =
-                    $"INSERT INTO {Builder.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency";
+                    $"INSERT INTO {Builder.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency, lot_name = @lot_name";
                 var cmd18 = new MySqlCommand(insertLot, connect);
                 cmd18.Prepare();
                 cmd18.Parameters.AddWithValue("@id_tender", idTender);
                 cmd18.Parameters.AddWithValue("@lot_number", lotNum);
                 cmd18.Parameters.AddWithValue("@max_price", nmck);
                 cmd18.Parameters.AddWithValue("@currency", currency);
+                cmd18.Parameters.AddWithValue("@lot_name", purName);
                 cmd18.ExecuteNonQuery();
-                var idLot = (int) cmd18.LastInsertedId;
+                var idLot = (int)cmd18.LastInsertedId;
                 var customerFullName =
                     (lot.QuerySelector("td:contains('Заказчик:') +  td")?.TextContent ?? "0.0").Trim();
                 if (!string.IsNullOrEmpty(customerFullName))
@@ -170,7 +163,7 @@ namespace ParserWebCore.Tender
                     if (reader7.HasRows)
                     {
                         reader7.Read();
-                        customerId = (int) reader7["id_customer"];
+                        customerId = (int)reader7["id_customer"];
                         reader7.Close();
                     }
                     else
@@ -184,7 +177,7 @@ namespace ParserWebCore.Tender
                         cmd14.Parameters.AddWithValue("@reg_num", customerRegNumber);
                         cmd14.Parameters.AddWithValue("@full_name", customerFullName);
                         cmd14.ExecuteNonQuery();
-                        customerId = (int) cmd14.LastInsertedId;
+                        customerId = (int)cmd14.LastInsertedId;
                     }
                 }
 
@@ -259,22 +252,26 @@ namespace ParserWebCore.Tender
         private int GetOrganizer(IHtmlDocument document, MySqlConnection connect)
         {
             var organiserId = 0;
-            var orgFullName =
-                (document.QuerySelector("td:contains('Наименование организатора:') +  td")?.TextContent ?? "")
-                .Trim();
-            if (!string.IsNullOrEmpty(orgFullName))
+            if (_tn.OrgName == "")
+            {
+                _tn.OrgName =
+                    (document.QuerySelector("td:contains('Наименование организатора:') +  td")?.TextContent ?? "")
+                    .Trim();
+            }
+
+            if (!string.IsNullOrEmpty(_tn.OrgName))
             {
                 var selectOrg =
                     $"SELECT id_organizer FROM {Builder.Prefix}organizer WHERE full_name = @full_name";
                 var cmd3 = new MySqlCommand(selectOrg, connect);
                 cmd3.Prepare();
-                cmd3.Parameters.AddWithValue("@full_name", orgFullName);
+                cmd3.Parameters.AddWithValue("@full_name", _tn.OrgName);
                 var dt3 = new DataTable();
-                var adapter3 = new MySqlDataAdapter {SelectCommand = cmd3};
+                var adapter3 = new MySqlDataAdapter { SelectCommand = cmd3 };
                 adapter3.Fill(dt3);
                 if (dt3.Rows.Count > 0)
                 {
-                    organiserId = (int) dt3.Rows[0].ItemArray[0];
+                    organiserId = (int)dt3.Rows[0].ItemArray[0];
                 }
                 else
                 {
@@ -291,12 +288,12 @@ namespace ParserWebCore.Tender
                         $"INSERT INTO {Builder.Prefix}organizer SET full_name = @full_name, contact_phone = @contact_phone, contact_person = @contact_person, contact_email = @contact_email";
                     var cmd4 = new MySqlCommand(addOrganizer, connect);
                     cmd4.Prepare();
-                    cmd4.Parameters.AddWithValue("@full_name", orgFullName);
+                    cmd4.Parameters.AddWithValue("@full_name", _tn.OrgName);
                     cmd4.Parameters.AddWithValue("@contact_phone", phone);
                     cmd4.Parameters.AddWithValue("@contact_person", contactPerson);
                     cmd4.Parameters.AddWithValue("@contact_email", email);
                     cmd4.ExecuteNonQuery();
-                    organiserId = (int) cmd4.LastInsertedId;
+                    organiserId = (int)cmd4.LastInsertedId;
                 }
             }
 

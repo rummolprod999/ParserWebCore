@@ -153,7 +153,7 @@ namespace ParserWebCore.Extensions
         {
             var price = "";
             price = HttpUtility.HtmlDecode(s);
-            price = price.DelAllWhitespace().GetDataFromRegex(@"([\d.,\s]+)").DelAllWhitespace().Replace(",", "")
+            price = price.DelAllWhitespace().GetDataFromRegex(@"([\d.,\s]+)").DelAllWhitespace().Replace(",", ".")
                 .Trim();
             return price;
         }

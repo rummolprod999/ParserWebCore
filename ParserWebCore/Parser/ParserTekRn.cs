@@ -84,6 +84,7 @@ namespace ParserWebCore.Parser
                 try
                 {
                     ParsingPage(url, tektkp);
+                    Thread.Sleep(4000);
                 }
                 catch (Exception e)
                 {
@@ -121,7 +122,6 @@ namespace ParserWebCore.Parser
 
         private void ParsingTender(IElement t, string url, bool tektkp = false)
         {
-            Thread.Sleep(4000);
             var urlT = (t.QuerySelector("a.section-procurement__item-title")?.GetAttribute("href") ?? "").Trim();
             if (string.IsNullOrEmpty(urlT))
             {

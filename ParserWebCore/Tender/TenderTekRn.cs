@@ -1,5 +1,6 @@
 using System;
 using System.Data;
+using System.Threading;
 using AngleSharp.Dom;
 using AngleSharp.Dom.Html;
 using AngleSharp.Parser.Html;
@@ -47,6 +48,7 @@ namespace ParserWebCore.Tender
                     return;
                 }
 
+                Thread.Sleep(4000);
                 var s = DownloadString.DownL(_tn.Href);
                 if (String.IsNullOrEmpty(s))
                 {

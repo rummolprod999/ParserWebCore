@@ -33,6 +33,48 @@ namespace ParserWebCore.Parser
                     Log.Logger($"Error in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}", e);
                 }
             }
+
+            for (var i = 0; i < _countPage; i++)
+            {
+                try
+                {
+                    GetPageKot(i);
+                }
+                catch (Exception e)
+                {
+                    Log.Logger($"Error in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}", e);
+                }
+            }
+        }
+
+        private void GetPageKot(int num)
+        {
+            var url =
+                $"https://old.zakupki.mos.ru/api/Cssp/Purchase/Query?queryDto={{\"filter\":{{\"typeIn\":[1],\"auctionSpecificFilter\":{{\"stateIdIn\":[19000002]}},\"needSpecificFilter\":{{}},\"tenderSpecificFilter\":{{}}}},\"order\":[{{\"field\":\"PublishDate\",\"desc\":true}}],\"withCount\":true,\"take\":50,\"skip\":{num * 50}}}";
+            url = Uri.EscapeUriString(url);
+
+            var s = DownloadString.DownLHttpPostWithCookiesB2b(url, cookie: null, useProxy: Builder.UserProxy);
+            if (string.IsNullOrEmpty(s))
+            {
+                Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                    _url);
+                return;
+            }
+
+            var jObj = JObject.Parse(s);
+            var tenders = GetElements(jObj, "items");
+            foreach (var t in tenders)
+            {
+                try
+                {
+                    ParserTenderObj(t);
+                }
+                catch (Exception e)
+                {
+                    Log.Logger($"Error in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                        e, t.ToString());
+                }
+            }
         }
 
         private void GetPage(int num)
@@ -72,34 +114,34 @@ namespace ParserWebCore.Parser
             var href = "";
             var purNum = "";
             var iD = 0;
-            var needId = (int?) t.SelectToken("needId") ?? 0;
+            var needId = (int?)t.SelectToken("needId") ?? 0;
             var tenderId = 0;
             var auctionId = 0;
             if (needId != 0)
             {
                 iD = needId;
                 href = $"https://old.zakupki.mos.ru/#/need/{needId}";
-                purNum = ((string) t.SelectToken("number") ?? "").Trim();
+                purNum = ((string)t.SelectToken("number") ?? "").Trim();
             }
             else
             {
-                tenderId = (int?) t.SelectToken("tenderId") ?? 0;
+                tenderId = (int?)t.SelectToken("tenderId") ?? 0;
                 if (tenderId != 0)
                 {
                     iD = tenderId;
                     href = $"https://old.zakupki.mos.ru/#/tenders/{tenderId}";
-                    purNum = ((string) t.SelectToken("number") ?? "").Trim();
+                    purNum = ((string)t.SelectToken("number") ?? "").Trim();
                 }
             }
 
             if (href == "" || purNum == "")
             {
-                auctionId = (int?) t.SelectToken("auctionId") ?? 0;
+                auctionId = (int?)t.SelectToken("auctionId") ?? 0;
                 if (auctionId != 0)
                 {
                     iD = auctionId;
                     href = $"https://zakupki.mos.ru/auction/{auctionId}";
-                    purNum = ((string) t.SelectToken("number") ?? "").Trim();
+                    purNum = ((string)t.SelectToken("number") ?? "").Trim();
                 }
             }
 
@@ -110,9 +152,9 @@ namespace ParserWebCore.Parser
             }
 
 
-            var purName = ((string) t.SelectToken("name") ?? "").Trim();
-            var pubDateS = (string) t.SelectToken("beginDate") ?? "";
-            var endDateS = (string) t.SelectToken("endDate") ?? "";
+            var purName = ((string)t.SelectToken("name") ?? "").Trim();
+            var pubDateS = (string)t.SelectToken("beginDate") ?? "";
+            var endDateS = (string)t.SelectToken("endDate") ?? "";
             var datePub = pubDateS.ParseDateUn("dd.MM.yyyy HH:mm:ss");
             var dateEnd = endDateS.ParseDateUn("dd.MM.yyyy HH:mm:ss");
             /*if (datePub == DateTime.MinValue && dateEnd == DateTime.MinValue)
@@ -121,17 +163,17 @@ namespace ParserWebCore.Parser
                 return;
             }*/
 
-            var status = ((string) t.SelectToken("stateName") ?? "").Trim();
-            var regionName = ((string) t.SelectToken("regionName") ?? "").Trim();
-            var orgName = ((string) t.SelectToken("purchaseCreator.name") ?? "").Trim();
-            var orgInn = ((string) t.SelectToken("purchaseCreator.inn") ?? "").Trim();
-            var nmck = (decimal?) t.SelectToken("startPrice") ?? 0.0m;
+            var status = ((string)t.SelectToken("stateName") ?? "").Trim();
+            var regionName = ((string)t.SelectToken("regionName") ?? "").Trim();
+            var orgName = ((string)t.SelectToken("purchaseCreator.name") ?? "").Trim();
+            var orgInn = ((string)t.SelectToken("purchaseCreator.inn") ?? "").Trim();
+            var nmck = (decimal?)t.SelectToken("startPrice") ?? 0.0m;
             var customers = new List<TypeZakupMos.Customer>();
             var cusEl = GetElements(t, "customers");
             cusEl.ForEach(c =>
             {
-                var cusName = ((string) c.SelectToken("name") ?? "").Trim();
-                var cusInn = ((string) c.SelectToken("inn") ?? "").Trim();
+                var cusName = ((string)c.SelectToken("name") ?? "").Trim();
+                var cusInn = ((string)c.SelectToken("inn") ?? "").Trim();
                 customers.Add(new TypeZakupMos.Customer(cusName, cusInn));
             });
             var typeZakupMos = new TypeZakupMos

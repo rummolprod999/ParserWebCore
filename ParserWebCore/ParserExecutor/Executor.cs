@@ -190,6 +190,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Sochipark:
                     _parser = new ParserSochi();
                     break;
+                case Arguments.Korabel:
+                    _parser = new ParserKorabel();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

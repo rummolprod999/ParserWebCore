@@ -65,5 +65,6 @@
         Rusfish,
         Uralair,
         Sochipark,
+        Korabel
     }
 }

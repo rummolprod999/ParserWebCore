@@ -65,6 +65,7 @@
         Rusfish,
         Uralair,
         Sochipark,
-        Korabel
+        Korabel,
+        Eurosib,
     }
 }

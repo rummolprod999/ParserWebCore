@@ -193,6 +193,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Korabel:
                     _parser = new ParserKorabel();
                     break;
+                case Arguments.Eurosib:
+                    _parser = new ParserEurosib();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

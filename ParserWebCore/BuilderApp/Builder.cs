@@ -12,7 +12,7 @@ namespace ParserWebCore.BuilderApp
     public class Builder
     {
         public const string ReqArguments =
-            "agrocomplex, kzgroup, agrotomsk, sibintek, setonline, mzvoron, maxi, tver, murman, kalug, smol, samar, udmurt, segezha, akashevo, sitno, naftan, rwby, tekkom, tekmarket, tekmos, mlconf, tekrn, brn32, sportmaster, teksil, sberb2b, zakupmos, agat, rubex, samcom, ravis, boaz, tektkp, zmorts, rtsmarket, uralmash, lotonline, etpu, ismt, tpta, absgroup, rb2b, federal, b2bweb, medsi, gpb, strateg, tenderit, kuzocm, zdship, kopemash, rusfish, uralair, sochipark, korabel, eurosib";
+            "agrocomplex, kzgroup, agrotomsk, sibintek, setonline, mzvoron, maxi, tver, murman, kalug, smol, samar, udmurt, segezha, akashevo, sitno, naftan, rwby, tekkom, tekmarket, tekmos, mlconf, tekrn, brn32, sportmaster, teksil, sberb2b, zakupmos, agat, rubex, samcom, ravis, boaz, tektkp, zmorts, rtsmarket, uralmash, lotonline, etpu, ismt, tpta, absgroup, rb2b, federal, b2bweb, medsi, gpb, strateg, tenderit, kuzocm, zdship, kopemash, rusfish, uralair, sochipark, korabel, eurosib, spgr";
 
         private static int _port;
         private static Builder _b;
@@ -41,6 +41,8 @@ namespace ParserWebCore.BuilderApp
         [Required] public static string ConnectString { get; set; }
         [Required] public static bool UserProxy { get; set; }
         [Required] public static string ProxyFile { get; set; }
+        [Required] public static string SpgrPass { get; set; }
+        [Required] public static string SpgrUser { get; set; }
         public static string Prefix { get; private set; }
         public static Arguments Arg { get; private set; }
 
@@ -243,6 +245,9 @@ namespace ParserWebCore.BuilderApp
                 case "eurosib":
                     Arg = Arguments.Eurosib;
                     break;
+                case "spgr":
+                    Arg = Arguments.Spgr;
+                    break;
                 default:
                     throw new Exception($"Неправильно указан аргумент {s}, используйте {ReqArguments}");
             }
@@ -262,6 +267,8 @@ namespace ParserWebCore.BuilderApp
                 FederalUser = (string) o["userfederal"];
                 SportPass = (string) o["passsport"];
                 SportUser = (string) o["usersport"];
+                SpgrPass = (string) o["passspgr"];
+                SpgrUser = (string) o["userspgr"];
                 UserProxy = (bool) o["use_proxy"];
                 ProxyFile = (string) o["proxy_file"];
                 _port = int.TryParse((string) o["port"], out _port) ? int.Parse((string) o["port"]) : 3306;

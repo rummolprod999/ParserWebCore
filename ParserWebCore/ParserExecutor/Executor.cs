@@ -196,6 +196,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Eurosib:
                     _parser = new ParserEurosib();
                     break;
+                case Arguments.Spgr:
+                    _parser = new ParserSpgr();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

@@ -13,8 +13,8 @@ namespace ParserWebCore.Tender
 {
     public class TenderRtsMarket : TenderAbstract, ITender
     {
-        private readonly TypeZmoRts _tn;
         private readonly int _section;
+        private readonly TypeZmoRts _tn;
 
         public TenderRtsMarket(string etpName, string etpUrl, int typeFz, TypeZmoRts tn, int section) : base(etpName,
             etpUrl,
@@ -30,14 +30,12 @@ namespace ParserWebCore.Tender
             {
                 connect.Open();
                 var selectTend =
-                    $"SELECT id_tender FROM {Builder.Prefix}tender WHERE purchase_number = @purchase_number AND doc_publish_date = @doc_publish_date AND type_fz = @type_fz AND notice_version = @notice_version AND end_date = @end_date";
+                    $"SELECT id_tender FROM {Builder.Prefix}tender WHERE purchase_number = @purchase_number AND type_fz = @type_fz AND notice_version = @notice_version";
                 var cmd = new MySqlCommand(selectTend, connect);
                 cmd.Prepare();
                 cmd.Parameters.AddWithValue("@purchase_number", _tn.Id);
-                cmd.Parameters.AddWithValue("@doc_publish_date", _tn.PublicationDate);
                 cmd.Parameters.AddWithValue("@type_fz", TypeFz);
                 cmd.Parameters.AddWithValue("@notice_version", _tn.StateString);
-                cmd.Parameters.AddWithValue("@end_date", _tn.EndDate);
                 var dt = new DataTable();
                 var adapter = new MySqlDataAdapter {SelectCommand = cmd};
                 adapter.Fill(dt);

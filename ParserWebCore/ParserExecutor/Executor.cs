@@ -202,6 +202,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Rcs:
                     _parser = new ParserRcs();
                     break;
+                case Arguments.Yangpur:
+                    _parser = new ParserYangPur();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

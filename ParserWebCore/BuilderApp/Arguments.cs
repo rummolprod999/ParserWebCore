@@ -69,5 +69,6 @@
         Eurosib,
         Spgr,
         Rcs,
+        Yangpur,
     }
 }

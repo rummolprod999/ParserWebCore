@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -36,6 +38,25 @@ namespace ParserWebCore.Extensions
             return d;
         }
 
+        public static DateTime ParseDateUnRus(this string s)
+        {
+            var d = DateTime.MinValue;
+            if (!string.IsNullOrEmpty(s))
+            {
+                try
+                {
+                    var myCultureInfo = new CultureInfo("ru-RU");
+                    d = DateTime.Parse(s, myCultureInfo);
+                }
+                catch
+                {
+                    // ignored
+                }
+            }
+
+            return d;
+        }
+
         public static string GetDataFromRegex(this string s, string r)
         {
             var ret = "";
@@ -46,6 +67,26 @@ namespace ParserWebCore.Extensions
                 if (matches.Count > 0)
                 {
                     ret = matches[0].Groups[1].Value.Trim();
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Logger(e, r);
+            }
+
+            return ret;
+        }
+
+        public static List<(string url, string name)> GetAllDataFromRegex(this string s, string r)
+        {
+            var ret = new List<(string, string)>();
+            try
+            {
+                var regex = new Regex(r, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                var matches = regex.Matches(s);
+                if (matches.Count > 0)
+                {
+                    ret.AddRange(matches.Select(x => (x.Groups[1].Value.Trim(), x.Groups[2].Value.Trim())));
                 }
             }
             catch (Exception e)

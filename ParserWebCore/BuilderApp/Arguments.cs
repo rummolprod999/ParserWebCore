@@ -70,5 +70,6 @@
         Spgr,
         Rcs,
         Yangpur,
+        Kpresort,
     }
 }

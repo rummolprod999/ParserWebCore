@@ -10,7 +10,7 @@ namespace ParserWebCore.NetworkLibrary
 {
     public static class DownloadString
     {
-        public static string DownL(string url)
+        public static string DownL(string url, int tryCount = 2)
         {
             var tmp = "";
             var count = 0;
@@ -26,7 +26,7 @@ namespace ParserWebCore.NetworkLibrary
 
                 catch (Exception e)
                 {
-                    if (count >= 2)
+                    if (count >= tryCount)
                     {
                         Log.Logger($"Не удалось скачать за {count} попыток", url);
                         break;
@@ -51,7 +51,7 @@ namespace ParserWebCore.NetworkLibrary
 
                     Log.Logger("Не удалось получить строку", e, url);
                     count++;
-                    Thread.Sleep(5000);
+                    Thread.Sleep(5000 * count);
                 }
             }
 

@@ -71,5 +71,6 @@
         Rcs,
         Yangpur,
         Kpresort,
+        Stniva,
     }
 }

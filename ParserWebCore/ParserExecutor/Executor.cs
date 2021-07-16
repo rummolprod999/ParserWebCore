@@ -208,6 +208,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Kpresort:
                     _parser = new ParserKpResort();
                     break;
+                case Arguments.Stniva:
+                    _parser = new ParserStniva();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

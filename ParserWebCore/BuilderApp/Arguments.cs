@@ -72,5 +72,6 @@
         Yangpur,
         Kpresort,
         Stniva,
+        Lenreg,
     }
 }

@@ -30,7 +30,7 @@ namespace ParserWebCore.Parser
                 Log.Logger(e);
             }
 
-            for (int i = 0; i <= UPPER; i++)
+            for (var i = 0; i <= UPPER; i++)
             {
                 try
                 {

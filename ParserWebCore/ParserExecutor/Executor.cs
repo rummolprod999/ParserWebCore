@@ -211,6 +211,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Stniva:
                     _parser = new ParserStniva();
                     break;
+                case Arguments.Lenreg:
+                    _parser = new ParserLenReg();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

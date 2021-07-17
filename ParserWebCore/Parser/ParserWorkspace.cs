@@ -81,7 +81,7 @@ namespace ParserWebCore.Parser
 
         private void LoadList()
         {
-            for (int i = 0; i < 50; i++)
+            for (var i = 0; i < 50; i++)
             {
                 try
                 {

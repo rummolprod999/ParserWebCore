@@ -260,6 +260,9 @@ namespace ParserWebCore.BuilderApp
                 case "stniva":
                     Arg = Arguments.Stniva;
                     break;
+                case "lenreg":
+                    Arg = Arguments.Lenreg;
+                    break;
                 default:
                     throw new Exception($"Неправильно указан аргумент {s}, используйте {ReqArguments}");
             }

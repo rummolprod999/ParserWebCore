@@ -10,9 +10,6 @@ namespace ParserWebCore.Parser
 {
     public class ParserLenReg : ParserAbstract, IParser
     {
-        private readonly string _urlpage =
-            "https://zakupki.lenreg.ru/Search/Requests?Urgent=False&Field=Weigh&Direction=Desc&Take=40&Page=";
-
         public int UPPER => 200;
 
         public void Parsing()

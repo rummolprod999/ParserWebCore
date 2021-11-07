@@ -12,7 +12,7 @@ namespace ParserWebCore.BuilderApp
     public class Builder
     {
         public const string ReqArguments =
-            "agrocomplex, kzgroup, agrotomsk, sibintek, setonline, mzvoron, maxi, tver, murman, kalug, smol, samar, udmurt, segezha, akashevo, sitno, naftan, rwby, tekkom, tekmarket, tekmos, mlconf, tekrn, brn32, sportmaster, teksil, sberb2b, zakupmos, agat, rubex, samcom, ravis, boaz, tektkp, zmorts, rtsmarket, uralmash, lotonline, etpu, ismt, tpta, absgroup, rb2b, federal, b2bweb, medsi, gpb, strateg, tenderit, kuzocm, zdship, kopemash, rusfish, uralair, sochipark, korabel, eurosib, spgr, rcs, yangpur, kpresort, stniva";
+            "agrocomplex, kzgroup, agrotomsk, sibintek, setonline, mzvoron, maxi, tver, murman, kalug, smol, samar, udmurt, segezha, akashevo, sitno, naftan, rwby, tekkom, tekmarket, tekmos, mlconf, tekrn, brn32, sportmaster, teksil, sberb2b, zakupmos, agat, rubex, samcom, ravis, boaz, tektkp, zmorts, rtsmarket, uralmash, lotonline, etpu, ismt, tpta, absgroup, rb2b, federal, b2bweb, medsi, gpb, strateg, tenderit, kuzocm, zdship, kopemash, rusfish, uralair, sochipark, korabel, eurosib, spgr, rcs, yangpur, kpresort, stniva, dvina";
 
         private static int _port;
         private static Builder _b;
@@ -263,6 +263,9 @@ namespace ParserWebCore.BuilderApp
                 case "lenreg":
                     Arg = Arguments.Lenreg;
                     break;
+                case "dvina":
+                    Arg = Arguments.Dvina;
+                    break;
                 default:
                     throw new Exception($"Неправильно указан аргумент {s}, используйте {ReqArguments}");
             }
@@ -273,27 +276,27 @@ namespace ParserWebCore.BuilderApp
             var nameFile = $"{Path}{System.IO.Path.DirectorySeparatorChar}settings.json";
             using (var reader = File.OpenText(nameFile))
             {
-                var o = (JObject) JToken.ReadFrom(new JsonTextReader(reader));
-                Prefix = (string) o["prefix"];
-                UserDb = (string) o["userdb"];
-                PassDb = (string) o["passdb"];
-                Server = (string) o["server"];
-                FederalPass = (string) o["passfederal"];
-                FederalUser = (string) o["userfederal"];
-                SportPass = (string) o["passsport"];
-                SportUser = (string) o["usersport"];
-                SpgrPass = (string) o["passspgr"];
-                SpgrUser = (string) o["userspgr"];
-                UserProxy = (bool) o["use_proxy"];
-                ProxyFile = (string) o["proxy_file"];
-                _port = int.TryParse((string) o["port"], out _port) ? int.Parse((string) o["port"]) : 3306;
-                Database = (string) o["database"];
+                var o = (JObject)JToken.ReadFrom(new JsonTextReader(reader));
+                Prefix = (string)o["prefix"];
+                UserDb = (string)o["userdb"];
+                PassDb = (string)o["passdb"];
+                Server = (string)o["server"];
+                FederalPass = (string)o["passfederal"];
+                FederalUser = (string)o["userfederal"];
+                SportPass = (string)o["passsport"];
+                SportUser = (string)o["usersport"];
+                SpgrPass = (string)o["passspgr"];
+                SpgrUser = (string)o["userspgr"];
+                UserProxy = (bool)o["use_proxy"];
+                ProxyFile = (string)o["proxy_file"];
+                _port = int.TryParse((string)o["port"], out _port) ? int.Parse((string)o["port"]) : 3306;
+                Database = (string)o["database"];
                 var logDirTmp = o["dirs"]
-                    .Where(c => ((JObject) c).Properties().First().Name == Arg.ToString().ToLower())
-                    .Select(c => (string) c.SelectToken("..log")).First();
+                    .Where(c => ((JObject)c).Properties().First().Name == Arg.ToString().ToLower())
+                    .Select(c => (string)c.SelectToken("..log")).First();
                 var tempDirTmp = o["dirs"]
-                    .Where(c => ((JObject) c).Properties().First().Name == Arg.ToString().ToLower())
-                    .Select(c => (string) c.SelectToken("..temp")).First();
+                    .Where(c => ((JObject)c).Properties().First().Name == Arg.ToString().ToLower())
+                    .Select(c => (string)c.SelectToken("..temp")).First();
                 if (string.IsNullOrEmpty(logDirTmp) || string.IsNullOrEmpty(tempDirTmp))
                 {
                     throw new Exception("cannot find logDir or tempDir in settings.json");

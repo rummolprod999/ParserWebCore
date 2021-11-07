@@ -41,6 +41,7 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Samar:
                 case Arguments.Udmurt:
                 case Arguments.Brn32:
+                case Arguments.Dvina:
                     _parser = new ParserDecoratorGzwSp(arg);
                     break;
                 case Arguments.Segezha:

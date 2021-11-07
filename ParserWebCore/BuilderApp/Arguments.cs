@@ -73,5 +73,6 @@
         Kpresort,
         Stniva,
         Lenreg,
+        Dvina,
     }
 }

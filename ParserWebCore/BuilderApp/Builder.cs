@@ -266,8 +266,11 @@ namespace ParserWebCore.BuilderApp
                 case "dvina":
                     Arg = Arguments.Dvina;
                     break;
+                case "kursk":
+                    Arg = Arguments.Kursk;
+                    break;
                 default:
-                    throw new Exception($"Неправильно указан аргумент {s}, используйте {ReqArguments}");
+                    throw new ArgumentException($"Неправильно указан аргумент {s}, используйте {ReqArguments}");
             }
         }
 

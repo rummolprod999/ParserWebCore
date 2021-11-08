@@ -67,6 +67,13 @@ namespace ParserWebCore.Parser
                             "https://zakupki.dvinaland.ru/smallpurchases/GzwSP/NoticesGrid", 349, _arguments)
                         .Parsing();
                     break;
+                case Arguments.Kursk:
+                    new ParserGzwSp("http://zak.imkursk.ru/smallpurchases/GzwSP/NoticesGrid",
+                            "http://zak.imkursk.ru",
+                            "Малые закупки Курской области",
+                            "hhttp://zak.imkursk.ru/smallpurchases/GzwSP/NoticesGrid", 350, _arguments)
+                        .Parsing();
+                    break;
                 default: throw new ArgumentOutOfRangeException(nameof(_arguments), _arguments, null);
             }
         }

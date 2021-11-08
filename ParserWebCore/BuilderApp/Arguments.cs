@@ -74,5 +74,6 @@
         Stniva,
         Lenreg,
         Dvina,
+        Kursk,
     }
 }

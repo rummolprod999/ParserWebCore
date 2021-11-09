@@ -13,8 +13,19 @@ using ParserWebCore.TenderType;
 
 namespace ParserWebCore.Parser
 {
-    public class ParserGzwSp : ParserAbstract, IParser
+    public class ParserGzwSp : ParserAbstract, IParser, Auth
     {
+        private const int Count = 10;
+        private readonly ChromeDriver _driver = CreatorChromeDriver.GetChromeDriver();
+        private Arguments _arg;
+        private string _baseUrl;
+        private string _etpName;
+        private string _etpUrl;
+        private List<TypeMzVoron> _tendersList = new List<TypeMzVoron>();
+        private TimeSpan _timeoutB = TimeSpan.FromSeconds(30);
+        private int _typeFz;
+        protected string _url;
+
         public ParserGzwSp(string url, string baseurl, string etpName, string etpUrl, int typeFz, Arguments arg)
         {
             _url = url;
@@ -25,16 +36,10 @@ namespace ParserWebCore.Parser
             _arg = arg;
         }
 
-        private const int Count = 10;
-        private TimeSpan _timeoutB = TimeSpan.FromSeconds(30);
-        private string _url;
-        private string _baseUrl;
-        private string _etpName;
-        private string _etpUrl;
-        private int _typeFz;
-        private Arguments _arg;
-        private readonly ChromeDriver _driver = CreatorChromeDriver.GetChromeDriver();
-        private List<TypeMzVoron> _tendersList = new List<TypeMzVoron>();
+        public virtual void Auth(ChromeDriver driver, WebDriverWait wait)
+        {
+            // not need;
+        }
 
         public void Parsing()
         {
@@ -62,6 +67,7 @@ namespace ParserWebCore.Parser
         private void ParserSelenium()
         {
             var wait = new WebDriverWait(_driver, _timeoutB);
+            Auth(_driver, wait);
             _driver.Navigate().GoToUrl(_url);
             Thread.Sleep(5000);
             wait.Until(dr =>

@@ -12,7 +12,7 @@ namespace ParserWebCore.BuilderApp
     public class Builder
     {
         public const string ReqArguments =
-            "agrocomplex, kzgroup, agrotomsk, sibintek, setonline, mzvoron, maxi, tver, murman, kalug, smol, samar, udmurt, segezha, akashevo, sitno, naftan, rwby, tekkom, tekmarket, tekmos, mlconf, tekrn, brn32, sportmaster, teksil, sberb2b, zakupmos, agat, rubex, samcom, ravis, boaz, tektkp, zmorts, rtsmarket, uralmash, lotonline, etpu, ismt, tpta, absgroup, rb2b, federal, b2bweb, medsi, gpb, strateg, tenderit, kuzocm, zdship, kopemash, rusfish, uralair, sochipark, korabel, eurosib, spgr, rcs, yangpur, kpresort, stniva, dvina";
+            "agrocomplex, kzgroup, agrotomsk, sibintek, setonline, mzvoron, maxi, tver, murman, kalug, smol, samar, udmurt, segezha, akashevo, sitno, naftan, rwby, tekkom, tekmarket, tekmos, mlconf, tekrn, brn32, sportmaster, teksil, sberb2b, zakupmos, agat, rubex, samcom, ravis, boaz, tektkp, zmorts, rtsmarket, uralmash, lotonline, etpu, ismt, tpta, absgroup, rb2b, federal, b2bweb, medsi, gpb, strateg, tenderit, kuzocm, zdship, kopemash, rusfish, uralair, sochipark, korabel, eurosib, spgr, rcs, yangpur, kpresort, stniva, dvina, kursk, ufin";
 
         private static int _port;
         private static Builder _b;
@@ -38,6 +38,8 @@ namespace ParserWebCore.BuilderApp
         [Required] public static string FederalUser { get; set; }
         [Required] public static string SportPass { get; set; }
         [Required] public static string SportUser { get; set; }
+        [Required] public static string UfinPass { get; set; }
+        [Required] public static string UfinUser { get; set; }
         [Required] public static string ConnectString { get; set; }
         [Required] public static bool UserProxy { get; set; }
         [Required] public static string ProxyFile { get; set; }
@@ -269,6 +271,9 @@ namespace ParserWebCore.BuilderApp
                 case "kursk":
                     Arg = Arguments.Kursk;
                     break;
+                case "ufin":
+                    Arg = Arguments.Ufin;
+                    break;
                 default:
                     throw new ArgumentException($"Неправильно указан аргумент {s}, используйте {ReqArguments}");
             }
@@ -290,6 +295,8 @@ namespace ParserWebCore.BuilderApp
                 SportUser = (string)o["usersport"];
                 SpgrPass = (string)o["passspgr"];
                 SpgrUser = (string)o["userspgr"];
+                UfinPass = (string)o["passufin"];
+                UfinUser = (string)o["userufin"];
                 UserProxy = (bool)o["use_proxy"];
                 ProxyFile = (string)o["proxy_file"];
                 _port = int.TryParse((string)o["port"], out _port) ? int.Parse((string)o["port"]) : 3306;

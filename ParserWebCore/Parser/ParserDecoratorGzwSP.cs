@@ -71,7 +71,14 @@ namespace ParserWebCore.Parser
                     new ParserGzwSp("http://zak.imkursk.ru/smallpurchases/GzwSP/NoticesGrid",
                             "http://zak.imkursk.ru",
                             "Малые закупки Курской области",
-                            "hhttp://zak.imkursk.ru/smallpurchases/GzwSP/NoticesGrid", 350, _arguments)
+                            "http://zak.imkursk.ru/smallpurchases/GzwSP/NoticesGrid", 350, _arguments)
+                        .Parsing();
+                    break;
+                case Arguments.Ufin:
+                    new ParserGzwSPUfin("http://goszakaz.ufin48.ru/smallpurchases/GzwSP/NoticesGrid",
+                            "http://goszakaz.ufin48.ru",
+                            "Малые закупки Липецкой области",
+                            "http://goszakaz.ufin48.ru/smallpurchases/GzwSP/NoticesGrid", 351, _arguments)
                         .Parsing();
                     break;
                 default: throw new ArgumentOutOfRangeException(nameof(_arguments), _arguments, null);

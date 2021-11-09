@@ -75,5 +75,6 @@
         Lenreg,
         Dvina,
         Kursk,
+        Ufin,
     }
 }

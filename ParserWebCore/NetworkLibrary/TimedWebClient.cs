@@ -31,7 +31,7 @@ namespace ParserWebCore.NetworkLibrary
 
         protected override WebRequest GetWebRequest(Uri address)
         {
-            var wr = (HttpWebRequest) base.GetWebRequest(address);
+            var wr = (HttpWebRequest)base.GetWebRequest(address);
             if (wr != null)
             {
                 wr.Timeout = 20000;
@@ -59,7 +59,7 @@ namespace ParserWebCore.NetworkLibrary
 
         protected override WebRequest GetWebRequest(Uri address)
         {
-            var wr = (HttpWebRequest) base.GetWebRequest(address);
+            var wr = (HttpWebRequest)base.GetWebRequest(address);
             if (wr != null)
             {
                 wr.Timeout = 20000;
@@ -82,7 +82,7 @@ namespace ParserWebCore.NetworkLibrary
     {
         protected override WebRequest GetWebRequest(Uri address)
         {
-            var wr = (HttpWebRequest) base.GetWebRequest(address);
+            var wr = (HttpWebRequest)base.GetWebRequest(address);
             if (wr != null)
             {
                 wr.Timeout = 20000;
@@ -105,12 +105,12 @@ namespace ParserWebCore.NetworkLibrary
 
         public TimedWebSber(int page)
         {
-            this._page = page;
+            _page = page;
         }
 
         protected override WebRequest GetWebRequest(Uri address)
         {
-            var wr = (HttpWebRequest) base.GetWebRequest(address);
+            var wr = (HttpWebRequest)base.GetWebRequest(address);
             if (wr != null)
             {
                 wr.Method = "POST";
@@ -172,7 +172,7 @@ namespace ParserWebCore.NetworkLibrary
     {
         protected override WebRequest GetWebRequest(Uri address)
         {
-            var wr = (HttpWebRequest) base.GetWebRequest(address);
+            var wr = (HttpWebRequest)base.GetWebRequest(address);
             if (wr != null)
             {
                 wr.Timeout = 20000;

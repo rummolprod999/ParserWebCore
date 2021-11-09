@@ -9,7 +9,7 @@ namespace ParserWebCore.NetworkLibrary
 
         public HttpPostMedsi(int page)
         {
-            this._page = page;
+            _page = page;
         }
 
         public string DownloadString(string url)

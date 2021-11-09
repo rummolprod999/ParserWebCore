@@ -21,7 +21,7 @@ namespace ParserWebCore.Tender
             typeFz)
         {
             _tn = tn;
-            this._section = section;
+            _section = section;
         }
 
         public void ParsingTender()
@@ -37,7 +37,7 @@ namespace ParserWebCore.Tender
                 cmd.Parameters.AddWithValue("@type_fz", TypeFz);
                 cmd.Parameters.AddWithValue("@notice_version", _tn.StateString);
                 var dt = new DataTable();
-                var adapter = new MySqlDataAdapter {SelectCommand = cmd};
+                var adapter = new MySqlDataAdapter { SelectCommand = cmd };
                 adapter.Fill(dt);
                 if (dt.Rows.Count > 0)
                 {
@@ -67,17 +67,17 @@ namespace ParserWebCore.Tender
                     cmd3.Prepare();
                     cmd3.Parameters.AddWithValue("@full_name", orgName);
                     var dt3 = new DataTable();
-                    var adapter3 = new MySqlDataAdapter {SelectCommand = cmd3};
+                    var adapter3 = new MySqlDataAdapter { SelectCommand = cmd3 };
                     adapter3.Fill(dt3);
                     if (dt3.Rows.Count > 0)
                     {
-                        organiserId = (int) dt3.Rows[0].ItemArray[0];
+                        organiserId = (int)dt3.Rows[0].ItemArray[0];
                     }
                     else
                     {
-                        var phone = ((string) tender.SelectToken("data.ContactPerson.Phone") ?? "").Trim();
-                        var email = ((string) tender.SelectToken("data.ContactPerson.ContactEmail") ?? "").Trim();
-                        var contactPerson = ((string) tender.SelectToken("data.ContactPerson.Name") ?? "").Trim();
+                        var phone = ((string)tender.SelectToken("data.ContactPerson.Phone") ?? "").Trim();
+                        var email = ((string)tender.SelectToken("data.ContactPerson.ContactEmail") ?? "").Trim();
+                        var contactPerson = ((string)tender.SelectToken("data.ContactPerson.Name") ?? "").Trim();
                         var inn = "";
                         var kpp = "";
                         var postAddr = "";
@@ -93,13 +93,13 @@ namespace ParserWebCore.Tender
                         cmd4.Parameters.AddWithValue("@kpp", kpp);
                         cmd4.Parameters.AddWithValue("@post_address", postAddr);
                         cmd4.ExecuteNonQuery();
-                        organiserId = (int) cmd4.LastInsertedId;
+                        organiserId = (int)cmd4.LastInsertedId;
                     }
                 }
 
                 var idPlacingWay = 0;
                 GetEtp(connect, out var idEtp);
-                var regionName = ((string) tender.SelectToken("data.DeliveryKladrRegionName") ?? "").Trim();
+                var regionName = ((string)tender.SelectToken("data.DeliveryKladrRegionName") ?? "").Trim();
                 var idRegion = GetRegionFromString(regionName, connect);
                 var href = "";
                 switch (_section)
@@ -136,7 +136,7 @@ namespace ParserWebCore.Tender
                 cmd9.Parameters.AddWithValue("@xml", href);
                 cmd9.Parameters.AddWithValue("@print_form", href);
                 var resInsertTender = cmd9.ExecuteNonQuery();
-                var idTender = (int) cmd9.LastInsertedId;
+                var idTender = (int)cmd9.LastInsertedId;
                 Counter(resInsertTender, updated);
                 var attacments = GetElements(tender, "data.OtherFiles");
                 WriteAttachments(connect, attacments, idTender);
@@ -150,7 +150,7 @@ namespace ParserWebCore.Tender
                 cmd18.Parameters.AddWithValue("@max_price", _tn.Nmck);
                 cmd18.Parameters.AddWithValue("@currency", "");
                 cmd18.ExecuteNonQuery();
-                var idLot = (int) cmd18.LastInsertedId;
+                var idLot = (int)cmd18.LastInsertedId;
                 var customerId = 0;
                 if (!string.IsNullOrEmpty(_tn.CusName))
                 {
@@ -163,7 +163,7 @@ namespace ParserWebCore.Tender
                     if (reader7.HasRows)
                     {
                         reader7.Read();
-                        customerId = (int) reader7["id_customer"];
+                        customerId = (int)reader7["id_customer"];
                         reader7.Close();
                     }
                     else
@@ -178,11 +178,11 @@ namespace ParserWebCore.Tender
                         cmd14.Parameters.AddWithValue("@full_name", _tn.CusName);
                         cmd14.Parameters.AddWithValue("@inn", "");
                         cmd14.ExecuteNonQuery();
-                        customerId = (int) cmd14.LastInsertedId;
+                        customerId = (int)cmd14.LastInsertedId;
                     }
                 }
 
-                var delivTerm = ((string) tender.SelectToken("data.DeliveryTerms") ?? "").Trim();
+                var delivTerm = ((string)tender.SelectToken("data.DeliveryTerms") ?? "").Trim();
                 foreach (var dp in _tn.DeliveryKladrRegionName)
                 {
                     if (delivTerm != "" || dp != "")
@@ -204,17 +204,17 @@ namespace ParserWebCore.Tender
                 purObjects.ForEach(po =>
                 {
                     var okpdName = "";
-                    var okpdCode = ((string) po.SelectToken(
+                    var okpdCode = ((string)po.SelectToken(
                         "ClassificatorCode") ?? "").Trim();
-                    var okei = ((string) po.SelectToken(
+                    var okei = ((string)po.SelectToken(
                         "OkeiName") ?? "").Trim();
-                    var quantity = (decimal?) po.SelectToken(
+                    var quantity = (decimal?)po.SelectToken(
                         "Quantity") ?? 0.0m;
-                    var price = (decimal?) po.SelectToken(
+                    var price = (decimal?)po.SelectToken(
                         "Price") ?? 0.0m;
-                    var sum = (decimal?) po.SelectToken(
+                    var sum = (decimal?)po.SelectToken(
                         "Sum") ?? 0.0m;
-                    var poName = ((string) po.SelectToken(
+                    var poName = ((string)po.SelectToken(
                         "Name") ?? "").Trim();
                     var insertLotitem =
                         $"INSERT INTO {Builder.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name, sum = @sum, okpd2_code = @okpd2_code, okpd2_group_code = @okpd2_group_code, okpd2_group_level1_code = @okpd2_group_level1_code, okpd_name = @okpd_name, quantity_value = @quantity_value, customer_quantity_value = @customer_quantity_value, okei = @okei, price = @price";
@@ -243,8 +243,8 @@ namespace ParserWebCore.Tender
         {
             foreach (var att in attachments)
             {
-                var name = ((string) att.SelectToken("Name") ?? "").Trim();
-                var fileGuid = ((string) att.SelectToken("FileGuid") ?? "").Trim();
+                var name = ((string)att.SelectToken("Name") ?? "").Trim();
+                var fileGuid = ((string)att.SelectToken("FileGuid") ?? "").Trim();
                 var webPath = $"https://zmo-new-webapi.rts-tender.ru/market/api/v1/files//{fileGuid}";
                 if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(webPath))
                 {

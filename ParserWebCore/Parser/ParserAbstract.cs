@@ -13,7 +13,15 @@ namespace ParserWebCore.Parser
         protected virtual void Parse(Action op)
         {
             Log.Logger("Время начала парсинга");
-            op?.Invoke();
+            try
+            {
+                op?.Invoke();
+            }
+            catch (Exception e)
+            {
+                Log.Logger("Exception in Parse()", e);
+            }
+
             Log.Logger("Добавили Tender", TenderAbstract.Count);
             Log.Logger("Обновили Tender", TenderAbstract.UpCount);
             Log.Logger("Время окончания парсинга");

@@ -66,10 +66,12 @@ namespace ParserWebCore.Parser
 
         private void ParserSelenium()
         {
+            _driver.Manage().Cookies.DeleteAllCookies();
             var wait = new WebDriverWait(_driver, _timeoutB);
             Auth(_driver, wait);
             _driver.Navigate().GoToUrl(_url);
             Thread.Sleep(5000);
+            _driver.SwitchTo().DefaultContent();
             wait.Until(dr =>
                 dr.FindElement(By.XPath(
                     "//div[@class = 'grid_content']/div[contains(@class, 'gridview_item')][1]/table/tbody")));

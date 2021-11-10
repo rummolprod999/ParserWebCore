@@ -36,7 +36,7 @@ namespace ParserWebCore.Tender
                 cmd.Parameters.AddWithValue("@doc_publish_date", _tn.DatePub);
                 cmd.Parameters.AddWithValue("@notice_version", _tn.Status);
                 var dt = new DataTable();
-                var adapter = new MySqlDataAdapter {SelectCommand = cmd};
+                var adapter = new MySqlDataAdapter { SelectCommand = cmd };
                 adapter.Fill(dt);
                 if (dt.Rows.Count > 0)
                 {
@@ -53,7 +53,7 @@ namespace ParserWebCore.Tender
 
                 var htmlDoc = new HtmlDocument();
                 htmlDoc.LoadHtml(s);
-                var navigator = (HtmlNodeNavigator) htmlDoc.CreateNavigator();
+                var navigator = (HtmlNodeNavigator)htmlDoc.CreateNavigator();
                 var dateUpd = DateTime.Now;
                 var cancelStatus = 0;
                 var updated = false;
@@ -63,14 +63,14 @@ namespace ParserWebCore.Tender
                 cmd2.Prepare();
                 cmd2.Parameters.AddWithValue("@purchase_number", _tn.PurNum);
                 cmd2.Parameters.AddWithValue("@type_fz", TypeFz);
-                var adapter2 = new MySqlDataAdapter {SelectCommand = cmd2};
+                var adapter2 = new MySqlDataAdapter { SelectCommand = cmd2 };
                 var dt2 = new DataTable();
                 adapter2.Fill(dt2);
                 foreach (DataRow row in dt2.Rows)
                 {
                     //DateTime dateNew = DateTime.Parse(pr.DatePublished);
                     updated = true;
-                    if (dateUpd >= (DateTime) row["date_version"])
+                    if (dateUpd >= (DateTime)row["date_version"])
                     {
                         row["cancel"] = 1;
                         //row.AcceptChanges();
@@ -83,7 +83,7 @@ namespace ParserWebCore.Tender
                 }
 
                 var commandBuilder =
-                    new MySqlCommandBuilder(adapter2) {ConflictOption = ConflictOption.OverwriteChanges};
+                    new MySqlCommandBuilder(adapter2) { ConflictOption = ConflictOption.OverwriteChanges };
                 adapter2.Update(dt2);
                 var printForm = _tn.Href;
                 var customerId = 0;
@@ -96,11 +96,11 @@ namespace ParserWebCore.Tender
                     cmd3.Prepare();
                     cmd3.Parameters.AddWithValue("@full_name", _tn.OrgName);
                     var dt3 = new DataTable();
-                    var adapter3 = new MySqlDataAdapter {SelectCommand = cmd3};
+                    var adapter3 = new MySqlDataAdapter { SelectCommand = cmd3 };
                     adapter3.Fill(dt3);
                     if (dt3.Rows.Count > 0)
                     {
-                        organiserId = (int) dt3.Rows[0].ItemArray[0];
+                        organiserId = (int)dt3.Rows[0].ItemArray[0];
                     }
                     else
                     {
@@ -129,7 +129,7 @@ namespace ParserWebCore.Tender
                         cmd4.Parameters.AddWithValue("@inn", inn);
                         cmd4.Parameters.AddWithValue("@kpp", kpp);
                         cmd4.ExecuteNonQuery();
-                        organiserId = (int) cmd4.LastInsertedId;
+                        organiserId = (int)cmd4.LastInsertedId;
                     }
                 }
 
@@ -173,7 +173,7 @@ namespace ParserWebCore.Tender
                 cmd9.Parameters.AddWithValue("@xml", _tn.Href);
                 cmd9.Parameters.AddWithValue("@print_form", printForm);
                 var resInsertTender = cmd9.ExecuteNonQuery();
-                var idTender = (int) cmd9.LastInsertedId;
+                var idTender = (int)cmd9.LastInsertedId;
                 Counter(resInsertTender, updated);
                 if (!string.IsNullOrEmpty(_tn.OrgName))
                 {
@@ -186,7 +186,7 @@ namespace ParserWebCore.Tender
                     if (reader7.HasRows)
                     {
                         reader7.Read();
-                        customerId = (int) reader7["id_customer"];
+                        customerId = (int)reader7["id_customer"];
                         reader7.Close();
                     }
                     else
@@ -200,7 +200,7 @@ namespace ParserWebCore.Tender
                         cmd14.Parameters.AddWithValue("@reg_num", customerRegNumber);
                         cmd14.Parameters.AddWithValue("@full_name", _tn.OrgName);
                         cmd14.ExecuteNonQuery();
-                        customerId = (int) cmd14.LastInsertedId;
+                        customerId = (int)cmd14.LastInsertedId;
                     }
                 }
 
@@ -211,7 +211,7 @@ namespace ParserWebCore.Tender
                 {
                     var urlAttT = (doc?.Attributes["href"]?.Value ?? "").Trim();
                     var fName = "Документация";
-                    var urlAtt = $"https://segezha-group.com{urlAttT}";
+                    var urlAtt = $"https://old.segezha-group.com{urlAttT}";
                     if (!string.IsNullOrEmpty(fName))
                     {
                         var insertAttach =
@@ -236,7 +236,7 @@ namespace ParserWebCore.Tender
                 cmd18.Parameters.AddWithValue("@currency", "");
                 cmd18.Parameters.AddWithValue("@finance_source", "");
                 cmd18.ExecuteNonQuery();
-                var idLot = (int) cmd18.LastInsertedId;
+                var idLot = (int)cmd18.LastInsertedId;
                 var insertLotitem =
                     $"INSERT INTO {Builder.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name, sum = @sum";
                 var cmd19 = new MySqlCommand(insertLotitem, connect);

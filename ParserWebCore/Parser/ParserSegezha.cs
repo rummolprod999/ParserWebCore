@@ -21,7 +21,7 @@ namespace ParserWebCore.Parser
         {
             for (var i = 1; i <= Count; i++)
             {
-                var urlpage = $"https://segezha-group.com/purchasing/?PAGEN_1={i}";
+                var urlpage = $"https://old.segezha-group.com/purchasing/?PAGEN_1={i}";
                 try
                 {
                     ParsingPage(urlpage);
@@ -70,7 +70,7 @@ namespace ParserWebCore.Parser
                 return;
             }
 
-            href = $"https://segezha-group.com{href}";
+            href = $"https://old.segezha-group.com{href}";
             var purNum = href.GetDataFromRegex(@"purchasing/(\d+)/");
             if (string.IsNullOrEmpty(purNum))
             {
@@ -105,7 +105,7 @@ namespace ParserWebCore.Parser
             }
 
             var status = (n.SelectSingleNode("./td[7]")
-                ?.InnerText ?? "").Trim();
+                ?.InnerText ?? "").Trim().GetDataFromRegex(@"(.+)\n");
 
             var cusName = (n.SelectSingleNode("./td[4]")
                 ?.InnerText ?? "").Trim();

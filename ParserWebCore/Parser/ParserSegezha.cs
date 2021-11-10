@@ -10,7 +10,7 @@ namespace ParserWebCore.Parser
 {
     public class ParserSegezha : ParserAbstract, IParser
     {
-        private const int Count = 5;
+        private const int Count = 50;
 
         public void Parsing()
         {

@@ -77,5 +77,6 @@
         Kursk,
         Ufin,
         Gosyakut,
+        Tatar,
     }
 }

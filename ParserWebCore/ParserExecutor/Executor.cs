@@ -218,6 +218,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Lenreg:
                     _parser = new ParserLenReg();
                     break;
+                case Arguments.Tatar:
+                    _parser = new ParserTatar();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

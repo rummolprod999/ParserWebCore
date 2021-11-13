@@ -17,8 +17,8 @@ namespace ParserWebCore.NetworkLibrary
         public CookieCollection CookieValue()
         {
             var cookieContainer = new CookieContainer();
-            var handler = new HttpClientHandler {CookieContainer = cookieContainer, AllowAutoRedirect = true};
-            if (Builder.UserProxy)
+            var handler = new HttpClientHandler { CookieContainer = cookieContainer, AllowAutoRedirect = true };
+            if (AppBuilder.UserProxy)
             {
                 var prixyEntity = ProxyLoader.getRandomProxy();
                 var proxy = new WebProxy

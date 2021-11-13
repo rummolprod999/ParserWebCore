@@ -18,12 +18,12 @@ namespace ParserWebCore.NetworkLibrary
         public Cookie CookieValue()
         {
             var cookieContainer = new CookieContainer();
-            var handler = new HttpClientHandler {CookieContainer = cookieContainer};
+            var handler = new HttpClientHandler { CookieContainer = cookieContainer };
             var client = new HttpClient(handler);
             var content = new FormUrlEncodedContent(new[]
             {
-                new KeyValuePair<string, string>("user_login", Builder.FederalUser),
-                new KeyValuePair<string, string>("user_pass", Builder.FederalPass),
+                new KeyValuePair<string, string>("user_login", AppBuilder.FederalUser),
+                new KeyValuePair<string, string>("user_pass", AppBuilder.FederalPass),
                 new KeyValuePair<string, string>("submit", "%D0%92%D0%BE%D0%B9%D1%82%D0%B8")
             });
             var response = client.PostAsync(BaseUrl, content);

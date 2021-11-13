@@ -53,7 +53,7 @@ namespace ParserWebCore.Parser
                 $"https://old.zakupki.mos.ru/api/Cssp/Purchase/Query?queryDto={{\"filter\":{{\"typeIn\":[1],\"auctionSpecificFilter\":{{\"stateIdIn\":[19000002]}},\"needSpecificFilter\":{{}},\"tenderSpecificFilter\":{{}}}},\"order\":[{{\"field\":\"PublishDate\",\"desc\":true}}],\"withCount\":true,\"take\":50,\"skip\":{num * 50}}}";
             url = Uri.EscapeUriString(url);
 
-            var s = DownloadString.DownLHttpPostWithCookiesB2b(url, cookie: null, useProxy: Builder.UserProxy);
+            var s = DownloadString.DownLHttpPostWithCookiesB2b(url, cookie: null, useProxy: AppBuilder.UserProxy);
             if (string.IsNullOrEmpty(s))
             {
                 Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
@@ -85,7 +85,7 @@ namespace ParserWebCore.Parser
                 $"https://old.zakupki.mos.ru/api/Cssp/Purchase/Query?queryDto={{\"filter\":{{\"auctionSpecificFilter\":{{}},\"needSpecificFilter\":{{}},\"tenderSpecificFilter\":{{}}}},\"order\":[{{\"field\":\"PublishDate\",\"desc\":true}}],\"withCount\":true,\"take\":50,\"skip\":{num * 50}}}";
             url = Uri.EscapeUriString(url);
 
-            var s = DownloadString.DownLHttpPostWithCookiesB2b(url, cookie: null, useProxy: Builder.UserProxy);
+            var s = DownloadString.DownLHttpPostWithCookiesB2b(url, cookie: null, useProxy: AppBuilder.UserProxy);
             if (string.IsNullOrEmpty(s))
             {
                 Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",

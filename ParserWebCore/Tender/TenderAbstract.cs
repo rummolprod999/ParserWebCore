@@ -64,21 +64,21 @@ namespace ParserWebCore.Tender
         {
             var verNum = 1;
             var selectTenders =
-                $"SELECT id_tender FROM {Builder.Prefix}tender WHERE purchase_number = @purchaseNumber AND type_fz = @typeFz ORDER BY id_tender ASC";
+                $"SELECT id_tender FROM {AppBuilder.Prefix}tender WHERE purchase_number = @purchaseNumber AND type_fz = @typeFz ORDER BY id_tender ASC";
             var cmd1 = new MySqlCommand(selectTenders, connect);
             cmd1.Prepare();
             cmd1.Parameters.AddWithValue("@purchaseNumber", purchaseNumber);
             cmd1.Parameters.AddWithValue("@typeFz", typeFz);
             var dt1 = new DataTable();
-            var adapter1 = new MySqlDataAdapter {SelectCommand = cmd1};
+            var adapter1 = new MySqlDataAdapter { SelectCommand = cmd1 };
             adapter1.Fill(dt1);
             if (dt1.Rows.Count > 0)
             {
                 var updateTender =
-                    $"UPDATE {Builder.Prefix}tender SET num_version = @num_version WHERE id_tender = @id_tender";
+                    $"UPDATE {AppBuilder.Prefix}tender SET num_version = @num_version WHERE id_tender = @id_tender";
                 foreach (DataRow ten in dt1.Rows)
                 {
-                    var idTender = (int) ten["id_tender"];
+                    var idTender = (int)ten["id_tender"];
                     var cmd2 = new MySqlCommand(updateTender, connect);
                     cmd2.Prepare();
                     cmd2.Parameters.AddWithValue("@id_tender", idTender);
@@ -91,28 +91,28 @@ namespace ParserWebCore.Tender
 
         protected void GetEtp(MySqlConnection connect, out int idEtp)
         {
-            var selectEtp = $"SELECT id_etp FROM {Builder.Prefix}etp WHERE name = @name AND url = @url";
+            var selectEtp = $"SELECT id_etp FROM {AppBuilder.Prefix}etp WHERE name = @name AND url = @url";
             var cmd7 = new MySqlCommand(selectEtp, connect);
             cmd7.Prepare();
             cmd7.Parameters.AddWithValue("@name", EtpName);
             cmd7.Parameters.AddWithValue("@url", EtpUrl);
             var dt5 = new DataTable();
-            var adapter5 = new MySqlDataAdapter {SelectCommand = cmd7};
+            var adapter5 = new MySqlDataAdapter { SelectCommand = cmd7 };
             adapter5.Fill(dt5);
             if (dt5.Rows.Count > 0)
             {
-                idEtp = (int) dt5.Rows[0].ItemArray[0];
+                idEtp = (int)dt5.Rows[0].ItemArray[0];
             }
             else
             {
                 var insertEtp =
-                    $"INSERT INTO {Builder.Prefix}etp SET name = @name, url = @url, conf=0";
+                    $"INSERT INTO {AppBuilder.Prefix}etp SET name = @name, url = @url, conf=0";
                 var cmd8 = new MySqlCommand(insertEtp, connect);
                 cmd8.Prepare();
                 cmd8.Parameters.AddWithValue("@name", EtpName);
                 cmd8.Parameters.AddWithValue("@url", EtpUrl);
                 cmd8.ExecuteNonQuery();
-                idEtp = (int) cmd8.LastInsertedId;
+                idEtp = (int)cmd8.LastInsertedId;
             }
         }
 
@@ -121,28 +121,28 @@ namespace ParserWebCore.Tender
             if (!string.IsNullOrEmpty(PlacingWay))
             {
                 var selectPlacingWay =
-                    $"SELECT id_placing_way FROM {Builder.Prefix}placing_way WHERE name = @name";
+                    $"SELECT id_placing_way FROM {AppBuilder.Prefix}placing_way WHERE name = @name";
                 var cmd5 = new MySqlCommand(selectPlacingWay, connect);
                 cmd5.Prepare();
                 cmd5.Parameters.AddWithValue("@name", PlacingWay);
                 var dt4 = new DataTable();
-                var adapter4 = new MySqlDataAdapter {SelectCommand = cmd5};
+                var adapter4 = new MySqlDataAdapter { SelectCommand = cmd5 };
                 adapter4.Fill(dt4);
                 if (dt4.Rows.Count > 0)
                 {
-                    idPlacingWay = (int) dt4.Rows[0].ItemArray[0];
+                    idPlacingWay = (int)dt4.Rows[0].ItemArray[0];
                 }
                 else
                 {
                     var insertPlacingWay =
-                        $"INSERT INTO {Builder.Prefix}placing_way SET name= @name, conformity = @conformity";
+                        $"INSERT INTO {AppBuilder.Prefix}placing_way SET name= @name, conformity = @conformity";
                     var cmd6 = new MySqlCommand(insertPlacingWay, connect);
                     cmd6.Prepare();
                     var conformity = GetConformity(PlacingWay);
                     cmd6.Parameters.AddWithValue("@name", PlacingWay);
                     cmd6.Parameters.AddWithValue("@conformity", conformity);
                     cmd6.ExecuteNonQuery();
-                    idPlacingWay = (int) cmd6.LastInsertedId;
+                    idPlacingWay = (int)cmd6.LastInsertedId;
                 }
             }
             else
@@ -191,76 +191,76 @@ namespace ParserWebCore.Tender
             }
 
             var selectPurObj =
-                $"SELECT DISTINCT po.name, po.okpd_name FROM {Builder.Prefix}purchase_object AS po LEFT JOIN {Builder.Prefix}lot AS l ON l.id_lot = po.id_lot WHERE l.id_tender = @id_tender";
+                $"SELECT DISTINCT po.name, po.okpd_name FROM {AppBuilder.Prefix}purchase_object AS po LEFT JOIN {AppBuilder.Prefix}lot AS l ON l.id_lot = po.id_lot WHERE l.id_tender = @id_tender";
             var cmd1 = new MySqlCommand(selectPurObj, connect);
             cmd1.Prepare();
             cmd1.Parameters.AddWithValue("@id_tender", idTender);
             var dt = new DataTable();
-            var adapter = new MySqlDataAdapter {SelectCommand = cmd1};
+            var adapter = new MySqlDataAdapter { SelectCommand = cmd1 };
             adapter.Fill(dt);
             if (dt.Rows.Count > 0)
             {
                 var distrDt = dt.AsEnumerable().Distinct(DataRowComparer.Default);
                 foreach (var row in distrDt)
                 {
-                    var name = !row.IsNull("name") ? ((string) row["name"]) : "";
-                    var okpdName = (!row.IsNull("okpd_name")) ? ((string) row["okpd_name"]) : "";
+                    var name = !row.IsNull("name") ? ((string)row["name"]) : "";
+                    var okpdName = (!row.IsNull("okpd_name")) ? ((string)row["okpd_name"]) : "";
                     resString += $"{name} {okpdName} ";
                 }
             }
 
             var selectCustReq =
-                $"SELECT DISTINCT cur.delivery_term FROM {Builder.Prefix}customer_requirement AS cur JOIN {Builder.Prefix}lot AS l ON l.id_lot = cur.id_lot WHERE l.id_tender = @id_tender";
+                $"SELECT DISTINCT cur.delivery_term FROM {AppBuilder.Prefix}customer_requirement AS cur JOIN {AppBuilder.Prefix}lot AS l ON l.id_lot = cur.id_lot WHERE l.id_tender = @id_tender";
             var cmd7 = new MySqlCommand(selectCustReq, connect);
             cmd7.Prepare();
             cmd7.Parameters.AddWithValue("@id_tender", idTender);
             var dt7 = new DataTable();
-            var adapter7 = new MySqlDataAdapter {SelectCommand = cmd7};
+            var adapter7 = new MySqlDataAdapter { SelectCommand = cmd7 };
             adapter7.Fill(dt7);
             if (dt7.Rows.Count > 0)
             {
                 var distrDeliv = dt7.AsEnumerable().Distinct(DataRowComparer.Default);
                 foreach (var row in distrDeliv)
                 {
-                    var delivTerm = !row.IsNull("delivery_term") ? ((string) row["delivery_term"]) : "";
+                    var delivTerm = !row.IsNull("delivery_term") ? ((string)row["delivery_term"]) : "";
                     resString += $"{delivTerm} ";
                 }
             }
 
-            var selectAttach = $"SELECT file_name FROM {Builder.Prefix}attachment WHERE id_tender = @id_tender";
+            var selectAttach = $"SELECT file_name FROM {AppBuilder.Prefix}attachment WHERE id_tender = @id_tender";
             var cmd2 = new MySqlCommand(selectAttach, connect);
             cmd2.Prepare();
             cmd2.Parameters.AddWithValue("@id_tender", idTender);
             var dt2 = new DataTable();
-            var adapter2 = new MySqlDataAdapter {SelectCommand = cmd2};
+            var adapter2 = new MySqlDataAdapter { SelectCommand = cmd2 };
             adapter2.Fill(dt2);
             if (dt2.Rows.Count > 0)
             {
                 var distrDt = dt2.AsEnumerable().Distinct(DataRowComparer.Default);
                 foreach (var row in distrDt)
                 {
-                    var attName = (!row.IsNull("file_name")) ? ((string) row["file_name"]) : "";
+                    var attName = (!row.IsNull("file_name")) ? ((string)row["file_name"]) : "";
                     resString += $" {attName}";
                 }
             }
 
             var idOrg = 0;
             var selectPurInf =
-                $"SELECT purchase_object_info, id_organizer FROM {Builder.Prefix}tender WHERE id_tender = @id_tender";
+                $"SELECT purchase_object_info, id_organizer FROM {AppBuilder.Prefix}tender WHERE id_tender = @id_tender";
             var cmd3 = new MySqlCommand(selectPurInf, connect);
             cmd3.Prepare();
             cmd3.Parameters.AddWithValue("@id_tender", idTender);
             var dt3 = new DataTable();
-            var adapter3 = new MySqlDataAdapter {SelectCommand = cmd3};
+            var adapter3 = new MySqlDataAdapter { SelectCommand = cmd3 };
             adapter3.Fill(dt3);
             if (dt3.Rows.Count > 0)
             {
                 foreach (DataRow row in dt3.Rows)
                 {
                     var purOb = (!row.IsNull("purchase_object_info"))
-                        ? ((string) row["purchase_object_info"])
+                        ? ((string)row["purchase_object_info"])
                         : "";
-                    idOrg = (!row.IsNull("id_organizer")) ? (int) row["id_organizer"] : 0;
+                    idOrg = (!row.IsNull("id_organizer")) ? (int)row["id_organizer"] : 0;
                     resString = $"{purOb} {resString}";
                 }
             }
@@ -268,39 +268,39 @@ namespace ParserWebCore.Tender
             if (idOrg != 0)
             {
                 var selectOrg =
-                    $"SELECT full_name, inn FROM {Builder.Prefix}organizer WHERE id_organizer = @id_organizer";
+                    $"SELECT full_name, inn FROM {AppBuilder.Prefix}organizer WHERE id_organizer = @id_organizer";
                 var cmd4 = new MySqlCommand(selectOrg, connect);
                 cmd4.Prepare();
                 cmd4.Parameters.AddWithValue("@id_organizer", idOrg);
                 var dt4 = new DataTable();
-                var adapter4 = new MySqlDataAdapter {SelectCommand = cmd4};
+                var adapter4 = new MySqlDataAdapter { SelectCommand = cmd4 };
                 adapter4.Fill(dt4);
                 if (dt4.Rows.Count > 0)
                 {
                     foreach (DataRow row in dt4.Rows)
                     {
-                        var innOrg = (!row.IsNull("inn")) ? ((string) row["inn"]) : "";
-                        var nameOrg = (!row.IsNull("full_name")) ? ((string) row["full_name"]) : "";
+                        var innOrg = (!row.IsNull("inn")) ? ((string)row["inn"]) : "";
+                        var nameOrg = (!row.IsNull("full_name")) ? ((string)row["full_name"]) : "";
                         resString += $" {innOrg} {nameOrg}";
                     }
                 }
             }
 
             var selectCustomer =
-                $"SELECT DISTINCT cus.inn, cus.full_name FROM {Builder.Prefix}customer AS cus LEFT JOIN {Builder.Prefix}purchase_object AS po ON cus.id_customer = po.id_customer LEFT JOIN {Builder.Prefix}lot AS l ON l.id_lot = po.id_lot WHERE l.id_tender = @id_tender";
+                $"SELECT DISTINCT cus.inn, cus.full_name FROM {AppBuilder.Prefix}customer AS cus LEFT JOIN {AppBuilder.Prefix}purchase_object AS po ON cus.id_customer = po.id_customer LEFT JOIN {AppBuilder.Prefix}lot AS l ON l.id_lot = po.id_lot WHERE l.id_tender = @id_tender";
             var cmd6 = new MySqlCommand(selectCustomer, connect);
             cmd6.Prepare();
             cmd6.Parameters.AddWithValue("@id_tender", idTender);
             var dt5 = new DataTable();
-            var adapter5 = new MySqlDataAdapter {SelectCommand = cmd6};
+            var adapter5 = new MySqlDataAdapter { SelectCommand = cmd6 };
             adapter5.Fill(dt5);
             if (dt5.Rows.Count > 0)
             {
                 var distrDt = dt5.AsEnumerable().Distinct(DataRowComparer.Default);
                 foreach (var row in distrDt)
                 {
-                    var innC = (!row.IsNull("inn")) ? ((string) row["inn"]) : "";
-                    var fullNameC = (!row.IsNull("full_name")) ? ((string) row["full_name"]) : "";
+                    var innC = (!row.IsNull("inn")) ? ((string)row["inn"]) : "";
+                    var fullNameC = (!row.IsNull("full_name")) ? ((string)row["full_name"]) : "";
                     resString += $" {innC} {fullNameC}";
                 }
             }
@@ -308,7 +308,7 @@ namespace ParserWebCore.Tender
             resString = Regex.Replace(resString, @"\s+", " ");
             resString = resString.Trim();
             var updateTender =
-                $"UPDATE {Builder.Prefix}tender SET tender_kwords = @tender_kwords WHERE id_tender = @id_tender";
+                $"UPDATE {AppBuilder.Prefix}tender SET tender_kwords = @tender_kwords WHERE id_tender = @id_tender";
             var cmd5 = new MySqlCommand(updateTender, connect);
             cmd5.Prepare();
             cmd5.Parameters.AddWithValue("@id_tender", idTender);
@@ -369,7 +369,7 @@ namespace ParserWebCore.Tender
             var idRegion = 0;
             var regionS = IsContainsRegion(st);
             if (regionS == "") return idRegion;
-            var selectReg = $"SELECT id FROM {Builder.Prefix}region WHERE name LIKE @name";
+            var selectReg = $"SELECT id FROM {AppBuilder.Prefix}region WHERE name LIKE @name";
             var cmd46 = new MySqlCommand(selectReg, connect);
             cmd46.Prepare();
             cmd46.Parameters.AddWithValue("@name", "%" + regionS + "%");
@@ -488,19 +488,19 @@ namespace ParserWebCore.Tender
             var cancelStatus = 0;
             var update = false;
             var selectDateT =
-                $"SELECT id_tender, date_version, cancel FROM {Builder.Prefix}tender WHERE purchase_number = @purchase_number AND type_fz = @type_fz";
+                $"SELECT id_tender, date_version, cancel FROM {AppBuilder.Prefix}tender WHERE purchase_number = @purchase_number AND type_fz = @type_fz";
             var cmd2 = new MySqlCommand(selectDateT, connect);
             cmd2.Prepare();
             cmd2.Parameters.AddWithValue("@purchase_number", purNum);
             cmd2.Parameters.AddWithValue("@type_fz", TypeFz);
-            var adapter2 = new MySqlDataAdapter {SelectCommand = cmd2};
+            var adapter2 = new MySqlDataAdapter { SelectCommand = cmd2 };
             var dt2 = new DataTable();
             adapter2.Fill(dt2);
             foreach (DataRow row in dt2.Rows)
             {
                 //DateTime dateNew = DateTime.Parse(pr.DatePublished);
                 update = true;
-                if (dateUpd >= (DateTime) row["date_version"])
+                if (dateUpd >= (DateTime)row["date_version"])
                 {
                     row["cancel"] = 1;
                     //row.AcceptChanges();
@@ -513,7 +513,7 @@ namespace ParserWebCore.Tender
             }
 
             var commandBuilder =
-                new MySqlCommandBuilder(adapter2) {ConflictOption = ConflictOption.OverwriteChanges};
+                new MySqlCommandBuilder(adapter2) { ConflictOption = ConflictOption.OverwriteChanges };
             adapter2.Update(dt2);
             return (update, cancelStatus);
         }

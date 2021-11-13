@@ -15,9 +15,6 @@ namespace ParserWebCore.MlConformity
 {
     public class ConformityLearner
     {
-        private string TrainDataPath => Path.Combine(Builder.Path, "Data", "placing_way.tsv");
-        private string TestDataPath => Path.Combine(Builder.Path, "Data", "placing_way_test.tsv");
-        private string ModelPath => Path.Combine(Builder.Path, "Models", "model.zip");
         private MLContext _mlContext;
         private PredictionEngine<ConformChecker, CheckerPrediction> _predEngine;
         private ITransformer _trainedModel;
@@ -30,11 +27,15 @@ namespace ParserWebCore.MlConformity
             ModelLearner();
         }
 
+        private string TrainDataPath => Path.Combine(AppBuilder.Path, "Data", "placing_way.tsv");
+        private string TestDataPath => Path.Combine(AppBuilder.Path, "Data", "placing_way_test.tsv");
+        private string ModelPath => Path.Combine(AppBuilder.Path, "Models", "model.zip");
+
         private void CreatePathModels()
         {
-            if (!Directory.Exists(Path.Combine(Builder.Path, "Models")))
+            if (!Directory.Exists(Path.Combine(AppBuilder.Path, "Models")))
             {
-                Directory.CreateDirectory(Path.Combine(Builder.Path, "Models"));
+                Directory.CreateDirectory(Path.Combine(AppBuilder.Path, "Models"));
             }
         }
 
@@ -119,13 +120,13 @@ namespace ParserWebCore.MlConformity
         {
             foreach (DataRow o in dr)
             {
-                var idPw = (int) o["id_placing_way"];
-                var namePw = (string) o["name"];
-                var singleConf = new ConformChecker {Name = namePw};
+                var idPw = (int)o["id_placing_way"];
+                var namePw = (string)o["name"];
+                var singleConf = new ConformChecker { Name = namePw };
                 var prediction = _predEngine.Predict(singleConf);
                 var res = prediction.Con;
                 var updateConf =
-                    $"UPDATE {Builder.Prefix}placing_way SET conformity = @conformity WHERE id_placing_way = @id_placing_way";
+                    $"UPDATE {AppBuilder.Prefix}placing_way SET conformity = @conformity WHERE id_placing_way = @id_placing_way";
                 var cmd2 = new MySqlCommand(updateConf, connect);
                 cmd2.Prepare();
                 cmd2.Parameters.AddWithValue("@conformity", res);

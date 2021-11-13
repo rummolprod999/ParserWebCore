@@ -105,8 +105,8 @@ namespace ParserWebCore.Parser
             _driver.Navigate().GoToUrl("https://zakupki.sportmaster.ru/auth/?login=yes");
             Thread.Sleep(5000);
             _driver.SwitchTo().DefaultContent();
-            _driver.FindElement(By.XPath("//input[@name = 'login']")).SendKeys(Builder.SportUser);
-            _driver.FindElement(By.XPath("//input[@name = 'password']")).SendKeys(Builder.SportPass);
+            _driver.FindElement(By.XPath("//input[@name = 'login']")).SendKeys(AppBuilder.SportUser);
+            _driver.FindElement(By.XPath("//input[@name = 'password']")).SendKeys(AppBuilder.SportPass);
             _driver.FindElement(By.XPath("//button[. = 'Отправить']")).Click();
             Thread.Sleep(5000);
         }

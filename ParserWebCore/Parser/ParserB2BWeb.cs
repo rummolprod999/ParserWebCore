@@ -40,7 +40,8 @@ namespace ParserWebCore.Parser
 
         private void GetPage(string url)
         {
-            var result = DownloadString.DownLHttpPostWithCookiesB2b(url, CookieCollection, useProxy: Builder.UserProxy);
+            var result =
+                DownloadString.DownLHttpPostWithCookiesB2b(url, CookieCollection, useProxy: AppBuilder.UserProxy);
             if (string.IsNullOrEmpty(result))
             {
                 Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",

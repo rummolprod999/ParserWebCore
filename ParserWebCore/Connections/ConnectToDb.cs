@@ -4,12 +4,12 @@ namespace ParserWebCore.Connections
 {
     public class ConnectToDb
     {
-        private static string ConnectString { get; }
-
         static ConnectToDb()
         {
-            ConnectString = BuilderApp.Builder.ConnectString;
+            ConnectString = BuilderApp.AppBuilder.ConnectString;
         }
+
+        private static string ConnectString { get; }
 
         public static MySqlConnection GetDbConnection()
         {

@@ -41,10 +41,10 @@ namespace ParserWebCore.MlConformity
             {
                 connect.Open();
                 var selectPw =
-                    $"SELECT id_placing_way, name FROM {Builder.Prefix}placing_way WHERE conformity = 0";
+                    $"SELECT id_placing_way, name FROM {AppBuilder.Prefix}placing_way WHERE conformity = 0";
                 var cmd1 = new MySqlCommand(selectPw, connect);
                 cmd1.Prepare();
-                var adapter1 = new MySqlDataAdapter {SelectCommand = cmd1};
+                var adapter1 = new MySqlDataAdapter { SelectCommand = cmd1 };
                 adapter1.Fill(_dt);
             }
         }

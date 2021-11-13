@@ -13,7 +13,7 @@ namespace ParserWebCore.Logger
 
         static Log()
         {
-            _fileLog = BuilderApp.Builder.FileLog;
+            _fileLog = BuilderApp.AppBuilder.FileLog;
         }
 
         public static void Logger(params object[] parametrs)

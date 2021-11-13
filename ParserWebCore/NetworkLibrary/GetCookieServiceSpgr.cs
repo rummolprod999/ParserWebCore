@@ -18,15 +18,15 @@ namespace ParserWebCore.NetworkLibrary
         public CookieCollection CookieValue()
         {
             var cookieContainer = new CookieContainer();
-            var handler = new HttpClientHandler {CookieContainer = cookieContainer};
+            var handler = new HttpClientHandler { CookieContainer = cookieContainer };
             var client = new HttpClient(handler);
             var content = new FormUrlEncodedContent(new[]
             {
                 new KeyValuePair<string, string>("AUTH_FORM", "Y"),
                 new KeyValuePair<string, string>("TYPE", "AUTH"),
                 new KeyValuePair<string, string>("USER_REMEMBER", "Y"),
-                new KeyValuePair<string, string>("USER_LOGIN", Builder.SpgrUser),
-                new KeyValuePair<string, string>("USER_PASSWORD", Builder.SpgrPass),
+                new KeyValuePair<string, string>("USER_LOGIN", AppBuilder.SpgrUser),
+                new KeyValuePair<string, string>("USER_PASSWORD", AppBuilder.SpgrPass),
                 new KeyValuePair<string, string>("Login", "%D0%92%D0%BE%D0%B9%D1%82%D0%B8")
             });
             var response = client.PostAsync(BaseUrl, content);

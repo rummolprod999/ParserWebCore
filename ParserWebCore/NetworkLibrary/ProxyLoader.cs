@@ -11,7 +11,7 @@ namespace ParserWebCore.NetworkLibrary
 
         static ProxyLoader()
         {
-            var proxyPath = $"{Builder.Path}{Path.DirectorySeparatorChar}{Builder.ProxyFile}";
+            var proxyPath = $"{AppBuilder.Path}{Path.DirectorySeparatorChar}{AppBuilder.ProxyFile}";
             using (var reader = File.OpenText(proxyPath))
             {
                 string line;

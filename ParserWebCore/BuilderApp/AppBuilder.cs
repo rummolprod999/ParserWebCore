@@ -9,18 +9,18 @@ using Newtonsoft.Json.Linq;
 
 namespace ParserWebCore.BuilderApp
 {
-    public class Builder
+    public class AppBuilder
     {
         public const string ReqArguments =
             "agrocomplex, kzgroup, agrotomsk, sibintek, setonline, mzvoron, maxi, tver, murman, kalug, smol, samar, udmurt, segezha, akashevo, sitno, naftan, rwby, tekkom, tekmarket, tekmos, mlconf, tekrn, brn32, sportmaster, teksil, sberb2b, zakupmos, agat, rubex, samcom, ravis, boaz, tektkp, zmorts, rtsmarket, uralmash, lotonline, etpu, ismt, tpta, absgroup, rb2b, federal, b2bweb, medsi, gpb, strateg, tenderit, kuzocm, zdship, kopemash, rusfish, uralair, sochipark, korabel, eurosib, spgr, rcs, yangpur, kpresort, stniva, dvina, kursk, ufin, gosyakut";
 
         private static int _port;
-        private static Builder _b;
+        private static AppBuilder _b;
 
         public static readonly string Path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName()
             .CodeBase.Substring(5));
 
-        private Builder(string arg)
+        private AppBuilder(string arg)
         {
             GetArgument(arg);
             GetSettings();
@@ -344,11 +344,11 @@ namespace ParserWebCore.BuilderApp
             }
         }
 
-        public static Builder GetBuilder(string arg)
+        public static AppBuilder GetBuilder(string arg)
         {
             if (_b == null)
             {
-                _b = new Builder(arg);
+                _b = new AppBuilder(arg);
                 var results = new List<ValidationResult>();
                 var context = new ValidationContext(_b);
                 if (!Validator.TryValidateObject(_b, context, results, true))

@@ -21,8 +21,8 @@ namespace ParserWebCore.Parser
                     "//input[@name = 'login']")));
             Thread.Sleep(1000);
             driver.SwitchTo().DefaultContent();
-            driver.FindElement(By.XPath("//input[@name = 'login']")).SendKeys(Builder.UfinUser);
-            driver.FindElement(By.XPath("//input[@name = 'pass']")).SendKeys(Builder.UfinPass);
+            driver.FindElement(By.XPath("//input[@name = 'login']")).SendKeys(AppBuilder.UfinUser);
+            driver.FindElement(By.XPath("//input[@name = 'pass']")).SendKeys(AppBuilder.UfinPass);
             driver.FindElement(By.XPath("//input[@value = 'Вход']")).Click();
             Thread.Sleep(5000);
         }

@@ -15,8 +15,8 @@ namespace ParserWebCore.Parser
 {
     public class ParserGzwSp : ParserAbstract, IParser, Auth
     {
-        private const int Count = 10;
         private readonly ChromeDriver _driver = CreatorChromeDriver.GetChromeDriver();
+        private readonly int Count = 10;
         private Arguments _arg;
         private string _baseUrl;
         private string _etpName;
@@ -26,7 +26,8 @@ namespace ParserWebCore.Parser
         private int _typeFz;
         protected string _url;
 
-        public ParserGzwSp(string url, string baseurl, string etpName, string etpUrl, int typeFz, Arguments arg)
+        public ParserGzwSp(string url, string baseurl, string etpName, string etpUrl, int typeFz, Arguments arg,
+            int count = 10)
         {
             _url = url;
             _baseUrl = baseurl;
@@ -34,6 +35,7 @@ namespace ParserWebCore.Parser
             _etpUrl = etpUrl;
             _typeFz = typeFz;
             _arg = arg;
+            Count = count;
         }
 
         public virtual void Auth(ChromeDriver driver, WebDriverWait wait)

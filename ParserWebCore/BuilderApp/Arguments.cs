@@ -76,5 +76,6 @@
         Dvina,
         Kursk,
         Ufin,
+        Gosyakut,
     }
 }

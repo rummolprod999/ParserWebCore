@@ -81,6 +81,13 @@ namespace ParserWebCore.Parser
                             "http://goszakaz.ufin48.ru/smallpurchases/GzwSP/NoticesGrid", 351, _arguments)
                         .Parsing();
                     break;
+                case Arguments.Gosyakut:
+                    new ParserGzwSp("https://www.goszakazyakutia.ru/smallpurchases/GzwSP/NoticesGrid",
+                            "https://www.goszakazyakutia.ru",
+                            "«WEB-Маркет закупок» Республики Саха (Якутия)",
+                            "http://market.goszakazyakutia.ru", 76, _arguments, 3)
+                        .Parsing();
+                    break;
                 default: throw new ArgumentOutOfRangeException(nameof(_arguments), _arguments, null);
             }
         }

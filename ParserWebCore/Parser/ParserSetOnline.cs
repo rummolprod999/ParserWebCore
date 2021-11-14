@@ -14,9 +14,9 @@ namespace ParserWebCore.Parser
     public class ParserSetOnline : ParserAbstract, IParser
     {
         private const int Count = 5;
-        private TimeSpan _timeoutB = TimeSpan.FromSeconds(120);
         private const string Url = "https://etp.setonline.ru/app/SearchLots/page";
         private readonly ChromeDriver _driver = CreatorChromeDriver.GetChromeDriver();
+        private TimeSpan _timeoutB = TimeSpan.FromSeconds(120);
 
         public void Parsing()
         {
@@ -95,7 +95,7 @@ namespace ParserWebCore.Parser
         {
             _driver.SwitchTo().DefaultContent();
             var purName = t.FindElementWithoutException(By.XPath("./td[3]/div/a"))?.Text.Trim() ??
-                          throw new Exception("cannot find purName " + t.Text);
+                          throw new Exception($"cannot find purName {t.Text}");
             var href = t.FindElementWithoutException(By.XPath("./td[3]/div/a"))?.GetAttribute("href").Trim() ??
                        throw new Exception("cannot find href");
             var datePubT = t.FindElementWithoutException(By.XPath("./td[6]/div"))?.Text.Trim() ??

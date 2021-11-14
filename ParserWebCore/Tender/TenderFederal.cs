@@ -209,12 +209,12 @@ namespace ParserWebCore.Tender
                 if (lotNumber == "") continue;
                 var docString =
                     CurlLoaderFederal.DownL(
-                        "https://t2.federal1.ru/includes/Auction/ajax/viewLot.php" + $"?id={lotNumber}",
+                        $"https://t2.federal1.ru/includes/Auction/ajax/viewLot.php?id={lotNumber}",
                         ParserFederal.Cookie.Value);
                 if (!docString.Contains("<table"))
                 {
                     docString = CurlLoaderFederal.DownL(
-                        "https://t2.federal1.ru/ajax/zQuotation/ajaxViewLotQuotation.php" + $"?id={lotNumber}",
+                        $"https://t2.federal1.ru/ajax/zQuotation/ajaxViewLotQuotation.php?id={lotNumber}",
                         ParserFederal.Cookie.Value);
                 }
 

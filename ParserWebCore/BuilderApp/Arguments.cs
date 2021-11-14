@@ -78,5 +78,6 @@
         Ufin,
         Gosyakut,
         Tatar,
+        Mts,
     }
 }

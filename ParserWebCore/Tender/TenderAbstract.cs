@@ -372,7 +372,7 @@ namespace ParserWebCore.Tender
             var selectReg = $"SELECT id FROM {AppBuilder.Prefix}region WHERE name LIKE @name";
             var cmd46 = new MySqlCommand(selectReg, connect);
             cmd46.Prepare();
-            cmd46.Parameters.AddWithValue("@name", "%" + regionS + "%");
+            cmd46.Parameters.AddWithValue("@name", $"%{regionS}%");
             var reader46 = cmd46.ExecuteReader();
             if (reader46.HasRows)
             {

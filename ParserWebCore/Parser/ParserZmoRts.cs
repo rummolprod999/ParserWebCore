@@ -104,9 +104,8 @@ namespace ParserWebCore.Parser
 
         private void GetPage(int num, in Dictionary<string, int> section)
         {
-            var data = "{\"FilterSource\":1,\"Paging\":{\"Page\":" + num +
-                       ",\"ItemsPerPage\":50},\"PaginationEventType\":0,\"Sorting\":[{\"field\":\"PublicationDate\",\"title\":\"По новизне\",\"direction\":\"Descending\",\"active\":true}],\"Filtering\":[" +
-                       section.Keys.First() + "]}";
+            var data =
+                $"{{\"FilterSource\":1,\"Paging\":{{\"Page\":{num},\"ItemsPerPage\":50}},\"PaginationEventType\":0,\"Sorting\":[{{\"field\":\"PublicationDate\",\"title\":\"По новизне\",\"direction\":\"Descending\",\"active\":true}}],\"Filtering\":[{section.Keys.First()}]}}";
             var s = DownloadString.DownLRtsZmo(_apiUrl, data, section.Values.First());
             if (string.IsNullOrEmpty(s))
             {
@@ -139,17 +138,17 @@ namespace ParserWebCore.Parser
 
         private void ParserTenderObj(JToken t, int sec)
         {
-            var id = ((string) t.SelectToken("Id") ?? "").Trim();
-            var lotId = ((string) t.SelectToken("LotId") ?? "").Trim();
-            var purName = ((string) t.SelectToken("Name") ?? "").Trim();
-            var nmck = ((string) t.SelectToken("Price") ?? "").Trim();
-            var cusName = ((string) t.SelectToken("CustomerName") ?? "").Trim();
-            var stateString = ((string) t.SelectToken("StateString") ?? "").Trim();
-            var publicationDate = (DateTime?) t.SelectToken("PublicationDate") ?? DateTime.MinValue;
-            var endDate = (DateTime?) t.SelectToken("FillingApplicationEndDate") ?? DateTime.MinValue;
+            var id = ((string)t.SelectToken("Id") ?? "").Trim();
+            var lotId = ((string)t.SelectToken("LotId") ?? "").Trim();
+            var purName = ((string)t.SelectToken("Name") ?? "").Trim();
+            var nmck = ((string)t.SelectToken("Price") ?? "").Trim();
+            var cusName = ((string)t.SelectToken("CustomerName") ?? "").Trim();
+            var stateString = ((string)t.SelectToken("StateString") ?? "").Trim();
+            var publicationDate = (DateTime?)t.SelectToken("PublicationDate") ?? DateTime.MinValue;
+            var endDate = (DateTime?)t.SelectToken("FillingApplicationEndDate") ?? DateTime.MinValue;
             var delivPlaces = GetElements(t, "DeliveryKladrs")
-                .Select(m => ((string) m.SelectToken("Name") ?? "").Trim()).ToArray();
-            var host = GetElements(t, "Hosts").Select(m => (string) m ?? "").FirstOrDefault();
+                .Select(m => ((string)m.SelectToken("Name") ?? "").Trim()).ToArray();
+            var host = GetElements(t, "Hosts").Select(m => (string)m ?? "").FirstOrDefault();
             if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(lotId) || publicationDate == DateTime.MinValue ||
                 endDate == DateTime.MinValue)
             {

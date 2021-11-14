@@ -93,7 +93,7 @@ namespace ParserWebCore.Parser
         private void ParsingPage(IWebElement t)
         {
             var purName = t.FindElementWithoutException(By.XPath("./td[1]"))?.Text.Replace("Название", "").Trim() ??
-                          throw new Exception("cannot find purName " + t.Text);
+                          throw new Exception($"cannot find purName {t.Text}");
             var href = "https://www.uralairlines.ru/tenders/";
             var purNum = purName.GetDataFromRegex(@"^(\d+)\s+");
             if (purNum == "")
@@ -127,7 +127,7 @@ namespace ParserWebCore.Parser
                 var name = a.Text.Trim();
                 var url = a.GetAttribute("href").Trim();
                 if (name == "" || url == "") continue;
-                attachments.Add(new TypeUralair.Attachment {Name = name, Url = url});
+                attachments.Add(new TypeUralair.Attachment { Name = name, Url = url });
             }
 
             var tn = new TenderUralair("Уральские авиалинии", "https://www.uralairlines.ru/", 323,

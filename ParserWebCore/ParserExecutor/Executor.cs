@@ -221,6 +221,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Tatar:
                     _parser = new ParserTatar();
                     break;
+                case Arguments.Mts:
+                    _parser = new ParserMts();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

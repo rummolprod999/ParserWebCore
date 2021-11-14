@@ -95,7 +95,7 @@ namespace ParserWebCore.Parser
         {
             _driver.SwitchTo().DefaultContent();
             var purName = t.FindElementWithoutException(By.XPath("./td[3]/div/a"))?.Text.Trim() ??
-                          throw new Exception("cannot find purName " + t.Text);
+                          throw new Exception($"cannot find purName {t.Text}");
             var href = t.FindElementWithoutException(By.XPath("./td[3]/div/a"))?.GetAttribute("href").Trim() ??
                        throw new Exception("cannot find href");
             var datePubT = t.FindElementWithoutException(By.XPath("./td[6]/div"))?.Text.Trim() ??

@@ -40,6 +40,8 @@ namespace ParserWebCore.BuilderApp
         [Required] public static string SportUser { get; set; }
         [Required] public static string UfinPass { get; set; }
         [Required] public static string UfinUser { get; set; }
+        [Required] public static string SmolPass { get; set; }
+        [Required] public static string SmolUser { get; set; }
         [Required] public static string ConnectString { get; set; }
         [Required] public static bool UserProxy { get; set; }
         [Required] public static string ProxyFile { get; set; }
@@ -306,6 +308,8 @@ namespace ParserWebCore.BuilderApp
                 SpgrUser = (string)o["userspgr"];
                 UfinPass = (string)o["passufin"];
                 UfinUser = (string)o["userufin"];
+                SmolPass = (string)o["passsmol"];
+                SmolUser = (string)o["usersmol"];
                 UserProxy = (bool)o["use_proxy"];
                 ProxyFile = (string)o["proxy_file"];
                 _port = int.TryParse((string)o["port"], out _port) ? int.Parse((string)o["port"]) : 3306;

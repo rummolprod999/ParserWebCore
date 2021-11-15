@@ -1,5 +1,6 @@
 using System;
 using System.Data;
+using System.Net;
 using System.Threading;
 using HtmlAgilityPack;
 using MySql.Data.MySqlClient;
@@ -8,6 +9,7 @@ using ParserWebCore.Connections;
 using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
+using ParserWebCore.Parser;
 using ParserWebCore.TenderType;
 
 namespace ParserWebCore.Tender
@@ -58,6 +60,13 @@ namespace ParserWebCore.Tender
                 if (_arg == Arguments.Samar || _arg == Arguments.Udmurt)
                 {
                     s = DownloadString.DownLUserAgent(_tn.Href);
+                }
+                else if (_arg == Arguments.Smol)
+                {
+                    var col = new CookieCollection();
+                    col.Add(new Cookie("ebudget", ParserGzwSp.AuthCookieValue));
+                    s = DownloadString.DownLHttpPostWithCookiesAll(_tn.Href, _baseUrl, col);
+                    ;
                 }
                 else
                 {

@@ -34,7 +34,7 @@ namespace ParserWebCore.Parser
                         "http://mimz.tender.admoblkaluga.ru/GzwSP/NoticesGrid", 87, _arguments).Parsing();
                     break;
                 case Arguments.Smol:
-                    new ParserGzwSp("https://goszakupki.admin-smolensk.ru/smallpurchases/GzwSP/NoticesGrid",
+                    new ParserGzwSSmol("https://goszakupki.admin-smolensk.ru/smallpurchases/GzwSP/NoticesGrid",
                             "https://goszakupki.admin-smolensk.ru",
                             "Малые закупки Смоленской области",
                             "http://goszakupki.admin-smolensk.ru/smallpurchases/GzwSP/NoticesGrid", 88, _arguments)

@@ -79,5 +79,6 @@
         Gosyakut,
         Tatar,
         Mts,
+        Tverzmo,
     }
 }

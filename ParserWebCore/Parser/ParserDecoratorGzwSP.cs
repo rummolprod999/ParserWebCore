@@ -88,6 +88,13 @@ namespace ParserWebCore.Parser
                             "http://market.goszakazyakutia.ru", 76, _arguments, 3)
                         .Parsing();
                     break;
+                case Arguments.Tverzmo:
+                    new ParserGzwSp("https://www.tver.ru/zakaz/GzwSP/NoticesGrid",
+                            "https://www.tver.ru",
+                            "ЗМО г. Тверь",
+                            "https://www.tver.ru", 353, _arguments, 5)
+                        .Parsing();
+                    break;
                 default: throw new ArgumentOutOfRangeException(nameof(_arguments), _arguments, null);
             }
         }

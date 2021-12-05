@@ -80,5 +80,6 @@
         Tatar,
         Mts,
         Tverzmo,
+        Bash,
     }
 }

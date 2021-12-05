@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -22,11 +23,13 @@ namespace ParserWebCore.NetworkLibrary
 
     public class TimedWebClientUa : WebClient
     {
+        private readonly Dictionary<string, string> _headers;
         private readonly bool _randomUa;
 
-        public TimedWebClientUa(bool randomUa)
+        public TimedWebClientUa(bool randomUa, Dictionary<string, string> headers = null)
         {
             _randomUa = randomUa;
+            _headers = headers;
         }
 
         protected override WebRequest GetWebRequest(Uri address)
@@ -41,6 +44,14 @@ namespace ParserWebCore.NetworkLibrary
                     : "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:55.0) Gecko/20100101 Firefox/55.0";
                 wr.AutomaticDecompression =
                     DecompressionMethods.GZip | DecompressionMethods.Deflate | DecompressionMethods.None;
+                if (_headers != null)
+                {
+                    foreach (var (key, value) in _headers)
+                    {
+                        wr.Headers.Add(key, value);
+                    }
+                }
+
                 return wr;
             }
 

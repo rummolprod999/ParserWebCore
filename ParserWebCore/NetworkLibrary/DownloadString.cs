@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -106,7 +107,8 @@ namespace ParserWebCore.NetworkLibrary
             return tmp;
         }
 
-        public static string DownLUserAgent(string url, bool randomUa = false)
+        public static string DownLUserAgent(string url, bool randomUa = false,
+            Dictionary<string, string> headers = null)
         {
             var tmp = "";
             var count = 0;
@@ -114,7 +116,7 @@ namespace ParserWebCore.NetworkLibrary
             {
                 try
                 {
-                    var task = Task.Run(() => (new TimedWebClientUa(randomUa)).DownloadString(url));
+                    var task = Task.Run(() => (new TimedWebClientUa(randomUa, headers)).DownloadString(url));
                     if (!task.Wait(TimeSpan.FromSeconds(60))) throw new TimeoutException();
                     tmp = task.Result;
                     break;
@@ -185,7 +187,7 @@ namespace ParserWebCore.NetworkLibrary
                     var task = Task.Run(() =>
                     {
                         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-                        var v = new TimedWebClient {Encoding = Encoding.GetEncoding("windows-1251")};
+                        var v = new TimedWebClient { Encoding = Encoding.GetEncoding("windows-1251") };
                         return v.DownloadString(url);
                     });
                     if (!task.Wait(TimeSpan.FromSeconds(60))) throw new TimeoutException();

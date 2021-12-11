@@ -49,7 +49,7 @@ namespace ParserWebCore.ParserExecutor
                     _parser = new ParserDecoratorGzwSp(arg);
                     break;
                 case Arguments.Segezha:
-                    _parser = new ParserSegezha();
+                    _parser = new ParserSegezhaNew();
                     break;
                 case Arguments.Akashevo:
                     _parser = new ParserAkashevo();

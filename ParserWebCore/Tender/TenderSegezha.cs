@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using HtmlAgilityPack;
 using MySql.Data.MySqlClient;
@@ -44,7 +45,15 @@ namespace ParserWebCore.Tender
                     return;
                 }
 
-                var s = DownloadString.DownLUserAgent(_tn.Href);
+                var headers = new Dictionary<string, string>
+                {
+                    ["sec-fetch-site"] = "none",
+                    ["sec-fetch-mode"] = "navigate",
+                    ["sec-fetch-user"] = "?1",
+                    ["sec-fetch-dest"] = "document",
+                    ["accept-language"] = "ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7",
+                };
+                var s = DownloadString.DownLUserAgent(_tn.Href, false, headers);
                 if (string.IsNullOrEmpty(s))
                 {
                     Log.Logger("Empty string in ParsingTender()", _tn.Href);
@@ -88,6 +97,15 @@ namespace ParserWebCore.Tender
                 var printForm = _tn.Href;
                 var customerId = 0;
                 var organiserId = 0;
+                var orgName = (navigator
+                    .SelectSingleNode(
+                        "//div[contains(., 'Организатор')]/following-sibling::div")
+                    ?.Value ?? "").Trim();
+                if (orgName != "")
+                {
+                    _tn.OrgName = orgName;
+                }
+
                 if (!string.IsNullOrEmpty(_tn.OrgName))
                 {
                     var selectOrg =
@@ -205,13 +223,13 @@ namespace ParserWebCore.Tender
                 }
 
                 var docs = htmlDoc.DocumentNode.SelectNodes(
-                               "//h3[contains(., 'ДОКУМЕНТАЦИЯ ПО ЗАКУПКЕ')]/following-sibling::div//div[@class = 'files-item']/a") ??
+                               "//li[@class = 'documents-list__item']/a") ??
                            new HtmlNodeCollection(null);
                 foreach (var doc in docs)
                 {
                     var urlAttT = (doc?.Attributes["href"]?.Value ?? "").Trim();
-                    var fName = "Документация";
-                    var urlAtt = $"https://old.segezha-group.com{urlAttT}";
+                    var fName = doc.InnerText.Trim().DelDoubleWhitespace();
+                    var urlAtt = $"https://segezha-group.com{urlAttT}";
                     if (!string.IsNullOrEmpty(fName))
                     {
                         var insertAttach =

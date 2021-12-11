@@ -19,7 +19,7 @@ namespace ParserWebCore.Parser
         {
             try
             {
-                ParsingPage("https://russianfishery.ru/tenders/");
+                ParsingPage("https://russianfishery.ru/suppliers/tenders/");
             }
             catch (Exception e)
             {
@@ -39,7 +39,7 @@ namespace ParserWebCore.Parser
             var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(s);
             var tens =
-                htmlDoc.DocumentNode.SelectNodes("//div[@class = 'tenderlist_item']") ??
+                htmlDoc.DocumentNode.SelectNodes("//div[@class = 'tender-list__item']") ??
                 new HtmlNodeCollection(null);
             foreach (var a in tens)
             {
@@ -56,7 +56,7 @@ namespace ParserWebCore.Parser
 
         private void ParserTender(HtmlNode n)
         {
-            var purName = (n.SelectSingleNode("./span")
+            var purName = (n.SelectSingleNode(".//div[@class = 'tender-prev__name']")
                 ?.InnerText ?? "").Trim();
             if (string.IsNullOrEmpty(purName))
             {
@@ -64,18 +64,16 @@ namespace ParserWebCore.Parser
                 return;
             }
 
-            var purNum = (n.Attributes["rel"]?.Value ?? "").Trim();
-            if (string.IsNullOrEmpty(purNum))
-            {
-                Log.Logger("Empty purNum");
-                return;
-            }
+            var purNum = purName.ToMd5();
 
-            var href = $"https://russianfishery.ru/tenders/item.php?page={purNum}";
-            var status = (n.SelectSingleNode("./div[@class = 'tender_active']")
-                ?.InnerText ?? "").Trim();
+            var href =
+                n.SelectSingleNode(".//a")?.Attributes["href"]?.Value ??
+                throw new Exception(
+                    $"Cannot find href in {purNum}");
+            href = $"https://russianfishery.ru{href}";
+            var status = "";
             var datePubT =
-                (n.SelectSingleNode(".//div[@class = 'date_tag']")
+                (n.SelectSingleNode(".//div[@class = 'tender-prev__date']")
                     ?.InnerText ?? "").Trim();
             var datePub = datePubT.ParseDateUn("dd.MM.yyyy");
             if (datePub == DateTime.MinValue)
@@ -83,7 +81,15 @@ namespace ParserWebCore.Parser
                 datePub = DateTime.Today;
             }
 
-            var dateEnd = datePub.AddDays(2);
+            var dateEndT =
+                (n.SelectSingleNode(".//div[@class = 'tender-prev__time']")
+                    ?.InnerText ?? "").Trim();
+            var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy");
+            if (dateEnd == DateTime.MinValue)
+            {
+                dateEnd = datePub.AddDays(2);
+            }
+
             var tn = new TenderRusfish("«Русская Рыбопромышленная Компания»", "https://russianfishery.ru/", 322,
                 new TypeRusfish
                 {

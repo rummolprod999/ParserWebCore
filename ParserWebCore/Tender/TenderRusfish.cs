@@ -27,12 +27,13 @@ namespace ParserWebCore.Tender
             {
                 connect.Open();
                 var selectTend =
-                    $"SELECT id_tender FROM {AppBuilder.Prefix}tender WHERE purchase_number = @purchase_number AND type_fz = @type_fz AND notice_version = @notice_version";
+                    $"SELECT id_tender FROM {AppBuilder.Prefix}tender WHERE purchase_number = @purchase_number AND type_fz = @type_fz AND doc_publish_date = @doc_publish_date AND end_date = @end_date";
                 var cmd = new MySqlCommand(selectTend, connect);
                 cmd.Prepare();
                 cmd.Parameters.AddWithValue("@purchase_number", _tn.PurNum);
                 cmd.Parameters.AddWithValue("@type_fz", TypeFz);
-                cmd.Parameters.AddWithValue("@notice_version", _tn.Status);
+                cmd.Parameters.AddWithValue("@doc_publish_date", _tn.DatePub);
+                cmd.Parameters.AddWithValue("@end_date", _tn.DateEnd);
                 var dt = new DataTable();
                 var adapter = new MySqlDataAdapter { SelectCommand = cmd };
                 adapter.Fill(dt);
@@ -58,12 +59,6 @@ namespace ParserWebCore.Tender
                 var customerId = 0;
                 var organiserId = 0;
                 var orgName = EtpName;
-                var dateEndT = s.GetDataFromRegex(@"в\s+срок\s+до\s+(\d{2}\.\d{2}\.\d{4})");
-                var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy");
-                if (dateEnd != DateTime.MinValue)
-                {
-                    _tn.DateEnd = dateEnd;
-                }
 
                 var biddingDateT =
                     s.GetDataFromRegex(@"Срок\s+проведения\s+тендера\s+приблизительно\s+(\d{2}\.\d{2}\.\d{4})");
@@ -128,7 +123,7 @@ namespace ParserWebCore.Tender
                 }
 
                 var docs = htmlDoc.DocumentNode.SelectNodes(
-                               "//a[starts-with(@href, '/upload/tenders')]") ??
+                               "//div[@class = 'lot']//a") ??
                            new HtmlNodeCollection(null);
                 foreach (var doc in docs)
                 {
@@ -173,6 +168,37 @@ namespace ParserWebCore.Tender
                 cmd20.Parameters.AddWithValue("@price", "");
                 cmd20.Parameters.AddWithValue("@sum", "");
                 cmd20.ExecuteNonQuery();
+
+                var nav = (HtmlNodeNavigator)htmlDoc.CreateNavigator();
+
+                var delivPlace = nav.SelectSingleNode(
+                                         "//div[. = 'Место проведения работ:']/following-sibling::div")
+                                     ?.Value?.Trim() ??
+                                 "";
+                var delivTerm1 = nav.SelectSingleNode(
+                                         "//div[. = 'Сроки реализации работ:']/following-sibling::div")
+                                     ?.Value?.Trim() ??
+                                 "";
+                var delivTerm = "";
+                if (!string.IsNullOrEmpty(delivTerm1))
+                {
+                    delivTerm = $"{delivTerm}\nСроки реализации работ: {delivTerm1}";
+                }
+
+                if (!string.IsNullOrEmpty(delivPlace) || !string.IsNullOrEmpty(delivTerm))
+                {
+                    var insertCustomerRequirement =
+                        $"INSERT INTO {AppBuilder.Prefix}customer_requirement SET id_lot = @id_lot, id_customer = @id_customer, delivery_place = @delivery_place, max_price = @max_price, delivery_term = @delivery_term";
+                    var cmd16 = new MySqlCommand(insertCustomerRequirement, connect);
+                    cmd16.Prepare();
+                    cmd16.Parameters.AddWithValue("@id_lot", idLot);
+                    cmd16.Parameters.AddWithValue("@id_customer", customerId);
+                    cmd16.Parameters.AddWithValue("@delivery_place", delivPlace);
+                    cmd16.Parameters.AddWithValue("@max_price", "");
+                    cmd16.Parameters.AddWithValue("@delivery_term", delivTerm.ReplaceHtmlEntyty().Trim());
+                    cmd16.ExecuteNonQuery();
+                }
+
                 TenderKwords(connect, idTender);
                 AddVerNumber(connect, _tn.PurNum, TypeFz);
             }

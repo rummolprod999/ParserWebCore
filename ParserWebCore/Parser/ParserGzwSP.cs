@@ -22,7 +22,7 @@ namespace ParserWebCore.Parser
         private string _baseUrl;
         private string _etpName;
         private string _etpUrl;
-        private List<TypeMzVoron> _tendersList = new List<TypeMzVoron>();
+        protected List<TypeMzVoron> _tendersList = new List<TypeMzVoron>();
         private TimeSpan _timeoutB = TimeSpan.FromSeconds(30);
         private int _typeFz;
         protected string _url;
@@ -165,7 +165,7 @@ namespace ParserWebCore.Parser
             }
         }
 
-        private void ParsingPage(IWebElement t)
+        protected virtual void ParsingPage(IWebElement t)
         {
             //_driver.SwitchTo().DefaultContent();
             var purName =

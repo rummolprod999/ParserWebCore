@@ -81,5 +81,6 @@
         Mts,
         Tverzmo,
         Bash,
+        Midural,
     }
 }

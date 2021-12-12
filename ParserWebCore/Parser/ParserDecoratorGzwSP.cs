@@ -95,6 +95,13 @@ namespace ParserWebCore.Parser
                             "https://www.tver.ru", 353, _arguments, 5)
                         .Parsing();
                     break;
+                case Arguments.Midural:
+                    new ParserMidural("https://torgi.midural.ru/smallpurchases/GzwSP/ProposalsBidsGrid",
+                            "https://torgi.midural.ru/",
+                            "Малые закупки  Свердловской области",
+                            "https://torgi.midural.ru/", 356, _arguments, 15)
+                        .Parsing();
+                    break;
                 default: throw new ArgumentOutOfRangeException(nameof(_arguments), _arguments, null);
             }
         }

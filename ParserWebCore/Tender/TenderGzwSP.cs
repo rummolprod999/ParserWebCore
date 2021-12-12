@@ -162,6 +162,11 @@ namespace ParserWebCore.Tender
                     .SelectSingleNode(
                         "//td[. = 'Способ закупки']/following-sibling::td")
                     ?.Value ?? "").Trim();
+                if (_arg == Arguments.Midural)
+                {
+                    PlacingWay = "коммерческое предложение";
+                }
+
                 GetPlacingWay(connect, out var idPlacingWay);
                 switch (_arg)
                 {
@@ -182,6 +187,9 @@ namespace ParserWebCore.Tender
                         break;
                     case Arguments.Udmurt:
                         idRegion = GetRegionFromString("удмурт", connect);
+                        break;
+                    case Arguments.Midural:
+                        idRegion = GetRegionFromString("свердл", connect);
                         break;
                     default:
                         idRegion = 0;
@@ -308,39 +316,77 @@ namespace ParserWebCore.Tender
                     cmd16.ExecuteNonQuery();
                 }
 
-                var poList =
-                    htmlDoc.DocumentNode.SelectNodes("//table[thead[tr[th[. = 'Количество']]]]/tbody/tr") ??
-                    new HtmlNodeCollection(null);
-                if (poList.Count != 0)
+                if (_arg == Arguments.Midural)
                 {
-                    poList.RemoveAt(poList.Count - 1);
-                    foreach (var pp in poList)
+                    var poList =
+                        htmlDoc.DocumentNode.SelectNodes("//table[thead[tr[th[. = 'Количество']]]]/tbody/tr") ??
+                        new HtmlNodeCollection(null);
+                    if (poList.Count != 0)
                     {
-                        var namePo = (pp.SelectSingleNode(".//td[2]")
-                            ?.InnerText ?? "").Trim();
-                        var okeiP = (pp.SelectSingleNode(".//td[3]")
-                            ?.InnerText ?? "").Trim();
-                        var priceP = (pp.SelectSingleNode(".//td[4]")
-                            ?.InnerText.Replace(",", ".").DelAllWhitespace() ?? "").Trim();
-                        var sumP = (pp.SelectSingleNode(".//td[6]")
-                            ?.InnerText.Replace(",", ".").DelAllWhitespace() ?? "").Trim();
-                        var quantityP = (pp.SelectSingleNode(".//td[5]")
-                            ?.InnerText.Replace(",", ".").DelAllWhitespace() ?? "").Trim();
-                        var insertLotitem =
-                            $"INSERT INTO {AppBuilder.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name, quantity_value = @quantity_value, okei = @okei, customer_quantity_value = @customer_quantity_value, price = @price, sum = @sum";
-                        var cmd19 = new MySqlCommand(insertLotitem, connect);
-                        cmd19.Prepare();
-                        cmd19.Parameters.AddWithValue("@id_lot", idLot);
-                        cmd19.Parameters.AddWithValue("@id_customer", customerId);
-                        cmd19.Parameters.AddWithValue("@name", namePo);
-                        cmd19.Parameters.AddWithValue("@quantity_value", quantityP);
-                        cmd19.Parameters.AddWithValue("@okei", okeiP);
-                        cmd19.Parameters.AddWithValue("@customer_quantity_value", quantityP);
-                        cmd19.Parameters.AddWithValue("@price", priceP);
-                        cmd19.Parameters.AddWithValue("@sum", sumP);
-                        cmd19.ExecuteNonQuery();
+                        //poList.RemoveAt(poList.Count - 1);
+                        foreach (var pp in poList)
+                        {
+                            var namePo = (pp.SelectSingleNode(".//td[2]")
+                                ?.InnerText ?? "").Trim();
+                            var okeiP = (pp.SelectSingleNode(".//td[5]")
+                                ?.InnerText ?? "").Trim();
+                            var priceP = "";
+                            var sumP = "";
+                            var quantityP = (pp.SelectSingleNode(".//td[4]")
+                                ?.InnerText.Replace(",", ".").DelAllWhitespace() ?? "").Trim();
+                            var insertLotitem =
+                                $"INSERT INTO {AppBuilder.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name, quantity_value = @quantity_value, okei = @okei, customer_quantity_value = @customer_quantity_value, price = @price, sum = @sum";
+                            var cmd19 = new MySqlCommand(insertLotitem, connect);
+                            cmd19.Prepare();
+                            cmd19.Parameters.AddWithValue("@id_lot", idLot);
+                            cmd19.Parameters.AddWithValue("@id_customer", customerId);
+                            cmd19.Parameters.AddWithValue("@name", namePo);
+                            cmd19.Parameters.AddWithValue("@quantity_value", quantityP);
+                            cmd19.Parameters.AddWithValue("@okei", okeiP);
+                            cmd19.Parameters.AddWithValue("@customer_quantity_value", quantityP);
+                            cmd19.Parameters.AddWithValue("@price", priceP);
+                            cmd19.Parameters.AddWithValue("@sum", sumP);
+                            cmd19.ExecuteNonQuery();
+                        }
                     }
                 }
+                else
+                {
+                    var poList =
+                        htmlDoc.DocumentNode.SelectNodes("//table[thead[tr[th[. = 'Количество']]]]/tbody/tr") ??
+                        new HtmlNodeCollection(null);
+                    if (poList.Count != 0)
+                    {
+                        //poList.RemoveAt(poList.Count - 1);
+                        foreach (var pp in poList)
+                        {
+                            var namePo = (pp.SelectSingleNode(".//td[2]")
+                                ?.InnerText ?? "").Trim();
+                            var okeiP = (pp.SelectSingleNode(".//td[3]")
+                                ?.InnerText ?? "").Trim();
+                            var priceP = (pp.SelectSingleNode(".//td[4]")
+                                ?.InnerText.Replace(",", ".").DelAllWhitespace() ?? "").Trim();
+                            var sumP = (pp.SelectSingleNode(".//td[6]")
+                                ?.InnerText.Replace(",", ".").DelAllWhitespace() ?? "").Trim();
+                            var quantityP = (pp.SelectSingleNode(".//td[5]")
+                                ?.InnerText.Replace(",", ".").DelAllWhitespace() ?? "").Trim();
+                            var insertLotitem =
+                                $"INSERT INTO {AppBuilder.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name, quantity_value = @quantity_value, okei = @okei, customer_quantity_value = @customer_quantity_value, price = @price, sum = @sum";
+                            var cmd19 = new MySqlCommand(insertLotitem, connect);
+                            cmd19.Prepare();
+                            cmd19.Parameters.AddWithValue("@id_lot", idLot);
+                            cmd19.Parameters.AddWithValue("@id_customer", customerId);
+                            cmd19.Parameters.AddWithValue("@name", namePo);
+                            cmd19.Parameters.AddWithValue("@quantity_value", quantityP);
+                            cmd19.Parameters.AddWithValue("@okei", okeiP);
+                            cmd19.Parameters.AddWithValue("@customer_quantity_value", quantityP);
+                            cmd19.Parameters.AddWithValue("@price", priceP);
+                            cmd19.Parameters.AddWithValue("@sum", sumP);
+                            cmd19.ExecuteNonQuery();
+                        }
+                    }
+                }
+
 
                 TenderKwords(connect, idTender);
                 AddVerNumber(connect, _tn.PurNum, TypeFz);

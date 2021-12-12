@@ -12,7 +12,7 @@ namespace ParserWebCore.BuilderApp
     public class AppBuilder
     {
         public const string ReqArguments =
-            "agrocomplex, kzgroup, agrotomsk, sibintek, setonline, mzvoron, maxi, tver, murman, kalug, smol, samar, udmurt, segezha, akashevo, sitno, naftan, rwby, tekkom, tekmarket, tekmos, mlconf, tekrn, brn32, sportmaster, teksil, sberb2b, zakupmos, agat, rubex, samcom, ravis, boaz, tektkp, zmorts, rtsmarket, uralmash, lotonline, etpu, ismt, tpta, absgroup, rb2b, federal, b2bweb, medsi, gpb, strateg, tenderit, kuzocm, zdship, kopemash, rusfish, uralair, sochipark, korabel, eurosib, spgr, rcs, yangpur, kpresort, stniva, dvina, kursk, ufin, gosyakut, tatar, mts, tverzmo, bash";
+            "agrocomplex, kzgroup, agrotomsk, sibintek, setonline, mzvoron, maxi, tver, murman, kalug, smol, samar, udmurt, segezha, akashevo, sitno, naftan, rwby, tekkom, tekmarket, tekmos, mlconf, tekrn, brn32, sportmaster, teksil, sberb2b, zakupmos, agat, rubex, samcom, ravis, boaz, tektkp, zmorts, rtsmarket, uralmash, lotonline, etpu, ismt, tpta, absgroup, rb2b, federal, b2bweb, medsi, gpb, strateg, tenderit, kuzocm, zdship, kopemash, rusfish, uralair, sochipark, korabel, eurosib, spgr, rcs, yangpur, kpresort, stniva, dvina, kursk, ufin, gosyakut, tatar, mts, tverzmo, bash, midural";
 
         private static int _port;
         private static AppBuilder _b;
@@ -290,6 +290,9 @@ namespace ParserWebCore.BuilderApp
                     break;
                 case "bash":
                     Arg = Arguments.Bash;
+                    break;
+                case "midural":
+                    Arg = Arguments.Midural;
                     break;
                 default:
                     throw new ArgumentException($"Неправильно указан аргумент {s}, используйте {ReqArguments}");

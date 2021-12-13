@@ -191,6 +191,9 @@ namespace ParserWebCore.Tender
                     case Arguments.Midural:
                         idRegion = GetRegionFromString("свердл", connect);
                         break;
+                    case Arguments.Mordov:
+                        idRegion = GetRegionFromString("мордов", connect);
+                        break;
                     default:
                         idRegion = 0;
                         break;
@@ -328,6 +331,11 @@ namespace ParserWebCore.Tender
                         {
                             var namePo = (pp.SelectSingleNode(".//td[2]")
                                 ?.InnerText ?? "").Trim();
+                            if (string.IsNullOrEmpty(namePo))
+                            {
+                                continue;
+                            }
+
                             var okeiP = (pp.SelectSingleNode(".//td[5]")
                                 ?.InnerText ?? "").Trim();
                             var priceP = "";
@@ -362,6 +370,11 @@ namespace ParserWebCore.Tender
                         {
                             var namePo = (pp.SelectSingleNode(".//td[2]")
                                 ?.InnerText ?? "").Trim();
+                            if (string.IsNullOrEmpty(namePo))
+                            {
+                                continue;
+                            }
+
                             var okeiP = (pp.SelectSingleNode(".//td[3]")
                                 ?.InnerText ?? "").Trim();
                             var priceP = (pp.SelectSingleNode(".//td[4]")

@@ -82,5 +82,6 @@
         Tverzmo,
         Bash,
         Midural,
+        Mordov,
     }
 }

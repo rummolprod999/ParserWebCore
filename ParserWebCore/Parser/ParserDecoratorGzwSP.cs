@@ -97,16 +97,23 @@ namespace ParserWebCore.Parser
                     break;
                 case Arguments.Midural:
                     new ParserMidural("https://torgi.midural.ru/smallpurchases/GzwSP/ProposalsBidsGrid",
-                            "https://torgi.midural.ru/",
+                            "https://torgi.midural.ru",
                             "Малые закупки  Свердловской области",
                             "https://torgi.midural.ru/", 356, _arguments, 15)
                         .Parsing();
                     break;
                 case Arguments.Mordov:
                     new ParserGzwSp("https://goszakaz44.e-mordovia.ru/smallpurchases/GzwSP/NoticesGrid",
-                            "https://goszakaz44.e-mordovia.ru/",
+                            "https://goszakaz44.e-mordovia.ru",
                             "Малые закупки  Республики Мордовия",
                             "https://goszakaz44.e-mordovia.ru/", 357, _arguments, 3)
+                        .Parsing();
+                    break;
+                case Arguments.Kurg:
+                    new ParserGzwSp("https://zakupki.45fin.ru/smallpurchases/GzwSP/NoticesGrid",
+                            "https://goszakaz44.e-mordovia.ru",
+                            "Малые закупки  Курганской области",
+                            "https://goszakaz44.e-mordovia.ru", 358, _arguments, 10)
                         .Parsing();
                     break;
                 default: throw new ArgumentOutOfRangeException(nameof(_arguments), _arguments, null);

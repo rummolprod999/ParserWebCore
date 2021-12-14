@@ -83,5 +83,6 @@
         Bash,
         Midural,
         Mordov,
+        Kurg,
     }
 }

@@ -111,9 +111,9 @@ namespace ParserWebCore.Parser
                     break;
                 case Arguments.Kurg:
                     new ParserGzwSp("https://zakupki.45fin.ru/smallpurchases/GzwSP/NoticesGrid",
-                            "https://goszakaz44.e-mordovia.ru",
+                            "https://zakupki.45fin.ru",
                             "Малые закупки  Курганской области",
-                            "https://goszakaz44.e-mordovia.ru", 358, _arguments, 10)
+                            "https://zakupki.45fin.ru", 358, _arguments, 10)
                         .Parsing();
                     break;
                 default: throw new ArgumentOutOfRangeException(nameof(_arguments), _arguments, null);

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -14,9 +15,9 @@ namespace ParserWebCore.Parser
 {
     public class ParserNaftan : ParserAbstract, IParser
     {
-        private readonly TimeSpan _timeoutB = TimeSpan.FromSeconds(30);
-        private const string StartUrl = "http://www.naftan.by/ru/all_tenders.aspx?KindGoodId=-1";
+        private const string StartUrl = "http://www.naftan.by/ru/Home/PivotKps";
         private readonly ChromeDriver _driver = CreatorChromeDriver.GetChromeDriver();
+        private readonly TimeSpan _timeoutB = TimeSpan.FromSeconds(30);
         private List<TenderNaftan> _listTenders = new List<TenderNaftan>();
 
         public void Parsing()
@@ -28,7 +29,7 @@ namespace ParserWebCore.Parser
         {
             try
             {
-                ParserSelenium();
+                GetCategories();
             }
             catch (Exception e)
             {
@@ -42,14 +43,43 @@ namespace ParserWebCore.Parser
             }
         }
 
-        private void ParserSelenium()
+        private void GetCategories()
         {
             var wait = new WebDriverWait(_driver, _timeoutB);
             _driver.Navigate().GoToUrl(StartUrl);
             Thread.Sleep(5000);
             wait.Until(dr =>
                 dr.FindElement(By.XPath(
-                    "//td[. = 'Страница:']/following-sibling::td[last()]")));
+                    "//a[@title and contains(@href, 'KpAnnounces')]")));
+            var pages =
+                _driver.FindElements(
+                        By.XPath(
+                            "//a[@title and contains(@href, 'KpAnnounces')]"))
+                    .Select(t => t.GetAttribute("href").Trim())
+                    .ToList();
+            foreach (var href in pages)
+            {
+                try
+                {
+                    ParserSelenium(href);
+                }
+                catch (Exception e)
+                {
+                    Log.Logger(e);
+                }
+            }
+
+            ParsingListTendersNaftan();
+        }
+
+        private void ParserSelenium(string url)
+        {
+            var wait = new WebDriverWait(_driver, _timeoutB);
+            _driver.Navigate().GoToUrl(url);
+            Thread.Sleep(5000);
+            wait.Until(dr =>
+                dr.FindElement(By.XPath(
+                    "//a[ contains(@href, 'pageNumber')]")));
             var lastPage = GetLastNumPage();
             ParsingList();
             if (lastPage != 0)
@@ -70,8 +100,6 @@ namespace ParserWebCore.Parser
             {
                 Log.Logger("cannot find last pages num");
             }
-
-            ParsingListTendersNaftan();
         }
 
         private void ParsingListTendersNaftan()
@@ -91,33 +119,27 @@ namespace ParserWebCore.Parser
 
         private void ParsingNextPage(int i, WebDriverWait wait)
         {
-            _driver.Clicker($"//td[. = 'Страница:']/following-sibling::td[. = '{i}']");
+            _driver.Clicker($"//a[ contains(@href, 'pageNumber')][. = '{i}']");
             Thread.Sleep(3000);
             _driver.SwitchTo().DefaultContent();
             wait.Until(dr =>
                 dr.FindElement(By.XPath(
-                    "//td[@id = 'First_NewsControl1_ICell']/table/tbody/tr")));
+                    "//ul[@class = 'posts']/li")));
             ParsingList();
         }
 
         private void ParsingList()
         {
-            Thread.Sleep(3000);
+            Thread.Sleep(2000);
             _driver.SwitchTo().DefaultContent();
             var tenders =
                 _driver.FindElements(
                     By.XPath(
-                        "//td[@id = 'First_NewsControl1_ICell']/table/tbody/tr"));
+                        "//ul[@class = 'posts']/li"));
             foreach (var t in tenders)
             {
                 try
                 {
-                    if (t is null)
-                    {
-                        Console.WriteLine("null");
-                        continue;
-                    }
-
                     ParsingPage(t);
                 }
                 catch (Exception e)
@@ -131,13 +153,13 @@ namespace ParserWebCore.Parser
         {
             _driver.SwitchTo().DefaultContent();
             var purName =
-                t.FindElement(By.XPath(".//div[contains(@class, 'dxncItemContent')]/a[starts-with(@href, 'one')]"))
+                t.FindElement(By.XPath("(.//h5/strong)[last()]"))
                     ?.Text.Trim();
             var href = t
-                .FindElement(By.XPath(".//div[contains(@class, 'dxncItemContent')]/a[starts-with(@href, 'one')]"))
+                .FindElement(By.XPath(".//h4/a"))
                 ?.GetAttribute("href").Trim();
             var tmpPurNum =
-                t.FindElementWithoutException(By.XPath(".//div[contains(@class, 'dxncItemHeader')]/span"))?.Text
+                t.FindElementWithoutException(By.XPath(".//h4/a"))?.Text
                     .Trim() ?? throw new Exception($"bad tmpPurNum {href}");
             var purNum = tmpPurNum.GetDataFromRegex(@"№\s*([\d-]+)\b");
             if (purNum == "")
@@ -145,7 +167,7 @@ namespace ParserWebCore.Parser
                 throw new Exception($"cannot find purNum {tmpPurNum}");
             }
 
-            var datePubTmp = t.FindElement(By.XPath(".//div[contains(@class, 'dxncItemDate')]"))
+            var datePubTmp = t.FindElement(By.XPath(".//div[@class = 'details']/span"))
                 ?.Text.Trim();
             var datePub = datePubTmp.ParseDateUn("dd.MM.yyyy");
             if (datePub == DateTime.MinValue)
@@ -154,25 +176,26 @@ namespace ParserWebCore.Parser
                 return;
             }
 
-            var dateEndTmp = t.FindElement(By.XPath(".//div[contains(@class, 'dxncItemContent')]"))
+            var dateEndTmp = t.FindElement(By.XPath(".//p/span[@class = 'fs-small']"))
                 ?.Text.Trim();
             var (tm, dt) = dateEndTmp.GetTwoDataFromRegex(@"(\d{2}:\d{2}).+(\d{2}\.\d{2}\.\d{4})");
             var dateEnd = $"{dt} {tm}".ParseDateUn("dd.MM.yyyy HH:mm");
             if (dateEnd == DateTime.MinValue)
             {
                 Log.Logger("Empty dateEnd");
+                dateEnd = datePub.AddDays(2);
             }
 
             var tt = new TypeNaftan
-                {DateEnd = dateEnd, DatePub = datePub, Href = href, PurName = purName, PurNum = purNum};
-            var tn = new TenderNaftan("ОАО «Нафтан»", "http://www.naftan.by/", 118, tt);
+                { DateEnd = dateEnd, DatePub = datePub, Href = href, PurName = purName, PurNum = purNum };
+            var tn = new TenderNaftan("ОАО «Нафтан»", "http://www.naftan.by/", 118, tt, _driver);
             _listTenders.Add(tn);
         }
 
         private int GetLastNumPage()
         {
             var numText =
-                _driver.FindElementWithoutException(By.XPath("//td[. = 'Страница:']/following-sibling::td[last()]"))
+                _driver.FindElementWithoutException(By.XPath("//a[ contains(@href, 'pageNumber')][last()]"))
                     ?.Text.Trim() ?? "";
             int.TryParse(numText, out var res);
             return res;

@@ -1,31 +1,32 @@
 using System;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Threading;
-using HtmlAgilityPack;
 using MySql.Data.MySqlClient;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.UI;
 using ParserWebCore.BuilderApp;
 using ParserWebCore.Connections;
-using ParserWebCore.Logger;
-using ParserWebCore.NetworkLibrary;
 using ParserWebCore.TenderType;
 
 namespace ParserWebCore.Tender
 {
     public class TenderNaftan : TenderAbstract, ITender
     {
+        private readonly ChromeDriver _driver;
         private readonly TypeNaftan _tn;
 
-        public TenderNaftan(string etpName, string etpUrl, int typeFz, TypeNaftan tn) : base(etpName, etpUrl,
+        public TenderNaftan(string etpName, string etpUrl, int typeFz, TypeNaftan tn, ChromeDriver driver) : base(
+            etpName, etpUrl,
             typeFz)
         {
             _tn = tn;
+            _driver = driver;
         }
 
         public void ParsingTender()
         {
-            /*Console.WriteLine(JsonConvert.SerializeObject(
-                _tn, Formatting.Indented,
-                new JsonConverter[] {new StringEnumConverter()}));*/
             using (var connect = ConnectToDb.GetDbConnection())
             {
                 connect.Open();
@@ -46,17 +47,13 @@ namespace ParserWebCore.Tender
                     return;
                 }
 
-                Thread.Sleep(5000);
-                var s = DownloadString.DownLUserAgent(_tn.Href);
-                if (string.IsNullOrEmpty(s))
-                {
-                    Log.Logger("Empty string in ParsingTender()", _tn.Href);
-                    return;
-                }
+                var wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(30));
+                _driver.Navigate().GoToUrl(_tn.Href);
+                Thread.Sleep(3000);
+                wait.Until(dr =>
+                    dr.FindElement(By.XPath(
+                        "//th[. = 'Номер']")));
 
-                var htmlDoc = new HtmlDocument();
-                htmlDoc.LoadHtml(s);
-                var navigator = (HtmlNodeNavigator)htmlDoc.CreateNavigator();
                 var dateUpd = DateTime.Now;
                 var cancelStatus = 0;
                 var updated = false;
@@ -128,10 +125,9 @@ namespace ParserWebCore.Tender
                     }
                 }
 
-                PlacingWay = (navigator
-                    .SelectSingleNode(
-                        "//td[b[contains(., 'Процедура закупки')]]/following-sibling::td/span")
-                    ?.Value ?? "").Trim();
+                PlacingWay = _driver
+                    .FindElement(By.XPath("//td[contains(., 'Процедура закупки')]/following-sibling::td/strong"))
+                    ?.Text.Trim();
                 GetPlacingWay(connect, out var idPlacingWay);
                 GetEtp(connect, out var idEtp);
                 var insertTender =
@@ -189,9 +185,9 @@ namespace ParserWebCore.Tender
                     }
                 }
 
-                var docs = htmlDoc.DocumentNode.SelectNodes(
-                               "//span/a[starts-with(@href, '../Download')]") ??
-                           new HtmlNodeCollection(null);
+                var docs = _driver.FindElements(
+                    By.XPath(
+                        "//p/a[starts-with(@href, '/ru/Home/Download')]"));
                 ExtractDocs(docs, connect, idTender);
                 var lotNum = 1;
                 var insertLot =
@@ -218,12 +214,12 @@ namespace ParserWebCore.Tender
                 AddVerNumber(connect, _tn.PurNum, TypeFz);
             }
 
-            void ExtractDocs(HtmlNodeCollection docs, MySqlConnection con, int idTender)
+            void ExtractDocs(ReadOnlyCollection<IWebElement> docs, MySqlConnection con, int idTender)
             {
                 foreach (var doc in docs)
                 {
-                    var urlAtt = (doc?.Attributes["href"]?.Value ?? "").Replace("../", "http://www.naftan.by/").Trim();
-                    var fName = (doc?.InnerText ?? "").Trim();
+                    var urlAtt = (doc.GetAttribute("href") ?? "").Trim();
+                    var fName = (doc.Text ?? "").Trim();
                     if (string.IsNullOrEmpty(fName)) continue;
                     var insertAttach =
                         $"INSERT INTO {AppBuilder.Prefix}attachment SET id_tender = @id_tender, file_name = @file_name, url = @url";

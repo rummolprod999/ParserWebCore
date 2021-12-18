@@ -63,14 +63,14 @@ namespace ParserWebCore.Parser
 
         private void ParserTenderObj(JToken t)
         {
-            var id = ((string) t.SelectToken("identifier") ?? "").Trim();
-            var purName = ((string) t.SelectToken("title") ?? "").Trim();
-            var publicationDateT = ((string) t.SelectToken("gdStartDate") ?? "").Trim();
-            var endDateT = ((string) t.SelectToken("gdEndDate") ?? (string) t.SelectToken("gdEndDate") ?? "").Trim();
+            var id = ((string)t.SelectToken("filingNumber") ?? "").Trim();
+            var purName = ((string)t.SelectToken("title") ?? "").Trim();
+            var publicationDateT = ((string)t.SelectToken("gdStartDate") ?? "").Trim();
+            var endDateT = ((string)t.SelectToken("gdEndDate") ?? (string)t.SelectToken("gdEndDate") ?? "").Trim();
             endDateT = endDateT.GetDataFromRegex(@"(\d{2}\.\d{2}\.\d{4}\s+\d{2}:\d{2})");
             var publicationDate = publicationDateT.ParseDateUn("dd.MM.yyyy HH:mm");
             var endDate = endDateT.ParseDateUn("dd.MM.yyyy HH:mm");
-            var href = ((string) t.SelectToken("lotLink") ?? "").Trim();
+            var href = ((string)t.SelectToken("lotLink") ?? "").Trim();
             href = $"https://market.lot-online.ru/{href}";
             if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(href) || publicationDate == DateTime.MinValue ||
                 endDate == DateTime.MinValue)
@@ -79,11 +79,11 @@ namespace ParserWebCore.Parser
                 return;
             }
 
-            var orgName = ((string) t.SelectToken("organizer.title") ?? "").Trim();
-            var orgInn = ((string) t.SelectToken("organizer.inn") ?? "").Trim();
-            var status = ((string) t.SelectToken("state.title") ?? "").Trim();
-            var regionName = ((string) t.SelectToken("regionCodes[0]") ?? "").Trim();
-            var nmck = ((string) t.SelectToken("price") ?? "").Trim().DelAllWhitespace();
+            var orgName = ((string)t.SelectToken("organizer.title") ?? "").Trim();
+            var orgInn = ((string)t.SelectToken("organizer.inn") ?? "").Trim();
+            var status = ((string)t.SelectToken("state.title") ?? "").Trim();
+            var regionName = ((string)t.SelectToken("regionCodes[0]") ?? "").Trim();
+            var nmck = ((string)t.SelectToken("price") ?? "").Trim().DelAllWhitespace();
             nmck = nmck.GetDataFromRegex(">([\\d.]+)").DelAllWhitespace();
             var tender = new TypeLotOnline
             {

@@ -107,7 +107,7 @@ namespace ParserWebCore.Tender
             var quantT = (purObject.SelectSingleNode(".//div[span[. = 'Минимальная закупаемая партия:']]")
                 ?.InnerText ?? "").Replace("Минимальная закупаемая партия:", "").Trim();
             var quant = quantT.GetDataFromRegex("([ \\d.]+)&nbsp;").DelAllWhitespace();
-            var okei = quantT.GetDataFromRegex("&nbsp;(.+)").DelAllWhitespace();
+            var okei = quantT.GetDataFromRegex("&nbsp;(.+)").DelDoubleWhitespace();
             var insertLotitem =
                 $"INSERT INTO {AppBuilder.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name, quantity_value = @quantity_value, okei = @okei, customer_quantity_value = @customer_quantity_value, price = @price, sum = @sum";
             var cmd20 = new MySqlCommand(insertLotitem, connect);
@@ -178,7 +178,7 @@ namespace ParserWebCore.Tender
         private void AddAttachments(HtmlDocument htmlDoc, MySqlConnection connect, int idTender)
         {
             var docs = htmlDoc.DocumentNode.SelectNodes(
-                           "//a[contains(@id, 'GenericLink')]") ??
+                           "//a[contains(@href, '/downloadppf?')]") ??
                        new HtmlNodeCollection(null);
             foreach (var doc in docs)
             {
@@ -226,7 +226,7 @@ namespace ParserWebCore.Tender
                     var customerRegNumber = Guid.NewGuid().ToString();
                     cmd14.Parameters.AddWithValue("@reg_num", customerRegNumber);
                     cmd14.Parameters.AddWithValue("@full_name", _tn.OrgName);
-                    cmd14.Parameters.AddWithValue("@inn", _tn.OrgInn);
+                    cmd14.Parameters.AddWithValue("@inn", "");
                     cmd14.ExecuteNonQuery();
                     customerId = (int)cmd14.LastInsertedId;
                 }

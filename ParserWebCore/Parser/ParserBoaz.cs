@@ -14,10 +14,10 @@ namespace ParserWebCore.Parser
 {
     public class ParserBoaz : ParserAbstract, IParser
     {
-        private TimeSpan _timeoutB = TimeSpan.FromSeconds(120);
-        private const string Url = "http://boaz-konkurs.ru/Actuals.aspx";
+        private const string Url = "https://boaz-zavod.ru/suppliers/tenders/";
         private readonly ChromeDriver _driver = CreatorChromeDriver.GetChromeDriver();
         private List<TypeBoaz> _tendersList = new List<TypeBoaz>();
+        private TimeSpan _timeoutB = TimeSpan.FromSeconds(120);
 
         public void Parsing()
         {
@@ -60,7 +60,7 @@ namespace ParserWebCore.Parser
             Thread.Sleep(5000);
             wait.Until(dr =>
                 dr.FindElement(By.XPath(
-                    "//table/tbody/tr[contains(@class, 'ms-itmhover')]")));
+                    "//table[@itemscope]/tbody/tr")));
             ParsingList();
         }
 
@@ -69,7 +69,7 @@ namespace ParserWebCore.Parser
             var tenders =
                 _driver.FindElements(
                     By.XPath(
-                        "//table/tbody/tr[contains(@class, 'ms-itmhover')]"));
+                        "//table[@itemscope]/tbody/tr"));
             foreach (var t in tenders)
             {
                 try
@@ -86,28 +86,23 @@ namespace ParserWebCore.Parser
         private void ParsingPage(IWebElement t)
         {
             var purName =
-                t.FindElementWithoutException(By.XPath(".//div/span"))?.Text
+                t.FindElementWithoutException(By.XPath(".//a"))?.Text
                     .Trim() ?? "";
-            var href = t.FindElementWithoutException(By.XPath(".//div[@onclick]"))?.GetAttribute("onclick")
+            var href = t.FindElementWithoutException(By.XPath(".//a"))?.GetAttribute("href")
                            .Trim() ??
                        throw new Exception("cannot find href");
-            href = href.GetDataFromRegex(@"location='(http.+)'$");
-            var purNum = href.GetDataFromRegex(@"ID=(\d+)");
-            if (purNum == "")
-            {
-                throw new Exception("cannot find purNum");
-            }
+            var purNum = href.ToMd5();
 
             var datePubT =
-                t.FindElementWithoutException(By.XPath(".//td[3]/nobr"))?.Text
+                t.FindElementWithoutException(By.XPath(".//td[1]"))?.Text
                     .Trim() ??
                 throw new Exception("cannot find datePubT");
             var datePub = datePubT.ParseDateUn("dd.MM.yyyy");
             var dateEndTt =
-                t.FindElementWithoutException(By.XPath(".//td[4]/nobr"))
+                t.FindElementWithoutException(By.XPath(".//td[3]"))
                     ?.Text.Trim() ??
                 throw new Exception("cannot find dateEndT");
-            var dateEnd = dateEndTt.ParseDateUn("dd.MM.yyyy HH:mm");
+            var dateEnd = dateEndTt.ParseDateUn("dd.MM.yyyy");
             var tt = new TypeBoaz
             {
                 PurName = purName,

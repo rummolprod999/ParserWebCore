@@ -1,11 +1,8 @@
 using System;
 using System.Data;
-using HtmlAgilityPack;
 using MySql.Data.MySqlClient;
 using ParserWebCore.BuilderApp;
 using ParserWebCore.Connections;
-using ParserWebCore.Logger;
-using ParserWebCore.NetworkLibrary;
 using ParserWebCore.TenderType;
 
 namespace ParserWebCore.Tender
@@ -41,17 +38,6 @@ namespace ParserWebCore.Tender
                     return;
                 }
 
-                var s = DownloadString.DownL(_tn.Href);
-                if (String.IsNullOrEmpty(s))
-                {
-                    Log.Logger(
-                        $"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
-                        _tn.Href);
-                }
-
-                var htmlDoc = new HtmlDocument();
-                htmlDoc.LoadHtml(s);
-                var navigator = (HtmlNodeNavigator)htmlDoc.CreateNavigator();
                 var dateUpd = DateTime.Now;
                 var cancelStatus = 0;
                 var updated = false;
@@ -148,26 +134,14 @@ namespace ParserWebCore.Tender
                 var resInsertTender = cmd9.ExecuteNonQuery();
                 var idTender = (int)cmd9.LastInsertedId;
                 Counter(resInsertTender, updated);
-                var docs = htmlDoc.DocumentNode.SelectNodes(
-                               "//a[contains(@href, '/Lists/Procurements/Attachments')]") ??
-                           new HtmlNodeCollection(null);
-                foreach (var doc in docs)
-                {
-                    var urlAttT = (doc?.Attributes["href"]?.Value ?? "").Trim();
-                    var fName = doc?.InnerText.Trim();
-                    var urlAtt = $"http://boaz-konkurs.ru{urlAttT}";
-                    if (!string.IsNullOrEmpty(fName))
-                    {
-                        var insertAttach =
-                            $"INSERT INTO {AppBuilder.Prefix}attachment SET id_tender = @id_tender, file_name = @file_name, url = @url";
-                        var cmd10 = new MySqlCommand(insertAttach, connect);
-                        cmd10.Prepare();
-                        cmd10.Parameters.AddWithValue("@id_tender", idTender);
-                        cmd10.Parameters.AddWithValue("@file_name", fName);
-                        cmd10.Parameters.AddWithValue("@url", urlAtt);
-                        cmd10.ExecuteNonQuery();
-                    }
-                }
+                var insertAttach =
+                    $"INSERT INTO {AppBuilder.Prefix}attachment SET id_tender = @id_tender, file_name = @file_name, url = @url";
+                var cmd10 = new MySqlCommand(insertAttach, connect);
+                cmd10.Prepare();
+                cmd10.Parameters.AddWithValue("@id_tender", idTender);
+                cmd10.Parameters.AddWithValue("@file_name", _tn.PurName);
+                cmd10.Parameters.AddWithValue("@url", _tn.Href);
+                cmd10.ExecuteNonQuery();
 
                 if (!string.IsNullOrEmpty(orgName))
                 {

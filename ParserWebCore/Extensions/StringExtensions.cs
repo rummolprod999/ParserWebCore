@@ -77,6 +77,26 @@ namespace ParserWebCore.Extensions
             return ret;
         }
 
+        public static string GetLastDataFromRegex(this string s, string r)
+        {
+            var ret = "";
+            try
+            {
+                var regex = new Regex(r, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                var matches = regex.Matches(s);
+                if (matches.Count > 0)
+                {
+                    ret = matches[matches.Count - 1].Groups[matches[matches.Count - 1].Groups.Count - 1].Value.Trim();
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Logger(e, r);
+            }
+
+            return ret;
+        }
+
         public static List<(string url, string name)> GetAllDataFromRegex(this string s, string r)
         {
             var ret = new List<(string, string)>();

@@ -84,5 +84,6 @@
         Midural,
         Mordov,
         Kurg,
+        Mobwin,
     }
 }

@@ -27,6 +27,11 @@ namespace ParserWebCore.SharedLibraries
             var parser = new HtmlParser();
             var document = parser.Parse(s);
             var pages = document.QuerySelectorAll("ul.pagination:first-of-type > li > a[aria-label *= Страница]");
+            if (pages.Length == 0)
+            {
+                pages = document.QuerySelectorAll("ul.pagination:first-of-type > li > a[aria-label *= Page]");
+            }
+
             if (pages.Length > 0)
             {
                 i = (from p in pages where p == pages.Last() select int.Parse(p.TextContent)).First();

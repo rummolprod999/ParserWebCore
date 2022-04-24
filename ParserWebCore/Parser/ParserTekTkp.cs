@@ -24,7 +24,7 @@ namespace ParserWebCore.Parser
         private void ParsingTekTkp()
         {
             var dateM = DateTime.Now.AddMinutes(-1 * DateMinus * 24 * 60);
-            var urlStart = $"https://www.tektorg.ru/rosnefttkp/procedures?dpfrom={dateM:dd.MM.yyyy}";
+            var urlStart = $"https://www.tektorg.ru/rosnefttkp/procedures?dpfrom={dateM:dd.MM.yyyy}&limit=500";
             var max = 0;
             try
             {
@@ -103,7 +103,7 @@ namespace ParserWebCore.Parser
 
             var tenderUrl = urlT;
             if (!urlT.Contains("https://")) tenderUrl = $"https://www.tektorg.ru{urlT}";
-            var status = (t.QuerySelector("div span:contains('Статус:')")?.TextContent?.Replace("Статус:", "") ?? "")
+            var status = (t.QuerySelector("div:contains('Статус:')")?.TextContent?.Replace("Статус:", "") ?? "")
                 .Trim();
             if (status.Contains("Осталось:"))
             {
@@ -111,12 +111,15 @@ namespace ParserWebCore.Parser
             }
 
             var datePubT =
-                (t.QuerySelector("div.section-procurement__item-dateTo:contains('Дата публикации:')")?.TextContent ??
-                 "").Replace("Дата публикации:", "").Trim();
-            var dateEndT =
-                (t.QuerySelector("div.section-procurement__item-dateTo:contains('Дата окончания приема заявок')")
+                (t.QuerySelector("div.section-procurement__item-dateTo:contains('Дата публикации процедуры:')")
                      ?.TextContent ??
-                 "").Replace("Дата окончания приема заявок:", "").Replace("Дата окончания приема заявок", "").Trim();
+                 "").Replace("Дата публикации процедуры:", "").Trim();
+            var dateEndT =
+                (t.QuerySelector(
+                         "div.section-procurement__item-dateTo:contains('Дата окончания срока подачи технико-коммерческих частей:')")
+                     ?.TextContent ??
+                 "").Replace("Дата окончания приема заявок:", "")
+                .Replace("Дата окончания срока подачи технико-коммерческих частей:", "").Trim();
             if (dateEndT == "")
             {
                 dateEndT =
@@ -143,7 +146,7 @@ namespace ParserWebCore.Parser
             }
 
             var purNumT = (t.QuerySelector("div.section-procurement__item-numbers > span")?.TextContent ?? "").Trim();
-            var purNum = purNumT.Replace("Номер закупки на сайте ЭТП:", "").Trim();
+            var purNum = purNumT.Replace("Номер процедуры:", "").Trim();
             if (string.IsNullOrEmpty(purNum))
             {
                 Log.Logger($"Empty purNum in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",

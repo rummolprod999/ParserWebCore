@@ -65,12 +65,12 @@ namespace ParserWebCore.Tender
                 var customerId = 0;
                 var organiserId = 0;
                 organiserId = GetOrganizer(document, connect);
-                PlacingWay = (document.QuerySelector("td:contains('Способ закупки:') +  td")?.TextContent ?? "")
+                PlacingWay = (document.QuerySelector("td:contains('Тип процедуры:') +  td")?.TextContent ?? "")
                     .Trim();
                 GetPlacingWay(connect, out var idPlacingWay);
                 GetEtp(connect, out var idEtp);
                 var purObjInfo =
-                    (document.QuerySelector("span:contains('Наименование закупки:') +  span")?.TextContent ?? "")
+                    (document.QuerySelector("span:contains('Наименование продукции:') +  span")?.TextContent ?? "")
                     .Trim();
                 var insertTender =
                     $"INSERT INTO {AppBuilder.Prefix}tender SET id_region = @id_region, id_xml = @id_xml, purchase_number = @purchase_number, doc_publish_date = @doc_publish_date, href = @href, purchase_object_info = @purchase_object_info, type_fz = @type_fz, id_organizer = @id_organizer, id_placing_way = @id_placing_way, id_etp = @id_etp, end_date = @end_date, scoring_date = @scoring_date, bidding_date = @bidding_date, cancel = @cancel, date_version = @date_version, num_version = @num_version, notice_version = @notice_version, xml = @xml, print_form = @print_form";

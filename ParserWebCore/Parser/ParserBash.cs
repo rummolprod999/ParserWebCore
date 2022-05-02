@@ -41,14 +41,14 @@ namespace ParserWebCore.Parser
                 ["sec-ch-ua"] = "\" Not;A Brand\";v=\"99\", \"Google Chrome\";v=\"97\", \"Chromium\";v=\"97\"",
                 ["accept"] = "application/json, text/plain, */*",
                 ["sec-ch-ua-mobile"] = "?0",
-                ["x-atmo"] = "jWkpQzwVDhahJyX9hnuZuqFH2xZA6fNf",
+                ["x-atmo"] = "jwYvNqVVWG4WjmP6GxnnzubwWZyMddyc",
                 ["user-agent"] =
-                    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.36 Safari/537.36",
+                    "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:100.0) Gecko/20100101 Firefox/100.0",
                 ["origin"] = "https://zakaz.bashkortostan.ru",
             };
 
             var url =
-                $"https://api-zakaz.bashkortostan.ru/apifront/purchases?filter=%7B%22purchaseName%22:%22%22,%22conditionname%22:%22%22,%22orderType%22:null,%22customer%22:%22%22,%22regNumber%22:%22%22,%22orderDateStart%22:null,%22orderDateFinish%22:null,%22priceStartFrom%22:null,%22priceStartTo%22:null%7D&status=&page={num}";
+                $"https://api-zakaz.bashkortostan.ru/apifront/purchases?filter=%7B%22purchaseCategories%22:[],%22conditionname%22:%22%22,%22orderType%22:null,%22customer%22:%22%22,%22regNumber%22:%22%22,%22orderDateStart%22:null,%22orderDateFinish%22:null,%22priceStartFrom%22:null,%22priceStartTo%22:null%7D&status=1&page={num}";
             var result = DownloadString.DownLUserAgent(url, false, headers);
             if (string.IsNullOrEmpty(result))
             {

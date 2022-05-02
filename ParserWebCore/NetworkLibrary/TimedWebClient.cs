@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
+using OpenQA.Selenium.Chrome;
+using ParserWebCore.Creators;
 
 namespace ParserWebCore.NetworkLibrary
 {
@@ -91,6 +94,31 @@ namespace ParserWebCore.NetworkLibrary
 
     public class TimedWebClientTektorg : WebClient
     {
+        private static String cookieTekTorg = null;
+
+        static TimedWebClientTektorg()
+        {
+            if (cookieTekTorg == null)
+            {
+                ChromeDriver _driver = CreatorChromeDriver.GetChromeDriver();
+                try
+                {
+                    _driver.Navigate().GoToUrl("https://www.tektorg.ru/");
+                    cookieTekTorg = _driver.Manage().Cookies.AllCookies.Select(c => $"{c.Name}={c.Value}")
+                        .Aggregate((x, y) => $"{x}; {y}");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    _driver.Manage().Cookies.DeleteAllCookies();
+                    _driver.Quit();
+                }
+            }
+        }
+
         protected override WebRequest GetWebRequest(Uri address)
         {
             var wr = (HttpWebRequest)base.GetWebRequest(address);
@@ -100,7 +128,7 @@ namespace ParserWebCore.NetworkLibrary
                 wr.UserAgent =
                     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.41 Safari/537.36";
                 wr.Headers.Add("cookie",
-                    "ipp_uid=1622979465908/tlppo3pOZZgmnTqD/7tyHMKalqpTv19WHiUQhCg==; ipp_uid1=1622979465908; ipp_uid2=tlppo3pOZZgmnTqD/7tyHMKalqpTv19WHiUQhCg==; Drupal.visitor.procedures_theme=blocks; _ym_uid=16232075371025666397; _ym_d=1623207537; _ga=GA1.2.493116861.1623207539; SSESS8aa208d9665c28bb20b7c818a7f80de5=HC7woFo2DfNrdf-ZcXBn006OJ_kNUhR1rh8LLns_csU; rerf=AAAAAGJlAtKgKkeHVEB+Ag==; ipp_key=v1650787025567/v3394bd400b5e53a13cfc65163aeca6afa04ab3/EDb1mO+RtY5ycqHCw2NAvA==;");
+                    cookieTekTorg);
                 wr.AutomaticDecompression =
                     DecompressionMethods.GZip | DecompressionMethods.Deflate | DecompressionMethods.None;
                 return wr;

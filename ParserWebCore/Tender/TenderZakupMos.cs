@@ -62,6 +62,12 @@ namespace ParserWebCore.Tender
         {
             var url = $"https://old.zakupki.mos.ru/api/Cssp/Need/GetEntity?id={_tn.NeedId}";
             var s = DownloadString.DownLHttpPostWithCookiesB2b(url, cookie: null, useProxy: AppBuilder.UserProxy);
+            if (s.Contains("\"tag\":\"nopermission\""))
+            {
+                url = $"https://zakupki.mos.ru/newapi/api/Need/Get?needId={_tn.NeedId}";
+                s = DownloadString.DownLHttpPostWithCookiesB2b(url, cookie: null, useProxy: AppBuilder.UserProxy);
+            }
+
             if (string.IsNullOrEmpty(s))
             {
                 Log.Logger(

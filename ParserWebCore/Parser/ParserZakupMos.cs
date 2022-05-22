@@ -13,6 +13,7 @@ namespace ParserWebCore.Parser
     public class ParserZakupMos : ParserAbstract, IParser
     {
         private readonly int _countPage = 20;
+        private readonly int _countPagePot = 50;
         private readonly string _url = "https://old.zakupki.mos.ru/api/Cssp/Purchase/PostQuery";
 
         public void Parsing()
@@ -39,6 +40,18 @@ namespace ParserWebCore.Parser
                 try
                 {
                     GetPageKot(i);
+                }
+                catch (Exception e)
+                {
+                    Log.Logger($"Error in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}", e);
+                }
+            }
+
+            for (var i = 0; i < _countPagePot; i++)
+            {
+                try
+                {
+                    GetPagePot(i);
                 }
                 catch (Exception e)
                 {
@@ -83,6 +96,36 @@ namespace ParserWebCore.Parser
                 $"{{\"filter\":{{\"auctionSpecificFilter\":{{}},\"needSpecificFilter\":{{}},\"tenderSpecificFilter\":{{}}}},\"order\":[{{\"field\":\"PublishDate\",\"desc\":true}}],\"withCount\":true,\"take\":50,\"skip\":{num * 50}}}";
             var url =
                 $"https://old.zakupki.mos.ru/api/Cssp/Purchase/Query?queryDto={{\"filter\":{{\"auctionSpecificFilter\":{{}},\"needSpecificFilter\":{{}},\"tenderSpecificFilter\":{{}}}},\"order\":[{{\"field\":\"PublishDate\",\"desc\":true}}],\"withCount\":true,\"take\":50,\"skip\":{num * 50}}}";
+            url = Uri.EscapeUriString(url);
+
+            var s = DownloadString.DownLHttpPostWithCookiesB2b(url, cookie: null, useProxy: AppBuilder.UserProxy);
+            if (string.IsNullOrEmpty(s))
+            {
+                Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                    _url);
+                return;
+            }
+
+            var jObj = JObject.Parse(s);
+            var tenders = GetElements(jObj, "items");
+            foreach (var t in tenders)
+            {
+                try
+                {
+                    ParserTenderObj(t);
+                }
+                catch (Exception e)
+                {
+                    Log.Logger($"Error in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                        e, t.ToString());
+                }
+            }
+        }
+
+        private void GetPagePot(int num)
+        {
+            var url =
+                $"https://old.zakupki.mos.ru/api/Cssp/Purchase/Query?queryDto={{\"filter\":{{\"typeIn\":[2],\"auctionSpecificFilter\":{{\"stateIdIn\":[19000002,19000005,19000003,19000004,19000008]}},\"needSpecificFilter\":{{\"isB2B\":false}},\"tenderSpecificFilter\":{{}}}},\"order\":[{{\"field\":\"PublishDate\",\"desc\":true}}],\"withCount\":true,\"take\":50,\"skip\":{num * 50}}}";
             url = Uri.EscapeUriString(url);
 
             var s = DownloadString.DownLHttpPostWithCookiesB2b(url, cookie: null, useProxy: AppBuilder.UserProxy);

@@ -100,7 +100,7 @@ namespace ParserWebCore.NetworkLibrary
         {
             if (cookieTekTorg == null)
             {
-                ChromeDriver _driver = CreatorChromeDriver.GetChromeDriver();
+                ChromeDriver _driver = CreateChomeDriverNoHeadless.GetChromeDriver();
                 try
                 {
                     _driver.Navigate().GoToUrl("https://www.tektorg.ru/");
@@ -126,7 +126,7 @@ namespace ParserWebCore.NetworkLibrary
             {
                 wr.Timeout = 20000;
                 wr.UserAgent =
-                    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.41 Safari/537.36";
+                    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.24 Safari/537.36";
                 wr.Headers.Add("cookie",
                     cookieTekTorg);
                 wr.AutomaticDecompression =

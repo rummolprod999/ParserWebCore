@@ -49,7 +49,7 @@ namespace ParserWebCore.Tender
                 }
 
                 Thread.Sleep(4000);
-                var s = DownloadString.DownL(_tn.Href);
+                var s = DownloadString.DownLTektorg(_tn.Href);
                 if (String.IsNullOrEmpty(s))
                 {
                     Log.Logger(

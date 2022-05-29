@@ -97,7 +97,7 @@ namespace ParserWebCore.Parser
 
         private void ParsingPage(string url, bool tektkp = false)
         {
-            var s = DownloadString.DownL(url);
+            var s = DownloadString.DownLTektorg(url);
             if (string.IsNullOrEmpty(s))
             {
                 Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
@@ -214,7 +214,7 @@ namespace ParserWebCore.Parser
             if (tektkp)
             {
                 var tn = new TenderTekRn("ТЭК Торг ТЭК Роснефть Запросы (Т)КП",
-                    "https://www.tektorg.ru/rosneft/procedures", 149,
+                    "https://www.tektorg.ru/rosneft/procedures", 362,
                     new TypeTekRn
                     {
                         Href = tenderUrl,

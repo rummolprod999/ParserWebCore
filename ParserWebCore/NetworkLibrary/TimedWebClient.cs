@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using OpenQA.Selenium.Chrome;
 using ParserWebCore.Creators;
+using ParserWebCore.Logger;
 
 namespace ParserWebCore.NetworkLibrary
 {
@@ -109,7 +110,7 @@ namespace ParserWebCore.NetworkLibrary
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e);
+                    Log.Logger(e);
                 }
                 finally
                 {

@@ -1,15 +1,14 @@
 using System;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Threading;
-using AngleSharp.Dom;
-using AngleSharp.Dom.Html;
-using AngleSharp.Parser.Html;
 using MySql.Data.MySqlClient;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.UI;
 using ParserWebCore.BuilderApp;
 using ParserWebCore.Connections;
 using ParserWebCore.Extensions;
-using ParserWebCore.Logger;
-using ParserWebCore.NetworkLibrary;
 using ParserWebCore.SharedLibraries;
 using ParserWebCore.TenderType;
 
@@ -17,12 +16,15 @@ namespace ParserWebCore.Tender
 {
     public class TenderTekRn : TenderAbstract, ITender
     {
+        private readonly ChromeDriver _driver;
         private readonly TypeTekRn _tn;
 
-        public TenderTekRn(string etpName, string etpUrl, int typeFz, TypeTekRn tn) : base(etpName, etpUrl,
+        public TenderTekRn(string etpName, string etpUrl, int typeFz, TypeTekRn tn, ChromeDriver driver) : base(etpName,
+            etpUrl,
             typeFz)
         {
             _tn = tn;
+            _driver = driver;
         }
 
         public void ParsingTender()
@@ -31,14 +33,13 @@ namespace ParserWebCore.Tender
             {
                 connect.Open();
                 var selectTend =
-                    $"SELECT id_tender FROM {AppBuilder.Prefix}tender WHERE purchase_number = @purchase_number AND doc_publish_date = @doc_publish_date AND type_fz = @type_fz AND notice_version = @notice_version AND end_date = @end_date";
+                    $"SELECT id_tender FROM {AppBuilder.Prefix}tender WHERE purchase_number = @purchase_number AND doc_publish_date = @doc_publish_date AND type_fz = @type_fz AND notice_version = @notice_version";
                 var cmd = new MySqlCommand(selectTend, connect);
                 cmd.Prepare();
                 cmd.Parameters.AddWithValue("@purchase_number", _tn.PurNum);
                 cmd.Parameters.AddWithValue("@doc_publish_date", _tn.DatePub);
                 cmd.Parameters.AddWithValue("@type_fz", TypeFz);
                 cmd.Parameters.AddWithValue("@notice_version", _tn.Status);
-                cmd.Parameters.AddWithValue("@end_date", _tn.DateEnd);
                 var dt = new DataTable();
                 var adapter = new MySqlDataAdapter { SelectCommand = cmd };
                 adapter.Fill(dt);
@@ -48,34 +49,72 @@ namespace ParserWebCore.Tender
                     return;
                 }
 
-                Thread.Sleep(4000);
-                var s = DownloadString.DownLTektorg(_tn.Href);
-                if (String.IsNullOrEmpty(s))
-                {
-                    Log.Logger(
-                        $"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
-                        _tn.Href);
-                }
-
-                var parser = new HtmlParser();
-                var document = parser.Parse(s);
+                var wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(120));
+                _driver.Navigate().GoToUrl(_tn.Href);
+                _driver.SwitchTo().DefaultContent();
+                Thread.Sleep(5000);
+                _driver.SwitchTo().DefaultContent();
+                wait.Until(dr =>
+                    dr.FindElement(By.XPath(
+                        "//h4[. = 'Общие сведения']")));
                 var dateUpd = DateTime.Now;
 
                 var (updated, cancelStatus) = UpdateTenderVersion(connect, _tn.PurNum, dateUpd);
+                var dateEndT =
+                    (_driver.FindElementWithoutException(By.XPath(
+                             ".//div[contains(concat(\" \",normalize-space(@class),\" \"),\" section-procurement__item-dateTo \")][contains(normalize-space(),\"Дата окончания срока подачи технико-коммерческих частей\")]"))
+                         ?.Text ??
+                     "").Replace("Дата окончания срока подачи технико-коммерческих частей:", "").Trim();
+                if (dateEndT == "")
+                {
+                    dateEndT =
+                        (_driver.FindElementWithoutException(By.XPath(
+                                 ".//div[contains(concat(\" \",normalize-space(@class),\" \"),\" section-procurement__item-dateTo \")][contains(normalize-space(),\"Дата окончания срока подачи коммерческих частей:\")]"))
+                             ?.Text ??
+                         "").Replace("Дата окончания срока подачи коммерческих частей:", "").Trim();
+                }
+
+                if (dateEndT == "")
+                {
+                    dateEndT =
+                        (_driver.FindElementWithoutException(By.XPath(
+                                 ".//div[contains(concat(\" \",normalize-space(@class),\" \"),\" section-procurement__item-dateTo \")][contains(normalize-space(),\"Дата окончания срока подачи технических частей:\")]"))
+                             ?.Text ??
+                         "").Replace("Дата окончания срока подачи технических частей:", "").Trim();
+                }
+
+                var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm 'GMT'z");
+                if (dateEnd == DateTime.MinValue)
+                {
+                    dateEnd = dateEnd.AddDays(2);
+                }
+
+                if (_tn.DateEnd == DateTime.MinValue)
+                {
+                    _tn.DateEnd = dateEnd;
+                }
+
                 var printForm = _tn.Href;
                 var customerId = 0;
-                var organiserId = GetOrganizer(document, connect);
-                PlacingWay = (document.QuerySelector("td:contains('Способ закупки:') +  td")?.TextContent ?? "")
+                var organiserId = GetOrganizer(connect);
+                PlacingWay =
+                    (_driver.FindElementWithoutException(By.XPath(
+                            ".//td[contains(normalize-space(),\"Способ закупки:\")]/following-sibling::*[1]/self::td"))
+                        ?.Text ?? "")
                     .Trim();
                 GetPlacingWay(connect, out var idPlacingWay);
                 GetEtp(connect, out var idEtp);
                 var purObjInfo =
-                    (document.QuerySelector("span:contains('Наименование закупки:') +  span")?.TextContent ?? "")
+                    (_driver.FindElementWithoutException(By.XPath(
+                            ".//span[contains(normalize-space(),\"Наименование закупки:\")]/following-sibling::*[1]/self::span"))
+                        ?.Text ?? "")
                     .Trim();
                 if (purObjInfo == "")
                 {
                     purObjInfo =
-                        (document.QuerySelector("span:contains('Наименование продукции:') +  span")?.TextContent ?? "")
+                        (_driver.FindElementWithoutException(By.XPath(
+                                ".//span[contains(normalize-space(),\"Наименование продукции:\")]/following-sibling::*[1]/self::span"))
+                            ?.Text ?? "")
                         .Trim();
                 }
 
@@ -110,33 +149,37 @@ namespace ParserWebCore.Tender
                 var resInsertTender = cmd9.ExecuteNonQuery();
                 var idTender = (int)cmd9.LastInsertedId;
                 Counter(resInsertTender, updated);
-                var docs = document.QuerySelectorAll(
-                    "a[href^='/document.php?']");
-                if (docs.Length == 0)
+                var docs = _driver.FindElements(By.CssSelector("a[href^='/document.php?']"));
+                if (docs.Count == 0)
                 {
-                    docs = document.QuerySelectorAll(
-                        "div.procedure__item--documents a");
+                    docs = _driver.FindElements(By.CssSelector(
+                        "div.procedure__item--documents a"));
                 }
 
                 GetDocs(docs, connect, idTender);
-                var lots = document.QuerySelectorAll(
-                    "div.procedure__lots > div.procedure__lot");
+                var lots = _driver.FindElements(By.CssSelector(
+                    "div.procedure__lots > div.procedure__lot"));
                 GetLots(lots, connect, idTender, customerId, purObjInfo);
                 TenderKwords(connect, idTender);
                 AddVerNumber(connect, _tn.PurNum, TypeFz);
             }
         }
 
-        private void GetLots(IHtmlCollection<IElement> lots, MySqlConnection connect, int idTender, int customerId,
+        private void GetLots(ReadOnlyCollection<IWebElement> lots, MySqlConnection connect, int idTender,
+            int customerId,
             string purObjInfo)
         {
             foreach (var lot in lots)
             {
-                var lotNumT = (lot.QuerySelector("div.procedure__lot-header span")?.TextContent ?? "").Trim();
+                var lotNumT =
+                    (lot.FindElementWithoutException(By.CssSelector("div.procedure__lot-header span"))?.Text ?? "")
+                    .Trim();
                 lotNumT = lotNumT.GetDataFromRegex(@"Лот\s+(\d+)");
                 int.TryParse(lotNumT, out var lotNum);
                 if (lotNum == 0) lotNum = 1;
-                var nmckT = (lot.QuerySelector("td:contains('Начальная цена:') +  td")?.TextContent ?? "0.0")
+                var nmckT = (lot.FindElementWithoutException(By.XPath(
+                            ".//td[contains(normalize-space(),\"Начальная цена:\")]/following-sibling::*[1]/self::td"))
+                        ?.Text ?? "0.0")
                     .Trim();
                 var currency = nmckT.GetDataFromRegex(@"[\D]$");
                 if (currency == "")
@@ -151,7 +194,9 @@ namespace ParserWebCore.Tender
                 }
 
                 var purName =
-                    (lot.QuerySelector("td:contains('Предмет договора:') +  td")?.TextContent ?? "").Trim();
+                    (lot.FindElementWithoutException(By.XPath(
+                            ".//td[contains(normalize-space(),\"Предмет договора:\")]/following-sibling::*[1]/self::td"))
+                        ?.Text ?? "").Trim();
                 if (string.IsNullOrEmpty(purName)) purName = purObjInfo;
                 var insertLot =
                     $"INSERT INTO {AppBuilder.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency, lot_name = @lot_name";
@@ -165,7 +210,10 @@ namespace ParserWebCore.Tender
                 cmd18.ExecuteNonQuery();
                 var idLot = (int)cmd18.LastInsertedId;
                 var customerFullName =
-                    (lot.QuerySelector("td:contains('Заказчик:') +  td")?.TextContent ?? "0.0").Trim();
+                    (lot.FindElementWithoutException(
+                            By.XPath(
+                                ".//td[contains(normalize-space(),\"Заказчик:\")]/following-sibling::*[1]/self::td"))
+                        ?.Text ?? "0.0").Trim();
                 if (!string.IsNullOrEmpty(customerFullName))
                 {
                     var selectCustomer =
@@ -196,7 +244,9 @@ namespace ParserWebCore.Tender
                 }
 
                 var okpd2Temp =
-                    (lot.QuerySelector("td:contains('Код классификатора ОКДП/ОКПД2') +  td")?.TextContent ?? "")
+                    (lot.FindElementWithoutException(By.XPath(
+                            ".//td[contains(normalize-space(),\"Код классификатора ОКДП/ОКПД2\")]/following-sibling::*[1]/self::td"))
+                        ?.Text ?? "")
                     .Trim();
                 var okpd2Code = okpd2Temp.GetDataFromRegex(@"^(\d[\.|\d]*\d)");
                 var okpd2GroupCode = 0;
@@ -224,7 +274,10 @@ namespace ParserWebCore.Tender
                     cmd19.ExecuteNonQuery();
                 }
 
-                var appGuarAt = (lot.QuerySelector("td:contains('Обеспечение заявки:') +  td")?.TextContent ?? "")
+                var appGuarAt =
+                    (lot.FindElementWithoutException(By.XPath(
+                            ".//td[contains(normalize-space(),\"Обеспечение заявки:\")]/following-sibling::*[1]/self::td"))
+                        ?.Text ?? "")
                     .Trim();
                 var appGuarA = SharedTekTorg.ParsePrice(appGuarAt);
                 if (appGuarA != 0.0m)
@@ -242,13 +295,12 @@ namespace ParserWebCore.Tender
             }
         }
 
-        private void GetDocs(IHtmlCollection<IElement> docs, MySqlConnection connect, int idTender)
+        private void GetDocs(ReadOnlyCollection<IWebElement> docs, MySqlConnection connect, int idTender)
         {
             foreach (var doc in docs)
             {
-                var fName = (doc?.TextContent ?? "").Trim();
-                var urlAttT = (doc?.GetAttribute("href") ?? "").Trim();
-                var urlAtt = $"https://www.tektorg.ru{urlAttT}";
+                var fName = (doc?.Text ?? "").Trim();
+                var urlAtt = (doc?.GetAttribute("href") ?? "").Trim();
                 if (!string.IsNullOrEmpty(fName))
                 {
                     var insertAttach =
@@ -263,13 +315,15 @@ namespace ParserWebCore.Tender
             }
         }
 
-        private int GetOrganizer(IHtmlDocument document, MySqlConnection connect)
+        private int GetOrganizer(MySqlConnection connect)
         {
             var organiserId = 0;
             if (_tn.OrgName == "")
             {
                 _tn.OrgName =
-                    (document.QuerySelector("td:contains('Наименование организатора:') +  td")?.TextContent ?? "")
+                    (_driver.FindElementWithoutException(By.XPath(
+                            ".//td[contains(normalize-space(),\"Наименование организатора:\")]/following-sibling::*[1]/self::td"))
+                        ?.Text ?? "")
                     .Trim();
             }
 
@@ -289,14 +343,20 @@ namespace ParserWebCore.Tender
                 }
                 else
                 {
-                    var phone = (document.QuerySelector("td:contains('Контактный телефон:') +  td")?.TextContent ??
+                    var phone = (_driver.FindElementWithoutException(By.XPath(
+                                         (".//td[contains(normalize-space(),\"Контактный телефон:\")]/following-sibling::*[1]/self::td")))
+                                     ?.Text ??
                                  "")
                         .Trim();
-                    var email = (document.QuerySelector("td:contains('Адрес электронной почты:') +  td")
-                            ?.TextContent ?? "")
+                    var email = (_driver
+                            .FindElementWithoutException(
+                                By.XPath(".//td[contains(normalize-space(),'Адрес//электронной//почты:)]"))
+                            ?.Text ?? "")
                         .Trim();
                     var contactPerson =
-                        (document.QuerySelector("td:contains('ФИО контактного лица:') +  td")?.TextContent ?? "")
+                        (_driver.FindElementWithoutException(By.XPath(
+                                ".//td[contains(normalize-space(),\"ФИО контактного лица:\")]/following-sibling::*[1]/self::td"))
+                            ?.Text ?? "")
                         .Trim();
                     var addOrganizer =
                         $"INSERT INTO {AppBuilder.Prefix}organizer SET full_name = @full_name, contact_phone = @contact_phone, contact_person = @contact_person, contact_email = @contact_email";

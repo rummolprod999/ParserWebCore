@@ -1,12 +1,12 @@
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Threading;
-using AngleSharp.Dom;
-using AngleSharp.Parser.Html;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.UI;
+using ParserWebCore.Creators;
 using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
-using ParserWebCore.NetworkLibrary;
-using ParserWebCore.SharedLibraries;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
 
@@ -14,104 +14,95 @@ namespace ParserWebCore.Parser
 {
     public class ParserTekRn : ParserAbstract, IParser
     {
+        private readonly ChromeDriver _driver = CreatorChromeDriver.GetChromeDriver();
+        private readonly List<TenderTekRn> tenderList = new List<TenderTekRn>();
+        private TimeSpan _timeoutB = TimeSpan.FromSeconds(120);
         private int DateMinus => 30;
 
         public void Parsing()
         {
-            Parse(ParsingTekRn);
-            Parse(ParsingTekRnTkp);
+            try
+            {
+                Parse(ParsingTekRn);
+                Parse(ParsingTekRnTkp);
+            }
+            catch (Exception e)
+            {
+                Log.Logger(e);
+            }
+            finally
+            {
+                _driver.Manage().Cookies.DeleteAllCookies();
+                _driver.Quit();
+            }
+        }
+
+        private void parsingList(TenderTekRn t)
+        {
+            try
+            {
+                ParserTender(t);
+            }
+            catch (Exception e)
+            {
+                Log.Logger(e);
+            }
         }
 
         private void ParsingTekRn()
         {
             var dateM = DateTime.Now.AddMinutes(-1 * DateMinus * 24 * 60);
-            var urlStart = $"https://www.tektorg.ru/rosneft/procedures?dpfrom={dateM:dd.MM.yyyy}";
-            var max = 0;
-            try
-            {
-                max = SharedTekTorg.GetCountPage(urlStart);
-            }
-            catch (Exception e)
-            {
-                Log.Logger(
-                    $"Exception recieve count page in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
-                    e, urlStart);
-            }
+            var urlStart =
+                $"https://www.tektorg.ru/rosneft/procedures?dpfrom={dateM:dd.MM.yyyy}&limit=500&sort=datestart";
 
-            if (max == 0)
-            {
-                Log.Logger(
-                    $"Null count page in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
-                    urlStart);
-                max = 1;
-            }
-
-            GetPage(max, urlStart);
+            GetPage(urlStart);
+            tenderList.ForEach(parsingList);
+            tenderList.Clear();
         }
 
         private void ParsingTekRnTkp()
         {
             var dateM = DateTime.Now.AddMinutes(-1 * DateMinus * 24 * 60);
-            var urlStart = $"https://www.tektorg.ru/rosnefttkp/procedures?dpfrom={dateM:dd.MM.yyyy}";
-            var max = 0;
+            var urlStart =
+                $"https://www.tektorg.ru/rosnefttkp/procedures?dpfrom={dateM:dd.MM.yyyy}&limit=500&sort=datestart";
+
+            GetPage(urlStart, true);
+            tenderList.ForEach(parsingList);
+            tenderList.Clear();
+        }
+
+        private void GetPage(string urlStart, bool tektkp = false)
+        {
             try
             {
-                max = SharedTekTorg.GetCountPage(urlStart);
+                var wait = new WebDriverWait(_driver, _timeoutB);
+                _driver.Navigate().GoToUrl(urlStart);
+                Thread.Sleep(5000);
+                _driver.SwitchTo().DefaultContent();
+                wait.Until(dr =>
+                    dr.FindElement(By.CssSelector(
+                        "div.section-procurement__item")));
+                ParsingPage(tektkp);
             }
             catch (Exception e)
             {
                 Log.Logger(
-                    $"Exception recieve count page in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                    $"Exception in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
                     e, urlStart);
             }
-
-            if (max == 0)
-            {
-                Log.Logger(
-                    $"Null count page in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
-                    urlStart);
-                max = 1;
-            }
-
-            GetPage(max, urlStart, true);
         }
 
-        private void GetPage(int max, string urlStart, bool tektkp = false)
+        private void ParsingPage(bool tektkp = false)
         {
-            for (var i = 1; i <= max; i++)
-            {
-                var url = $"{urlStart}&page={i}&limit=500";
-                try
-                {
-                    ParsingPage(url, tektkp);
-                    Thread.Sleep(4000);
-                }
-                catch (Exception e)
-                {
-                    Log.Logger(
-                        $"Exception in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
-                        e, urlStart);
-                }
-            }
-        }
-
-        private void ParsingPage(string url, bool tektkp = false)
-        {
-            var s = DownloadString.DownLTektorg(url);
-            if (string.IsNullOrEmpty(s))
-            {
-                Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
-                    url);
-            }
-
-            var parser = new HtmlParser();
-            var document = parser.Parse(s);
-            var tens = document.All.Where(m => m.ClassList.Contains("section-procurement__item") && m.TagName == "DIV");
+            _driver.SwitchTo().DefaultContent();
+            var tens = _driver.FindElements(
+                By.CssSelector(
+                    "div.section-procurement__item"));
             foreach (var t in tens)
             {
                 try
                 {
-                    ParsingTender(t, url, tektkp);
+                    ParsingTender(t, tektkp);
                 }
                 catch (Exception e)
                 {
@@ -120,31 +111,40 @@ namespace ParserWebCore.Parser
             }
         }
 
-        private void ParsingTender(IElement t, string url, bool tektkp = false)
+        private void ParsingTender(IWebElement t, bool tektkp = false)
         {
-            var urlT = (t.QuerySelector("a.section-procurement__item-title")?.GetAttribute("href") ?? "").Trim();
+            var urlT = (t
+                .FindElementWithoutException(By.XPath(
+                    (".//a[contains(concat(\" \",normalize-space(@class),\" \"),\" section-procurement__item-title \")]")))
+                ?.GetAttribute("href") ?? "").Trim();
             if (string.IsNullOrEmpty(urlT))
             {
-                Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
-                    url);
+                Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}");
             }
 
-            var purName = (t.QuerySelector("a.section-procurement__item-title")?.TextContent ??
-                           "");
+            var purName =
+                (t.FindElementWithoutException(By.XPath(
+                         ".//a[contains(concat(\" \",normalize-space(@class),\" \"),\" section-procurement__item-title \")]"))
+                     ?.Text ??
+                 "");
 
             var tenderUrl = urlT;
             if (!urlT.Contains("https://")) tenderUrl = $"https://www.tektorg.ru{urlT}";
-            var status = (t.QuerySelector("div.section-procurement__item-dateTo:contains('Статус:')")?.TextContent
+            var status = (t
+                    .FindElementWithoutException(By.XPath(
+                        ".//div[contains(concat(\" \",normalize-space(@class),\" \"),\" section-procurement__item-dateTo \")][contains(normalize-space(),\"Статус:\")]"))
+                    ?.Text
                     ?.Replace("Статус:", "") ?? "")
                 .Trim();
             if (status.Contains("Осталось:"))
             {
-                status = status.GetDataFromRegex("(.+)\n.+Осталось:.+").Trim();
+                status = status.GetDataFromRegex("(.+)Осталось:.+").Trim();
             }
 
             var datePubT =
-                (t.QuerySelector("div.section-procurement__item-dateTo:contains('Дата публикации процедуры:')")
-                     ?.TextContent ??
+                (t.FindElementWithoutException(By.XPath(
+                         ".//div[contains(concat(\" \",normalize-space(@class),\" \"),\" section-procurement__item-dateTo \")][contains(normalize-space(),\"Дата публикации процедуры:\")]"))
+                     ?.Text ??
                  "").Replace("Дата публикации процедуры:", "").Trim();
             var datePub = datePubT.ParseDateUn("dd.MM.yyyy HH:mm 'GMT'z");
             if (datePub == DateTime.MinValue)
@@ -155,41 +155,39 @@ namespace ParserWebCore.Parser
             }
 
             var dateEndT =
-                (t.QuerySelector(
-                         "div.section-procurement__item-dateTo:contains('Дата окончания срока подачи технико-коммерческих частей:')")
-                     ?.TextContent ??
+                (t.FindElementWithoutException(By.XPath(
+                         ".//div[contains(concat(\" \",normalize-space(@class),\" \"),\" section-procurement__item-dateTo \")][contains(normalize-space(),\"Дата окончания срока подачи технико-коммерческих частей\")]"))
+                     ?.Text ??
                  "").Replace("Дата окончания срока подачи технико-коммерческих частей:", "").Trim();
             if (dateEndT == "")
             {
                 dateEndT =
-                    (t.QuerySelector(
-                             "div.section-procurement__item-dateTo:contains('Дата окончания срока подачи коммерческих частей:')")
-                         ?.TextContent ??
+                    (t.FindElementWithoutException(By.XPath(
+                             ".//div[contains(concat(\" \",normalize-space(@class),\" \"),\" section-procurement__item-dateTo \")][contains(normalize-space(),\"Дата окончания срока подачи коммерческих частей:\")]"))
+                         ?.Text ??
                      "").Replace("Дата окончания срока подачи коммерческих частей:", "").Trim();
             }
 
             if (dateEndT == "")
             {
                 dateEndT =
-                    (t.QuerySelector(
-                             "div.section-procurement__item-dateTo:contains('Дата окончания срока подачи технических частей:')")
-                         ?.TextContent ??
+                    (t.FindElementWithoutException(By.XPath(
+                             ".//div[contains(concat(\" \",normalize-space(@class),\" \"),\" section-procurement__item-dateTo \")][contains(normalize-space(),\"Дата окончания срока подачи технических частей:\")]"))
+                         ?.Text ??
                      "").Replace("Дата окончания срока подачи технических частей:", "").Trim();
             }
 
             var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm 'GMT'z");
-            if (dateEnd == DateTime.MinValue)
-            {
-                Log.Logger($"Empty dateEnd {tenderUrl}");
-                dateEnd = dateEnd.AddDays(2);
-            }
 
-            var purNum = (t.QuerySelector("div > span:contains('Номер закупки на сайте ЭТП:')")?.TextContent
+            var purNum = (t
+                .FindElementWithoutException(
+                    By.XPath(".//div/span[contains(normalize-space(),\"Номер закупки на сайте ЭТП:\")]"))?.Text
                 ?.Replace("Номер закупки на сайте ЭТП:", "") ?? "").Trim();
             if (purNum == "")
             {
                 purNum =
-                    (t.QuerySelector("span:contains('Номер процедуры:')")?.TextContent ??
+                    (t.FindElementWithoutException(
+                         By.XPath(".//span[contains(normalize-space(),\"Номер процедуры:\")]"))?.Text ??
                      "").Replace("Номер процедуры:", "").Trim();
             }
 
@@ -200,16 +198,21 @@ namespace ParserWebCore.Parser
                 return;
             }
 
-            var orgName = (t.QuerySelector("div > span:contains('Организатор:') + a")?.TextContent
+            var orgName = (t
+                .FindElementWithoutException(By.XPath(
+                    ".//div/span[contains(normalize-space(),\"Организатор:\")]/following-sibling::*[1]/self::a"))?.Text
                 ?.Replace("Организатор:", "") ?? "").Trim();
 
             var dateScoringT =
-                (t.QuerySelector("div.section-procurement__item-dateTo:contains('Подведение итогов не позднее:')")
-                     ?.TextContent ??
+                (t.FindElementWithoutException(By.XPath(
+                         ".//div[contains(concat(\" \",normalize-space(@class),\" \"),\" section-procurement__item-dateTo \")][contains(normalize-space(),\"Подведение итогов не позднее:\")]"))
+                     ?.Text ??
                  "").Replace("Подведение итогов не позднее:", "").Trim();
             var dateScoring = dateScoringT.ParseDateUn("dd.MM.yyyy HH:mm 'GMT'z");
 
-            var nmckT = (t.QuerySelector("div.section-procurement__item-totalPrice")?.TextContent ?? "").Trim();
+            var nmckT = (t.FindElementWithoutException(By.XPath(
+                    ".//div[contains(concat(\" \",normalize-space(@class),\" \"),\" section-procurement__item-totalPrice \")]"))
+                ?.Text ?? "").Trim();
             var nmck = nmckT.ExtractPriceNew();
             if (tektkp)
             {
@@ -226,8 +229,8 @@ namespace ParserWebCore.Parser
                         DateEnd = dateEnd,
                         Nmck = nmck,
                         PurName = purName,
-                    });
-                ParserTender(tn);
+                    }, _driver);
+                tenderList.Add(tn);
             }
             else
             {
@@ -243,8 +246,8 @@ namespace ParserWebCore.Parser
                         DateEnd = dateEnd,
                         Nmck = nmck,
                         PurName = purName,
-                    });
-                ParserTender(tn);
+                    }, _driver);
+                tenderList.Add(tn);
             }
         }
     }

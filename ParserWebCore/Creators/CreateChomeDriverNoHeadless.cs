@@ -16,7 +16,7 @@ namespace ParserWebCore.Creators
                 //options.AddArguments("headless");
                 options.AddArguments("disable-gpu");
                 options.AddArguments("no-sandbox");
-                options.AddArguments("remote-debugging-port=9222");
+                //options.AddArguments("remote-debugging-port=9222");
                 _driver = new ChromeDriver("/usr/local/bin", options);
                 _driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(120);
                 //Driver.Manage().Window.Maximize();

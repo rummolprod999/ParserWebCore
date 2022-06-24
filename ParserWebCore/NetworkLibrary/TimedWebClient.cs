@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using OpenQA.Selenium.Chrome;
 using ParserWebCore.Creators;
 using ParserWebCore.Logger;
@@ -104,7 +105,8 @@ namespace ParserWebCore.NetworkLibrary
                 ChromeDriver _driver = CreateChomeDriverNoHeadless.GetChromeDriver();
                 try
                 {
-                    _driver.Navigate().GoToUrl("https://www.tektorg.ru/");
+                    _driver.Navigate().GoToUrl("https://www.tektorg.ru/rosneft/procedures");
+                    Thread.Sleep(5000);
                     cookieTekTorg = _driver.Manage().Cookies.AllCookies.Select(c => $"{c.Name}={c.Value}")
                         .Aggregate((x, y) => $"{x}; {y}");
                 }

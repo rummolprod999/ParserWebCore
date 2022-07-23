@@ -14,7 +14,7 @@ namespace ParserWebCore.Parser
 {
     public class ParserTekRn : ParserAbstract, IParser
     {
-        private readonly ChromeDriver _driver = CreatorChromeDriver.GetChromeDriver();
+        private readonly ChromeDriver _driver = CreateChomeDriverNoHeadless.GetChromeDriver();
         private readonly List<TenderTekRn> tenderList = new List<TenderTekRn>();
         private TimeSpan _timeoutB = TimeSpan.FromSeconds(120);
         private int DateMinus => 30;

@@ -78,7 +78,7 @@ namespace ParserWebCore.Parser
                     new ParserGzwSPUfin("http://goszakaz.ufin48.ru/smallpurchases/GzwSP/NoticesGrid",
                             "http://goszakaz.ufin48.ru",
                             "Малые закупки Липецкой области",
-                            "http://goszakaz.ufin48.ru/smallpurchases/GzwSP/NoticesGrid", 351, _arguments)
+                            "http://goszakaz.ufin48.ru/smallpurchases/GzwSP/NoticesGrid", 351, _arguments, 5)
                         .Parsing();
                     break;
                 case Arguments.Gosyakut:

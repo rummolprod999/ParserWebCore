@@ -61,7 +61,7 @@ namespace ParserWebCore.Tender
                 {
                     s = DownloadString.DownLUserAgent(_tn.Href);
                 }
-                else if (_arg == Arguments.Smol)
+                else if (_arg == Arguments.Smol || _arg == Arguments.Ufin)
                 {
                     var col = new CookieCollection();
                     col.Add(new Cookie("ebudget", ParserGzwSp.AuthCookieValue));

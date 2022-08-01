@@ -27,7 +27,7 @@ namespace ParserWebCore.Parser
             Log.Logger("Время окончания парсинга");
         }
 
-        protected void ParserTender(ITender t)
+        protected virtual void ParserTender(ITender t)
         {
             try
             {

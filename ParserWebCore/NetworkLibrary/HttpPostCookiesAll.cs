@@ -18,11 +18,12 @@ namespace ParserWebCore.NetworkLibrary
             //cookieContainer.SetCookies(new Uri(baseUrl), "PHPSESSID");
             cookieContainer.Add(new Uri(baseUrl), cookie);
             using (var client = new HttpClient(new HttpClientHandler
-            {
-                AllowAutoRedirect = true,
-                CookieContainer = cookieContainer,
-                UseCookies = true
-            }))
+                   {
+                       AllowAutoRedirect = true,
+                       CookieContainer = cookieContainer,
+                       UseCookies = true,
+                       ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+                   }))
             {
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Add("User-Agent",

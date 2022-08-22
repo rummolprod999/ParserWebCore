@@ -28,7 +28,7 @@ namespace ParserWebCore.Parser
                         "http://gz-murman.ru/site/GzwSP/NoticesGrid", 86, _arguments).Parsing();
                     break;
                 case Arguments.Kalug:
-                    new ParserGzwSp("https://mimz.admoblkaluga.ru/GzwSP/NoticesGrid",
+                    new ParserGzwSPKalug("https://mimz.admoblkaluga.ru/GzwSP/NoticesGrid",
                         "https://mimz.admoblkaluga.ru",
                         "Малые закупки Калужской области",
                         "http://mimz.tender.admoblkaluga.ru/GzwSP/NoticesGrid", 87, _arguments, 40).Parsing();

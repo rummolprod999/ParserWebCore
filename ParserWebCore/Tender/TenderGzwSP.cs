@@ -57,12 +57,8 @@ namespace ParserWebCore.Tender
 
                 Thread.Sleep(5000);
                 string s;
-                if (_arg == Arguments.Udmurt)
-                {
-                    s = DownloadString.DownLUserAgent(_tn.Href);
-                }
-                else if (_arg == Arguments.Smol || _arg == Arguments.Ufin || _arg == Arguments.Kurg ||
-                         _arg == Arguments.Udmurt || _arg == Arguments.Samar)
+                if (_arg == Arguments.Smol || _arg == Arguments.Ufin || _arg == Arguments.Kurg ||
+                    _arg == Arguments.Udmurt || _arg == Arguments.Samar || _arg == Arguments.Kalug)
                 {
                     var col = new CookieCollection();
                     col.Add(new Cookie("ebudget", ParserGzwSp.AuthCookieValue));

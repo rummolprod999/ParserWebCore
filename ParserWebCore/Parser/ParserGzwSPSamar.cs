@@ -15,6 +15,17 @@ namespace ParserWebCore.Parser
 {
     public class ParserGzwSpSamar : ParserAbstract, IParser
     {
+        private const int Count = 10;
+        private readonly ChromeDriver _driver = CreatorChromeDriverNoSsl.GetChromeDriver();
+        private Arguments _arg;
+        private string _baseUrl;
+        private string _etpName;
+        private string _etpUrl;
+        private List<TypeMzVoron> _tendersList = new List<TypeMzVoron>();
+        private TimeSpan _timeoutB = TimeSpan.FromSeconds(30);
+        private int _typeFz;
+        private string _url;
+
         public ParserGzwSpSamar(string url, string baseurl, string etpName, string etpUrl, int typeFz, Arguments arg)
         {
             _url = url;
@@ -24,17 +35,6 @@ namespace ParserWebCore.Parser
             _typeFz = typeFz;
             _arg = arg;
         }
-
-        private const int Count = 10;
-        private TimeSpan _timeoutB = TimeSpan.FromSeconds(30);
-        private string _url;
-        private string _baseUrl;
-        private string _etpName;
-        private string _etpUrl;
-        private int _typeFz;
-        private Arguments _arg;
-        private readonly ChromeDriver _driver = CreatorChromeDriverNoSsl.GetChromeDriver();
-        private List<TypeMzVoron> _tendersList = new List<TypeMzVoron>();
 
         public void Parsing()
         {
@@ -62,6 +62,7 @@ namespace ParserWebCore.Parser
         private void ParserSelenium()
         {
             var wait = new WebDriverWait(_driver, _timeoutB);
+            Auth(_driver, wait);
             _driver.Navigate().GoToUrl(_url);
             Thread.Sleep(5000);
             wait.Until(dr =>
@@ -100,6 +101,23 @@ namespace ParserWebCore.Parser
                     tt, _baseUrl, _arg);
                 ParserTender(tn);
             }
+        }
+
+        public void Auth(ChromeDriver driver, WebDriverWait wait)
+        {
+            driver.Navigate()
+                .GoToUrl(
+                    "https://webtorgi.samregion.ru//smallpurchases/Login/Form?err=badlogged&ret=%2fsmallpurchases%2fProfile%2fGotoHomePage");
+            wait.Until(dr =>
+                dr.FindElement(By.XPath(
+                    "//input[@name = 'login']")));
+            Thread.Sleep(1000);
+            driver.SwitchTo().DefaultContent();
+            driver.FindElement(By.XPath("//input[@name = 'login']")).SendKeys(AppBuilder.SamarUser);
+            driver.FindElement(By.XPath("//input[@name = 'pass']")).SendKeys(AppBuilder.SamarPass);
+            driver.FindElement(By.XPath("//input[@value = 'Вход']")).Click();
+            Thread.Sleep(5000);
+            ParserGzwSp.AuthCookieValue = driver.Manage().Cookies.GetCookieNamed("ebudget_mz").Value;
         }
 
         private void ParsingList(int pageNum)

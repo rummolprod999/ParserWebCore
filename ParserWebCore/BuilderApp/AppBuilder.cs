@@ -44,6 +44,11 @@ namespace ParserWebCore.BuilderApp
         [Required] public static string SmolUser { get; set; }
         [Required] public static string KurgPass { get; set; }
         [Required] public static string KurgUser { get; set; }
+        [Required] public static string UdmPass { get; set; }
+        [Required] public static string UdmUser { get; set; }
+
+        [Required] public static string SamarPass { get; set; }
+        [Required] public static string SamarUser { get; set; }
         [Required] public static string ConnectString { get; set; }
         [Required] public static bool UserProxy { get; set; }
         [Required] public static string ProxyFile { get; set; }
@@ -332,6 +337,10 @@ namespace ParserWebCore.BuilderApp
                 SmolUser = (string)o["usersmol"];
                 KurgPass = (string)o["passkurg"];
                 KurgUser = (string)o["userkurg"];
+                UdmPass = (string)o["passudm"];
+                UdmUser = (string)o["userudm"];
+                SamarPass = (string)o["passsamar"];
+                SamarUser = (string)o["usersamar"];
                 UserProxy = (bool)o["use_proxy"];
                 ProxyFile = (string)o["proxy_file"];
                 _port = int.TryParse((string)o["port"], out _port) ? int.Parse((string)o["port"]) : 3306;

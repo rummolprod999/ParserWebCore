@@ -66,10 +66,10 @@ namespace ParserWebCore.Parser
                         .Parsing();
                     break;
                 case Arguments.Dvina:
-                    new ParserGzwSp("https://zakupki.dvinaland.ru/smallpurchases/GzwSP/NoticesGrid",
+                    new ParserGzwSPDvina("https://zakupki.dvinaland.ru/smallpurchases/GzwSP/NoticesGrid",
                             "https://zakupki.dvinaland.ru",
                             "Малые закупки Архангельский области",
-                            "https://zakupki.dvinaland.ru/smallpurchases/GzwSP/NoticesGrid", 349, _arguments)
+                            "https://zakupki.dvinaland.ru/smallpurchases/GzwSP/NoticesGrid", 349, _arguments, 7)
                         .Parsing();
                     break;
                 case Arguments.Kursk:

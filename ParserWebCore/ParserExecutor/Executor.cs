@@ -234,6 +234,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Mobwin:
                     _parser = new ParserMobWin();
                     break;
+                case Arguments.Acron:
+                    _parser = new ParserAcron();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

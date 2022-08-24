@@ -85,5 +85,6 @@
         Mordov,
         Kurg,
         Mobwin,
+        Acron,
     }
 }

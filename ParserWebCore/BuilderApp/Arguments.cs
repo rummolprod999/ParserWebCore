@@ -86,5 +86,6 @@
         Kurg,
         Mobwin,
         Acron,
+        UdmurtProp,
     }
 }

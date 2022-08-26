@@ -52,6 +52,8 @@ namespace ParserWebCore.Parser
                             "Малые закупки Удмуртской Республики",
                             "https://wt.udmr.ru/smallpurchases/GzwSP/NoticesGrid", 90, _arguments, 10)
                         .Parsing();
+                    break;
+                case Arguments.UdmurtProp:
                     new ParserGzwSPUdmurtProp("https://wt.udmr.ru/smallpurchases/GzwSP/ProposalsBidsGrid",
                             "https://wt.mfur.ru",
                             "Малые закупки Удмуртской Республики",

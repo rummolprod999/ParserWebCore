@@ -96,7 +96,7 @@ namespace ParserWebCore.Parser
                         .Parsing();
                     break;
                 case Arguments.Tverzmo:
-                    new ParserGzwSp("https://www.tver.ru/zakaz/GzwSP/NoticesGrid",
+                    new ParserGzwSPTverZmo("https://www.tver.ru/zakaz/GzwSP/NoticesGrid",
                             "https://www.tver.ru",
                             "ЗМО г. Тверь",
                             "https://www.tver.ru", 353, _arguments, 5)

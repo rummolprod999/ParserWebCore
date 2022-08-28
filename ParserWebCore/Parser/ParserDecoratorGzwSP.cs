@@ -75,10 +75,10 @@ namespace ParserWebCore.Parser
                         .Parsing();
                     break;
                 case Arguments.Kursk:
-                    new ParserGzwSp("http://zak.imkursk.ru/smallpurchases/GzwSP/NoticesGrid",
+                    new ParserGzwSPKursk("http://zak.imkursk.ru/smallpurchases/GzwSP/NoticesGrid",
                             "http://zak.imkursk.ru",
                             "Малые закупки Курской области",
-                            "http://zak.imkursk.ru/smallpurchases/GzwSP/NoticesGrid", 350, _arguments)
+                            "http://zak.imkursk.ru/smallpurchases/GzwSP/NoticesGrid", 350, _arguments, 5)
                         .Parsing();
                     break;
                 case Arguments.Ufin:

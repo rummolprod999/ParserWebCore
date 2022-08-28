@@ -4,6 +4,7 @@ using System.Threading;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
+using ParserWebCore.BuilderApp;
 using ParserWebCore.Creators;
 using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
@@ -49,6 +50,7 @@ namespace ParserWebCore.Parser
         private void ParserSelenium()
         {
             var wait = new WebDriverWait(_driver, _timeoutB);
+            Auth(_driver, wait);
             _driver.Navigate().GoToUrl(Url);
             Thread.Sleep(5000);
             wait.Until(dr =>
@@ -76,6 +78,23 @@ namespace ParserWebCore.Parser
                         "//div[@class = 'grid_content']/div[contains(@class, 'gridview_item')][1]/table/tbody")));
                 ParsingList();
             }
+        }
+
+        private void Auth(ChromeDriver driver, WebDriverWait wait)
+        {
+            driver.Navigate()
+                .GoToUrl(
+                    "https://goszakupki.govvrn.ru/mzvoron/Login/Form?err=badlogged&ret=%2fmzvoron%2fProfile%2fGotoHomePage");
+            wait.Until(dr =>
+                dr.FindElement(By.XPath(
+                    "//input[@name = 'login']")));
+            Thread.Sleep(1000);
+            driver.SwitchTo().DefaultContent();
+            driver.FindElement(By.XPath("//input[@name = 'login']")).SendKeys(AppBuilder.KalugUser);
+            driver.FindElement(By.XPath("//input[@name = 'pass']")).SendKeys(AppBuilder.KalugPass);
+            driver.FindElement(By.XPath("//input[@value = 'Вход']")).Click();
+            Thread.Sleep(5000);
+            ParserGzwSp.AuthCookieValue = driver.Manage().Cookies.GetCookieNamed("ebudget").Value;
         }
 
         private void ParserListTenders()

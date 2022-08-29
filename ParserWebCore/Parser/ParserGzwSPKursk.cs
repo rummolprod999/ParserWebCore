@@ -18,7 +18,7 @@ namespace ParserWebCore.Parser
         {
             driver.Navigate()
                 .GoToUrl(
-                    "https://mimz.admoblkaluga.ru/Login/Form?err=badlogged&ret=%2fProfile%2fGotoHomePage");
+                    "http://zak.imkursk.ru/smallpurchases/Login/Form?err=badlogged&ret=%2fsmallpurchases%2fProfile%2fGotoHomePage");
             wait.Until(dr =>
                 dr.FindElement(By.XPath(
                     "//input[@name = 'login']")));

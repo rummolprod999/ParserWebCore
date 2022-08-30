@@ -87,5 +87,6 @@
         Mobwin,
         Acron,
         UdmurtProp,
+        Tambov,
     }
 }

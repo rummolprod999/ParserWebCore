@@ -123,6 +123,13 @@ namespace ParserWebCore.Parser
                             "https://zakupki.45fin.ru", 358, _arguments, 10)
                         .Parsing();
                     break;
+                case Arguments.Tambov:
+                    new ParserGzwSPTambov("https://torgi.tambov.gov.ru/smallpurchases/GzwSP/NoticesGrid",
+                            "https://torgi.tambov.gov.ru",
+                            "Малые закупки  Тамбовской области",
+                            "https://torgi.tambov.gov.ru", 366, _arguments, 2)
+                        .Parsing();
+                    break;
                 default: throw new ArgumentOutOfRangeException(nameof(_arguments), _arguments, null);
             }
         }

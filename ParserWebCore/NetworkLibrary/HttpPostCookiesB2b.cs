@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 
@@ -12,7 +13,7 @@ namespace ParserWebCore.NetworkLibrary
         }
 
         public string DownloadString(string url, CookieCollection cookie = null,
-            FormUrlEncodedContent postContent = null, bool useProxy = false)
+            FormUrlEncodedContent postContent = null, bool useProxy = false, Dictionary<string, string> headers = null)
         {
             var cookieContainer = new CookieContainer();
             if (cookie != null)
@@ -44,7 +45,7 @@ namespace ParserWebCore.NetworkLibrary
             using (var client = new HttpClient(httpClientHandler))
             {
                 //client.DefaultRequestHeaders.Clear();
-                FillUserAgent(client);
+                FillUserAgent(client, headers);
                 var response = client.GetAsync(url);
                 var res = response.Result;
                 if (res.StatusCode == HttpStatusCode.NotFound)
@@ -56,12 +57,19 @@ namespace ParserWebCore.NetworkLibrary
             }
         }
 
-        protected internal static void FillUserAgent(HttpClient client)
+        protected internal static void FillUserAgent(HttpClient client, Dictionary<string, string> dictionary)
         {
             try
             {
                 client.DefaultRequestHeaders.Add("User-Agent",
                     RandomUa.RandomUserAgent);
+                if (dictionary != null)
+                {
+                    foreach (var keyValuePair in dictionary)
+                    {
+                        client.DefaultRequestHeaders.Add(keyValuePair.Key, keyValuePair.Value);
+                    }
+                }
             }
             catch (Exception)
             {

@@ -742,7 +742,7 @@ namespace ParserWebCore.NetworkLibrary
         }
 
         public static string DownLHttpPostWithCookiesB2b(string url, CookieCollection cookie,
-            FormUrlEncodedContent postContent = null, bool useProxy = false)
+            FormUrlEncodedContent postContent = null, bool useProxy = false, Dictionary<string, string> headers = null)
         {
             var tmp = "";
             var count = 0;
@@ -752,7 +752,7 @@ namespace ParserWebCore.NetworkLibrary
                 {
                     var task = Task.Run(() =>
                         (HttpPostCookiesB2b.CreateInstance()).DownloadString(url, cookie, postContent,
-                            useProxy: useProxy));
+                            useProxy: useProxy, headers));
                     if (!task.Wait(TimeSpan.FromSeconds(60))) throw new TimeoutException();
                     tmp = task.Result;
                     break;

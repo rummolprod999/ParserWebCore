@@ -50,7 +50,8 @@ namespace ParserWebCore.Parser
 
             var url =
                 $"https://api-zakaz.bashkortostan.ru/apifront/purchases?filter=%7B%22purchaseCategories%22:[],%22conditionname%22:%22%22,%22orderType%22:null,%22customer%22:%22%22,%22regNumber%22:%22%22,%22orderDateStart%22:null,%22orderDateFinish%22:null,%22priceStartFrom%22:null,%22priceStartTo%22:null%7D&status=1&page={num}";
-            var result = DownloadString.DownLHttpPostWithCookiesB2b(url, cookie: null, useProxy: AppBuilder.UserProxy);
+            var result = DownloadString.DownLHttpPostWithCookiesB2b(url, cookie: null, useProxy: AppBuilder.UserProxy,
+                headers: headers);
             if (string.IsNullOrEmpty(result))
             {
                 Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",

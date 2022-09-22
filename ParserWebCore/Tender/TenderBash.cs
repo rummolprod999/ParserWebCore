@@ -60,7 +60,8 @@ namespace ParserWebCore.Tender
                 var dateUpd = DateTime.Now;
                 var url =
                     $"https://api-zakaz.bashkortostan.ru/apifront/purchases/{_tn.Id}";
-                var result = DownloadString.DownLUserAgent(url, false, headers);
+                var result = DownloadString.DownLHttpPostWithCookiesB2b(url, cookie: null,
+                    useProxy: AppBuilder.UserProxy, headers: headers);
                 if (string.IsNullOrEmpty(result))
                 {
                     Log.Logger(

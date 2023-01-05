@@ -56,31 +56,31 @@ namespace ParserWebCore.Tender
                 _driver.SwitchTo().DefaultContent();
                 wait.Until(dr =>
                     dr.FindElement(By.XPath(
-                        "//h4[. = 'Общие сведения']")));
+                        "//h3[. = 'Общие сведения']")));
                 var dateUpd = DateTime.Now;
 
                 var (updated, cancelStatus) = UpdateTenderVersion(connect, _tn.PurNum, dateUpd);
                 var dateEndT =
                     (_driver.FindElementWithoutException(By.XPath(
-                             ".//div[contains(concat(\" \",normalize-space(@class),\" \"),\" section-procurement__item-dateTo \")][contains(normalize-space(),\"Дата окончания срока подачи технико-коммерческих частей\")]"))
+                             "//div[. = 'Дата окончания срока подачи технико-коммерческих частей']/following-sibling::time"))
                          ?.Text ??
-                     "").Replace("Дата окончания срока подачи технико-коммерческих частей:", "").Trim();
+                     "").Replace("\n", " ").Trim();
                 if (dateEndT == "")
                 {
                     dateEndT =
                         (_driver.FindElementWithoutException(By.XPath(
-                                 ".//div[contains(concat(\" \",normalize-space(@class),\" \"),\" section-procurement__item-dateTo \")][contains(normalize-space(),\"Дата окончания срока подачи коммерческих частей:\")]"))
+                                 "//div[. = 'Дата окончания срока подачи коммерческих частей']/following-sibling::time"))
                              ?.Text ??
-                         "").Replace("Дата окончания срока подачи коммерческих частей:", "").Trim();
+                         "").Replace("\n", " ").Trim();
                 }
 
                 if (dateEndT == "")
                 {
                     dateEndT =
                         (_driver.FindElementWithoutException(By.XPath(
-                                 ".//div[contains(concat(\" \",normalize-space(@class),\" \"),\" section-procurement__item-dateTo \")][contains(normalize-space(),\"Дата окончания срока подачи технических частей:\")]"))
+                                 "//div[. = 'Дата окончания срока подачи технических частей']/following-sibling::time"))
                              ?.Text ??
-                         "").Replace("Дата окончания срока подачи технических частей:", "").Trim();
+                         "").Replace("\n", " ").Trim();
                 }
 
                 var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm 'GMT'z");
@@ -99,14 +99,14 @@ namespace ParserWebCore.Tender
                 var organiserId = GetOrganizer(connect);
                 PlacingWay =
                     (_driver.FindElementWithoutException(By.XPath(
-                            ".//td[contains(normalize-space(),\"Способ закупки:\")]/following-sibling::*[1]/self::td"))
+                            ".//div[. = 'Способ закупки']//following-sibling::div"))
                         ?.Text ?? "")
                     .Trim();
                 GetPlacingWay(connect, out var idPlacingWay);
                 GetEtp(connect, out var idEtp);
                 var purObjInfo =
                     (_driver.FindElementWithoutException(By.XPath(
-                            ".//span[contains(normalize-space(),\"Наименование закупки:\")]/following-sibling::*[1]/self::span"))
+                            ".//span[contains(@class, 'CardProcedureViewstyled__Title')]"))
                         ?.Text ?? "")
                     .Trim();
                 if (purObjInfo == "")
@@ -152,13 +152,13 @@ namespace ParserWebCore.Tender
                 var docs = _driver.FindElements(By.CssSelector("a[href^='/document.php?']"));
                 if (docs.Count == 0)
                 {
-                    docs = _driver.FindElements(By.CssSelector(
-                        "div.procedure__item--documents a"));
+                    docs = _driver.FindElements(By.XPath(
+                        "//a[contains(@class, 'Documentstyled__Container-sc')]"));
                 }
 
                 GetDocs(docs, connect, idTender);
-                var lots = _driver.FindElements(By.CssSelector(
-                    "div.procedure__lots > div.procedure__lot"));
+                var lots = _driver.FindElements(By.XPath(
+                    "//div[contains(@class, 'Tabsstyled__TabsItem-sc')]"));
                 GetLots(lots, connect, idTender, customerId, purObjInfo);
                 TenderKwords(connect, idTender);
                 AddVerNumber(connect, _tn.PurNum, TypeFz);
@@ -172,13 +172,14 @@ namespace ParserWebCore.Tender
             foreach (var lot in lots)
             {
                 var lotNumT =
-                    (lot.FindElementWithoutException(By.CssSelector("div.procedure__lot-header span"))?.Text ?? "")
+                    (lot.FindElementWithoutException(
+                        By.XPath(".//span[contains(@class, 'CardProcedureViewstyled__Title-sc')]"))?.Text ?? "")
                     .Trim();
                 lotNumT = lotNumT.GetDataFromRegex(@"Лот\s+(\d+)");
                 int.TryParse(lotNumT, out var lotNum);
                 if (lotNum == 0) lotNum = 1;
                 var nmckT = (lot.FindElementWithoutException(By.XPath(
-                            ".//td[contains(normalize-space(),\"Начальная цена:\")]/following-sibling::*[1]/self::td"))
+                            ".//div[contains(@class, 'ProcedurePricestyled__Container-sc')]"))
                         ?.Text ?? "0.0")
                     .Trim();
                 var currency = nmckT.GetDataFromRegex(@"[\D]$");
@@ -212,8 +213,8 @@ namespace ParserWebCore.Tender
                 var customerFullName =
                     (lot.FindElementWithoutException(
                             By.XPath(
-                                ".//td[contains(normalize-space(),\"Заказчик:\")]/following-sibling::*[1]/self::td"))
-                        ?.Text ?? "0.0").Trim();
+                                ".//div[. = 'Заказчик']//following-sibling::div"))
+                        ?.Text ?? "").Trim();
                 if (!string.IsNullOrEmpty(customerFullName))
                 {
                     var selectCustomer =
@@ -245,7 +246,7 @@ namespace ParserWebCore.Tender
 
                 var okpd2Temp =
                     (lot.FindElementWithoutException(By.XPath(
-                            ".//td[contains(normalize-space(),\"Код классификатора ОКДП/ОКПД2\")]/following-sibling::*[1]/self::td"))
+                            ".//p[. = 'ОКДП/ОКДП2']//following-sibling::div/div"))
                         ?.Text ?? "")
                     .Trim();
                 var okpd2Code = okpd2Temp.GetDataFromRegex(@"^(\d[\.|\d]*\d)");
@@ -276,7 +277,7 @@ namespace ParserWebCore.Tender
 
                 var appGuarAt =
                     (lot.FindElementWithoutException(By.XPath(
-                            ".//td[contains(normalize-space(),\"Обеспечение заявки:\")]/following-sibling::*[1]/self::td"))
+                            ".//p[. = 'Обеспечение заявки']//following-sibling::div"))
                         ?.Text ?? "")
                     .Trim();
                 var appGuarA = SharedTekTorg.ParsePrice(appGuarAt);
@@ -299,7 +300,9 @@ namespace ParserWebCore.Tender
         {
             foreach (var doc in docs)
             {
-                var fName = (doc?.Text ?? "").Trim();
+                var fName = (doc?.FindElementWithoutException(By.XPath(
+                        ".//p"))
+                    ?.Text ?? "").Trim();
                 var urlAtt = (doc?.GetAttribute("href") ?? "").Trim();
                 if (!string.IsNullOrEmpty(fName))
                 {
@@ -322,7 +325,7 @@ namespace ParserWebCore.Tender
             {
                 _tn.OrgName =
                     (_driver.FindElementWithoutException(By.XPath(
-                            ".//td[contains(normalize-space(),\"Наименование организатора:\")]/following-sibling::*[1]/self::td"))
+                            ".//p[. = 'Наименование организатора']//following-sibling::div"))
                         ?.Text ?? "")
                     .Trim();
             }
@@ -344,18 +347,18 @@ namespace ParserWebCore.Tender
                 else
                 {
                     var phone = (_driver.FindElementWithoutException(By.XPath(
-                                         (".//td[contains(normalize-space(),\"Контактный телефон:\")]/following-sibling::*[1]/self::td")))
+                                         (".//p[. = 'Контактный телефон']//following-sibling::div")))
                                      ?.Text ??
                                  "")
                         .Trim();
                     var email = (_driver
                             .FindElementWithoutException(
-                                By.XPath(".//td[contains(normalize-space(),'Адрес//электронной//почты:)]"))
+                                By.XPath(".//p[. = 'Адрес электронной почты']//following-sibling::div"))
                             ?.Text ?? "")
                         .Trim();
                     var contactPerson =
                         (_driver.FindElementWithoutException(By.XPath(
-                                ".//td[contains(normalize-space(),\"ФИО контактного лица:\")]/following-sibling::*[1]/self::td"))
+                                ".//p[. = 'ФИО контактного лица']//following-sibling::div"))
                             ?.Text ?? "")
                         .Trim();
                     var addOrganizer =

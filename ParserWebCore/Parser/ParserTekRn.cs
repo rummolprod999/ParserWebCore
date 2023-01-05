@@ -51,22 +51,28 @@ namespace ParserWebCore.Parser
 
         private void ParsingTekRn()
         {
-            var dateM = DateTime.Now.AddMinutes(-1 * DateMinus * 24 * 60);
-            var urlStart =
-                $"https://www.tektorg.ru/rosneft/procedures?dpfrom={dateM:dd.MM.yyyy}&limit=500&sort=datestart";
+            for (var i = 1; i < 50; i++)
+            {
+                var urlStart =
+                    $"https://www.tektorg.ru/rosneft/procedures?page={i}&sort=datePublished_desc";
 
-            GetPage(urlStart);
+                GetPage(urlStart);
+            }
+
             tenderList.ForEach(parsingList);
             tenderList.Clear();
         }
 
         private void ParsingTekRnTkp()
         {
-            var dateM = DateTime.Now.AddMinutes(-1 * DateMinus * 24 * 60);
-            var urlStart =
-                $"https://www.tektorg.ru/rosnefttkp/procedures?dpfrom={dateM:dd.MM.yyyy}&limit=500&sort=datestart";
+            for (var i = 1; i < 50; i++)
+            {
+                var urlStart =
+                    $"https://www.tektorg.ru/rosnefttkp/procedures?page={i}&sort=datePublished_desc";
 
-            GetPage(urlStart, true);
+                GetPage(urlStart);
+            }
+
             tenderList.ForEach(parsingList);
             tenderList.Clear();
         }
@@ -80,8 +86,8 @@ namespace ParserWebCore.Parser
                 Thread.Sleep(5000);
                 _driver.SwitchTo().DefaultContent();
                 wait.Until(dr =>
-                    dr.FindElement(By.CssSelector(
-                        "div.section-procurement__item")));
+                    dr.FindElement(By.XPath(
+                        "//div[contains(@class, 'CardProcedureViewstyled__Container-sc')]")));
                 ParsingPage(tektkp);
             }
             catch (Exception e)
@@ -96,8 +102,8 @@ namespace ParserWebCore.Parser
         {
             _driver.SwitchTo().DefaultContent();
             var tens = _driver.FindElements(
-                By.CssSelector(
-                    "div.section-procurement__item"));
+                By.XPath(
+                    "//div[contains(@class, 'CardProcedureViewstyled__Container-sc')]"));
             foreach (var t in tens)
             {
                 try
@@ -115,7 +121,7 @@ namespace ParserWebCore.Parser
         {
             var urlT = (t
                 .FindElementWithoutException(By.XPath(
-                    (".//a[contains(concat(\" \",normalize-space(@class),\" \"),\" section-procurement__item-title \")]")))
+                    (".//a[contains(@class, 'CardProcedureViewstyled__Title')]")))
                 ?.GetAttribute("href") ?? "").Trim();
             if (string.IsNullOrEmpty(urlT))
             {
@@ -124,7 +130,7 @@ namespace ParserWebCore.Parser
 
             var purName =
                 (t.FindElementWithoutException(By.XPath(
-                         ".//a[contains(concat(\" \",normalize-space(@class),\" \"),\" section-procurement__item-title \")]"))
+                         ".//a[contains(@class, 'CardProcedureViewstyled__Title')]"))
                      ?.Text ??
                  "");
 
@@ -132,7 +138,7 @@ namespace ParserWebCore.Parser
             if (!urlT.Contains("https://")) tenderUrl = $"https://www.tektorg.ru{urlT}";
             var status = (t
                     .FindElementWithoutException(By.XPath(
-                        ".//div[contains(concat(\" \",normalize-space(@class),\" \"),\" section-procurement__item-dateTo \")][contains(normalize-space(),\"Статус:\")]"))
+                        ".//span[contains(@class, 'ProcedureStatusstyled__StatusValue')]"))
                     ?.Text
                     ?.Replace("Статус:", "") ?? "")
                 .Trim();
@@ -143,9 +149,9 @@ namespace ParserWebCore.Parser
 
             var datePubT =
                 (t.FindElementWithoutException(By.XPath(
-                         ".//div[contains(concat(\" \",normalize-space(@class),\" \"),\" section-procurement__item-dateTo \")][contains(normalize-space(),\"Дата публикации процедуры:\")]"))
+                         ".//div[. = 'Дата публикации']/following-sibling::time"))
                      ?.Text ??
-                 "").Replace("Дата публикации процедуры:", "").Trim();
+                 "").Replace("\n", " ").Trim();
             var datePub = datePubT.ParseDateUn("dd.MM.yyyy HH:mm 'GMT'z");
             if (datePub == DateTime.MinValue)
             {
@@ -156,33 +162,33 @@ namespace ParserWebCore.Parser
 
             var dateEndT =
                 (t.FindElementWithoutException(By.XPath(
-                         ".//div[contains(concat(\" \",normalize-space(@class),\" \"),\" section-procurement__item-dateTo \")][contains(normalize-space(),\"Дата окончания срока подачи технико-коммерческих частей\")]"))
+                         ".//div[. = 'Дата окончания срока подачи технико-коммерческих частей']/following-sibling::time"))
                      ?.Text ??
-                 "").Replace("Дата окончания срока подачи технико-коммерческих частей:", "").Trim();
+                 "").Replace("\n", " ").Trim();
             if (dateEndT == "")
             {
                 dateEndT =
                     (t.FindElementWithoutException(By.XPath(
-                             ".//div[contains(concat(\" \",normalize-space(@class),\" \"),\" section-procurement__item-dateTo \")][contains(normalize-space(),\"Дата окончания срока подачи коммерческих частей:\")]"))
+                             ".//div[. = 'Дата окончания срока подачи коммерческих частей']/following-sibling::time"))
                          ?.Text ??
-                     "").Replace("Дата окончания срока подачи коммерческих частей:", "").Trim();
+                     "").Replace("\n", " ").Trim();
             }
 
             if (dateEndT == "")
             {
                 dateEndT =
                     (t.FindElementWithoutException(By.XPath(
-                             ".//div[contains(concat(\" \",normalize-space(@class),\" \"),\" section-procurement__item-dateTo \")][contains(normalize-space(),\"Дата окончания срока подачи технических частей:\")]"))
+                             ".//div[. = 'Дата окончания срока подачи технических частей']/following-sibling::time"))
                          ?.Text ??
-                     "").Replace("Дата окончания срока подачи технических частей:", "").Trim();
+                     "").Replace("\n", " ").Trim();
             }
 
             var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm 'GMT'z");
 
             var purNum = (t
                 .FindElementWithoutException(
-                    By.XPath(".//div/span[contains(normalize-space(),\"Номер закупки на сайте ЭТП:\")]"))?.Text
-                ?.Replace("Номер закупки на сайте ЭТП:", "") ?? "").Trim();
+                    By.XPath(".//span[contains(@class, 'ProcedureInfoHeaderstyled__RegistryNumber')]"))?.Text
+                ?.Replace("№", "") ?? "").Trim();
             if (purNum == "")
             {
                 purNum =
@@ -200,7 +206,7 @@ namespace ParserWebCore.Parser
 
             var orgName = (t
                 .FindElementWithoutException(By.XPath(
-                    ".//div/span[contains(normalize-space(),\"Организатор:\")]/following-sibling::*[1]/self::a"))?.Text
+                    ".//div[. = 'Организатор']/following-sibling::div"))?.Text
                 ?.Replace("Организатор:", "") ?? "").Trim();
 
             var dateScoringT =
@@ -211,7 +217,7 @@ namespace ParserWebCore.Parser
             var dateScoring = dateScoringT.ParseDateUn("dd.MM.yyyy HH:mm 'GMT'z");
 
             var nmckT = (t.FindElementWithoutException(By.XPath(
-                    ".//div[contains(concat(\" \",normalize-space(@class),\" \"),\" section-procurement__item-totalPrice \")]"))
+                    ".//div[contains(@class, 'ProcedurePricestyled__Container')]"))
                 ?.Text ?? "").Trim();
             var nmck = nmckT.ExtractPriceNew();
             if (tektkp)

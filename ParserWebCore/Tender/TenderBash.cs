@@ -18,13 +18,13 @@ namespace ParserWebCore.Tender
         private Dictionary<string, string> headers = new Dictionary<string, string>
         {
             ["authority"] = "api-zakaz.bashkortostan.ru",
-            ["sec-ch-ua"] = "\" Not;A Brand\";v=\"99\", \"Google Chrome\";v=\"97\", \"Chromium\";v=\"97\"",
+            ["sec-ch-ua"] = "\"Not_A Brand\";v=\"99\", \"Google Chrome\";v=\"109\", \"Chromium\";v=\"109\"",
             ["accept"] = "application/json, text/plain, */*",
-            ["sec-ch-ua-mobile"] = "?0",
-            ["x-atmo"] = "jwYvNqVVWG4WjmP6GxnnzubwWZyMddyc",
             ["user-agent"] =
-                "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:100.0) Gecko/20100101 Firefox/100.0",
+                "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36",
             ["origin"] = "https://zakaz.bashkortostan.ru",
+            ["referer"] = "https://zakaz.bashkortostan.ru/",
+            ["accept-language"] = "ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7"
         };
 
         public TenderBash(string etpName, string etpUrl, int typeFz, TypeBash tn) : base(etpName,

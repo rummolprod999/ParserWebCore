@@ -20,7 +20,7 @@ namespace ParserWebCore.Parser
 
         private void ParsingBash()
         {
-            for (var i = 0; i < _countPage; i++)
+            for (var i = 1; i < _countPage; i++)
             {
                 try
                 {
@@ -39,17 +39,17 @@ namespace ParserWebCore.Parser
             var headers = new Dictionary<string, string>
             {
                 ["authority"] = "api-zakaz.bashkortostan.ru",
-                ["sec-ch-ua"] = "\" Not;A Brand\";v=\"99\", \"Google Chrome\";v=\"97\", \"Chromium\";v=\"97\"",
+                ["sec-ch-ua"] = "\"Not_A Brand\";v=\"99\", \"Google Chrome\";v=\"109\", \"Chromium\";v=\"109\"",
                 ["accept"] = "application/json, text/plain, */*",
-                ["sec-ch-ua-mobile"] = "?0",
-                ["x-atmo"] = "jwYvNqVVWG4WjmP6GxnnzubwWZyMddyc",
                 ["user-agent"] =
-                    "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:100.0) Gecko/20100101 Firefox/100.0",
+                    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36",
                 ["origin"] = "https://zakaz.bashkortostan.ru",
+                ["referer"] = "https://zakaz.bashkortostan.ru/",
+                ["accept-language"] = "ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7"
             };
 
             var url =
-                $"https://api-zakaz.bashkortostan.ru/apifront/purchases?filter=%7B%22purchaseCategories%22:[],%22conditionname%22:%22%22,%22orderType%22:null,%22customer%22:%22%22,%22regNumber%22:%22%22,%22orderDateStart%22:null,%22orderDateFinish%22:null,%22priceStartFrom%22:null,%22priceStartTo%22:null%7D&status=1&page={num}";
+                $"https://api-zakaz.bashkortostan.ru/apifront/purchases?page={num}";
             var result = DownloadString.DownLHttpPostWithCookiesB2b(url, cookie: null, useProxy: AppBuilder.UserProxy,
                 headers: headers);
             if (string.IsNullOrEmpty(result))

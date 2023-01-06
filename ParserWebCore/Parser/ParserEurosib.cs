@@ -1,8 +1,12 @@
 using System;
-using HtmlAgilityPack;
+using System.Collections.Generic;
+using System.Threading;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.UI;
+using ParserWebCore.Creators;
 using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
-using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
 
@@ -11,6 +15,9 @@ namespace ParserWebCore.Parser
     public class ParserEurosib : ParserAbstract, IParser
     {
         private const string Urlpage = "https://www.eurosib-td.ru/ru/zakupki-rabot-i-uslug/";
+        private readonly ChromeDriver _driver = CreatorChromeDriver.GetChromeDriver();
+        private List<TypeEurosib> _listTenders = new List<TypeEurosib>();
+        private TimeSpan _timeoutB = TimeSpan.FromSeconds(120);
 
         public void Parsing()
         {
@@ -21,34 +28,50 @@ namespace ParserWebCore.Parser
         {
             try
             {
-                ParsingPage(Urlpage);
+                ParserSelenium();
             }
             catch (Exception e)
             {
                 Log.Logger(e);
             }
+            finally
+            {
+                _driver.Manage().Cookies.DeleteAllCookies();
+                _driver.Quit();
+            }
         }
 
-        private void ParsingPage(string url)
+        private void ParserSelenium()
         {
-            var s = DownloadString.DownLUserAgent(url);
-            if (string.IsNullOrEmpty(s))
-            {
-                Log.Logger("Empty string in ParserPage()", url);
-                return;
-            }
+            var wait = new WebDriverWait(_driver, _timeoutB);
+            _driver.Navigate().GoToUrl(Urlpage);
+            Thread.Sleep(5000);
+            wait.Until(dr =>
+                dr.FindElement(By.XPath("//table[@id = 'z']//tr[contains(., 'Дата начала подачи заявок:')]")));
+            ParserFirstPage();
+            ParserTenderList();
+        }
 
-            var htmlDoc = new HtmlDocument();
-            htmlDoc.LoadHtml(s);
-            var tens =
-                htmlDoc.DocumentNode.SelectNodes(
-                    "//table[@id = 'd']//tr[contains(., 'Дата начала подачи заявок:')]") ??
-                new HtmlNodeCollection(null);
-            foreach (var a in tens)
+        private void ParserTenderList()
+        {
+            foreach (var tn in _listTenders)
+            {
+                var t = new TenderEurosib("ООО «Торговый дом «ЕвроСибЭнерго»", "https://www.eurosib-td.ru/", 329,
+                    tn);
+                ParserTender(t);
+            }
+        }
+
+        private void ParserFirstPage()
+        {
+            var tenders =
+                _driver.FindElements(
+                    By.XPath("//table[@id = 'z']//tr[contains(., 'Дата начала подачи заявок:')]"));
+            foreach (var t in tenders)
             {
                 try
                 {
-                    ParserTender(a);
+                    ParsingPage(t);
                 }
                 catch (Exception e)
                 {
@@ -57,24 +80,21 @@ namespace ParserWebCore.Parser
             }
         }
 
-        private void ParserTender(HtmlNode n)
+        private void ParsingPage(IWebElement t)
         {
             var purName = "";
-            var purNum =
-                n.SelectSingleNode(".//a")?.InnerText?.Replace("№", "")
-                    .Trim().ReplaceHtmlEntyty() ?? throw new Exception(
-                    $"cannot find purNum");
+            var purNum = t.FindElement(By.XPath(".//a"))?.Text.Replace("№", "").Trim() ??
+                         throw new Exception("cannot find purNum");
             var href =
-                n.SelectSingleNode(".//a")?.Attributes["href"]?.Value ??
+                t.FindElement(By.XPath(".//a"))?.GetAttribute("href") ??
                 throw new Exception(
                     $"Cannot find href in {purNum}");
-            href = $"https://www.eurosib-td.ru{href}";
             var cusName = "";
             var pubDateT =
-                n.SelectSingleNode(".//p[contains(., 'Дата начала подачи заявок:')]")?.InnerText
+                t.FindElement(By.XPath(".//p[contains(., 'Дата начала подачи заявок:')]"))?.Text
                     ?.Replace("Дата начала подачи заявок:", "")
-                    .Trim().ReplaceHtmlEntyty().DelDoubleWhitespace() ?? throw new Exception(
-                    $"cannot find pubDateT");
+                    .Trim().ReplaceHtmlEntyty().DelDoubleWhitespace().Trim() ??
+                throw new Exception("cannot find pubDateT");
             var datePub = pubDateT.ParseDateUn("dd/MM/yyyy HH:mm");
             if (datePub == DateTime.MinValue)
             {
@@ -87,9 +107,9 @@ namespace ParserWebCore.Parser
             }
 
             var endDateT =
-                n.SelectSingleNode(".//p[contains(., 'Дата окончания приема заявок:')]")?.InnerText
+                t.FindElement(By.XPath(".//p[contains(., 'Дата окончания приема заявок:')]"))?.Text
                     ?.Replace("Дата окончания приема заявок:", "")
-                    .Trim().ReplaceHtmlEntyty().DelDoubleWhitespace() ?? "";
+                    .Trim().ReplaceHtmlEntyty().DelDoubleWhitespace().Trim() ?? "";
             var dateEnd = endDateT.ParseDateUn("dd/MM/yyyy HH:mm");
             if (dateEnd == DateTime.MinValue)
             {
@@ -98,16 +118,20 @@ namespace ParserWebCore.Parser
 
             if (dateEnd == DateTime.MinValue)
             {
+                dateEnd = endDateT.ParseDateUn("dd/MM/yyyy HH:mm:ss");
+            }
+
+            if (dateEnd == DateTime.MinValue)
+            {
                 datePub.AddDays(2);
             }
 
-            var tn = new TenderEurosib("ООО «Торговый дом «ЕвроСибЭнерго»", "https://www.eurosib-td.ru/", 329,
-                new TypeEurosib
-                {
-                    PurName = purName, PurNum = purNum, DatePub = datePub, Href = href, DateEnd = dateEnd,
-                    CusName = cusName
-                });
-            ParserTender(tn);
+            var tn = new TypeEurosib
+            {
+                PurName = purName, PurNum = purNum, DatePub = datePub, Href = href, DateEnd = dateEnd,
+                CusName = cusName
+            };
+            _listTenders.Add(tn);
         }
     }
 }

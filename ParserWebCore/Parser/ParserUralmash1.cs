@@ -64,12 +64,12 @@ namespace ParserWebCore.Parser
                 throw new Exception(
                     $"Cannot find currency in {_href}");
             var dates =
-                n.SelectSingleNode(".//p[span[contains(., 'Срок приёма заявок:')]]/text()")?.InnerText?.Trim() ??
+                n.SelectSingleNode(".//p[span[contains(., 'Срок приёма заявок:')]]")?.InnerText?.Trim() ??
                 throw new Exception(
                     $"Cannot find dates in {_href}");
-            var datePubT = dates.GetDataFromRegex(@"(^\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})");
+            var datePubT = dates.GetDataFromRegex(@"(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})");
             var datePub = datePubT.ParseDateUn("yyyy-MM-dd HH:mm:ss");
-            var dateEndT = dates.GetDataFromRegex(@"-(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})");
+            var dateEndT = dates.GetDataFromRegex(@"-\s+(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})");
             var dateEnd = dateEndT.ParseDateUn("yyyy-MM-dd HH:mm:ss");
             if (datePub == DateTime.MinValue || dateEnd == DateTime.MinValue)
             {
@@ -77,11 +77,6 @@ namespace ParserWebCore.Parser
                     $"Cannot find date pub or date end in {_href}");
             }
 
-            var scoringDate =
-                n.SelectSingleNode(".//p[span[contains(., 'Дата подведения итогов:')]]/text()")?.InnerText?.Trim() ??
-                throw new Exception(
-                    $"Cannot find scoringDate in {_href}");
-            var dateScoring = scoringDate.ParseDateUn("yyyy-MM-dd HH:mm:ss");
             var person =
                 n.SelectSingleNode(".//p[span[contains(., 'ФИО ответственного:')]]/text()")?.InnerText?.Trim() ??
                 throw new Exception(

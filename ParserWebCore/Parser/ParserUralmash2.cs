@@ -51,7 +51,7 @@ namespace ParserWebCore.Parser
         private void ParserTender(HtmlNode n)
         {
             var purName =
-                n.SelectSingleNode("./div[position() = 2]/p[position() = 1]")?.InnerText?.Trim() ??
+                n.SelectSingleNode("./p[position() = 1]")?.InnerText?.Trim() ??
                 throw new Exception(
                     $"Cannot find purName in {_href}");
             purName = HttpUtility.HtmlDecode(purName);
@@ -66,7 +66,7 @@ namespace ParserWebCore.Parser
                 var url = a.GetAttributeValue("href", "").Trim();
                 if (name == "" || url == "") continue;
                 url = $"https://uralmash-kartex.ru/{url}";
-                attachments.Add(new TypeUral2.Attachment {Name = name, Url = url});
+                attachments.Add(new TypeUral2.Attachment { Name = name, Url = url });
             }
 
             var tn = new TenderUralmash2("ИНПАРК \"УРАЛМАШ\"",

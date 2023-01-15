@@ -1,5 +1,5 @@
 using System;
-using HtmlAgilityPack;
+using Newtonsoft.Json.Linq;
 using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
@@ -10,7 +10,7 @@ namespace ParserWebCore.Parser
 {
     public class ParserSitno : ParserAbstract, IParser
     {
-        private const int Count = 2;
+        private const int Count = 5;
 
         public void Parsing()
         {
@@ -21,7 +21,8 @@ namespace ParserWebCore.Parser
         {
             for (var i = 1; i <= Count; i++)
             {
-                var urlpage = $"http://tender.sitno.ru/?PAGEN_1={i}";
+                var urlpage =
+                    $"https://tender.sitno.ru:9000/api/trade-offer/showcase?page={i}&expand=status,company,file,user,bidder,is_follow,categories,procedureType&search[Active]=active&per-page=9&sort=-published_at";
                 try
                 {
                     ParsingPage(urlpage);
@@ -35,19 +36,16 @@ namespace ParserWebCore.Parser
 
         private void ParsingPage(string url)
         {
-            var s = DownloadString.DownL1251(url);
+            var s = DownloadString.DownL(url);
             if (string.IsNullOrEmpty(s))
             {
                 Log.Logger("Empty string in ParserPage()", url);
                 return;
             }
 
-            var htmlDoc = new HtmlDocument();
-            htmlDoc.LoadHtml(s);
-            var tens =
-                htmlDoc.DocumentNode.SelectNodes("//ul[@class = 'tenders_list']/li[@class = 'tenders_item']") ??
-                new HtmlNodeCollection(null);
-            foreach (var a in tens)
+            var jObj = JObject.Parse(s);
+            var tenders = GetElements(jObj, "data");
+            foreach (var a in tenders)
             {
                 try
                 {
@@ -60,36 +58,24 @@ namespace ParserWebCore.Parser
             }
         }
 
-        private void ParserTender(HtmlNode n)
+        private void ParserTender(JToken t)
         {
-            var href = (n.SelectSingleNode(".//a[contains(@class, 'tit_link')]")?.Attributes["href"]?.Value ?? "")
-                .Trim();
-            if (string.IsNullOrEmpty(href))
-            {
-                Log.Logger("Empty href");
-                return;
-            }
+            var href = "https://tender.sitno.ru/showcase";
 
-            href = $"http://tender.sitno.ru/{href}";
-            var purNum = href.GetDataFromRegex(@"LOT_ID=(\d+)");
+            var purNum = ((string)t.SelectToken("id") ?? "").Trim();
             if (string.IsNullOrEmpty(purNum))
             {
                 Log.Logger("Empty purNum", href);
                 return;
             }
 
-            var purName = (n.SelectSingleNode(".//a[contains(@class, 'tit_link')]")
-                ?.InnerText ?? "").Trim();
-            var orgName = (n.SelectSingleNode(".//p[b = 'Компания:']")
-                ?.InnerText ?? "").Replace("Компания:", "").Trim();
-            var contactPerson = (n.SelectSingleNode(".//p[b = 'Ответственный:']")
-                ?.InnerText ?? "").Replace("Ответственный:", "").Trim();
-            var phone = (n.SelectSingleNode(".//p[b = 'Телефон:']")
-                ?.InnerText ?? "").Replace("Телефон:", "").Trim();
+            var purName = ((string)t.SelectToken("name") ?? "").Trim();
+            var orgName = "Компания СИТНО";
+            var contactPerson = ((string)t.SelectToken("user.name") ?? "").Trim();
+            var phone = ((string)t.SelectToken("bidder[0].phone") ?? "").Trim();
             var datePubT =
-                (n.SelectSingleNode(".//p[contains(b, 'Дата начала:')]")
-                    ?.InnerText ?? "").Replace("Дата начала:", "").Trim();
-            var datePub = datePubT.ParseDateUn("dd.MM.yyyy HH:mm:ss");
+                ((string)t.SelectToken("published_at") ?? "").Trim();
+            var datePub = datePubT.ParseDateUn("yyyy-MM-dd HH:mm");
             if (datePub == DateTime.MinValue)
             {
                 Log.Logger("Empty datePub", href);
@@ -97,9 +83,8 @@ namespace ParserWebCore.Parser
             }
 
             var dateEndT =
-                (n.SelectSingleNode(".//p[contains(b, 'Дата окончания:')]")
-                    ?.InnerText ?? "").Replace("Дата окончания:", "").Trim();
-            var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm:ss");
+                ((string)t.SelectToken("duration") ?? "").Trim();
+            var dateEnd = dateEndT.ParseDateUn("yyyy-MM-dd HH:mm");
             if (dateEnd == DateTime.MinValue)
             {
                 dateEnd = datePub.AddDays(2);

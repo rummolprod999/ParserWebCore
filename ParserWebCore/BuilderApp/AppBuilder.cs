@@ -60,6 +60,9 @@ namespace ParserWebCore.BuilderApp
         [Required] public static string ProxyFile { get; set; }
         [Required] public static string SpgrPass { get; set; }
         [Required] public static string SpgrUser { get; set; }
+
+        [Required] public static string AgroPass { get; set; }
+        [Required] public static string AgroUser { get; set; }
         public static string Prefix { get; private set; }
         public static Arguments Arg { get; private set; }
 
@@ -362,6 +365,8 @@ namespace ParserWebCore.BuilderApp
                 DvinaUser = (string)o["userdvina"];
                 MordovPass = (string)o["passmordov"];
                 MordovUser = (string)o["usermordov"];
+                AgroPass = (string)o["passagro"];
+                AgroUser = (string)o["useragro"];
                 UserProxy = (bool)o["use_proxy"];
                 ProxyFile = (string)o["proxy_file"];
                 _port = int.TryParse((string)o["port"], out _port) ? int.Parse((string)o["port"]) : 3306;

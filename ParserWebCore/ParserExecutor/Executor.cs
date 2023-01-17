@@ -14,7 +14,7 @@ namespace ParserWebCore.ParserExecutor
             switch (arg)
             {
                 case Arguments.Agrocomplex:
-                    _parser = new ParserAgrokomplex();
+                    _parser = new ParserAgrokomplexNew();
                     break;
                 case Arguments.Kzgroup:
                     _parser = new ParserKzGroup();

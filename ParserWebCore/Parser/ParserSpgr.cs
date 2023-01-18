@@ -37,13 +37,13 @@ namespace ParserWebCore.Parser
             Cookies = _cookieService.CookieValue();
             for (var i = 1; i <= 10; i++)
             {
-                GetPage($"http://procurement.spgr.ru/tender/?PAGEN_1={i}");
+                GetPage($"https://procurement.spgr.ru/tender/?login=yes&PAGEN_1={i}");
             }
         }
 
         private void GetPage(string url)
         {
-            var s = DownloadString.DownLHttpPostWithCookiesAll(url, HttpsT2Federal1Ru, Cookies);
+            var s = DownloadString.DownLHttpPostWithCookiesAll(url);
             if (string.IsNullOrEmpty(s))
             {
                 Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",

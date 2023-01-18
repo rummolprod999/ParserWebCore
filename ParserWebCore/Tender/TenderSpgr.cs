@@ -253,7 +253,7 @@ namespace ParserWebCore.Tender
             {
                 var urlAttT = (dd?.Attributes["href"]?.Value ?? "").Trim();
                 var fName = (dd?.InnerText ?? "").Trim();
-                var urlAtt = $"http://procurement.spgr.ru/tender/{urlAttT}";
+                var urlAtt = $"https://procurement.spgr.ru/tender/{urlAttT}";
                 if (string.IsNullOrEmpty(fName)) continue;
                 var insertAttach =
                     $"INSERT INTO {AppBuilder.Prefix}attachment SET id_tender = @id_tender, file_name = @file_name, url = @url";

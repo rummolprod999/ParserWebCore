@@ -9,7 +9,7 @@ namespace ParserWebCore.NetworkLibrary
     public class GetCookieServiceSpgr
     {
         private static GetCookieServiceSpgr service = new GetCookieServiceSpgr();
-        private readonly string BaseUrl = "http://procurement.spgr.ru/tender/?login=yes";
+        private readonly string BaseUrl = "https://procurement.spgr.ru/tender/?login=yes";
 
         private GetCookieServiceSpgr()
         {
@@ -32,7 +32,7 @@ namespace ParserWebCore.NetworkLibrary
             var response = client.PostAsync(BaseUrl, content);
             var res = response.Result;
             _ = res.Content.ReadAsStringAsync().Result;
-            var cookies = handler.CookieContainer.GetCookies(new Uri(BaseUrl));
+            var cookies = handler.CookieContainer.GetCookies(new Uri("https://procurement.spgr.ru/"));
             return cookies;
         }
 

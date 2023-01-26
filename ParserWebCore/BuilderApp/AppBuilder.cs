@@ -55,6 +55,9 @@ namespace ParserWebCore.BuilderApp
         [Required] public static string DvinaUser { get; set; }
         [Required] public static string MordovPass { get; set; }
         [Required] public static string MordovUser { get; set; }
+
+        [Required] public static string TverZmoPass { get; set; }
+        [Required] public static string TverZmoUser { get; set; }
         [Required] public static string ConnectString { get; set; }
         [Required] public static bool UserProxy { get; set; }
         [Required] public static string ProxyFile { get; set; }
@@ -365,6 +368,8 @@ namespace ParserWebCore.BuilderApp
                 DvinaUser = (string)o["userdvina"];
                 MordovPass = (string)o["passmordov"];
                 MordovUser = (string)o["usermordov"];
+                TverZmoPass = (string)o["passtverzmo"];
+                TverZmoUser = (string)o["usertverzmo"];
                 AgroPass = (string)o["passagro"];
                 AgroUser = (string)o["useragro"];
                 UserProxy = (bool)o["use_proxy"];

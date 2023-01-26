@@ -28,7 +28,14 @@ namespace ParserWebCore.Parser
             driver.FindElement(By.XPath("//input[@name = 'pass']")).SendKeys(AppBuilder.MordovPass);
             driver.FindElement(By.XPath("//input[@value = 'Вход']")).Click();
             Thread.Sleep(5000);
-            AuthCookieValue = driver.Manage().Cookies.GetCookieNamed("ebudget").Value;
+            foreach (var cookiesAllCookie in driver.Manage().Cookies.AllCookies)
+            {
+                if (cookiesAllCookie.Name.Contains("ebudget"))
+                {
+                    AuthCookieValue = cookiesAllCookie.Value;
+                    AuthCookieName = cookiesAllCookie.Name;
+                }
+            }
         }
     }
 }

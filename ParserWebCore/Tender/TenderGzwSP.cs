@@ -258,7 +258,9 @@ namespace ParserWebCore.Tender
                 }
 
                 var docs = htmlDoc.DocumentNode.SelectNodes(
-                               "//table[thead[tr[th[. = 'Прикрепленные документы']]]]/tbody//td/a") ??
+                               "//table[thead[tr[th[. = 'Прикрепленные документы']]]]/tbody//td/a")
+                           ?? htmlDoc.DocumentNode.SelectNodes(
+                               "//a[contains(@href, '/smallpurchases/Gzw/DownloadGzwFile')]") ??
                            new HtmlNodeCollection(null);
                 foreach (var dd in docs)
                 {
@@ -321,7 +323,7 @@ namespace ParserWebCore.Tender
                     cmd16.ExecuteNonQuery();
                 }
 
-                if (_arg == Arguments.Midural)
+                if (_arg == Arguments.Midural || _arg == Arguments.Mordov)
                 {
                     var poList =
                         htmlDoc.DocumentNode.SelectNodes("//table[thead[tr[th[. = 'Количество']]]]/tbody/tr") ??

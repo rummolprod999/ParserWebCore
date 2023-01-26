@@ -16,6 +16,7 @@ namespace ParserWebCore.Parser
     public class ParserGzwSp : ParserAbstract, IParser, Auth
     {
         public static string AuthCookieValue = null;
+        public static string AuthCookieName = null;
         private readonly ChromeDriver _driver = CreatorChromeDriverNoSsl.GetChromeDriver();
         private readonly int Count = 10;
         private Arguments _arg;

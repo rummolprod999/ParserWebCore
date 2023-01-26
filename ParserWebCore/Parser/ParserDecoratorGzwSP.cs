@@ -96,10 +96,10 @@ namespace ParserWebCore.Parser
                         .Parsing();
                     break;
                 case Arguments.Tverzmo:
-                    new ParserGzwSPTverZmo("https://www.tver.ru/zakaz/GzwSP/NoticesGrid",
-                            "https://www.tver.ru",
+                    new ParserGzwSPTverZmo("https://gostorgi.tverreg.ru/smallpurchases/GzwSP/NoticesGrid",
+                            "https://gostorgi.tverreg.ru",
                             "ЗМО г. Тверь",
-                            "https://www.tver.ru", 353, _arguments, 5)
+                            "https://www.tver.ru", 353, _arguments, 9)
                         .Parsing();
                     break;
                 case Arguments.Midural:

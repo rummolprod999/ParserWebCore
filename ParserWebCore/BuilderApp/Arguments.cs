@@ -88,5 +88,6 @@
         Acron,
         UdmurtProp,
         Tambov,
+        Udsoil
     }
 }

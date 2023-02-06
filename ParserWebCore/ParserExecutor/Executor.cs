@@ -239,6 +239,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Acron:
                     _parser = new ParserAcron();
                     break;
+                case Arguments.Udsoil:
+                    _parser = new ParserUdsOil();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

@@ -139,6 +139,20 @@ namespace ParserWebCore.Tender
                 cmd20.Parameters.AddWithValue("@price", "");
                 cmd20.Parameters.AddWithValue("@sum", "");
                 cmd20.ExecuteNonQuery();
+                if (!string.IsNullOrEmpty(_tn.DelivPlace))
+                {
+                    var insertCustomerRequirement =
+                        $"INSERT INTO {AppBuilder.Prefix}customer_requirement SET id_lot = @id_lot, id_customer = @id_customer, delivery_place = @delivery_place, max_price = @max_price, delivery_term = @delivery_term";
+                    var cmd16 = new MySqlCommand(insertCustomerRequirement, connect);
+                    cmd16.Prepare();
+                    cmd16.Parameters.AddWithValue("@id_lot", idLot);
+                    cmd16.Parameters.AddWithValue("@id_customer", customerId);
+                    cmd16.Parameters.AddWithValue("@delivery_place", _tn.DelivPlace);
+                    cmd16.Parameters.AddWithValue("@max_price", "");
+                    cmd16.Parameters.AddWithValue("@delivery_term", "");
+                    cmd16.ExecuteNonQuery();
+                }
+
                 TenderKwords(connect, idTender);
                 AddVerNumber(connect, _tn.PurNum, TypeFz);
             }

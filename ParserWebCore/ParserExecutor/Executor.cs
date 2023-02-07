@@ -242,6 +242,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Udsoil:
                     _parser = new ParserUdsOil();
                     break;
+                case Arguments.Uos:
+                    _parser = new ParserUos();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

@@ -61,10 +61,10 @@ namespace ParserWebCore.Parser
                         .Parsing();
                     break;
                 case Arguments.Brn32:
-                    new ParserGzwSp("http://tender32.ru/site/GzwSP/NoticesGrid",
+                    new ParserGzwSPBrn32("http://tender32.ru/smallpurchases/GzwSP/NoticesGrid",
                             "http://tender32.ru",
                             "Электронный магазин Брянской области",
-                            "http://tender32.ru/site/GzwSP/NoticesGrid", 193, _arguments)
+                            "http://tender32.ru/site/GzwSP/NoticesGrid", 193, _arguments, 6)
                         .Parsing();
                     break;
                 case Arguments.Dvina:

@@ -90,5 +90,6 @@
         Tambov,
         Udsoil,
         Uos,
+        Zmk,
     }
 }

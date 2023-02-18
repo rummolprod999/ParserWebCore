@@ -245,6 +245,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Uos:
                     _parser = new ParserUos();
                     break;
+                case Arguments.Zmk:
+                    _parser = new ParserZmk();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

@@ -363,6 +363,46 @@ namespace ParserWebCore.Tender
                         }
                     }
                 }
+                else if (_arg == Arguments.Brn32)
+                {
+                    var poList =
+                        htmlDoc.DocumentNode.SelectNodes("//table[thead[tr[th[. = 'Количество']]]]/tbody/tr") ??
+                        new HtmlNodeCollection(null);
+                    if (poList.Count != 0)
+                    {
+                        //poList.RemoveAt(poList.Count - 1);
+                        foreach (var pp in poList)
+                        {
+                            var namePo = (pp.SelectSingleNode(".//td[2]")
+                                ?.InnerText ?? "").Trim();
+                            if (string.IsNullOrEmpty(namePo))
+                            {
+                                continue;
+                            }
+
+                            var okeiP = (pp.SelectSingleNode(".//td[3]")
+                                ?.InnerText ?? "").Trim();
+                            var priceP = "";
+                            var sumP = (pp.SelectSingleNode(".//td[5]")
+                                ?.InnerText.Replace(",", ".").DelAllWhitespace() ?? "").Trim();
+                            var quantityP = (pp.SelectSingleNode(".//td[4]")
+                                ?.InnerText.Replace(",", ".").DelAllWhitespace() ?? "").Trim();
+                            var insertLotitem =
+                                $"INSERT INTO {AppBuilder.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name, quantity_value = @quantity_value, okei = @okei, customer_quantity_value = @customer_quantity_value, price = @price, sum = @sum";
+                            var cmd19 = new MySqlCommand(insertLotitem, connect);
+                            cmd19.Prepare();
+                            cmd19.Parameters.AddWithValue("@id_lot", idLot);
+                            cmd19.Parameters.AddWithValue("@id_customer", customerId);
+                            cmd19.Parameters.AddWithValue("@name", namePo);
+                            cmd19.Parameters.AddWithValue("@quantity_value", quantityP);
+                            cmd19.Parameters.AddWithValue("@okei", okeiP);
+                            cmd19.Parameters.AddWithValue("@customer_quantity_value", quantityP);
+                            cmd19.Parameters.AddWithValue("@price", priceP);
+                            cmd19.Parameters.AddWithValue("@sum", sumP);
+                            cmd19.ExecuteNonQuery();
+                        }
+                    }
+                }
                 else
                 {
                     var poList =

@@ -55,7 +55,15 @@ namespace ParserWebCore.Tender
                     return;
                 }
 
-                Thread.Sleep(5000);
+                if (_arg == Arguments.Brn32)
+                {
+                    Thread.Sleep(20000);
+                }
+                else
+                {
+                    Thread.Sleep(5000);
+                }
+
                 string s;
                 if (_arg == Arguments.Smol || _arg == Arguments.Ufin || _arg == Arguments.Kurg ||
                     _arg == Arguments.Udmurt || _arg == Arguments.Samar || _arg == Arguments.Kalug ||

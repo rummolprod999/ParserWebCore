@@ -69,8 +69,7 @@ namespace ParserWebCore.Tender
                     _arg == Arguments.Udmurt || _arg == Arguments.Samar || _arg == Arguments.Kalug ||
                     _arg == Arguments.Dvina || _arg == Arguments.Mordov || _arg == Arguments.UdmurtProp ||
                     _arg == Arguments.Tver || _arg == Arguments.Tverzmo || _arg == Arguments.Mzvoron
-                    || _arg == Arguments.Kursk || _arg == Arguments.Midural || _arg == Arguments.Tambov ||
-                    _arg == Arguments.Brn32)
+                    || _arg == Arguments.Kursk || _arg == Arguments.Midural || _arg == Arguments.Tambov)
                 {
                     var col = new CookieCollection();
                     col.Add(new Cookie("ebudget", ParserGzwSp.AuthCookieValue));
@@ -409,6 +408,10 @@ namespace ParserWebCore.Tender
                             cmd19.Parameters.AddWithValue("@sum", sumP);
                             cmd19.ExecuteNonQuery();
                         }
+                    }
+                    else
+                    {
+                        Log.Logger(s);
                     }
                 }
                 else

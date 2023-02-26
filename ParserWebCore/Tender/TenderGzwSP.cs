@@ -409,10 +409,6 @@ namespace ParserWebCore.Tender
                             cmd19.ExecuteNonQuery();
                         }
                     }
-                    else
-                    {
-                        Log.Logger(s);
-                    }
                 }
                 else
                 {

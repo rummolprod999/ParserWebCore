@@ -55,7 +55,7 @@ namespace ParserWebCore.Tender
                     return;
                 }
 
-                if (_arg == Arguments.Brn32)
+                if (_arg == Arguments.Brn32 || _arg == Arguments.Kurg)
                 {
                     Thread.Sleep(20000);
                 }
@@ -449,6 +449,10 @@ namespace ParserWebCore.Tender
                             cmd19.Parameters.AddWithValue("@sum", sumP);
                             cmd19.ExecuteNonQuery();
                         }
+                    }
+                    else if (_arg == Arguments.Kurg)
+                    {
+                        Log.Logger(s);
                     }
                 }
 

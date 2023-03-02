@@ -77,6 +77,10 @@ namespace ParserWebCore.Tender
                     s = DownloadString.DownLHttpPostWithCookiesAll(_tn.Href, _baseUrl, col);
                     ;
                 }
+                else if (_arg == Arguments.Kurg)
+                {
+                    s = DownloadString.DownLUserAgent(_tn.Href, true);
+                }
                 else
                 {
                     s = DownloadString.DownL(_tn.Href);

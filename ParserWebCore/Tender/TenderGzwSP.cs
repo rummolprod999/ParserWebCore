@@ -55,9 +55,13 @@ namespace ParserWebCore.Tender
                     return;
                 }
 
-                if (_arg == Arguments.Brn32 || _arg == Arguments.Kurg)
+                if (_arg == Arguments.Brn32)
                 {
                     Thread.Sleep(20000);
+                }
+                else if (_arg == Arguments.Kurg)
+                {
+                    Thread.Sleep(300_000);
                 }
                 else
                 {
@@ -76,10 +80,6 @@ namespace ParserWebCore.Tender
                     col.Add(new Cookie("ebudget_mz", ParserGzwSp.AuthCookieValue));
                     s = DownloadString.DownLHttpPostWithCookiesAll(_tn.Href, _baseUrl, col);
                     ;
-                }
-                else if (_arg == Arguments.Kurg)
-                {
-                    s = DownloadString.DownLUserAgent(_tn.Href, true);
                 }
                 else
                 {

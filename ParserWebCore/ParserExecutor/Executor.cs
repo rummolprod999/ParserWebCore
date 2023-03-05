@@ -72,7 +72,7 @@ namespace ParserWebCore.ParserExecutor
                     _parser = new ParserTekKom();
                     break;
                 case Arguments.Tekmarket:
-                    _parser = new ParserTekMarket();
+                    _parser = new ParserTekmarketNew();
                     break;
                 case Arguments.Tekmos:
                     _parser = new ParserTekMos();

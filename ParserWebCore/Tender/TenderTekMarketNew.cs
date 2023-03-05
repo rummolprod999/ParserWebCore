@@ -110,109 +110,118 @@ namespace ParserWebCore.Tender
             var lotNum = 1;
             foreach (var lot in lots)
             {
-                var nmck = ((string)lot.SelectToken("startPrice") ?? "").Trim().ExtractPriceNew();
-                var insertLot =
-                    $"INSERT INTO {AppBuilder.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency";
-                var cmd18 = new MySqlCommand(insertLot, connect);
-                cmd18.Prepare();
-                cmd18.Parameters.AddWithValue("@id_tender", idTender);
-                cmd18.Parameters.AddWithValue("@lot_number", lotNum);
-                cmd18.Parameters.AddWithValue("@max_price", nmck);
-                cmd18.Parameters.AddWithValue("@currency", "₽");
-                cmd18.ExecuteNonQuery();
-                var idLot = (int)cmd18.LastInsertedId;
-                var cusName = ((string)(lot.SelectToken(
-                                   "customerName")) ??
-                               EtpName).Trim();
-                var customerId = 0;
-                if (!string.IsNullOrEmpty(cusName))
+                try
                 {
-                    var selectCustomer =
-                        $"SELECT id_customer FROM {AppBuilder.Prefix}customer WHERE full_name = @full_name";
-                    var cmd13 = new MySqlCommand(selectCustomer, connect);
-                    cmd13.Prepare();
-                    cmd13.Parameters.AddWithValue("@full_name", cusName);
-                    var reader7 = cmd13.ExecuteReader();
-                    if (reader7.HasRows)
+                    var nmck = ((string)lot.SelectToken("startPrice") ?? "").Trim().ExtractPriceNew();
+                    var insertLot =
+                        $"INSERT INTO {AppBuilder.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency";
+                    var cmd18 = new MySqlCommand(insertLot, connect);
+                    cmd18.Prepare();
+                    cmd18.Parameters.AddWithValue("@id_tender", idTender);
+                    cmd18.Parameters.AddWithValue("@lot_number", lotNum);
+                    cmd18.Parameters.AddWithValue("@max_price", nmck);
+                    cmd18.Parameters.AddWithValue("@currency", "₽");
+                    cmd18.ExecuteNonQuery();
+                    var idLot = (int)cmd18.LastInsertedId;
+                    lotNum++;
+                    var cusName = ((string)(lot.SelectToken(
+                                       "customerName[0]")) ??
+                                   EtpName).Trim();
+                    var customerId = 0;
+                    if (!string.IsNullOrEmpty(cusName))
                     {
-                        reader7.Read();
-                        customerId = (int)reader7["id_customer"];
-                        reader7.Close();
+                        var selectCustomer =
+                            $"SELECT id_customer FROM {AppBuilder.Prefix}customer WHERE full_name = @full_name";
+                        var cmd13 = new MySqlCommand(selectCustomer, connect);
+                        cmd13.Prepare();
+                        cmd13.Parameters.AddWithValue("@full_name", cusName);
+                        var reader7 = cmd13.ExecuteReader();
+                        if (reader7.HasRows)
+                        {
+                            reader7.Read();
+                            customerId = (int)reader7["id_customer"];
+                            reader7.Close();
+                        }
+                        else
+                        {
+                            reader7.Close();
+                            var insertCustomer =
+                                $"INSERT INTO {AppBuilder.Prefix}customer SET reg_num = @reg_num, full_name = @full_name, is223=1, inn = @inn";
+                            var cmd14 = new MySqlCommand(insertCustomer, connect);
+                            cmd14.Prepare();
+                            var customerRegNumber = Guid.NewGuid().ToString();
+                            cmd14.Parameters.AddWithValue("@reg_num", customerRegNumber);
+                            cmd14.Parameters.AddWithValue("@full_name", cusName);
+                            cmd14.Parameters.AddWithValue("@inn", "");
+                            cmd14.ExecuteNonQuery();
+                            customerId = (int)cmd14.LastInsertedId;
+                        }
                     }
-                    else
+
+                    var delivterm = ((string)(lot.SelectToken(
+                                         "deliveryPlace.term")) ??
+                                     "").Trim();
+                    var delivpalce = ((string)(lot.SelectToken(
+                                          "deliveryPlace.address")) ??
+                                      "").Trim();
+                    var insertCustomerRequirement =
+                        $"INSERT INTO {AppBuilder.Prefix}customer_requirement SET id_lot = @id_lot, id_customer = @id_customer, delivery_place = @delivery_place, max_price = @max_price, delivery_term = @delivery_term";
+                    var cmd16 = new MySqlCommand(insertCustomerRequirement, connect);
+                    cmd16.Prepare();
+                    cmd16.Parameters.AddWithValue("@id_lot", idLot);
+                    cmd16.Parameters.AddWithValue("@id_customer", customerId);
+                    cmd16.Parameters.AddWithValue("@delivery_place", delivpalce);
+                    cmd16.Parameters.AddWithValue("@max_price", "");
+                    cmd16.Parameters.AddWithValue("@delivery_term", delivterm);
+                    cmd16.ExecuteNonQuery();
+                    var purObjects = GetElements(lot, "units");
+                    purObjects.ForEach(po =>
                     {
-                        reader7.Close();
-                        var insertCustomer =
-                            $"INSERT INTO {AppBuilder.Prefix}customer SET reg_num = @reg_num, full_name = @full_name, is223=1, inn = @inn";
-                        var cmd14 = new MySqlCommand(insertCustomer, connect);
-                        cmd14.Prepare();
-                        var customerRegNumber = Guid.NewGuid().ToString();
-                        cmd14.Parameters.AddWithValue("@reg_num", customerRegNumber);
-                        cmd14.Parameters.AddWithValue("@full_name", cusName);
-                        cmd14.Parameters.AddWithValue("@inn", "");
-                        cmd14.ExecuteNonQuery();
-                        customerId = (int)cmd14.LastInsertedId;
-                    }
+                        var okpdName = ((string)po.SelectToken(
+                            "okpd.name") ?? "").Trim();
+                        var okpdCode = ((string)po.SelectToken(
+                            "okpd.code") ?? "").Trim();
+                        var okei = ((string)po.SelectToken(
+                            "okeiName") ?? "").Trim();
+                        var quantity = (string)po.SelectToken(
+                            "quantity") ?? "";
+                        var price = (string)po.SelectToken(
+                            "price") ?? "";
+                        var sum = (string)po.SelectToken(
+                            "max_cost") ?? "";
+                        var poName = ((string)po.SelectToken(
+                            "name") ?? "").Trim();
+                        var descr = ((string)po.SelectToken(
+                            "ktru.description") ?? "").Trim();
+                        if (descr != "")
+                        {
+                            poName = $"{poName}\n{descr}";
+                        }
+
+                        var insertLotitem =
+                            $"INSERT INTO {AppBuilder.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name, sum = @sum, okpd2_code = @okpd2_code, okpd2_group_code = @okpd2_group_code, okpd2_group_level1_code = @okpd2_group_level1_code, okpd_name = @okpd_name, quantity_value = @quantity_value, customer_quantity_value = @customer_quantity_value, okei = @okei, price = @price";
+                        var cmd19 = new MySqlCommand(insertLotitem, connect);
+                        cmd19.Prepare();
+                        cmd19.Parameters.AddWithValue("@id_lot", idLot);
+                        cmd19.Parameters.AddWithValue("@id_customer", customerId);
+                        cmd19.Parameters.AddWithValue("@name", poName);
+                        cmd19.Parameters.AddWithValue("@sum", sum);
+                        cmd19.Parameters.AddWithValue("@okpd2_code", okpdCode);
+                        cmd19.Parameters.AddWithValue("@okpd2_group_code", "");
+                        cmd19.Parameters.AddWithValue("@okpd2_group_level1_code", "");
+                        cmd19.Parameters.AddWithValue("@okpd_name", okpdName);
+                        cmd19.Parameters.AddWithValue("@quantity_value", quantity);
+                        cmd19.Parameters.AddWithValue("@customer_quantity_value", quantity);
+                        cmd19.Parameters.AddWithValue("@okei", okei);
+                        cmd19.Parameters.AddWithValue("@price", price);
+                        cmd19.ExecuteNonQuery();
+                    });
                 }
-
-                var delivterm = ((string)(lot.SelectToken(
-                                     "deliveryPlace.term")) ??
-                                 "").Trim();
-                var delivpalce = ((string)(lot.SelectToken(
-                                      "deliveryPlace.address")) ??
-                                  "").Trim();
-                var insertCustomerRequirement =
-                    $"INSERT INTO {AppBuilder.Prefix}customer_requirement SET id_lot = @id_lot, id_customer = @id_customer, delivery_place = @delivery_place, max_price = @max_price, delivery_term = @delivery_term";
-                var cmd16 = new MySqlCommand(insertCustomerRequirement, connect);
-                cmd16.Prepare();
-                cmd16.Parameters.AddWithValue("@id_lot", idLot);
-                cmd16.Parameters.AddWithValue("@id_customer", customerId);
-                cmd16.Parameters.AddWithValue("@delivery_place", delivpalce);
-                cmd16.Parameters.AddWithValue("@max_price", "");
-                cmd16.Parameters.AddWithValue("@delivery_term", delivterm);
-                cmd16.ExecuteNonQuery();
-                var purObjects = GetElements(lot, "units");
-                purObjects.ForEach(po =>
+                catch (Exception e)
                 {
-                    var okpdName = ((string)po.SelectToken(
-                        "okpd.name") ?? "").Trim();
-                    var okpdCode = ((string)po.SelectToken(
-                        "okpd.code") ?? "").Trim();
-                    var okei = ((string)po.SelectToken(
-                        "okeiName") ?? "").Trim();
-                    var quantity = (string)po.SelectToken(
-                        "quantity") ?? "";
-                    var price = (string)po.SelectToken(
-                        "price") ?? "";
-                    var sum = (string)po.SelectToken(
-                        "max_cost") ?? "";
-                    var poName = ((string)po.SelectToken(
-                        "name") ?? "").Trim();
-                    var descr = ((string)po.SelectToken(
-                        "ktru.description") ?? "").Trim();
-                    if (descr != "")
-                    {
-                        poName = $"{poName}\n{descr}";
-                    }
-
-                    var insertLotitem =
-                        $"INSERT INTO {AppBuilder.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name, sum = @sum, okpd2_code = @okpd2_code, okpd2_group_code = @okpd2_group_code, okpd2_group_level1_code = @okpd2_group_level1_code, okpd_name = @okpd_name, quantity_value = @quantity_value, customer_quantity_value = @customer_quantity_value, okei = @okei, price = @price";
-                    var cmd19 = new MySqlCommand(insertLotitem, connect);
-                    cmd19.Prepare();
-                    cmd19.Parameters.AddWithValue("@id_lot", idLot);
-                    cmd19.Parameters.AddWithValue("@id_customer", customerId);
-                    cmd19.Parameters.AddWithValue("@name", poName);
-                    cmd19.Parameters.AddWithValue("@sum", sum);
-                    cmd19.Parameters.AddWithValue("@okpd2_code", okpdCode);
-                    cmd19.Parameters.AddWithValue("@okpd2_group_code", "");
-                    cmd19.Parameters.AddWithValue("@okpd2_group_level1_code", "");
-                    cmd19.Parameters.AddWithValue("@okpd_name", okpdName);
-                    cmd19.Parameters.AddWithValue("@quantity_value", quantity);
-                    cmd19.Parameters.AddWithValue("@customer_quantity_value", quantity);
-                    cmd19.Parameters.AddWithValue("@okei", okei);
-                    cmd19.Parameters.AddWithValue("@price", price);
-                    cmd19.ExecuteNonQuery();
-                });
+                    Console.WriteLine(e);
+                    throw;
+                }
             }
         }
 

@@ -556,7 +556,7 @@ namespace ParserWebCore.NetworkLibrary
         }
 
         public static string DownLHttpPostWithCookiesAll(string url, string baseUrl, CookieCollection cookie,
-            FormUrlEncodedContent postContent = null)
+            FormUrlEncodedContent postContent = null, bool useProxy = false)
         {
             var tmp = "";
             var count = 0;
@@ -565,7 +565,8 @@ namespace ParserWebCore.NetworkLibrary
                 try
                 {
                     var task = Task.Run(() =>
-                        (HttpPostCookiesAll.CreateInstance()).DownloadString(url, baseUrl, cookie, postContent));
+                        (HttpPostCookiesAll.CreateInstance()).DownloadString(url, baseUrl, cookie, postContent,
+                            useProxy: useProxy));
                     if (!task.Wait(TimeSpan.FromSeconds(60))) throw new TimeoutException();
                     tmp = task.Result;
                     break;

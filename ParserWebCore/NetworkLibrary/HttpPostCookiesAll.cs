@@ -12,18 +12,34 @@ namespace ParserWebCore.NetworkLibrary
         }
 
         public string DownloadString(string url, string baseUrl, CookieCollection cookie,
-            FormUrlEncodedContent postContent = null)
+            FormUrlEncodedContent postContent = null, bool useProxy = false)
         {
             var cookieContainer = new CookieContainer();
             //cookieContainer.SetCookies(new Uri(baseUrl), "PHPSESSID");
             cookieContainer.Add(new Uri(baseUrl), cookie);
-            using (var client = new HttpClient(new HttpClientHandler
-                   {
-                       AllowAutoRedirect = true,
-                       CookieContainer = cookieContainer,
-                       UseCookies = true,
-                       ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
-                   }))
+            var httpClientHandler = new HttpClientHandler
+            {
+                AllowAutoRedirect = true,
+                CookieContainer = cookieContainer,
+                UseCookies = true,
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+            };
+            if (useProxy)
+            {
+                var prixyEntity = ProxyLoader.getRandomProxy();
+                var proxy = new WebProxy
+                {
+                    Address = new Uri($"http://{prixyEntity.Ip}:{prixyEntity.Port}"),
+                    BypassProxyOnLocal = false,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential(
+                        userName: prixyEntity.User,
+                        password: prixyEntity.Pass)
+                };
+                httpClientHandler.Proxy = proxy;
+            }
+
+            using (var client = new HttpClient(httpClientHandler))
             {
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Add("User-Agent",

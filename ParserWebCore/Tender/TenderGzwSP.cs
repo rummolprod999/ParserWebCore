@@ -36,7 +36,7 @@ namespace ParserWebCore.Tender
             int idRegion;
             if (_arg == Arguments.Kurg)
             {
-                Thread.Sleep(50_000);
+                Thread.Sleep(100_000);
             }
 
             using (var connect = ConnectToDb.GetDbConnection())
@@ -87,7 +87,7 @@ namespace ParserWebCore.Tender
                     var col = new CookieCollection();
                     col.Add(new Cookie("ebudget", ParserGzwSp.AuthCookieValue));
                     col.Add(new Cookie("ebudget_mz", ParserGzwSp.AuthCookieValue));
-                    s = DownloadString.DownLHttpPostWithCookiesAll(_tn.Href, _baseUrl, col, useProxy: false);
+                    s = DownloadString.DownLHttpPostWithCookiesAll(_tn.Href, _baseUrl, col, useProxy: true);
                 }
                 else
                 {

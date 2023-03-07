@@ -87,7 +87,7 @@ namespace ParserWebCore.Tender
                     var col = new CookieCollection();
                     col.Add(new Cookie("ebudget", ParserGzwSp.AuthCookieValue));
                     col.Add(new Cookie("ebudget_mz", ParserGzwSp.AuthCookieValue));
-                    s = DownloadString.DownLHttpPostWithCookiesAll(_tn.Href, _baseUrl, col, useProxy: true);
+                    s = DownloadString.DownLHttpPostWithCookiesAll(_tn.Href, _baseUrl, col, useProxy: false);
                 }
                 else
                 {

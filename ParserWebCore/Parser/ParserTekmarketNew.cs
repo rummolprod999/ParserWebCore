@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
@@ -11,6 +12,8 @@ namespace ParserWebCore.Parser
     public class ParserTekmarketNew : ParserAbstract, IParser
     {
         private readonly string url = "https://www.tektorg.ru/api/getProcedures";
+
+        private List<TenderTekMarketNew> _tendersList = new List<TenderTekMarketNew>();
         private int DateMinus => 3;
 
         public void Parsing()
@@ -25,7 +28,7 @@ namespace ParserWebCore.Parser
             var s = DownloadString.DownL(urlStart);
             var buildid = s.GetDataFromRegex("\"buildId\":\"(\\d+)\"");
 
-            for (var i = 1; i <= 10; i++)
+            for (var i = 1; i <= 20; i++)
             {
                 var data =
                     $"{{\"params\":{{\"sectionsCodes[0]\":\"market\",\"dpfrom\":\"{dateM:dd.MM.yyyy}\",\"page\":{i},\"sort\":\"actual\"}}}}";
@@ -38,6 +41,18 @@ namespace ParserWebCore.Parser
                     Log.Logger(
                         $"Exception in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
                         e, url);
+                }
+            }
+
+            foreach (var tenderTekMarketNew in _tendersList)
+            {
+                try
+                {
+                    ParserTender(tenderTekMarketNew);
+                }
+                catch (Exception e)
+                {
+                    Log.Logger(e);
                 }
             }
         }
@@ -104,7 +119,7 @@ namespace ParserWebCore.Parser
                     PwName = pwName,
                     Down = tenderUrl
                 });
-            ParserTender(tn);
+            _tendersList.Add(tn);
         }
     }
 }

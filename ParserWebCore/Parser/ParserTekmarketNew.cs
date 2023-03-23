@@ -44,6 +44,22 @@ namespace ParserWebCore.Parser
                 }
             }
 
+            for (var i = 1; i <= 20; i++)
+            {
+                var data =
+                    $"{{\"params\":{{\"sectionsCodes[0]\":\"market\",\"page\":{i},\"sort\":\"datePublished_desc\"}}}}";
+                try
+                {
+                    ParsingPage(data, buildid);
+                }
+                catch (Exception e)
+                {
+                    Log.Logger(
+                        $"Exception in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                        e, url);
+                }
+            }
+
             foreach (var tenderTekMarketNew in _tendersList)
             {
                 try

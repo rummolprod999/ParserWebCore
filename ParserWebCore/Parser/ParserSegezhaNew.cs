@@ -19,7 +19,10 @@ namespace ParserWebCore.Parser
         private readonly ChromeDriver _driver = CreatorChromeDriver.GetChromeDriver();
 
         private readonly string[] Url =
-            { "https://segezha-group.com/providers/purchasing/", "https://segezha-group.com/providers/qualification/" };
+        {
+            "https://segezha-group.com/providers/purchasing/?status=1",
+            "https://segezha-group.com/providers/qualification/"
+        };
 
         private List<TypeSegezha> _tendersList = new List<TypeSegezha>();
         private TimeSpan _timeoutB = TimeSpan.FromSeconds(60);
@@ -124,6 +127,7 @@ namespace ParserWebCore.Parser
                        throw new Exception("cannot find @click");
             var hrefT = href.GetDataFromRegex(@"location\s+=\s+'(\d+)/'$");
             href = $"{url}{hrefT}/";
+            href = href.Replace("?status=1", "");
             var purNum = hrefT;
             var purName = t.FindElementWithoutException(By.XPath(".//td[3]"))?.Text
                 .Trim() ?? "";

@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
+using System.Threading;
 using Newtonsoft.Json.Linq;
-using ParserWebCore.BuilderApp;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
@@ -25,6 +26,7 @@ namespace ParserWebCore.Parser
                 try
                 {
                     GetPage(i);
+                    Thread.Sleep(10000);
                 }
                 catch (Exception e)
                 {
@@ -42,7 +44,7 @@ namespace ParserWebCore.Parser
                 ["sec-ch-ua"] = "\"Not_A Brand\";v=\"99\", \"Google Chrome\";v=\"109\", \"Chromium\";v=\"109\"",
                 ["accept"] = "application/json, text/plain, */*",
                 ["user-agent"] =
-                    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36",
+                    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/538.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/538.36",
                 ["origin"] = "https://zakaz.bashkortostan.ru",
                 ["referer"] = "https://zakaz.bashkortostan.ru/",
                 ["accept-language"] = "ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7"
@@ -50,7 +52,7 @@ namespace ParserWebCore.Parser
 
             var url =
                 $"https://api-zakaz.bashkortostan.ru/apifront/purchases?page={num}";
-            var result = DownloadString.DownLHttpPostWithCookiesB2b(url, cookie: null, useProxy: AppBuilder.UserProxy,
+            var result = DownloadString.DownLHttpPostWithCookiesB2b(url, cookie: null, useProxy: false,
                 headers: headers);
             if (string.IsNullOrEmpty(result))
             {
@@ -59,19 +61,27 @@ namespace ParserWebCore.Parser
                 return;
             }
 
-            var jObj = JObject.Parse(result);
-            var tenders = GetElements(jObj, "data");
-            foreach (var t in tenders)
+            try
             {
-                try
+                var jObj = JObject.Parse(result);
+                var tenders = GetElements(jObj, "data");
+                foreach (var t in tenders)
                 {
-                    ParserTenderObj(t);
+                    try
+                    {
+                        ParserTenderObj(t);
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Logger($"Error in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
+                            e, t.ToString());
+                    }
                 }
-                catch (Exception e)
-                {
-                    Log.Logger($"Error in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
-                        e, t.ToString());
-                }
+            }
+            catch (Exception e)
+            {
+                Log.Logger("result " + result);
+                throw;
             }
         }
 

@@ -1,5 +1,4 @@
 using System;
-using System.Web;
 using Newtonsoft.Json.Linq;
 using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
@@ -38,7 +37,7 @@ namespace ParserWebCore.Parser
         private void GetPage(int num)
         {
             var url =
-                $"https://etp.acron.ru/searchServlet?query={HttpUtility.UrlEncode($"{{\"types\":[\"BUYING\"]}}&filter={{\"state\":[\"GD\"]}}&sort={{\"placementDate\":false}}&limit={{\"min\":{num},\"max\":{num + 20},\"updateTotalCount\":true}}")}";
+                $"https://etp.acron.ru/searchServlet?query=%7B%22types%22%3A%5B%22BUYING%22%5D%7D&filter=%7B%22state%22%3A%5B%22GD%22%5D%7D&sort=%7B%22placementDate%22%3Afalse%7D&limit=%7B%22min%22%3A{num}%2C%22max%22%3A{num + 20}%7D";
             var result = DownloadString.DownLUserAgent(url);
             if (string.IsNullOrEmpty(result))
             {

@@ -91,6 +91,7 @@
         Udsoil,
         Uos,
         Zmk,
-        Atisu
+        Atisu,
+        Rzdmed
     }
 }

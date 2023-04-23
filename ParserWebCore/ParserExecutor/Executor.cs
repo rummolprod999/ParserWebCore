@@ -251,6 +251,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Atisu:
                     _parser = new ParserAtiSu();
                     break;
+                case Arguments.Rzdmed:
+                    _parser = new ParserRzdMed();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

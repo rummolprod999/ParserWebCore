@@ -52,7 +52,7 @@ namespace ParserWebCore.Parser
 
             var url =
                 $"https://api-zakaz.bashkortostan.ru/apifront/purchases?page={num}";
-            var result = DownloadString.DownLHttpPostWithCookiesB2b(url, cookie: null, useProxy: false,
+            var result = DownloadString.DownLHttpPostWithCookiesB2b(url, cookie: null, useProxy: true,
                 headers: headers);
             if (string.IsNullOrEmpty(result))
             {

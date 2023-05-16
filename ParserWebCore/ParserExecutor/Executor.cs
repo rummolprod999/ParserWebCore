@@ -254,6 +254,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Rzdmed:
                     _parser = new ParserRzdMed();
                     break;
+                case Arguments.Progress:
+                    _parser = new ParserProgress();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

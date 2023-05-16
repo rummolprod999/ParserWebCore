@@ -92,6 +92,7 @@
         Uos,
         Zmk,
         Atisu,
-        Rzdmed
+        Rzdmed,
+        Progress,
     }
 }

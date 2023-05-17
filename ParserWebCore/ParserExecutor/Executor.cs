@@ -257,6 +257,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Progress:
                     _parser = new ParserProgress();
                     break;
+                case Arguments.Toaz:
+                    _parser = new ParserToaz();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

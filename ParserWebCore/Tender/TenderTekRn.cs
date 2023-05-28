@@ -9,6 +9,7 @@ using OpenQA.Selenium.Support.UI;
 using ParserWebCore.BuilderApp;
 using ParserWebCore.Connections;
 using ParserWebCore.Extensions;
+using ParserWebCore.Logger;
 using ParserWebCore.SharedLibraries;
 using ParserWebCore.TenderType;
 
@@ -152,8 +153,16 @@ namespace ParserWebCore.Tender
                 var docs = _driver.FindElements(By.CssSelector("a[href^='/document.php?']"));
                 if (docs.Count == 0)
                 {
-                    docs = _driver.FindElements(By.XPath(
-                        "//a[contains(@class, 'Documentstyled__Container-sc')]"));
+                    try
+                    {
+                        _driver.FindElement(By.XPath("//div[h3[. = 'Документация по процедуре']]")).Click();
+                        docs = _driver.FindElements(By.XPath(
+                            "//a[contains(@class, 'Documentstyled__Container-sc')]"));
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Logger(e);
+                    }
                 }
 
                 GetDocs(docs, connect, idTender);

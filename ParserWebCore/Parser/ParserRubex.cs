@@ -11,7 +11,7 @@ namespace ParserWebCore.Parser
 {
     public class ParserRubex : ParserAbstract, IParser
     {
-        private readonly string _urlpage = "https://rubexgroup.ru/%D0%B7%D0%B0%D0%BA%D1%83%D0%BF%D0%BA%D0%B8/";
+        private readonly string _urlpage = "https://rubexgroup.ru/zakupki/";
 
         public void Parsing()
         {
@@ -78,21 +78,22 @@ namespace ParserWebCore.Parser
             var purNum = fullDateNum.GetDataFromRegex(@"Извещение\s+№\s+(\d+)");
             if (string.IsNullOrEmpty(purNum))
             {
-                Log.Logger("Empty purNum");
+                Log.Logger("Empty purNum " + purName);
                 return;
             }
 
             var datePubT = fullDateNum.GetDataFromRegex(@"(\d{2}\.\d{2}\.\d{4})");
             if (string.IsNullOrEmpty(datePubT))
             {
-                Log.Logger("Empty datePubT");
+                Log.Logger("Empty datePubT " + purName);
                 return;
             }
 
             var datePub = datePubT.ParseDateUn("dd.MM.yyyy");
             var dateEnd = DateTime.Now;
             var tn = new TenderRubex("RubEx Group", "https://rubexgroup.ru/", 248,
-                new TypeRubex {PurName = purName, PurNum = purNum, DatePub = datePub, Href = href, DateEnd = dateEnd});
+                new TypeRubex
+                    { PurName = purName, PurNum = purNum, DatePub = datePub, Href = href, DateEnd = dateEnd });
             ParserTender(tn);
         }
     }

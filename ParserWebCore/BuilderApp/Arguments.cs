@@ -95,5 +95,6 @@
         Rzdmed,
         Progress,
         Toaz,
+        Metal100,
     }
 }

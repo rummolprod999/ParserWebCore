@@ -168,6 +168,22 @@ namespace ParserWebCore.Extensions
             return s.Contains("дек") ? s.Replace("дек", "12") : "";
         }
 
+        public static string GetDateWithMonthFull(this string s)
+        {
+            if (s.Contains("января")) return s.Replace("января", "01");
+            if (s.Contains("февраля")) return s.Replace("февраля", "02");
+            if (s.Contains("марта")) return s.Replace("марта", "03");
+            if (s.Contains("апреля")) return s.Replace("апреля", "04");
+            if (s.Contains("мая")) return s.Replace("мая", "05");
+            if (s.Contains("июня")) return s.Replace("июня", "06");
+            if (s.Contains("июля")) return s.Replace("июля", "07");
+            if (s.Contains("августа")) return s.Replace("августа", "08");
+            if (s.Contains("сентября")) return s.Replace("сентября", "09");
+            if (s.Contains("октября")) return s.Replace("октября", "10");
+            if (s.Contains("ноября")) return s.Replace("ноября", "11");
+            return s.Contains("декабря") ? s.Replace("декабря", "12") : "";
+        }
+
         public static string DelDoubleWhitespace(this string s)
         {
             var resString = Regex.Replace(s, @"\s+", " ");

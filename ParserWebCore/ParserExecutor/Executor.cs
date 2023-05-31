@@ -260,6 +260,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Toaz:
                     _parser = new ParserToaz();
                     break;
+                case Arguments.Metal100:
+                    _parser = new ParserMetal100();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

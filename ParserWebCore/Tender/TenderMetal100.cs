@@ -205,10 +205,10 @@ namespace ParserWebCore.Tender
                 var idLot = (int)cmd18.LastInsertedId;
                 var delivTPlace = _driver
                     .FindElementWithoutException(By.XPath("//span[contains(., 'Требуется доставка')]"))
-                    ?.Text.Trim();
+                    ?.Text?.Trim() ?? "";
                 var delivTerm = _driver
                     .FindElementWithoutException(By.XPath("//div[@class = 'margin-bottom-20']"))
-                    ?.Text.Trim();
+                    ?.Text?.Trim() ?? "";
                 if (!string.IsNullOrEmpty(delivTPlace) || !string.IsNullOrEmpty(delivTerm))
                 {
                     var insertCustomerRequirement =

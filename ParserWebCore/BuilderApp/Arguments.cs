@@ -96,5 +96,6 @@
         Progress,
         Toaz,
         Metal100,
+        Nazot,
     }
 }

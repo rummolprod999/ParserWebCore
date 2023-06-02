@@ -263,6 +263,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Metal100:
                     _parser = new ParserMetal100();
                     break;
+                case Arguments.Nazot:
+                    _parser = new ParserNazot();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

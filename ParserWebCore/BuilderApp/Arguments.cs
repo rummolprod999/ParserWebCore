@@ -98,5 +98,6 @@
         Metal100,
         Nazot,
         Famyug,
+        Ruscable,
     }
 }

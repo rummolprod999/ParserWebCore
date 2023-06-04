@@ -269,6 +269,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Famyug:
                     _parser = new ParserFamYug();
                     break;
+                case Arguments.Ruscable:
+                    _parser = new ParserRuscable();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

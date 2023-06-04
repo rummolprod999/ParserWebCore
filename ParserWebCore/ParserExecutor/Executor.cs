@@ -266,6 +266,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Nazot:
                     _parser = new ParserNazot();
                     break;
+                case Arguments.Famyug:
+                    _parser = new ParserFamYug();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

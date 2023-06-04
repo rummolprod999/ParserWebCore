@@ -12,7 +12,7 @@ namespace ParserWebCore.BuilderApp
     public class AppBuilder
     {
         public const string ReqArguments =
-            "agrocomplex, kzgroup, agrotomsk, sibintek, setonline, mzvoron, maxi, tver, murman, kalug, smol, samar, udmurt, segezha, akashevo, sitno, naftan, rwby, tekkom, tekmarket, tekmos, mlconf, tekrn, brn32, sportmaster, teksil, sberb2b, zakupmos, agat, rubex, samcom, ravis, boaz, tektkp, zmorts, rtsmarket, uralmash, lotonline, etpu, ismt, tpta, absgroup, rb2b, federal, b2bweb, medsi, gpb, strateg, tenderit, kuzocm, zdship, kopemash, rusfish, uralair, sochipark, korabel, eurosib, spgr, rcs, yangpur, kpresort, stniva, dvina, kursk, ufin, gosyakut, tatar, mts, tverzmo, bash, midural, mordov, kurg, mobwin, acron, udmurtprop, tambov, udsoil, uos, zmk, atisu, rzdmed, progress, toaz, metal100, nazot";
+            "agrocomplex, kzgroup, agrotomsk, sibintek, setonline, mzvoron, maxi, tver, murman, kalug, smol, samar, udmurt, segezha, akashevo, sitno, naftan, rwby, tekkom, tekmarket, tekmos, mlconf, tekrn, brn32, sportmaster, teksil, sberb2b, zakupmos, agat, rubex, samcom, ravis, boaz, tektkp, zmorts, rtsmarket, uralmash, lotonline, etpu, ismt, tpta, absgroup, rb2b, federal, b2bweb, medsi, gpb, strateg, tenderit, kuzocm, zdship, kopemash, rusfish, uralair, sochipark, korabel, eurosib, spgr, rcs, yangpur, kpresort, stniva, dvina, kursk, ufin, gosyakut, tatar, mts, tverzmo, bash, midural, mordov, kurg, mobwin, acron, udmurtprop, tambov, udsoil, uos, zmk, atisu, rzdmed, progress, toaz, metal100, nazot, famyug";
 
         private static int _port;
         private static AppBuilder _b;
@@ -68,6 +68,8 @@ namespace ParserWebCore.BuilderApp
 
         [Required] public static string AgroPass { get; set; }
         [Required] public static string AgroUser { get; set; }
+        [Required] public static string FamYugPass { get; set; }
+        [Required] public static string FamYugUser { get; set; }
         public static string Prefix { get; private set; }
         public static Arguments Arg { get; private set; }
 
@@ -360,6 +362,9 @@ namespace ParserWebCore.BuilderApp
                 case "nazot":
                     Arg = Arguments.Nazot;
                     break;
+                case "famyug":
+                    Arg = Arguments.Famyug;
+                    break;
                 default:
                     throw new ArgumentException($"Неправильно указан аргумент {s}, используйте {ReqArguments}");
             }
@@ -403,6 +408,8 @@ namespace ParserWebCore.BuilderApp
                 TverZmoUser = (string)o["usertverzmo"];
                 AgroPass = (string)o["passagro"];
                 AgroUser = (string)o["useragro"];
+                FamYugPass = (string)o["passfamyug"];
+                FamYugUser = (string)o["userfamyug"];
                 UserProxy = (bool)o["use_proxy"];
                 ProxyFile = (string)o["proxy_file"];
                 _port = int.TryParse((string)o["port"], out _port) ? int.Parse((string)o["port"]) : 3306;

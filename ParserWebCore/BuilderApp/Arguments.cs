@@ -97,5 +97,6 @@
         Toaz,
         Metal100,
         Nazot,
+        Famyug,
     }
 }

@@ -272,6 +272,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Ruscable:
                     _parser = new ParserRuscable();
                     break;
+                case Arguments.Etpmir:
+                    _parser = new ParserEtpMir();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

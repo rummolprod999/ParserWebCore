@@ -275,6 +275,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Etpmir:
                     _parser = new ParserEtpMir();
                     break;
+                case Arguments.Comrzd:
+                    _parser = new ParserComRzd();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

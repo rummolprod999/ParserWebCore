@@ -99,6 +99,7 @@
         Nazot,
         Famyug,
         Ruscable,
-        Etpmir
+        Etpmir,
+        Comrzd,
     }
 }

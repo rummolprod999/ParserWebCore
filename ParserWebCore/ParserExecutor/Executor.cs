@@ -278,6 +278,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Comrzd:
                     _parser = new ParserComRzd();
                     break;
+                case Arguments.Metport:
+                    _parser = new ParserMetPort();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

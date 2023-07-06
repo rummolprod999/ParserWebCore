@@ -284,6 +284,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Segz:
                     _parser = new ParserSegz();
                     break;
+                case Arguments.Avtodis:
+                    _parser = new ParserAvtodis();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

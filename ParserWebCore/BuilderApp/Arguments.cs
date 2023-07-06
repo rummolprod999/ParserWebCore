@@ -103,5 +103,6 @@
         Comrzd,
         Metport,
         Segz,
+        Avtodis,
     }
 }

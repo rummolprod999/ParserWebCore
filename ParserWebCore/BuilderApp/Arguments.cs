@@ -102,5 +102,6 @@
         Etpmir,
         Comrzd,
         Metport,
+        Segz,
     }
 }

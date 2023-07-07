@@ -287,6 +287,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Avtodis:
                     _parser = new ParserAvtodis();
                     break;
+                case Arguments.Stpo:
+                    _parser = new ParserStPo();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

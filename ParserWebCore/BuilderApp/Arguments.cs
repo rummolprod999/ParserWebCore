@@ -104,5 +104,6 @@
         Metport,
         Segz,
         Avtodis,
+        Stpo,
     }
 }

@@ -22,7 +22,7 @@ namespace ParserWebCore.Parser
             {
                 try
                 {
-                    ParsingPage($"https://www.stroyportal.ru/tender/st{i}/");
+                    ParsingPage($"https://www.stroyportal.ru/tender/st{i}/?type=&region_id=all");
                 }
                 catch (Exception e)
                 {

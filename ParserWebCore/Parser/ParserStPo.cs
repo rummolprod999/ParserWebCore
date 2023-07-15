@@ -17,7 +17,7 @@ namespace ParserWebCore.Parser
 
         private void ParsingStpo()
         {
-            ParsingPage($"https://www.stroyportal.ru/tender/");
+            ParsingPage($"https://www.stroyportal.ru/tender/?region_id=all&type=");
             for (int i = 45; i <= 45 * 5; i = i + 45)
             {
                 try

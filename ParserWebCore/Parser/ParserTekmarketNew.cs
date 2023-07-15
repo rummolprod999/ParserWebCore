@@ -101,7 +101,7 @@ namespace ParserWebCore.Parser
         private void ParserTenderObj(JToken t, string buildid)
         {
             var id = ((string)t.SelectToken("id") ?? throw new ApplicationException("id not found")).Trim();
-            var tenderUrl = $"https://www.tektorg.ru/_next/data/{buildid}/ru/market/procedures/{id}.json?id={id}";
+            var tenderUrl = $"https://www.tektorg.ru/_next/data/build/ru/market/procedures/{id}.json?id={id}";
             var status = ((string)(t.SelectToken(
                               "statusName")) ??
                           "").Trim();

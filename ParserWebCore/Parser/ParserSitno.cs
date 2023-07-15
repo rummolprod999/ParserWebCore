@@ -22,7 +22,7 @@ namespace ParserWebCore.Parser
             for (var i = 1; i <= Count; i++)
             {
                 var urlpage =
-                    $"https://tender.sitno.ru:9000/api/trade-offer/showcase?page={i}&expand=status,company,file,user,bidder,is_follow,categories,procedureType&search[Active]=active&per-page=9&sort=-published_at";
+                    $"https://tender.sitno.ru/api/trade-offer/showcase?page={i}&expand=status,company,file,user,bidder,is_follow,categories,procedureType&search[Active]=active&per-page=9&sort=-published_at";
                 try
                 {
                     ParsingPage(urlpage);

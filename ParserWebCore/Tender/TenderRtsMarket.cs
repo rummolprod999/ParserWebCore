@@ -104,7 +104,7 @@ namespace ParserWebCore.Tender
                 var href = "";
                 switch (_section)
                 {
-                    case 132:
+                    case 3:
                         href = $"https://market.rts-tender.ru/zapros/{_tn.Id}/request";
                         break;
                     default:

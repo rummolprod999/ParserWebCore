@@ -39,8 +39,8 @@ namespace ParserWebCore.NetworkLibrary
             {
                 client.Headers[HttpRequestHeader.ContentType] = "application/json";
                 client.Headers[HttpRequestHeader.UserAgent] =
-                    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.56 Safari/537.36";
-                client.Headers.Add("xxx-tenantid-header", section.ToString());
+                    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36";
+                client.Headers.Add("XXX-TenantId-Header", section.ToString());
                 if (data is null)
                 {
                     result = client.DownloadString(url);

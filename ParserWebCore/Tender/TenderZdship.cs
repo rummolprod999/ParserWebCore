@@ -59,14 +59,14 @@ namespace ParserWebCore.Tender
                 var customerId = 0;
                 var organiserId = 0;
                 var orgName = EtpName;
-                PlacingWay = (navigator.SelectSingleNode("//div[contains(., 'Способ проведения тендера: ')]/span")
+                PlacingWay = (navigator.SelectSingleNode("//td[. = 'Тип:']/following-sibling::td")
                     ?.Value ?? "").ReplaceHtmlEntyty().Trim();
                 GetPlacingWay(connect, out var idPlacingWay);
                 GetEtp(connect, out var idEtp);
                 organiserId = AddOrganizer(orgName, connect, organiserId);
                 var biddingDateT = (navigator
                     .SelectSingleNode(
-                        "//div[contains(., 'Дата подведения окончательных итогов:')]/span")
+                        "//td[. = 'Дата подведения окончательных итогов:']/following-sibling::td")
                     ?.Value ?? "").Trim();
                 var biddingDate = biddingDateT.ParseDateUn("dd.MM.yyyy");
                 var insertTender =
@@ -126,13 +126,13 @@ namespace ParserWebCore.Tender
                 }
 
                 var docs = htmlDoc.DocumentNode.SelectNodes(
-                               "//div[contains(., 'Приложенные документы: ')]/span/a") ??
+                               "//td[. = 'Приложенные документы:']/following-sibling::td//a") ??
                            new HtmlNodeCollection(null);
                 foreach (var doc in docs)
                 {
                     var urlAttT = (doc?.Attributes["href"]?.Value ?? "").Trim();
                     var fName = doc.InnerHtml.Trim();
-                    var urlAtt = $"http://tender.zdship.ru{urlAttT}";
+                    var urlAtt = $"{urlAttT}";
                     if (!string.IsNullOrEmpty(fName))
                     {
                         var insertAttach =
@@ -146,7 +146,7 @@ namespace ParserWebCore.Tender
                     }
                 }
 
-                var price = (navigator.SelectSingleNode("//div[contains(., 'Начальная цена: ')]/span")
+                var price = (navigator.SelectSingleNode("//td[. = 'Начальная цена:']/following-sibling::td")
                     ?.Value ?? "").ReplaceHtmlEntyty().ExtractPriceNew().Trim();
                 var lotNum = 1;
                 var insertLot =
@@ -173,7 +173,7 @@ namespace ParserWebCore.Tender
                 cmd20.Parameters.AddWithValue("@price", "");
                 cmd20.Parameters.AddWithValue("@sum", price);
                 cmd20.ExecuteNonQuery();
-                var delivTerm = (navigator.SelectSingleNode("//div[contains(., 'Cрок:')]/span")
+                var delivTerm = (navigator.SelectSingleNode("//td[. = 'Срок исполнения:']/following-sibling::td")
                     ?.Value ?? "").ReplaceHtmlEntyty().Trim();
                 if (!string.IsNullOrEmpty(delivTerm))
                 {

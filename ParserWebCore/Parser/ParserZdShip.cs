@@ -13,10 +13,7 @@ namespace ParserWebCore.Parser
     {
         private readonly List<string> Urlpages = new List<string>
         {
-            "http://tender.zdship.ru/zakupki/",
-            "http://tender.zdship.ru/zakupki/page-2/",
-            "http://tender.zdship.ru/zakupki/page-3/",
-            "http://tender.zdship.ru/zakupki/page-4/"
+            "https://zdship.ru/tender"
         };
 
         public void Parsing()
@@ -30,7 +27,10 @@ namespace ParserWebCore.Parser
             {
                 try
                 {
-                    ParsingPage(urlpage);
+                    for (int i = 1; i < 5; i++)
+                    {
+                        ParsingPage($"https://zdship.ru/tender?page={i}");
+                    }
                 }
                 catch (Exception e)
                 {
@@ -52,7 +52,7 @@ namespace ParserWebCore.Parser
             htmlDoc.LoadHtml(s);
             var tens =
                 htmlDoc.DocumentNode.SelectNodes(
-                    "//table[@class = 'table']/tbody/tr") ??
+                    "//table[contains(@class, 'table')]/tbody/tr") ??
                 new HtmlNodeCollection(null);
             foreach (var a in tens)
             {
@@ -77,17 +77,17 @@ namespace ParserWebCore.Parser
                 return;
             }
 
-            href = $"http://tender.zdship.ru{href}";
+            href = $"{href}";
             var purName = (n.SelectSingleNode(".//td[2]//a")
                 ?.InnerText ?? "").Trim().ReplaceHtmlEntyty();
             var purNum = (n.SelectSingleNode(".//td[1]")
                 ?.InnerText ?? "").Trim().ReplaceHtmlEntyty();
             var datePubT =
-                (n.SelectSingleNode(".//td[3]")
+                (n.SelectSingleNode(".//td[4]")
                     ?.InnerText ?? "").Trim();
             var datePub = datePubT.ParseDateUn("dd.MM.yyyy");
             var dateEndT =
-                (n.SelectSingleNode(".//td[4]")
+                (n.SelectSingleNode(".//td[5]")
                     ?.InnerText ?? "").Trim();
             var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy");
             if (datePub == DateTime.MinValue)
@@ -102,7 +102,7 @@ namespace ParserWebCore.Parser
                 return;
             }
 
-            var status = (n.SelectSingleNode(".//td[5]")
+            var status = (n.SelectSingleNode(".//td[6]")
                 ?.InnerText ?? "").Trim().ReplaceHtmlEntyty();
             var tn = new TenderZdship("Тендерная площадка ОАО «Зеленодольский завод имени A.M. Горького»",
                 "http://tender.zdship.ru/", 307,

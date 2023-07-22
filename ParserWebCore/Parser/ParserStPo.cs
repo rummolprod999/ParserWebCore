@@ -16,6 +16,7 @@ namespace ParserWebCore.Parser
     public class ParserStPo : ParserAbstract, IParser
     {
         public static string cookie = "";
+        public static string ua = "";
         private readonly ChromeDriver _driver = CreateChomeDriverNoHeadless.GetChromeDriver();
         private TimeSpan _timeoutB = TimeSpan.FromSeconds(60);
 

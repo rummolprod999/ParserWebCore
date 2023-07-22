@@ -1,5 +1,10 @@
 using System;
+using System.Text;
+using System.Threading;
 using HtmlAgilityPack;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.UI;
+using ParserWebCore.Creators;
 using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
@@ -10,6 +15,10 @@ namespace ParserWebCore.Parser
 {
     public class ParserStPo : ParserAbstract, IParser
     {
+        public static string cookie = "";
+        private readonly ChromeDriver _driver = CreateChomeDriverNoHeadless.GetChromeDriver();
+        private TimeSpan _timeoutB = TimeSpan.FromSeconds(60);
+
         public void Parsing()
         {
             Parse(ParsingStpo);
@@ -17,6 +26,31 @@ namespace ParserWebCore.Parser
 
         private void ParsingStpo()
         {
+            try
+            {
+                var wait = new WebDriverWait(_driver, _timeoutB);
+                _driver.Navigate().GoToUrl("https://www.stroyportal.ru/tender/?region_id=all&type=");
+                Thread.Sleep(5000);
+                var cookies = _driver.Manage().Cookies.AllCookies;
+                var str = new StringBuilder();
+                foreach (var cookie in cookies)
+                {
+                    str.Append($"{cookie.Name}={cookie.Value};");
+                }
+
+                cookie = str.ToString();
+                Console.WriteLine(cookie);
+            }
+            catch (Exception e)
+            {
+                Log.Logger(e);
+            }
+            finally
+            {
+                _driver.Manage().Cookies.DeleteAllCookies();
+                _driver.Quit();
+            }
+
             ParsingPage($"https://www.stroyportal.ru/tender/?region_id=all&type=");
             for (int i = 45; i <= 45 * 5; i = i + 45)
             {
@@ -33,7 +67,10 @@ namespace ParserWebCore.Parser
 
         private void ParsingPage(string url)
         {
-            var s = DownloadString.DownLUserAgent(url);
+            var arg =
+                $"\"{url}\" -H \"cookie: {cookie}\" -H \"user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36\"";
+            Console.WriteLine(arg);
+            var s = CurlDownloadSportMaster.DownL(arg);
             if (string.IsNullOrEmpty(s))
             {
                 Log.Logger("Empty string in ParserPage()", url);

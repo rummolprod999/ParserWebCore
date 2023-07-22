@@ -7,6 +7,7 @@ using ParserWebCore.Connections;
 using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
+using ParserWebCore.Parser;
 using ParserWebCore.TenderType;
 
 namespace ParserWebCore.Tender
@@ -42,7 +43,9 @@ namespace ParserWebCore.Tender
                     return;
                 }
 
-                var s = DownloadString.DownLUserAgent(_tn.Href);
+                var arg =
+                    $"\"{_tn.Href}\" -H \"cookie: {ParserStPo.cookie}\" -H \"user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36\"";
+                var s = CurlDownloadSportMaster.DownL(arg);
                 if (string.IsNullOrEmpty(s))
                 {
                     Log.Logger("Empty string in ParsingTender()", _tn.Href);

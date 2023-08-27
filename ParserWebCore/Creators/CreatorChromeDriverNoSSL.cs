@@ -13,6 +13,7 @@ namespace ParserWebCore.Creators
             try
             {
                 var options = new ChromeOptions();
+                options.AcceptInsecureCertificates = true;
                 options.AddArguments("headless");
                 options.AddArguments("disable-gpu");
                 options.AddArguments("no-sandbox");

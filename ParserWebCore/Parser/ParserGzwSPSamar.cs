@@ -1,5 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Linq;
 using System.Threading;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -10,6 +14,7 @@ using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
+using TwoCaptcha.Captcha;
 
 namespace ParserWebCore.Parser
 {
@@ -105,19 +110,79 @@ namespace ParserWebCore.Parser
 
         public void Auth(ChromeDriver driver, WebDriverWait wait)
         {
-            driver.Navigate()
-                .GoToUrl(
-                    "https://webtorgi.samregion.ru//smallpurchases/Login/Form?err=badlogged&ret=%2fsmallpurchases%2fProfile%2fGotoHomePage");
-            wait.Until(dr =>
-                dr.FindElement(By.XPath(
-                    "//input[@name = 'login']")));
-            Thread.Sleep(1000);
-            driver.SwitchTo().DefaultContent();
-            driver.FindElement(By.XPath("//input[@name = 'login']")).SendKeys(AppBuilder.SamarUser);
-            driver.FindElement(By.XPath("//input[@name = 'pass']")).SendKeys(AppBuilder.SamarPass);
-            driver.FindElement(By.XPath("//input[@value = 'Вход']")).Click();
-            Thread.Sleep(5000);
-            ParserGzwSp.AuthCookieValue = driver.Manage().Cookies.GetCookieNamed("ebudget_mz").Value;
+            var count = 3;
+            while (count > 0)
+            {
+                try
+                {
+                    driver.Navigate()
+                        .GoToUrl(
+                            "https://webtorgi.samregion.ru//smallpurchases/Login/Form?err=badlogged&ret=%2fsmallpurchases%2fProfile%2fGotoHomePage");
+                    wait.Until(dr =>
+                        dr.FindElement(By.XPath(
+                            "//input[@name = 'login']")));
+                    //Thread.Sleep(1000);
+                    driver.SwitchTo().DefaultContent();
+                    driver.FindElement(By.XPath("//input[@name = 'login']")).SendKeys(AppBuilder.SamarUser);
+                    driver.FindElement(By.XPath("//input[@name = 'pass']")).SendKeys(AppBuilder.SamarPass);
+                    var solver = new TwoCaptcha.TwoCaptcha(AppBuilder.Api);
+                    solver.DefaultTimeout = 120;
+                    solver.RecaptchaTimeout = 600;
+                    solver.PollingInterval = 10;
+                    var base64string = driver.ExecuteScript(@"
+    var c = document.createElement('canvas');
+    var ctx = c.getContext('2d');
+    var img = document.getElementById('captcha');
+    c.height=img.naturalHeight;
+    c.width=img.naturalWidth;
+    ctx.drawImage(img, 0, 0,img.naturalWidth, img.naturalHeight);
+    var base64String = c.toDataURL();
+    return base64String;
+    ") as string;
+
+                    var base64 = base64string.Split(',').Last();
+                    using (var stream = new MemoryStream(Convert.FromBase64String(base64)))
+                    {
+                        using (var bitmap = new Bitmap(stream))
+                        {
+                            var filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Captcha.jpeg");
+                            bitmap.Save(filepath, ImageFormat.Jpeg);
+                        }
+                    }
+
+                    var captcha = new Normal();
+                    captcha.SetFile("Captcha.jpeg");
+                    captcha.SetMinLen(3);
+                    captcha.SetMaxLen(20);
+                    captcha.SetCaseSensitive(true);
+                    solver.Solve(captcha).GetAwaiter().GetResult();
+                    Console.WriteLine(captcha.Code);
+                    driver.FindElement(By.XPath("//input[@name = 'captcha']")).SendKeys(captcha.Code);
+                    driver.FindElement(By.XPath("//input[@value = 'Вход']")).Click();
+                    Thread.Sleep(5000);
+                    foreach (var cookiesAllCookie in driver.Manage().Cookies.AllCookies)
+                    {
+                        ParserGzwSp.col.Add(new System.Net.Cookie(cookiesAllCookie.Name, cookiesAllCookie.Value));
+                    }
+
+                    break;
+                }
+                catch (Exception e)
+                {
+                    try
+                    {
+                        var alert = driver.SwitchTo().Alert();
+                        alert.Accept();
+                        _driver.Manage().Cookies.DeleteAllCookies();
+                    }
+                    catch (Exception)
+                    {
+                    }
+
+                    count--;
+                    Log.Logger(e);
+                }
+            }
         }
 
         private void ParsingList(int pageNum)

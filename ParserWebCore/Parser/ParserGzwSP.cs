@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -17,6 +18,7 @@ namespace ParserWebCore.Parser
     {
         public static string AuthCookieValue = null;
         public static string AuthCookieName = null;
+        public static CookieCollection col = new CookieCollection();
         private readonly ChromeDriver _driver = CreatorChromeDriverNoSsl.GetChromeDriver();
         private readonly int Count = 10;
         private Arguments _arg;

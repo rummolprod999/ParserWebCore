@@ -70,7 +70,7 @@ namespace ParserWebCore.Tender
                 }
 
                 string s;
-                if (_arg == Arguments.Smol || _arg == Arguments.Ufin || _arg == Arguments.Kurg ||
+                if (_arg == Arguments.Ufin || _arg == Arguments.Kurg ||
                     _arg == Arguments.Udmurt || _arg == Arguments.Samar || _arg == Arguments.Kalug ||
                     _arg == Arguments.Dvina || _arg == Arguments.Mordov || _arg == Arguments.UdmurtProp ||
                     _arg == Arguments.Tver || _arg == Arguments.Tverzmo || _arg == Arguments.Mzvoron
@@ -80,6 +80,13 @@ namespace ParserWebCore.Tender
                     var col = new CookieCollection();
                     col.Add(new Cookie("ebudget", ParserGzwSp.AuthCookieValue));
                     col.Add(new Cookie("ebudget_mz", ParserGzwSp.AuthCookieValue));
+                    s = DownloadString.DownLHttpPostWithCookiesAll(_tn.Href, _baseUrl, col);
+                    ;
+                }
+                else if (_arg == Arguments.Smol)
+                {
+                    var col = new CookieCollection();
+                    col.Add(new Cookie(ParserGzwSp.AuthCookieName, ParserGzwSp.AuthCookieValue));
                     s = DownloadString.DownLHttpPostWithCookiesAll(_tn.Href, _baseUrl, col);
                     ;
                 }

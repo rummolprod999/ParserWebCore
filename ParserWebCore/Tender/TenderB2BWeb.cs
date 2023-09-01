@@ -274,12 +274,12 @@ namespace ParserWebCore.Tender
                                    "//td[contains(., 'Вид валюты:')]/following-sibling::td")
                                ?.Value?.Trim() ??
                            "руб.";
-            var price = priceT.ExtractPrice();
+            var price = priceT.ExtractPriceNew();
             var nmckT = navigator.SelectSingleNode(
                                 "//td[contains(., 'Начальная (максимальная) цена договора:' ) or contains(., 'Начальная цена всего лота:') or contains(., 'Общая стоимость')]/following-sibling::td/b")
                             ?.Value?.Trim() ??
                         "";
-            var nmck = nmckT.ExtractPrice();
+            var nmck = nmckT.ExtractPriceNew();
             var lotName = navLot.SelectSingleNode(
                                   "//div[@class = 'expandable-text short']/span")
                               ?.Value?.Trim() ??

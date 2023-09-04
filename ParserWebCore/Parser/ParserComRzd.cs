@@ -14,8 +14,8 @@ namespace ParserWebCore.Parser
 {
     public class ParserComRzd : ParserAbstract, IParser
     {
-        private const string Urlpage = "https://company.rzd.ru/ru/9395";
-        private const int Count = 5;
+        private const string Urlpage = "https://company.rzd.ru/ru/9395?f1465_pagesize=100";
+        private const int Count = 10;
         private readonly ChromeDriver _driver = CreatorChromeDriver.GetChromeDriver();
         private List<TypeComRzd> _listTenders = new List<TypeComRzd>();
         private TimeSpan _timeoutB = TimeSpan.FromSeconds(120);
@@ -115,8 +115,9 @@ namespace ParserWebCore.Parser
             var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy");
             if (dateEnd == DateTime.MinValue)
             {
-                Log.Logger("Empty dateEnd");
-                return;
+                Log.Logger("Empty dateEnd " + purNum + " set curr date plus 2 days");
+
+                dateEnd = DateTime.Today.AddDays(2);
             }
 
             var purName = t.FindElement(By.XPath("./div[@data-title='Наименование процедуры']"))?.Text.Trim() ??

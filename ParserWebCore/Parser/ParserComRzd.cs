@@ -108,7 +108,8 @@ namespace ParserWebCore.Parser
 
         private void ParsingPage(IWebElement t)
         {
-            var purNum = t.FindElement(By.XPath("./div[@data-title='Номер процедуры']"))?.Text.Trim() ??
+            var purNum = t.FindElement(By.XPath("./div[@data-title='Номер процедуры']"))?.Text
+                             ?.Replace("\u200a/\u200a", "/").Trim() ??
                          throw new Exception("cannot find purNum");
             var dateEndT = t.FindElement(By.XPath("./div[@data-title='Дата окончания подачи заявок']"))?.Text.Trim() ??
                            throw new Exception("cannot find dateEndT");

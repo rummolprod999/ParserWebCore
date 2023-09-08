@@ -26,7 +26,7 @@ namespace ParserWebCore.Parser
             var dateM = DateTime.Now.AddMinutes(-1 * DateMinus * 24 * 60);
             var urlStart = $"https://www.tektorg.ru/market/procedures?dpfrom={dateM:dd.MM.yyyy}";
             var s = DownloadString.DownL(urlStart);
-            var buildid = s.GetDataFromRegex("\"buildId\":\"(\\d+)\"");
+            var buildid = s.GetDataFromRegex("\"buildId\":\"(\\w+)\"");
 
             for (var i = 1; i <= 20; i++)
             {
@@ -101,7 +101,7 @@ namespace ParserWebCore.Parser
         private void ParserTenderObj(JToken t, string buildid)
         {
             var id = ((string)t.SelectToken("id") ?? throw new ApplicationException("id not found")).Trim();
-            var tenderUrl = $"https://www.tektorg.ru/_next/data/build/ru/market/procedures/{id}.json?id={id}";
+            var tenderUrl = $"https://www.tektorg.ru/_next/data/{buildid}/ru/market/procedures/{id}.json?id={id}";
             var status = ((string)(t.SelectToken(
                               "statusName")) ??
                           "").Trim();

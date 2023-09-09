@@ -290,6 +290,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Stpo:
                     _parser = new ParserStPo();
                     break;
+                case Arguments.Fbrts:
+                    _parser = new ParserFbRts();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

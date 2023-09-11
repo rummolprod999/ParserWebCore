@@ -71,7 +71,7 @@ namespace ParserWebCore.Tender
                 var commandBuilder =
                     new MySqlCommandBuilder(adapter2) { ConflictOption = ConflictOption.OverwriteChanges };
                 adapter2.Update(dt2);
-                var printForm = _tn.Href;
+                var printForm = _tn.PrintForm;
                 var customerId = 0;
                 var organiserId = 0;
                 if (!string.IsNullOrEmpty(_tn.OrgName))

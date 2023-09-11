@@ -14,6 +14,8 @@ namespace ParserWebCore.TenderType
 
         public string Region { get; set; }
 
+        public string PrintForm { get; set; }
+
         public List<TypeFbRtsPos> positions { get; set; }
 
         public override string ToString()

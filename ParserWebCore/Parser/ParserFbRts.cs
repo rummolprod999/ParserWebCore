@@ -154,7 +154,10 @@ namespace ParserWebCore.Parser
             var purNum = t.FindElement(By.XPath(".//a[@class = 'link']"))?.Text
                              ?.Replace("\u2116", "").Trim() ??
                          throw new Exception("cannot find purNum");
-            var href = t.FindElementWithoutException(By.XPath(".//a[@class = 'link']"))?.GetAttribute("href").Trim() ??
+            var printForm = t.FindElementWithoutException(By.XPath(".//a[@class = 'link']"))?.GetAttribute("href")
+                                .Trim() ??
+                            throw new Exception("cannot find href");
+            var href = t.FindElementWithoutException(By.XPath(".//a[.='Подробнее']"))?.GetAttribute("href").Trim() ??
                        throw new Exception("cannot find href");
             var purName = t.FindElementWithoutException(By.XPath(".//a[contains(@class, 'main-text')]"))?.Text.Trim() ??
                           throw new Exception("cannot find purName");
@@ -237,7 +240,8 @@ namespace ParserWebCore.Parser
             var type = new TypeFbRts()
             {
                 CusName = cusName, PurName = purName, PurNum = purNum, Status = status, positions = pos, Href = href,
-                Nmck = nmck, DateEnd = dateEnd, DatePub = datePub, OrgName = orgName, Region = region
+                Nmck = nmck, DateEnd = dateEnd, DatePub = datePub, OrgName = orgName, Region = region,
+                PrintForm = printForm
             };
             var td = new TenderFbRts("РТС", "https://fb.rts-tender.ru/", 406, type);
             _tendersList.Add(td);

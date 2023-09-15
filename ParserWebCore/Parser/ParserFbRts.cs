@@ -95,6 +95,23 @@ namespace ParserWebCore.Parser
                 dr.FindElement(
                     By.XPath("//article[@class = 'trade-card']")));
             _driver.SwitchTo().DefaultContent();
+            try
+            {
+                Thread.Sleep(6000);
+                _driver.FindElement(By.XPath("//button[@class = 'sort-button link']")).Click();
+                Thread.Sleep(2000);
+                _driver.SwitchTo().DefaultContent();
+                _driver.FindElement(By.XPath("//ul[@class = 'sort-list ng-star-inserted']/li[2]")).Click();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+            wait.Until(dr =>
+                dr.FindElement(
+                    By.XPath("//article[@class = 'trade-card']")));
+            _driver.SwitchTo().DefaultContent();
             ParserFirstPage();
             ParsingNextPage();
         }
@@ -154,6 +171,11 @@ namespace ParserWebCore.Parser
             var purNum = t.FindElement(By.XPath(".//a[@class = 'link']"))?.Text
                              ?.Replace("\u2116", "").Trim() ??
                          throw new Exception("cannot find purNum");
+            if (purNum.Length > 15)
+            {
+                return;
+            }
+
             var printForm = t.FindElementWithoutException(By.XPath(".//a[@class = 'link']"))?.GetAttribute("href")
                                 .Trim() ??
                             throw new Exception("cannot find href");

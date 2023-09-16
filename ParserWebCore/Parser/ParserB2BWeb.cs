@@ -1,5 +1,6 @@
 using System;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Threading;
 using HtmlAgilityPack;
 using ParserWebCore.BuilderApp;
@@ -92,7 +93,12 @@ namespace ParserWebCore.Parser
                 return;
             }
 
-            href = $"https://www.b2b-center.ru{href}";
+            if (!href.Contains("rosatom"))
+            {
+                href = $"https://www.b2b-center.ru{href}";
+            }
+
+            href = Regex.Replace(href, @"#btid.+", "");
             var pwName = fullPw.GetDataFromRegex(@"(.+) №\s+\d+");
             var purNum = fullPw.GetDataFromRegex(@"№\s+(\d+)");
             if (string.IsNullOrEmpty(href))

@@ -93,7 +93,7 @@ namespace ParserWebCore.Parser
                 return;
             }
 
-            if (!href.Contains("rosatom") || !href.StartsWith("http", StringComparison.Ordinal))
+            if (!href.StartsWith("http", StringComparison.Ordinal))
             {
                 href = $"https://www.b2b-center.ru{href}";
             }

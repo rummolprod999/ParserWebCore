@@ -21,14 +21,36 @@ namespace ParserWebCore.Parser
         {
             driver.Navigate()
                 .GoToUrl(
-                    "https://torgi.midural.ru/smallpurchases/Login/Form?err=badlogged&ret=%2fsmallpurchases%2fProfile%2fGotoHomePage");
+                    "https://torgi.egov66.ru/smallpurchases/Login/Form?err=badlogged&ret=%2fsmallpurchases%2fProfile%2fGotoHomePage");
+            try
+            {
+                wait.Until(dr =>
+                    dr.FindElement(By.XPath(
+                        "//button[. = 'Закрыть']")));
+                try
+                {
+                    var alert = driver.SwitchTo().Alert();
+                    alert.Dismiss();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+
+                driver.FindElement(By.XPath("//button[. = 'Закрыть']")).Click();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
             wait.Until(dr =>
                 dr.FindElement(By.XPath(
                     "//input[@name = 'login']")));
             Thread.Sleep(1000);
             driver.SwitchTo().DefaultContent();
-            driver.FindElement(By.XPath("//input[@name = 'login']")).SendKeys(AppBuilder.KalugUser);
-            driver.FindElement(By.XPath("//input[@name = 'pass']")).SendKeys(AppBuilder.KalugPass);
+            driver.FindElement(By.XPath("//input[@name = 'login']")).SendKeys(AppBuilder.MiduralUser);
+            driver.FindElement(By.XPath("//input[@name = 'pass']")).SendKeys(AppBuilder.MiduralPass);
             driver.FindElement(By.XPath("//input[@value = 'Вход']")).Click();
             Thread.Sleep(5000);
             AuthCookieValue = driver.Manage().Cookies.GetCookieNamed("ebudget").Value;

@@ -103,8 +103,8 @@ namespace ParserWebCore.Parser
                         .Parsing();
                     break;
                 case Arguments.Midural:
-                    new ParserMidural("https://torgi.midural.ru/smallpurchases/GzwSP/ProposalsBidsGrid",
-                            "https://torgi.midural.ru",
+                    new ParserMidural("https://torgi.egov66.ru/smallpurchases/GzwSP/ProposalsBidsGrid",
+                            "https://torgi.egov66.ru",
                             "Малые закупки  Свердловской области",
                             "https://torgi.midural.ru/", 356, _arguments, 15)
                         .Parsing();

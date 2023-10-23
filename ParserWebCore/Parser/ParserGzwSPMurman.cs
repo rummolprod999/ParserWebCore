@@ -55,7 +55,7 @@ namespace ParserWebCore.Parser
             }
 
             var captcha = new Normal();
-            captcha.SetFile("Captcha.jpeg");
+            captcha.SetFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Captcha.jpeg"));
             captcha.SetMinLen(3);
             captcha.SetMaxLen(20);
             captcha.SetCaseSensitive(true);

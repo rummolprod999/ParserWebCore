@@ -49,13 +49,13 @@ namespace ParserWebCore.Parser
             {
                 using (var bitmap = new Bitmap(stream))
                 {
-                    var filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "captcha.jpeg");
+                    var filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Captcha.jpeg");
                     bitmap.Save(filepath, ImageFormat.Jpeg);
                 }
             }
 
             var captcha = new Normal();
-            captcha.SetFile("captcha.jpeg");
+            captcha.SetFile("Captcha.jpeg");
             captcha.SetMinLen(3);
             captcha.SetMaxLen(20);
             captcha.SetCaseSensitive(true);

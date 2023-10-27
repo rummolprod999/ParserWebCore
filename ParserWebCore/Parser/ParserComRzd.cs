@@ -62,8 +62,11 @@ namespace ParserWebCore.Parser
                 try
                 {
                     //_driver.Clicker("//td[contains(., 'Перейти на страницу:')]//a[. = '>']");
-                    _driver.ExecutorJs(
-                        "var elem = document.querySelectorAll('a.pager__next'); elem[elem.length-1].click()");
+                    /*_driver.ExecutorJs(
+                        "var elem = document.querySelectorAll('a.pager__next'); elem[elem.length-1].click()");*/
+                    _driver.Navigate()
+                        .GoToUrl(
+                            $"https://company.rzd.ru/ru/9395/page/4893?f1465_pagesize=100&f1465_pagenumber={i + 1}");
                     Thread.Sleep(3000);
                     wait.Until(dr =>
                         dr.FindElement(

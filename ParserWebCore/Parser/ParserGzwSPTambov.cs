@@ -24,8 +24,8 @@ namespace ParserWebCore.Parser
                     "//input[@name = 'login']")));
             Thread.Sleep(1000);
             driver.SwitchTo().DefaultContent();
-            driver.FindElement(By.XPath("//input[@name = 'login']")).SendKeys(AppBuilder.KalugUser);
-            driver.FindElement(By.XPath("//input[@name = 'pass']")).SendKeys(AppBuilder.KalugPass);
+            driver.FindElement(By.XPath("//input[@name = 'login']")).SendKeys(AppBuilder.TambovUser);
+            driver.FindElement(By.XPath("//input[@name = 'pass']")).SendKeys(AppBuilder.TambovPass);
             driver.FindElement(By.XPath("//input[@value = 'Вход']")).Click();
             Thread.Sleep(5000);
             AuthCookieValue = driver.Manage().Cookies.GetCookieNamed("ebudget").Value;

@@ -47,6 +47,7 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Tverzmo:
                 case Arguments.Gosyakut:
                 case Arguments.Midural:
+                case Arguments.MiduralGr:
                 case Arguments.Mordov:
                 case Arguments.UdmurtProp:
                 case Arguments.Tambov:

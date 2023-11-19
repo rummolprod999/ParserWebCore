@@ -71,8 +71,8 @@ namespace ParserWebCore.Tender
 
                 string s;
                 if (_arg == Arguments.Ufin || _arg == Arguments.Kurg ||
-                    _arg == Arguments.Udmurt || _arg == Arguments.Kalug ||
-                    _arg == Arguments.Dvina || _arg == Arguments.Mordov || _arg == Arguments.UdmurtProp ||
+                    _arg == Arguments.Udmurt || _arg == Arguments.Kalug || _arg == Arguments.Mordov ||
+                    _arg == Arguments.UdmurtProp ||
                     _arg == Arguments.Tver || _arg == Arguments.Tverzmo || _arg == Arguments.Mzvoron
                     || _arg == Arguments.Kursk || _arg == Arguments.Midural ||
                     _arg == Arguments.Brn32 || _arg == Arguments.Murman)
@@ -90,7 +90,7 @@ namespace ParserWebCore.Tender
                     s = DownloadString.DownLHttpPostWithCookiesAll(_tn.Href, _baseUrl, col);
                     ;
                 }
-                else if (_arg == Arguments.Samar || _arg == Arguments.Tambov)
+                else if (_arg == Arguments.Samar || _arg == Arguments.Tambov || _arg == Arguments.Dvina)
                 {
                     var col = new CookieCollection();
                     col.Add(ParserGzwSp.col);

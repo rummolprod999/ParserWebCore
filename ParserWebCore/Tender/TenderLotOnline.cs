@@ -54,6 +54,13 @@ namespace ParserWebCore.Tender
 
                 if (string.IsNullOrEmpty(s))
                 {
+                    s = DownloadString.DownLHttpPost(_tn.Href.Replace(
+                        "https://market.lot-online.ru/app/SmallPurchaseCard/page?SmallPurchaseCard.smallPurchaseEntity=",
+                        "https://market.lot-online.ru/etp/app/section/rosseti/LotCard/page?LotCard.lotEntity="));
+                }
+
+                if (string.IsNullOrEmpty(s))
+                {
                     Log.Logger("Empty string in ParsingTender()", _tn.Href);
                     return;
                 }
@@ -98,6 +105,55 @@ namespace ParserWebCore.Tender
             {
                 CreatePurObjects(connect, customerId, purObject, idLot);
             }
+
+            var purObjects1 = htmlDoc.DocumentNode.SelectNodes(
+                                  "//h3[. = 'Информация о товарах, работах, услугах']/following-sibling::div//tbody/tr") ??
+                              new HtmlNodeCollection(null);
+            foreach (var purObject in purObjects1)
+            {
+                CreatePurObjects1(connect, customerId, purObject, idLot);
+            }
+
+            if (purObjects.Count == 0 && purObjects1.Count == 0)
+            {
+                var insertLotitem =
+                    $"INSERT INTO {AppBuilder.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name, quantity_value = @quantity_value, okei = @okei, customer_quantity_value = @customer_quantity_value, price = @price, sum = @sum";
+                var cmd20 = new MySqlCommand(insertLotitem, connect);
+                cmd20.Prepare();
+                cmd20.Parameters.AddWithValue("@id_lot", idLot);
+                cmd20.Parameters.AddWithValue("@id_customer", customerId);
+                cmd20.Parameters.AddWithValue("@name", _tn.PurName);
+                cmd20.Parameters.AddWithValue("@quantity_value", "");
+                cmd20.Parameters.AddWithValue("@okei", "");
+                cmd20.Parameters.AddWithValue("@customer_quantity_value", "");
+                cmd20.Parameters.AddWithValue("@price", "");
+                cmd20.Parameters.AddWithValue("@sum", _tn.Nmck);
+                cmd20.ExecuteNonQuery();
+            }
+        }
+
+        private void CreatePurObjects1(MySqlConnection connect, int customerId, HtmlNode purObject, int idLot)
+        {
+            var namePo = (purObject.SelectSingleNode("./td[2]")
+                ?.InnerText ?? "").Trim();
+            var quantT = (purObject.SelectSingleNode("./td[5]")
+                ?.InnerText ?? "").Replace("Минимальная закупаемая партия:", "").Trim();
+            var quant = quantT.GetDataFromRegex("([ \\d.]+)").DelAllWhitespace();
+            var okei = quantT.GetDataFromRegex("\\((.+)\\)").DelDoubleWhitespace();
+            var insertLotitem =
+                $"INSERT INTO {AppBuilder.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name, quantity_value = @quantity_value, okei = @okei, customer_quantity_value = @customer_quantity_value, price = @price, sum = @sum";
+            var cmd20 = new MySqlCommand(insertLotitem, connect);
+            cmd20.Prepare();
+            cmd20.Parameters.AddWithValue("@id_lot", idLot);
+            cmd20.Parameters.AddWithValue("@id_customer", customerId);
+            cmd20.Parameters.AddWithValue("@name", namePo);
+            cmd20.Parameters.AddWithValue("@quantity_value", quant);
+            cmd20.Parameters.AddWithValue("@okei", okei);
+            cmd20.Parameters.AddWithValue("@customer_quantity_value", quant);
+            cmd20.Parameters.AddWithValue("@price", "");
+            cmd20.Parameters.AddWithValue("@sum", _tn.Nmck);
+            cmd20.ExecuteNonQuery();
+            CreateCustomerRec(connect, customerId, purObject, idLot);
         }
 
         private void CreatePurObjects(MySqlConnection connect, int customerId, HtmlNode purObject, int idLot)

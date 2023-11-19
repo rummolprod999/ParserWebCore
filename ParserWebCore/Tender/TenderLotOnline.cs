@@ -55,7 +55,7 @@ namespace ParserWebCore.Tender
                 if (string.IsNullOrEmpty(s))
                 {
                     s = DownloadString.DownLHttpPost(_tn.Href.Replace(
-                        "https://market.lot-online.ru/app/SmallPurchaseCard/page?SmallPurchaseCard.smallPurchaseEntity=",
+                        "https://market.lot-online.ru/etp/app/LotCard/page?LotCard.lotEntity=",
                         "https://market.lot-online.ru/etp/app/section/rosseti/LotCard/page?LotCard.lotEntity="));
                 }
 

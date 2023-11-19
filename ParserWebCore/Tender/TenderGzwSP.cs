@@ -106,6 +106,10 @@ namespace ParserWebCore.Tender
                     col.Add(new Cookie("ebudget_mz", ParserGzwSp.AuthCookieValue));
                     s = DownloadString.DownLHttpPostWithCookiesAll(_tn.Href, _baseUrl, col, useProxy: true);
                 }
+                else if (_arg == Arguments.Gosyakut)
+                {
+                    s = _tn.Href != "" ? DownloadString.DownL(_tn.Href) : "empty";
+                }
                 else
                 {
                     s = DownloadString.DownL(_tn.Href);

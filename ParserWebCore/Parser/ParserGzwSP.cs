@@ -192,8 +192,8 @@ namespace ParserWebCore.Parser
             }
 
             var href = t.FindElementWithoutException(By.XPath(".//span[@class = 'regnumber']/a"))?.GetAttribute("href")
-                           .Trim() ??
-                       throw new Exception("cannot find href");
+                           ?.Trim() ??
+                       "";
             var purNum = t.FindElementWithoutException(By.XPath(".//span[@class = 'regnumber']/a"))?.Text.Trim() ??
                          throw new Exception("cannot find purNum ");
             var datePubT =

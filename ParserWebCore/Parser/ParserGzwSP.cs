@@ -74,7 +74,15 @@ namespace ParserWebCore.Parser
         {
             _driver.Manage().Cookies.DeleteAllCookies();
             var wait = new WebDriverWait(_driver, _timeoutB);
-            Auth(_driver, wait);
+            try
+            {
+                Auth(_driver, wait);
+            }
+            catch (Exception e)
+            {
+                Log.Logger(e);
+            }
+
             _driver.Navigate().GoToUrl(_url);
             Thread.Sleep(5000);
             _driver.SwitchTo().DefaultContent();

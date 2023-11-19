@@ -53,7 +53,10 @@ namespace ParserWebCore.Parser
             driver.FindElement(By.XPath("//input[@name = 'pass']")).SendKeys(AppBuilder.MiduralPass);
             driver.FindElement(By.XPath("//input[@value = 'Вход']")).Click();
             Thread.Sleep(5000);
-            AuthCookieValue = driver.Manage().Cookies.GetCookieNamed("ebudget").Value;
+            foreach (var cookiesAllCookie in driver.Manage().Cookies.AllCookies)
+            {
+                ParserGzwSp.col.Add(new System.Net.Cookie(cookiesAllCookie.Name, cookiesAllCookie.Value));
+            }
         }
 
         protected override void ParsingPage(IWebElement t)

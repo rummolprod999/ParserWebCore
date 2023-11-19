@@ -74,7 +74,7 @@ namespace ParserWebCore.Tender
                     _arg == Arguments.Udmurt || _arg == Arguments.Kalug || _arg == Arguments.Mordov ||
                     _arg == Arguments.UdmurtProp ||
                     _arg == Arguments.Tver || _arg == Arguments.Tverzmo || _arg == Arguments.Mzvoron
-                    || _arg == Arguments.Kursk || _arg == Arguments.Midural ||
+                    || _arg == Arguments.Kursk ||
                     _arg == Arguments.Brn32 || _arg == Arguments.Murman)
                 {
                     var col = new CookieCollection();
@@ -90,7 +90,9 @@ namespace ParserWebCore.Tender
                     s = DownloadString.DownLHttpPostWithCookiesAll(_tn.Href, _baseUrl, col);
                     ;
                 }
-                else if (_arg == Arguments.Samar || _arg == Arguments.Tambov || _arg == Arguments.Dvina)
+                else if (_arg == Arguments.Samar || _arg == Arguments.Tambov || _arg == Arguments.Dvina ||
+                         _arg == Arguments.Midural ||
+                         _arg == Arguments.MiduralGr)
                 {
                     var col = new CookieCollection();
                     col.Add(ParserGzwSp.col);
@@ -198,7 +200,7 @@ namespace ParserWebCore.Tender
                     .SelectSingleNode(
                         "//td[. = 'Способ закупки']/following-sibling::td")
                     ?.Value ?? "").Trim();
-                if (_arg == Arguments.Midural)
+                if (_arg == Arguments.Midural || _arg == Arguments.MiduralGr)
                 {
                     PlacingWay = "коммерческое предложение";
                 }
@@ -226,6 +228,9 @@ namespace ParserWebCore.Tender
                         idRegion = GetRegionFromString("удмурт", connect);
                         break;
                     case Arguments.Midural:
+                        idRegion = GetRegionFromString("свердл", connect);
+                        break;
+                    case Arguments.MiduralGr:
                         idRegion = GetRegionFromString("свердл", connect);
                         break;
                     case Arguments.Mordov:
@@ -358,7 +363,7 @@ namespace ParserWebCore.Tender
                     cmd16.ExecuteNonQuery();
                 }
 
-                if (_arg == Arguments.Midural || _arg == Arguments.Mordov)
+                if (_arg == Arguments.Midural || _arg == Arguments.Mordov || _arg == Arguments.MiduralGr)
                 {
                     var poList =
                         htmlDoc.DocumentNode.SelectNodes("//table[thead[tr[th[. = 'Количество']]]]/tbody/tr") ??
@@ -395,6 +400,10 @@ namespace ParserWebCore.Tender
                             cmd19.Parameters.AddWithValue("@sum", sumP);
                             cmd19.ExecuteNonQuery();
                         }
+                    }
+                    else
+                    {
+                        defaultPO(connect, idLot, customerId);
                     }
                 }
                 else if (_arg == Arguments.Brn32)
@@ -435,6 +444,10 @@ namespace ParserWebCore.Tender
                             cmd19.Parameters.AddWithValue("@sum", sumP);
                             cmd19.ExecuteNonQuery();
                         }
+                    }
+                    else
+                    {
+                        defaultPO(connect, idLot, customerId);
                     }
                 }
                 else
@@ -477,9 +490,9 @@ namespace ParserWebCore.Tender
                             cmd19.ExecuteNonQuery();
                         }
                     }
-                    else if (_arg == Arguments.Kurg)
+                    else
                     {
-                        Log.Logger(s);
+                        defaultPO(connect, idLot, customerId);
                     }
                 }
 
@@ -487,6 +500,19 @@ namespace ParserWebCore.Tender
                 TenderKwords(connect, idTender);
                 AddVerNumber(connect, _tn.PurNum, TypeFz);
             }
+        }
+
+        private void defaultPO(MySqlConnection connect, int idLot, int customerId)
+        {
+            var insertLotitem =
+                $"INSERT INTO {AppBuilder.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name, sum = @sum";
+            var cmd19 = new MySqlCommand(insertLotitem, connect);
+            cmd19.Prepare();
+            cmd19.Parameters.AddWithValue("@id_lot", idLot);
+            cmd19.Parameters.AddWithValue("@id_customer", customerId);
+            cmd19.Parameters.AddWithValue("@name", _tn.PurName);
+            cmd19.Parameters.AddWithValue("@sum", "");
+            cmd19.ExecuteNonQuery();
         }
     }
 }

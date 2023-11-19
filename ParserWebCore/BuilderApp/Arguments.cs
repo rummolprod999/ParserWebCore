@@ -82,6 +82,7 @@
         Tverzmo,
         Bash,
         Midural,
+        MiduralGr,
         Mordov,
         Kurg,
         Mobwin,

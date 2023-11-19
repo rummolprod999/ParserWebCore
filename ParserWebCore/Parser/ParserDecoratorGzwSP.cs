@@ -109,6 +109,13 @@ namespace ParserWebCore.Parser
                             "https://torgi.midural.ru/", 356, _arguments, 15)
                         .Parsing();
                     break;
+                case Arguments.MiduralGr:
+                    new ParserMidural("https://torgi.egov66.ru/smallpurchases/GzwSP/NoticesGrid",
+                            "https://torgi.egov66.ru",
+                            "Малые закупки  Свердловской области",
+                            "https://torgi.midural.ru/", 356, _arguments, 15)
+                        .Parsing();
+                    break;
                 case Arguments.Mordov:
                     new ParserGzwSPMordov("https://goszakaz44.e-mordovia.ru/smallpurchases/GzwSP/NoticesGrid",
                             "https://goszakaz44.e-mordovia.ru",

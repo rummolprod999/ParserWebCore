@@ -91,8 +91,7 @@ namespace ParserWebCore.Tender
                     ;
                 }
                 else if (_arg == Arguments.Samar || _arg == Arguments.Tambov || _arg == Arguments.Dvina ||
-                         _arg == Arguments.Midural ||
-                         _arg == Arguments.MiduralGr)
+                         _arg == Arguments.Midural)
                 {
                     var col = new CookieCollection();
                     col.Add(ParserGzwSp.col);
@@ -106,7 +105,8 @@ namespace ParserWebCore.Tender
                     col.Add(new Cookie("ebudget_mz", ParserGzwSp.AuthCookieValue));
                     s = DownloadString.DownLHttpPostWithCookiesAll(_tn.Href, _baseUrl, col, useProxy: true);
                 }
-                else if (_arg == Arguments.Gosyakut)
+                else if (_arg == Arguments.Gosyakut ||
+                         _arg == Arguments.MiduralGr)
                 {
                     s = _tn.Href != "" ? DownloadString.DownL(_tn.Href) : "empty";
                 }

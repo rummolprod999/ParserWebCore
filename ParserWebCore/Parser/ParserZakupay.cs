@@ -153,7 +153,7 @@ namespace ParserWebCore.Parser
                 }
             }
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 20; i++)
             {
                 var combined = string.Join(",", excludedId);
                 var data1 =

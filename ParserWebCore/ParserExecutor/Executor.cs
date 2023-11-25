@@ -294,6 +294,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.Fbrts:
                     _parser = new ParserFbRts();
                     break;
+                case Arguments.Zakupay:
+                    _parser = new ParserZakupay();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

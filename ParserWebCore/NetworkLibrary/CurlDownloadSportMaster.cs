@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 
 namespace ParserWebCore.NetworkLibrary
@@ -11,7 +12,9 @@ namespace ParserWebCore.NetworkLibrary
                 StartInfo = new ProcessStartInfo("curl", arguments)
                 {
                     UseShellExecute = false,
-                    RedirectStandardOutput = true
+                    RedirectStandardOutput = true,
+                    CreateNoWindow = true,
+                    WorkingDirectory = Environment.SystemDirectory
                 }
             };
             cliProcess.Start();

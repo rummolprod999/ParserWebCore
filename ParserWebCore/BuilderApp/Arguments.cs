@@ -107,5 +107,6 @@
         Avtodis,
         Stpo,
         Fbrts,
+        Zakupay,
     }
 }

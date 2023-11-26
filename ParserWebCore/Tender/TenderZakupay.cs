@@ -184,7 +184,7 @@ namespace ParserWebCore.Tender
                 foreach (var t in _tn.ObjectsPurchase)
                 {
                     var insertLotitem =
-                        $"INSERT INTO {AppBuilder.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name, quantity_value = @quantity_value, okei = @okei, customer_quantity_value = @customer_quantity_value, price = @price, sum = @sum, , okpd_name = @okpd_name";
+                        $"INSERT INTO {AppBuilder.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name, quantity_value = @quantity_value, okei = @okei, customer_quantity_value = @customer_quantity_value, price = @price, sum = @sum, okpd_name = @okpd_name";
                     var cmd20 = new MySqlCommand(insertLotitem, connect);
                     cmd20.Prepare();
                     cmd20.Parameters.AddWithValue("@id_lot", idLot);

@@ -239,6 +239,320 @@ namespace ParserWebCore.Tender
                     var lots = htmlDoc.DocumentNode.SelectNodes(
                                    "//div[@class = 'wideTable-wrap']//tr[position() > 1]") ??
                                new HtmlNodeCollection(null);
+                    var lots0 = navigator.SelectSingleNode(
+                                    "//div[@class = 'wideTable-wrap']//tr[position() = 1]")?.Value ??
+                                "";
+                    if (lots0.Contains("\u2116 лота"))
+                    {
+                        foreach (var p in lots)
+                        {
+                            var name1 = p.SelectSingleNode(
+                                                "./td[3]")
+                                            ?.InnerText.Trim() ??
+                                        "";
+                            var name = $"{name1}".Trim();
+                            var quant = p.SelectSingleNode(
+                                                "./td[4]")
+                                            ?.InnerText.Trim() ??
+                                        "";
+                            var okei = p.SelectSingleNode(
+                                               "./td[5]")
+                                           ?.InnerText.Trim() ??
+                                       "";
+                            var price = p.SelectSingleNode(
+                                                "./td[6]")
+                                            ?.InnerText.Trim()?.ExtractPriceNew() ??
+                                        "";
+                            var sumP = p.SelectSingleNode(
+                                               "./td[7]")
+                                           ?.InnerText.Trim()?.ExtractPriceNew() ??
+                                       "";
+                            var insertLotitem =
+                                $"INSERT INTO {AppBuilder.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name, sum = @sum, okpd2_code = @okpd2_code, okpd2_group_code = @okpd2_group_code, okpd2_group_level1_code = @okpd2_group_level1_code, okpd_name = @okpd_name, quantity_value = @quantity_value, customer_quantity_value = @customer_quantity_value, okei = @okei, price = @price";
+                            var cmd19 = new MySqlCommand(insertLotitem, connect);
+                            cmd19.Prepare();
+                            cmd19.Parameters.AddWithValue("@id_lot", idLot);
+                            cmd19.Parameters.AddWithValue("@id_customer", customerId);
+                            cmd19.Parameters.AddWithValue("@name", name);
+                            cmd19.Parameters.AddWithValue("@sum", sumP);
+                            cmd19.Parameters.AddWithValue("@okpd2_code", okpd2);
+                            cmd19.Parameters.AddWithValue("@okpd2_group_code", "");
+                            cmd19.Parameters.AddWithValue("@okpd2_group_level1_code", "");
+                            cmd19.Parameters.AddWithValue("@okpd_name", okpdName);
+                            cmd19.Parameters.AddWithValue("@quantity_value", quant);
+                            cmd19.Parameters.AddWithValue("@customer_quantity_value", quant);
+                            cmd19.Parameters.AddWithValue("@okei", okei);
+                            cmd19.Parameters.AddWithValue("@price", price);
+                            cmd19.ExecuteNonQuery();
+                        }
+                    }
+                    else if (lots0.Contains("Срок поставки из заявки"))
+                    {
+                        foreach (var p in lots)
+                        {
+                            var name = p.SelectSingleNode(
+                                               "./td[2]")
+                                           ?.InnerText.Trim() ??
+                                       "";
+                            var name1 = p.SelectSingleNode(
+                                                "./td[3]")
+                                            ?.InnerText.Trim() ??
+                                        "";
+                            var name2 = p.SelectSingleNode(
+                                                "./td[4]")
+                                            ?.InnerText.Trim() ??
+                                        "";
+                            var name3 = p.SelectSingleNode(
+                                                "./td[5]")
+                                            ?.InnerText.Trim() ??
+                                        "";
+                            name = $"{name} {name1} {name2} {name3}".Trim();
+                            var quant = p.SelectSingleNode(
+                                                "./td[6]")
+                                            ?.InnerText.Trim() ??
+                                        "";
+                            var okei = p.SelectSingleNode(
+                                               "./td[7]")
+                                           ?.InnerText.Trim() ??
+                                       "";
+                            var price = "";
+                            var sumP = "";
+                            var insertLotitem =
+                                $"INSERT INTO {AppBuilder.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name, sum = @sum, okpd2_code = @okpd2_code, okpd2_group_code = @okpd2_group_code, okpd2_group_level1_code = @okpd2_group_level1_code, okpd_name = @okpd_name, quantity_value = @quantity_value, customer_quantity_value = @customer_quantity_value, okei = @okei, price = @price";
+                            var cmd19 = new MySqlCommand(insertLotitem, connect);
+                            cmd19.Prepare();
+                            cmd19.Parameters.AddWithValue("@id_lot", idLot);
+                            cmd19.Parameters.AddWithValue("@id_customer", customerId);
+                            cmd19.Parameters.AddWithValue("@name", name);
+                            cmd19.Parameters.AddWithValue("@sum", sumP);
+                            cmd19.Parameters.AddWithValue("@okpd2_code", okpd2);
+                            cmd19.Parameters.AddWithValue("@okpd2_group_code", "");
+                            cmd19.Parameters.AddWithValue("@okpd2_group_level1_code", "");
+                            cmd19.Parameters.AddWithValue("@okpd_name", okpdName);
+                            cmd19.Parameters.AddWithValue("@quantity_value", quant);
+                            cmd19.Parameters.AddWithValue("@customer_quantity_value", quant);
+                            cmd19.Parameters.AddWithValue("@okei", okei);
+                            cmd19.Parameters.AddWithValue("@price", price);
+                            cmd19.ExecuteNonQuery();
+                        }
+                    }
+                    else if (lots0.Contains("Дата начала поставки"))
+                    {
+                        foreach (var p in lots)
+                        {
+                            var name = p.SelectSingleNode(
+                                               "./td[2]")
+                                           ?.InnerText.Trim() ??
+                                       "";
+                            var name1 = p.SelectSingleNode(
+                                                "./td[3]")
+                                            ?.InnerText.Trim() ??
+                                        "";
+                            var name2 = p.SelectSingleNode(
+                                                "./td[4]")
+                                            ?.InnerText.Trim() ??
+                                        "";
+                            var name3 = p.SelectSingleNode(
+                                                "./td[5]")
+                                            ?.InnerText.Trim() ??
+                                        "";
+                            name = $"{name} {name1} {name2} {name3}".Trim();
+                            var quant = p.SelectSingleNode(
+                                                "./td[8]")
+                                            ?.InnerText.Trim() ??
+                                        "";
+                            var okei = p.SelectSingleNode(
+                                               "./td[9]")
+                                           ?.InnerText.Trim() ??
+                                       "";
+                            var price = "";
+                            var sumP = "";
+                            var insertLotitem =
+                                $"INSERT INTO {AppBuilder.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name, sum = @sum, okpd2_code = @okpd2_code, okpd2_group_code = @okpd2_group_code, okpd2_group_level1_code = @okpd2_group_level1_code, okpd_name = @okpd_name, quantity_value = @quantity_value, customer_quantity_value = @customer_quantity_value, okei = @okei, price = @price";
+                            var cmd19 = new MySqlCommand(insertLotitem, connect);
+                            cmd19.Prepare();
+                            cmd19.Parameters.AddWithValue("@id_lot", idLot);
+                            cmd19.Parameters.AddWithValue("@id_customer", customerId);
+                            cmd19.Parameters.AddWithValue("@name", name);
+                            cmd19.Parameters.AddWithValue("@sum", sumP);
+                            cmd19.Parameters.AddWithValue("@okpd2_code", okpd2);
+                            cmd19.Parameters.AddWithValue("@okpd2_group_code", "");
+                            cmd19.Parameters.AddWithValue("@okpd2_group_level1_code", "");
+                            cmd19.Parameters.AddWithValue("@okpd_name", okpdName);
+                            cmd19.Parameters.AddWithValue("@quantity_value", quant);
+                            cmd19.Parameters.AddWithValue("@customer_quantity_value", quant);
+                            cmd19.Parameters.AddWithValue("@okei", okei);
+                            cmd19.Parameters.AddWithValue("@price", price);
+                            cmd19.ExecuteNonQuery();
+                        }
+                    }
+                    else
+                    {
+                        foreach (var p in lots)
+                        {
+                            var name = p.SelectSingleNode(
+                                               "./td[2]")
+                                           ?.InnerText.Trim() ??
+                                       "";
+                            var name1 = p.SelectSingleNode(
+                                                "./td[3]")
+                                            ?.InnerText.Trim() ??
+                                        "";
+                            name = $"{name} {name1}".Trim();
+                            var quant = p.SelectSingleNode(
+                                                "./td[4]")
+                                            ?.InnerText.Trim() ??
+                                        "";
+                            var okei = p.SelectSingleNode(
+                                               "./td[5]")
+                                           ?.InnerText.Trim() ??
+                                       "";
+                            var price = p.SelectSingleNode(
+                                                "./td[6]")
+                                            ?.InnerText.Trim()?.ExtractPriceNew() ??
+                                        "";
+                            var sumP = p.SelectSingleNode(
+                                               "./td[7]")
+                                           ?.InnerText.Trim()?.ExtractPriceNew() ??
+                                       "";
+                            var insertLotitem =
+                                $"INSERT INTO {AppBuilder.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name, sum = @sum, okpd2_code = @okpd2_code, okpd2_group_code = @okpd2_group_code, okpd2_group_level1_code = @okpd2_group_level1_code, okpd_name = @okpd_name, quantity_value = @quantity_value, customer_quantity_value = @customer_quantity_value, okei = @okei, price = @price";
+                            var cmd19 = new MySqlCommand(insertLotitem, connect);
+                            cmd19.Prepare();
+                            cmd19.Parameters.AddWithValue("@id_lot", idLot);
+                            cmd19.Parameters.AddWithValue("@id_customer", customerId);
+                            cmd19.Parameters.AddWithValue("@name", name);
+                            cmd19.Parameters.AddWithValue("@sum", sumP);
+                            cmd19.Parameters.AddWithValue("@okpd2_code", okpd2);
+                            cmd19.Parameters.AddWithValue("@okpd2_group_code", "");
+                            cmd19.Parameters.AddWithValue("@okpd2_group_level1_code", "");
+                            cmd19.Parameters.AddWithValue("@okpd_name", okpdName);
+                            cmd19.Parameters.AddWithValue("@quantity_value", quant);
+                            cmd19.Parameters.AddWithValue("@customer_quantity_value", quant);
+                            cmd19.Parameters.AddWithValue("@okei", okei);
+                            cmd19.Parameters.AddWithValue("@price", price);
+                            cmd19.ExecuteNonQuery();
+                        }
+                    }
+
+                    return;
+                }
+            }
+
+            var zak = nav.SelectSingleNode(
+                              "//a[contains(., 'Закупочные позиции')]")
+                          ?.Value?.ReplaceHtmlEntyty().Trim() ??
+                      "";
+            if (zak != "")
+            {
+                var s = DownloadString.DownLHttpPostWithCookiesB2b(_tn.Href + "?action=positions",
+                    ParserB2BWeb.CookieCollection,
+                    useProxy: AppBuilder.UserProxy);
+                var htmlDoc = new HtmlDocument();
+                htmlDoc.LoadHtml(s);
+                var navigator = (HtmlNodeNavigator)htmlDoc.CreateNavigator();
+                var lots = htmlDoc.DocumentNode.SelectNodes(
+                               "//div[@class = 'wideTable-wrap']//tr[position() > 1]") ??
+                           new HtmlNodeCollection(null);
+                var lots0 = navigator.SelectSingleNode(
+                                "//div[@class = 'wideTable-wrap']//tr[position() = 1]")?.Value ??
+                            "";
+                if (lots0.Contains("\u2116 лота"))
+                {
+                    foreach (var p in lots)
+                    {
+                        var name1 = p.SelectSingleNode(
+                                            "./td[3]")
+                                        ?.InnerText.Trim() ??
+                                    "";
+                        var name = $"{name1}".Trim();
+                        var quant = p.SelectSingleNode(
+                                            "./td[4]")
+                                        ?.InnerText.Trim() ??
+                                    "";
+                        var okei = p.SelectSingleNode(
+                                           "./td[5]")
+                                       ?.InnerText.Trim() ??
+                                   "";
+                        var price = p.SelectSingleNode(
+                                            "./td[6]")
+                                        ?.InnerText.Trim()?.ExtractPriceNew() ??
+                                    "";
+                        var sumP = p.SelectSingleNode(
+                                           "./td[7]")
+                                       ?.InnerText.Trim()?.ExtractPriceNew() ??
+                                   "";
+                        var insertLotitem =
+                            $"INSERT INTO {AppBuilder.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name, sum = @sum, okpd2_code = @okpd2_code, okpd2_group_code = @okpd2_group_code, okpd2_group_level1_code = @okpd2_group_level1_code, okpd_name = @okpd_name, quantity_value = @quantity_value, customer_quantity_value = @customer_quantity_value, okei = @okei, price = @price";
+                        var cmd19 = new MySqlCommand(insertLotitem, connect);
+                        cmd19.Prepare();
+                        cmd19.Parameters.AddWithValue("@id_lot", idLot);
+                        cmd19.Parameters.AddWithValue("@id_customer", customerId);
+                        cmd19.Parameters.AddWithValue("@name", name);
+                        cmd19.Parameters.AddWithValue("@sum", sumP);
+                        cmd19.Parameters.AddWithValue("@okpd2_code", okpd2);
+                        cmd19.Parameters.AddWithValue("@okpd2_group_code", "");
+                        cmd19.Parameters.AddWithValue("@okpd2_group_level1_code", "");
+                        cmd19.Parameters.AddWithValue("@okpd_name", okpdName);
+                        cmd19.Parameters.AddWithValue("@quantity_value", quant);
+                        cmd19.Parameters.AddWithValue("@customer_quantity_value", quant);
+                        cmd19.Parameters.AddWithValue("@okei", okei);
+                        cmd19.Parameters.AddWithValue("@price", price);
+                        cmd19.ExecuteNonQuery();
+                    }
+                }
+                else if (lots0.Contains("Срок поставки из заявки"))
+                {
+                    foreach (var p in lots)
+                    {
+                        var name = p.SelectSingleNode(
+                                           "./td[2]")
+                                       ?.InnerText.Trim() ??
+                                   "";
+                        var name1 = p.SelectSingleNode(
+                                            "./td[3]")
+                                        ?.InnerText.Trim() ??
+                                    "";
+                        var name2 = p.SelectSingleNode(
+                                            "./td[4]")
+                                        ?.InnerText.Trim() ??
+                                    "";
+                        var name3 = p.SelectSingleNode(
+                                            "./td[5]")
+                                        ?.InnerText.Trim() ??
+                                    "";
+                        name = $"{name} {name1} {name2} {name3}".Trim();
+                        var quant = p.SelectSingleNode(
+                                            "./td[6]")
+                                        ?.InnerText.Trim() ??
+                                    "";
+                        var okei = p.SelectSingleNode(
+                                           "./td[7]")
+                                       ?.InnerText.Trim() ??
+                                   "";
+                        var price = "";
+                        var sumP = "";
+                        var insertLotitem =
+                            $"INSERT INTO {AppBuilder.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name, sum = @sum, okpd2_code = @okpd2_code, okpd2_group_code = @okpd2_group_code, okpd2_group_level1_code = @okpd2_group_level1_code, okpd_name = @okpd_name, quantity_value = @quantity_value, customer_quantity_value = @customer_quantity_value, okei = @okei, price = @price";
+                        var cmd19 = new MySqlCommand(insertLotitem, connect);
+                        cmd19.Prepare();
+                        cmd19.Parameters.AddWithValue("@id_lot", idLot);
+                        cmd19.Parameters.AddWithValue("@id_customer", customerId);
+                        cmd19.Parameters.AddWithValue("@name", name);
+                        cmd19.Parameters.AddWithValue("@sum", sumP);
+                        cmd19.Parameters.AddWithValue("@okpd2_code", okpd2);
+                        cmd19.Parameters.AddWithValue("@okpd2_group_code", "");
+                        cmd19.Parameters.AddWithValue("@okpd2_group_level1_code", "");
+                        cmd19.Parameters.AddWithValue("@okpd_name", okpdName);
+                        cmd19.Parameters.AddWithValue("@quantity_value", quant);
+                        cmd19.Parameters.AddWithValue("@customer_quantity_value", quant);
+                        cmd19.Parameters.AddWithValue("@okei", okei);
+                        cmd19.Parameters.AddWithValue("@price", price);
+                        cmd19.ExecuteNonQuery();
+                    }
+                }
+                else if (lots0.Contains("Дата начала поставки"))
+                {
                     foreach (var p in lots)
                     {
                         var name = p.SelectSingleNode(
@@ -286,65 +600,54 @@ namespace ParserWebCore.Tender
                         cmd19.Parameters.AddWithValue("@price", price);
                         cmd19.ExecuteNonQuery();
                     }
-
-                    return;
                 }
-            }
-
-            var zak = nav.SelectSingleNode(
-                              "//a[contains(., 'Закупочные позиции')]")
-                          ?.Value?.ReplaceHtmlEntyty().Trim() ??
-                      "";
-            if (zak != "")
-            {
-                var s = DownloadString.DownLHttpPostWithCookiesB2b(_tn.Href + "?action=positions",
-                    ParserB2BWeb.CookieCollection,
-                    useProxy: AppBuilder.UserProxy);
-                var htmlDoc = new HtmlDocument();
-                htmlDoc.LoadHtml(s);
-                var navigator = (HtmlNodeNavigator)htmlDoc.CreateNavigator();
-                var lots = htmlDoc.DocumentNode.SelectNodes(
-                               "//div[@class = 'wideTable-wrap']//tr[position() > 1]") ??
-                           new HtmlNodeCollection(null);
-                foreach (var p in lots)
+                else
                 {
-                    var name = p.SelectSingleNode(
-                                       "./td[2]")
-                                   ?.InnerText.Trim() ??
-                               "";
-                    var quant = p.SelectSingleNode(
-                                        "./td[3]")
-                                    ?.InnerText.Trim() ??
-                                "";
-                    var okei = p.SelectSingleNode(
-                                       "./td[4]")
-                                   ?.InnerText.Trim() ??
-                               "";
-                    var price = p.SelectSingleNode(
-                                        "./td[5]")
-                                    ?.InnerText.Trim().ExtractPriceNew() ??
-                                "";
-                    var sumP = p.SelectSingleNode(
-                                       "./td[6]")
-                                   ?.InnerText.Trim().ExtractPriceNew() ??
-                               "";
-                    var insertLotitem =
-                        $"INSERT INTO {AppBuilder.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name, sum = @sum, okpd2_code = @okpd2_code, okpd2_group_code = @okpd2_group_code, okpd2_group_level1_code = @okpd2_group_level1_code, okpd_name = @okpd_name, quantity_value = @quantity_value, customer_quantity_value = @customer_quantity_value, okei = @okei, price = @price";
-                    var cmd19 = new MySqlCommand(insertLotitem, connect);
-                    cmd19.Prepare();
-                    cmd19.Parameters.AddWithValue("@id_lot", idLot);
-                    cmd19.Parameters.AddWithValue("@id_customer", customerId);
-                    cmd19.Parameters.AddWithValue("@name", name);
-                    cmd19.Parameters.AddWithValue("@sum", sumP);
-                    cmd19.Parameters.AddWithValue("@okpd2_code", okpd2);
-                    cmd19.Parameters.AddWithValue("@okpd2_group_code", "");
-                    cmd19.Parameters.AddWithValue("@okpd2_group_level1_code", "");
-                    cmd19.Parameters.AddWithValue("@okpd_name", okpdName);
-                    cmd19.Parameters.AddWithValue("@quantity_value", quant);
-                    cmd19.Parameters.AddWithValue("@customer_quantity_value", quant);
-                    cmd19.Parameters.AddWithValue("@okei", okei);
-                    cmd19.Parameters.AddWithValue("@price", price);
-                    cmd19.ExecuteNonQuery();
+                    foreach (var p in lots)
+                    {
+                        var name = p.SelectSingleNode(
+                                           "./td[2]")
+                                       ?.InnerText.Trim() ??
+                                   "";
+                        var name1 = p.SelectSingleNode(
+                                            "./td[3]")
+                                        ?.InnerText.Trim() ??
+                                    "";
+                        name = $"{name} {name1}".Trim();
+                        var quant = p.SelectSingleNode(
+                                            "./td[4]")
+                                        ?.InnerText.Trim() ??
+                                    "";
+                        var okei = p.SelectSingleNode(
+                                           "./td[5]")
+                                       ?.InnerText.Trim() ??
+                                   "";
+                        var price = p.SelectSingleNode(
+                                            "./td[6]")
+                                        ?.InnerText.Trim()?.ExtractPriceNew() ??
+                                    "";
+                        var sumP = p.SelectSingleNode(
+                                           "./td[7]")
+                                       ?.InnerText.Trim()?.ExtractPriceNew() ??
+                                   "";
+                        var insertLotitem =
+                            $"INSERT INTO {AppBuilder.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name, sum = @sum, okpd2_code = @okpd2_code, okpd2_group_code = @okpd2_group_code, okpd2_group_level1_code = @okpd2_group_level1_code, okpd_name = @okpd_name, quantity_value = @quantity_value, customer_quantity_value = @customer_quantity_value, okei = @okei, price = @price";
+                        var cmd19 = new MySqlCommand(insertLotitem, connect);
+                        cmd19.Prepare();
+                        cmd19.Parameters.AddWithValue("@id_lot", idLot);
+                        cmd19.Parameters.AddWithValue("@id_customer", customerId);
+                        cmd19.Parameters.AddWithValue("@name", name);
+                        cmd19.Parameters.AddWithValue("@sum", sumP);
+                        cmd19.Parameters.AddWithValue("@okpd2_code", okpd2);
+                        cmd19.Parameters.AddWithValue("@okpd2_group_code", "");
+                        cmd19.Parameters.AddWithValue("@okpd2_group_level1_code", "");
+                        cmd19.Parameters.AddWithValue("@okpd_name", okpdName);
+                        cmd19.Parameters.AddWithValue("@quantity_value", quant);
+                        cmd19.Parameters.AddWithValue("@customer_quantity_value", quant);
+                        cmd19.Parameters.AddWithValue("@okei", okei);
+                        cmd19.Parameters.AddWithValue("@price", price);
+                        cmd19.ExecuteNonQuery();
+                    }
                 }
             }
             else

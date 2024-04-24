@@ -33,9 +33,9 @@ namespace ParserWebCore.Parser
         private void GetPage(int i)
         {
             var d = DateTime.Now.AddMonths(i).ToString("yyyy-MM");
-            var href = $"http://n-azot.ru/tender.php?month={d}-01";
+            var href = $"https://n-azot.ru/tender.php?month={d}-01";
             var data =
-                $"\"http://n-azot.ru/tender.php?month={d}-01\" -H \"User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36\" --data-raw \"day=0&lang=RU&tec_date={d}-01\" --compressed";
+                $"\"https://n-azot.ru/tender.php?month={d}-01\" -H \"User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36\" --data-raw \"day=0&lang=RU&tec_date={d}-01\" --compressed";
             var s = CurlDownloadSportMaster.DownL(data);
             if (string.IsNullOrEmpty(s))
             {

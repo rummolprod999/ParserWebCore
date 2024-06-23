@@ -50,7 +50,7 @@ namespace ParserWebCore.Tender
                 Counter(1, false);
             }
 
-            Thread.Sleep(2000);
+            Thread.Sleep(3000);
         }
     }
 }

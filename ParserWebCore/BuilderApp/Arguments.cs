@@ -108,5 +108,6 @@
         Stpo,
         Fbrts,
         Zakupay,
+        J44,
     }
 }

@@ -300,6 +300,9 @@ namespace ParserWebCore.ParserExecutor
                 case Arguments.J44:
                     _parser = new ParserJ44();
                     break;
+                case Arguments.J223:
+                    _parser = new ParserJ223();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(arg), arg, null);
             }

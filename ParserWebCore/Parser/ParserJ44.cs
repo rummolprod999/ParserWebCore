@@ -17,7 +17,7 @@ namespace ParserWebCore.Parser
 
         private readonly List<string> _listUrls = new List<string>
         {
-            "https://zakupki.gov.ru/epz/order/extendedsearch/results.html?morphology=on&search-filter=+%D0%94%D0%B0%D1%82%D0%B5+%D0%BE%D0%B1%D0%BD%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F&sortDirection=true&recordsPerPage=_50&showLotsInfoHidden=false&sortBy=UPDATE_DATE&fz44=on&currencyIdGeneral=-1&pageNumber=",
+            "https://zakupki.gov.ru/epz/order/extendedsearch/results.html?morphology=on&search-filter=+%D0%94%D0%B0%D1%82%D0%B5+%D0%BE%D0%B1%D0%BD%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F&sortDirection=true&recordsPerPage=_50&showLotsInfoHidden=false&sortBy=UPDATE_DATE&fz44=on&currencyIdGeneral=-1&publishDateFrom=01.06.2024&gws=%D0%92%D1%8B%D0%B1%D0%B5%D1%80%D0%B8%D1%82%D0%B5+%D1%82%D0%B8%D0%BF+%D0%B7%D0%B0%D0%BA%D1%83%D0%BF%D0%BA%D0%B8&OrderPlacementSmallBusinessSubject=on&OrderPlacementRnpData=on&OrderPlacementExecutionRequirement=on&orderPlacement94_0=0&orderPlacement94_1=0&orderPlacement94_2=0&pageNumber=",
         };
 
         public void Parsing()

@@ -1,26 +1,30 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Web;
+using System.Threading;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json.Linq;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.UI;
 using ParserWebCore.BuilderApp;
 using ParserWebCore.Connections;
 using ParserWebCore.Extensions;
-using ParserWebCore.Logger;
-using ParserWebCore.NetworkLibrary;
 using ParserWebCore.TenderType;
 
 namespace ParserWebCore.Tender
 {
     public class TenderSberB2B : TenderAbstract, ITender
     {
+        private readonly ChromeDriver _driver;
         private readonly TypeSber _tn;
 
-        public TenderSberB2B(string etpName, string etpUrl, int typeFz, TypeSber tn) : base(etpName, etpUrl,
+        public TenderSberB2B(string etpName, string etpUrl, int typeFz, TypeSber tn, ChromeDriver driver) : base(
+            etpName, etpUrl,
             typeFz)
         {
             _tn = tn;
+            _driver = driver;
         }
 
         public void ParsingTender()
@@ -45,18 +49,14 @@ namespace ParserWebCore.Tender
                     return;
                 }
 
-                var s = DownloadString.DownL(_tn.Href);
-                if (String.IsNullOrEmpty(s))
-                {
-                    Log.Logger(
-                        $"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
-                        _tn.Href);
-                }
-
-                var ss = s.GetDataFromRegex(":request=\"(.+)}\"");
-                ss += "}";
-                ss = HttpUtility.HtmlDecode(ss);
-                var tender = JObject.Parse(ss);
+                var wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(60));
+                _driver.Navigate().GoToUrl(_tn.Href);
+                _driver.SwitchTo().DefaultContent();
+                Thread.Sleep(3000);
+                _driver.SwitchTo().DefaultContent();
+                wait.Until(dr =>
+                    dr.FindElement(By.XPath(
+                        "//span[@class = 'title']")));
                 var purNum = _tn.PurNum;
                 var noticeVersion = _tn.Status;
                 var dateUpd = DateTime.Now;
@@ -81,11 +81,14 @@ namespace ParserWebCore.Tender
                     }
                     else
                     {
-                        var phone = ((string)tender.SelectToken("customer.phone") ?? "").Trim();
+                        var phone = "";
                         var email = "";
-                        var contactPerson = ((string)tender.SelectToken("customer.director_fullname") ?? "").Trim();
-                        var inn = ((string)tender.SelectToken("customer.inn") ?? "").Trim();
-                        var kpp = ((string)tender.SelectToken("customer.kpp") ?? "").Trim();
+                        var contactPerson = "";
+                        var inn = (_driver.FindElementWithoutException(By.XPath(
+                                           "//span[@class = 'dashboard-info__text_margin_0']"))
+                                       ?.Text ??
+                                   "").Trim().GetDataFromRegex("(\\d+)");
+                        var kpp = "";
                         var addOrganizer =
                             $"INSERT INTO {AppBuilder.Prefix}organizer SET full_name = @full_name, contact_phone = @contact_phone, contact_person = @contact_person, contact_email = @contact_email, inn = @inn, kpp = @kpp";
                         var cmd4 = new MySqlCommand(addOrganizer, connect);
@@ -129,29 +132,12 @@ namespace ParserWebCore.Tender
                 var resInsertTender = cmd9.ExecuteNonQuery();
                 var idTender = (int)cmd9.LastInsertedId;
                 Counter(resInsertTender, updated);
-                var attachments = GetElements(tender, "current_condition.attachments_files");
-                attachments.AddRange(GetElements(tender, "current_condition.interaction_files"));
-                foreach (var att in attachments)
-                {
-                    var name = ((string)att.SelectToken("name") ?? "").Trim();
-                    var fName = ((string)att.SelectToken("file.original_name") ?? "").Trim();
-                    var webPath = ((string)att.SelectToken("web_path") ?? "").Trim();
-                    var urlAtt = $"https://sberb2b.ru{webPath}{name}";
-                    if (!string.IsNullOrEmpty(fName))
-                    {
-                        var insertAttach =
-                            $"INSERT INTO {AppBuilder.Prefix}attachment SET id_tender = @id_tender, file_name = @file_name, url = @url";
-                        var cmd10 = new MySqlCommand(insertAttach, connect);
-                        cmd10.Prepare();
-                        cmd10.Parameters.AddWithValue("@id_tender", idTender);
-                        cmd10.Parameters.AddWithValue("@file_name", fName);
-                        cmd10.Parameters.AddWithValue("@url", urlAtt);
-                        cmd10.ExecuteNonQuery();
-                    }
-                }
 
                 var lotNum = 1;
-                var nmck = (decimal?)tender.SelectToken("last_customer_published_condition.total_price") ?? 0.0m;
+                var nmck = (_driver.FindElementWithoutException(By.XPath(
+                                    "//span[. = 'Стоимость запроса:']/following-sibling::span"))
+                                ?.Text ??
+                            "").Trim().ExtractPriceNew();
                 var insertLot =
                     $"INSERT INTO {AppBuilder.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency";
                 var cmd18 = new MySqlCommand(insertLot, connect);
@@ -184,7 +170,10 @@ namespace ParserWebCore.Tender
                         var cmd14 = new MySqlCommand(insertCustomer, connect);
                         cmd14.Prepare();
                         var customerRegNumber = Guid.NewGuid().ToString();
-                        var inn = ((string)tender.SelectToken("customer.inn") ?? "").Trim();
+                        var inn = (_driver.FindElementWithoutException(By.XPath(
+                                           "//span[@class = 'dashboard-info__text_margin_0']"))
+                                       ?.Text ??
+                                   "").Trim().GetDataFromRegex("(\\d+)");
                         cmd14.Parameters.AddWithValue("@reg_num", customerRegNumber);
                         cmd14.Parameters.AddWithValue("@full_name", _tn.CusName);
                         cmd14.Parameters.AddWithValue("@inn", inn);
@@ -207,11 +196,15 @@ namespace ParserWebCore.Tender
                 cmd19.Parameters.AddWithValue("@okpd_name", "");
                 cmd19.ExecuteNonQuery();
                 var delivPl =
-                    ((string)tender.SelectToken(
-                        "last_customer_published_condition.condition_deliveries[0].builded_string") ?? "").Trim();
+                    (_driver.FindElementWithoutException(By.XPath(
+                             "//span[contains(., 'Доставка по адресу')]/following-sibling::span"))
+                         ?.Text ??
+                     "").Trim();
                 var delivTerm =
-                    ((string)tender.SelectToken(
-                        "last_customer_published_condition.condition_payment.string_representation") ?? "").Trim();
+                    (_driver.FindElementWithoutException(By.XPath(
+                             "//span[contains(., 'Оплата:')]/following-sibling::span"))
+                         ?.Text ??
+                     "").Trim();
                 if (delivTerm != "" || delivPl != "")
                 {
                     var insertCustomerRequirement =
@@ -221,7 +214,7 @@ namespace ParserWebCore.Tender
                     cmd16.Parameters.AddWithValue("@id_lot", idLot);
                     cmd16.Parameters.AddWithValue("@id_customer", customerId);
                     cmd16.Parameters.AddWithValue("@delivery_place", delivPl);
-                    cmd16.Parameters.AddWithValue("@delivery_term", delivTerm);
+                    cmd16.Parameters.AddWithValue("@delivery_term", "Оплата: " + delivTerm);
                     cmd16.Parameters.AddWithValue("@max_price", nmck);
                     cmd16.ExecuteNonQuery();
                 }

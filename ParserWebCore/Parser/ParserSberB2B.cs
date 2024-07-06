@@ -93,7 +93,7 @@ namespace ParserWebCore.Parser
             var href = $"https://sberb2b.ru/request/supplier/preview/{id}";
             var cusName = ((string)t.SelectToken("customer.short_name") ?? "").Trim();
             var purName = ((string)t.SelectToken("name") ?? "").Trim();
-            var purNum = ((string)t.SelectToken("numeric_hash") ?? "").Trim();
+            var purNum = ((string)t.SelectToken("number") ?? "").Trim();
             var pubDate = (DateTime?)t.SelectToken("published_at") ?? DateTime.Now;
             var endDate = (DateTime?)t.SelectToken("send_kp_until_at") ?? DateTime.Now;
             var status = ((string)t.SelectToken("public_request_status") ?? "").Trim();

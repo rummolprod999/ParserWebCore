@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using Newtonsoft.Json.Linq;
 using OpenQA.Selenium.Chrome;
 using ParserWebCore.Logger;
@@ -54,7 +55,7 @@ namespace ParserWebCore.Parser
                 }
                 catch (Exception e)
                 {
-                    Log.Logger($"Error in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}", e);
+                    Log.Logger($"Error in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", e);
                 }
             }
         }
@@ -62,11 +63,11 @@ namespace ParserWebCore.Parser
         private void GetPage(int num)
         {
             var data =
-                $"-k \"https://sberb2b.ru/request/get-public-requests?r_published_at=desc\" \\\n  -H \"content-type: application/json\" \\\n  --data-raw \"{{\\\"orderBy\\\":{{\\\"r_published_at\\\":\\\"desc\\\"}},\\\"selectBy\\\":{{\\\"like_concat\\\":{{\\\"r_name\\\":[\\\"\\\",[{{\\\"name\\\":\\\"r.number\\\",\\\"is_varchar\\\":false}},{{\\\"name\\\":\\\"r.name\\\",\\\"is_varchar\\\":true}},{{\\\"name\\\":\\\"customer_company.shortName\\\",\\\"is_varchar\\\":true}},{{\\\"name\\\":\\\"customer_company.inn\\\",\\\"is_varchar\\\":true}}]]}}}},\\\"pagination\\\":{{\\\"page\\\":{num},\\\"size\\\":10}},\\\"extra\\\":{{\\\"subjectDomain\\\":\\\"\\\"}}}}\"  --compressed";
+                $"-k \"https://sberb2b.ru/request/get-public-requests?r_published_at=desc\" \\\n -H \"User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36\" \\\n -H \"content-type: application/json\" \\\n  --data-raw \"{{\\\"orderBy\\\":{{\\\"r_published_at\\\":\\\"desc\\\"}},\\\"selectBy\\\":{{\\\"like_concat\\\":{{\\\"r_name\\\":[\\\"\\\",[{{\\\"name\\\":\\\"r.number\\\",\\\"is_varchar\\\":false}},{{\\\"name\\\":\\\"r.name\\\",\\\"is_varchar\\\":true}},{{\\\"name\\\":\\\"customer_company.shortName\\\",\\\"is_varchar\\\":true}},{{\\\"name\\\":\\\"customer_company.inn\\\",\\\"is_varchar\\\":true}}]]}}}},\\\"pagination\\\":{{\\\"page\\\":{num},\\\"size\\\":10}},\\\"extra\\\":{{\\\"subjectDomain\\\":\\\"\\\"}}}}\"  --compressed";
             var s = CurlDownloadSportMaster.DownL(data);
             if (string.IsNullOrEmpty(s))
             {
-                Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                Log.Logger($"Empty string in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     _url);
                 return;
             }
@@ -81,7 +82,7 @@ namespace ParserWebCore.Parser
                 }
                 catch (Exception e)
                 {
-                    Log.Logger($"Error in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                    Log.Logger($"Error in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                         e);
                 }
             }

@@ -56,7 +56,7 @@ namespace ParserWebCore.Tender
                 _driver.SwitchTo().DefaultContent();
                 wait.Until(dr =>
                     dr.FindElement(By.XPath(
-                        "//span[@class = 'title']")));
+                        "//h1[@class = 'title']")));
                 var purNum = _tn.PurNum;
                 var noticeVersion = _tn.Status;
                 var dateUpd = DateTime.Now;
@@ -85,7 +85,7 @@ namespace ParserWebCore.Tender
                         var email = "";
                         var contactPerson = "";
                         var inn = (_driver.FindElementWithoutException(By.XPath(
-                                           "//span[@class = 'dashboard-info__text_margin_0']"))
+                                           "//span[@class = 'dashboard-info__text--bold']"))
                                        ?.Text ??
                                    "").Trim().GetDataFromRegex("(\\d+)");
                         var kpp = "";
@@ -171,7 +171,7 @@ namespace ParserWebCore.Tender
                         cmd14.Prepare();
                         var customerRegNumber = Guid.NewGuid().ToString();
                         var inn = (_driver.FindElementWithoutException(By.XPath(
-                                           "//span[@class = 'dashboard-info__text_margin_0']"))
+                                           "//span[@class = 'dashboard-info__text--bold']"))
                                        ?.Text ??
                                    "").Trim().GetDataFromRegex("(\\d+)");
                         cmd14.Parameters.AddWithValue("@reg_num", customerRegNumber);

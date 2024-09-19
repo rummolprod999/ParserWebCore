@@ -78,6 +78,9 @@ namespace ParserWebCore.BuilderApp
 
         [Required] public static string AgroPass { get; set; }
         [Required] public static string AgroUser { get; set; }
+
+        [Required] public static string AkashPass { get; set; }
+        [Required] public static string AkashUser { get; set; }
         [Required] public static string FamYugPass { get; set; }
         [Required] public static string FamYugUser { get; set; }
 
@@ -467,6 +470,8 @@ namespace ParserWebCore.BuilderApp
                 TverZmoUser = (string)o["usertverzmo"];
                 AgroPass = (string)o["passagro"];
                 AgroUser = (string)o["useragro"];
+                AkashPass = (string)o["passakash"];
+                AkashUser = (string)o["userakash"];
                 FamYugPass = (string)o["passfamyug"];
                 FamYugUser = (string)o["userfamyug"];
                 FbRtsPass = (string)o["passfbrts"];

@@ -1,8 +1,13 @@
 using System;
-using HtmlAgilityPack;
+using System.Collections.Generic;
+using System.Threading;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.UI;
+using ParserWebCore.BuilderApp;
+using ParserWebCore.Creators;
 using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
-using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
 
@@ -10,21 +15,106 @@ namespace ParserWebCore.Parser
 {
     public class ParserAkashevo : ParserAbstract, IParser
     {
-        private const int Count = 10;
+        private const int Count = 5;
+        private const string Url = "https://atp.akashevo.ru/lots";
+        private readonly ChromeDriver _driver = CreateChomeDriverNoHeadless.GetChromeDriver();
+        private TimeSpan _timeoutB = TimeSpan.FromSeconds(120);
+        private List<TypeAgrokomplex> _urls = new List<TypeAgrokomplex>();
 
         public void Parsing()
         {
-            Parse(ParsingAkashevo);
+            Parse(ParsingAkash);
         }
 
-        private void ParsingAkashevo()
+        private void ParsingAkash()
         {
-            for (var i = 1; i <= Count; i++)
+            try
             {
-                var urlpage = $"http://tender.akashevo.ru/purchase/?PAGEN_1={i}";
+                ParserSelenium();
+            }
+            catch (Exception e)
+            {
+                Log.Logger(e);
+            }
+            finally
+            {
+                _driver.Manage().Cookies.DeleteAllCookies();
+                _driver.Quit();
+            }
+        }
+
+        private void ParserSelenium()
+        {
+            Auth();
+            var wait = new WebDriverWait(_driver, _timeoutB);
+            _driver.Navigate().GoToUrl(Url);
+            Thread.Sleep(5000);
+            wait.Until(dr =>
+                dr.FindElement(By.XPath(
+                    "//lot")));
+            ParsingList();
+            for (var i = 0; i < Count; i++)
+            {
+                _driver.SwitchTo().DefaultContent();
                 try
                 {
-                    ParsingPage(urlpage);
+                    wait.Until(dr =>
+                        dr.FindElement(By.XPath("//button[contains(@class, 'mat-paginator-navigation-next')]")));
+                    _driver.SwitchTo().DefaultContent();
+                }
+                catch (Exception)
+                {
+                    Log.Logger("This is last page, return");
+                    return;
+                }
+
+                try
+                {
+                    _driver.ExecutorJs(
+                        "var elem = document.querySelectorAll('button.mat-paginator-navigation-next'); elem[0].click()");
+                    Thread.Sleep(5000);
+                }
+                catch (Exception)
+                {
+                    Log.Logger("This is last page, return");
+                }
+
+                wait.Until(dr =>
+                    dr.FindElement(By.XPath(
+                        "//lot")));
+                _driver.SwitchTo().DefaultContent();
+                ParsingList();
+            }
+
+            _urls.ForEach(x =>
+            {
+                try
+                {
+                    var tn = new TenderAgrokomplexNew("Птицефабрика Акашевская", "http://tender.akashevo.ru/purchase/",
+                        98,
+                        x
+                        , _driver);
+                    ParserTender(tn);
+                }
+                catch (Exception e)
+                {
+                    Log.Logger(e);
+                }
+            });
+        }
+
+        private void ParsingList()
+        {
+            _driver.SwitchTo().DefaultContent();
+            var tenders =
+                _driver.FindElements(
+                    By.XPath(
+                        "//lot"));
+            foreach (var t in tenders)
+            {
+                try
+                {
+                    ParsingPage(t);
                 }
                 catch (Exception e)
                 {
@@ -33,63 +123,31 @@ namespace ParserWebCore.Parser
             }
         }
 
-        private void ParsingPage(string url)
+        private void ParsingPage(IWebElement t)
         {
-            var s = DownloadString.DownL(url);
-            if (string.IsNullOrEmpty(s))
-            {
-                Log.Logger("Empty string in ParserPage()", url);
-                return;
-            }
-
-            var htmlDoc = new HtmlDocument();
-            htmlDoc.LoadHtml(s);
-            var tens =
-                htmlDoc.DocumentNode.SelectNodes("//div[@class = 't_lots']/table/tbody/tr") ??
-                new HtmlNodeCollection(null);
-            foreach (var a in tens)
-            {
-                try
-                {
-                    ParserTender(a);
-                }
-                catch (Exception e)
-                {
-                    Log.Logger(e);
-                }
-            }
-        }
-
-        private void ParserTender(HtmlNode n)
-        {
-            var href = (n.SelectSingleNode(".//a[contains(@class, 't_lot_title')]")?.Attributes["href"]?.Value ?? "")
-                .Trim();
-            if (string.IsNullOrEmpty(href))
-            {
-                Log.Logger("Empty href");
-                return;
-            }
-
-            href = $"http://tender.akashevo.ru/purchase/{href}";
-            var purNum = href.GetDataFromRegex(@"LOT_ID=(\d+)");
+            var purNum = t.FindElementWithoutException(By.XPath(".//div[@class = 'lot__number']"))?.Text
+                             .Replace("№", "").Trim() ??
+                         throw new Exception("cannot find purNum");
             if (string.IsNullOrEmpty(purNum))
             {
-                Log.Logger("Empty purNum", href);
+                Log.Logger("Empty purNum");
                 return;
             }
 
-            var purName = (n.SelectSingleNode(".//a[contains(@class, 't_lot_title')]")
-                ?.InnerText ?? "").Trim();
-            var orgName = (n.SelectSingleNode(".//span[b = 'Компания:']")
-                ?.InnerText ?? "").Replace("Компания:", "").Trim();
-            var contactPerson = (n.SelectSingleNode(".//span[b = 'Ответственный:']")
-                ?.InnerText ?? "").Replace("Ответственный:", "").Trim();
-            var phone = (n.SelectSingleNode(".//span[b = 'Телефон:']")
-                ?.InnerText ?? "").Replace("Телефон:", "").Trim();
+            var href = "https://atp.akashevo.ru/lots/detail/" + purNum;
+            var purName = t.FindElementWithoutException(By.XPath(".//div[@class = 'lot__title']"))?.Text.Trim() ??
+                          throw new Exception("cannot find purName");
+            var orgName = "АО «Агрокомплекс»";
+            var contactPerson =
+                t.FindElementWithoutException(By.XPath(".//div[. = 'Ответственный']/following-sibling::div"))?.Text
+                    .Trim() ??
+                "";
+            var phone = "";
             var datePubT =
-                (n.SelectSingleNode(".//span[contains(b, 'Дата начала:')]")
-                    ?.InnerText ?? "").Replace("Дата начала:", "").Trim();
-            var datePub = datePubT.ParseDateUn("dd.MM.yyyy HH:mm:ss");
+                t.FindElementWithoutException(By.XPath(".//div[. = 'Дата публикации']/following-sibling::div"))?.Text
+                    .Trim() ??
+                "";
+            var datePub = datePubT.ParseDateUn("dd.MM.yyyy HH:mm");
             if (datePub == DateTime.MinValue)
             {
                 Log.Logger("Empty datePub", href);
@@ -97,28 +155,40 @@ namespace ParserWebCore.Parser
             }
 
             var dateEndT =
-                (n.SelectSingleNode(".//span[contains(b, 'Дата окончания:')]")
-                    ?.InnerText ?? "").Replace("Дата окончания:", "").Trim();
-            var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm:ss");
+                t.FindElementWithoutException(By.XPath(".//div[. = 'Крайний срок приема']/following-sibling::div"))
+                    ?.Text.Trim() ??
+                "";
+            var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm");
             if (dateEnd == DateTime.MinValue)
             {
                 Log.Logger("Empty dateEnd", href);
                 return;
             }
 
-            var tn = new TenderAgrokomplex("Птицефабрика Акашевская", "http://tender.akashevo.ru/purchase/", 98,
-                new TypeAgrokomplex
-                {
-                    OrgName = orgName,
-                    DateEnd = dateEnd,
-                    DatePub = datePub,
-                    Href = href,
-                    PurNum = purNum,
-                    PurName = purName,
-                    ContactPerson = contactPerson,
-                    Phone = phone
-                });
-            ParserTender(tn);
+            var tp = new TypeAgrokomplex
+            {
+                OrgName = orgName,
+                DateEnd = dateEnd,
+                DatePub = datePub,
+                Href = href,
+                PurNum = purNum,
+                PurName = purName,
+                ContactPerson = contactPerson,
+                Phone = phone
+            };
+            _urls.Add(tp);
+        }
+
+        private void Auth()
+        {
+            var wait = new WebDriverWait(_driver, _timeoutB);
+            _driver.Navigate().GoToUrl("https://atp.akashevo.ru/login/authorization");
+            Thread.Sleep(5000);
+            _driver.SwitchTo().DefaultContent();
+            _driver.FindElement(By.XPath("//input[@type = 'email']")).SendKeys(AppBuilder.AkashUser);
+            _driver.FindElement(By.XPath("//input[@type = 'password']")).SendKeys(AppBuilder.AkashPass);
+            _driver.FindElement(By.XPath("//button[@type = 'submit']")).Click();
+            Thread.Sleep(5000);
         }
     }
 }

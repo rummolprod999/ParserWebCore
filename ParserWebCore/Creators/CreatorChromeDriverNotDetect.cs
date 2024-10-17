@@ -19,6 +19,7 @@ namespace ParserWebCore.Creators
                 //options.AddArguments("--headless");
                 options.AddArguments("--disable-gpu");
                 options.AddArguments("--no-sandbox");
+                options.AddArguments("--disable-dev-shm-usage");
                 options.AddArguments("--ignore-certificate-errors");
                 options.AcceptInsecureCertificates = true;
                 _driver = UndetectedChromeDriver.Create(

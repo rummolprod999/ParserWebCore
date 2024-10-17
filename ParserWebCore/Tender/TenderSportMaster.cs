@@ -25,13 +25,13 @@ namespace ParserWebCore.Tender
             {
                 connect.Open();
                 var selectTend =
-                    $"SELECT id_tender FROM {AppBuilder.Prefix}tender WHERE purchase_number = @purchase_number AND end_date = @end_date AND type_fz = @type_fz AND doc_publish_date = @doc_publish_date AND notice_version = @notice_version";
+                    $"SELECT id_tender FROM {AppBuilder.Prefix}tender WHERE purchase_number = @purchase_number AND type_fz = @type_fz AND notice_version = @notice_version";
                 var cmd = new MySqlCommand(selectTend, connect);
                 cmd.Prepare();
                 cmd.Parameters.AddWithValue("@purchase_number", _tn.PurNum);
-                cmd.Parameters.AddWithValue("@end_date", _tn.DateEnd);
+                //cmd.Parameters.AddWithValue("@end_date", _tn.DateEnd);
                 cmd.Parameters.AddWithValue("@type_fz", TypeFz);
-                cmd.Parameters.AddWithValue("@doc_publish_date", _tn.DatePub);
+                //cmd.Parameters.AddWithValue("@doc_publish_date", _tn.DatePub);
                 cmd.Parameters.AddWithValue("@notice_version", _tn.Status);
                 var dt = new DataTable();
                 var adapter = new MySqlDataAdapter { SelectCommand = cmd };

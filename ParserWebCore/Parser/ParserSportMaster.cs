@@ -164,12 +164,12 @@ namespace ParserWebCore.Parser
             var datePubT =
                 _driver.FindElementWithoutException(By.XPath("//td[. = 'Дата начала:']/following-sibling::td"))?.Text
                     .Trim() ??
-                throw new Exception($"cannot find datePubT {tender}");
+                DateTime.Now.ToString("dd.MM.yyyy HH:mm");
             var datePub = datePubT.ParseDateUn("dd.MM.yyyy HH:mm");
             var dateEndT =
                 _driver.FindElementWithoutException(By.XPath("//td[. = 'Дата окончания: ']/following-sibling::td"))
                     ?.Text.Trim() ??
-                throw new Exception($"cannot find dateEndT {tender}");
+                DateTime.Now.AddDays(2).ToString("dd.MM.yyyy HH:mm");
             var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm");
             if (dateEnd == DateTime.MinValue)
             {

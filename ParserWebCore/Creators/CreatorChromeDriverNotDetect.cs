@@ -17,6 +17,9 @@ namespace ParserWebCore.Creators
                 var options = new ChromeOptions();
                 options.AcceptInsecureCertificates = true;
                 //options.AddArguments("--headless");
+                options.AddArguments("--disable-gpu");
+                options.AddArguments("--no-sandbox");
+                options.AddArguments("--ignore-certificate-errors");
                 options.AcceptInsecureCertificates = true;
                 _driver = UndetectedChromeDriver.Create(
                     driverExecutablePath: driverExecutablePath, options: options);

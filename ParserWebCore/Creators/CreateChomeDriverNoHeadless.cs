@@ -21,7 +21,6 @@ namespace ParserWebCore.Creators
                 options.AddArguments("disable-blink-features=AutomationControlled");
                 options.AddArguments(
                     "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36");
-                options.AddAdditionalCapability("useAutomationExtension", false);
                 options.AddExcludedArgument("enable-automation");
                 //options.AddArguments("remote-debugging-port=9222");
                 _driver = new ChromeDriver("/usr/local/bin", options);

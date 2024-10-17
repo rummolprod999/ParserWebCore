@@ -146,8 +146,8 @@ namespace ParserWebCore.Parser
                             goto Finish;
                         }
 
-                        var t = _driver.FindElementByXPath(
-                            $"//div[@class = 'grid_content']/div[contains(@class, 'gridview_item')][{i}]/table/tbody");
+                        var t = _driver.FindElement(By.XPath(
+                            $"//div[@class = 'grid_content']/div[contains(@class, 'gridview_item')][{i}]/table/tbody"));
                         ParsingPage(t);
                         break;
                     }

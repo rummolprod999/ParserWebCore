@@ -19,6 +19,10 @@ namespace ParserWebCore.Parser
         public void Parsing()
         {
             Parse(ParsingTekMarket);
+            _tendersList.Clear();
+            Parse(ParsingRosneft);
+            _tendersList.Clear();
+            Parse(ParsingRosneftTkp);
         }
 
         private void ParsingTekMarket()
@@ -34,7 +38,7 @@ namespace ParserWebCore.Parser
                     $"{{\"params\":{{\"sectionsCodes[0]\":\"market\",\"dpfrom\":\"{dateM:dd.MM.yyyy}\",\"page\":{i},\"sort\":\"actual\"}}}}";
                 try
                 {
-                    ParsingPage(data, buildid);
+                    ParsingPage(data, buildid, 0);
                 }
                 catch (Exception e)
                 {
@@ -50,7 +54,7 @@ namespace ParserWebCore.Parser
                     $"{{\"params\":{{\"sectionsCodes[0]\":\"market\",\"page\":{i},\"sort\":\"datePublished_desc\"}}}}";
                 try
                 {
-                    ParsingPage(data, buildid);
+                    ParsingPage(data, buildid, 0);
                 }
                 catch (Exception e)
                 {
@@ -73,7 +77,111 @@ namespace ParserWebCore.Parser
             }
         }
 
-        private void ParsingPage(string data, string buildid)
+        private void ParsingRosneft()
+        {
+            var dateM = DateTime.Now.AddMinutes(-1 * DateMinus * 24 * 60);
+            var urlStart = $"https://www.tektorg.ru/rosneft/procedures?dpfrom={dateM:dd.MM.yyyy}";
+            var s = DownloadString.DownL(urlStart);
+            var buildid = s.GetDataFromRegex("\"buildId\":\"(\\w+)\"");
+
+            for (var i = 1; i <= 20; i++)
+            {
+                var data =
+                    $"{{\"params\":{{\"sectionsCodes[0]\":\"rosneft\",\"dpfrom\":\"{dateM:dd.MM.yyyy}\",\"page\":{i},\"sort\":\"actual\"}}}}";
+                try
+                {
+                    ParsingPage(data, buildid, 1);
+                }
+                catch (Exception e)
+                {
+                    Log.Logger(
+                        $"Exception in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                        e, url);
+                }
+            }
+
+            for (var i = 1; i <= 20; i++)
+            {
+                var data =
+                    $"{{\"params\":{{\"sectionsCodes[0]\":\"rosneft\",\"page\":{i},\"sort\":\"datePublished_desc\"}}}}";
+                try
+                {
+                    ParsingPage(data, buildid, 1);
+                }
+                catch (Exception e)
+                {
+                    Log.Logger(
+                        $"Exception in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                        e, url);
+                }
+            }
+
+            foreach (var tenderTekMarketNew in _tendersList)
+            {
+                try
+                {
+                    ParserTender(tenderTekMarketNew);
+                }
+                catch (Exception e)
+                {
+                    Log.Logger(e);
+                }
+            }
+        }
+        
+        private void ParsingRosneftTkp()
+        {
+            var dateM = DateTime.Now.AddMinutes(-1 * DateMinus * 24 * 60);
+            var urlStart = $"https://www.tektorg.ru/rosnefttkp/procedures?dpfrom={dateM:dd.MM.yyyy}";
+            var s = DownloadString.DownL(urlStart);
+            var buildid = s.GetDataFromRegex("\"buildId\":\"(\\w+)\"");
+
+            for (var i = 1; i <= 20; i++)
+            {
+                var data =
+                    $"{{\"params\":{{\"sectionsCodes[0]\":\"rosnefttkp\",\"dpfrom\":\"{dateM:dd.MM.yyyy}\",\"page\":{i},\"sort\":\"actual\"}}}}";
+                try
+                {
+                    ParsingPage(data, buildid, 2);
+                }
+                catch (Exception e)
+                {
+                    Log.Logger(
+                        $"Exception in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                        e, url);
+                }
+            }
+
+            for (var i = 1; i <= 20; i++)
+            {
+                var data =
+                    $"{{\"params\":{{\"sectionsCodes[0]\":\"rosnefttkp\",\"page\":{i},\"sort\":\"datePublished_desc\"}}}}";
+                try
+                {
+                    ParsingPage(data, buildid, 2);
+                }
+                catch (Exception e)
+                {
+                    Log.Logger(
+                        $"Exception in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                        e, url);
+                }
+            }
+
+            foreach (var tenderTekMarketNew in _tendersList)
+            {
+                try
+                {
+                    ParserTender(tenderTekMarketNew);
+                }
+                catch (Exception e)
+                {
+                    Log.Logger(e);
+                }
+            }
+        }
+
+        private void ParsingPage(string data, string buildid, int i)
         {
             var s = DownloadString.DownLZakMos(url, data);
             if (string.IsNullOrEmpty(s))
@@ -88,7 +196,7 @@ namespace ParserWebCore.Parser
             {
                 try
                 {
-                    ParserTenderObj(t, buildid);
+                    ParserTenderObj(t, buildid, i);
                 }
                 catch (Exception e)
                 {
@@ -98,10 +206,23 @@ namespace ParserWebCore.Parser
             }
         }
 
-        private void ParserTenderObj(JToken t, string buildid)
+        private void ParserTenderObj(JToken t, string buildid, int i)
         {
             var id = ((string)t.SelectToken("id") ?? throw new ApplicationException("id not found")).Trim();
-            var tenderUrl = $"https://www.tektorg.ru/_next/data/{buildid}/ru/market/procedures/{id}.json?id={id}";
+            var tenderUrl = "";
+            if (i == 0)
+            {
+                tenderUrl = $"https://www.tektorg.ru/_next/data/{buildid}/ru/market/procedures/{id}.json?id={id}";
+            }
+            else if (i == 1)
+            {
+                tenderUrl = $"https://www.tektorg.ru/_next/data/{buildid}/ru/rosneft/procedures/{id}.json?id={id}";
+            }
+            else if (i == 2)
+            {
+                tenderUrl = $"https://www.tektorg.ru/_next/data/{buildid}/ru/rosnefttkp/procedures/{id}.json?id={id}";
+            }
+
             var status = ((string)(t.SelectToken(
                               "statusName")) ??
                           "").Trim();
@@ -122,20 +243,52 @@ namespace ParserWebCore.Parser
             var pwName = ((string)(t.SelectToken(
                               "typeName")) ??
                           "").Trim();
-            var tn = new TenderTekMarketNew("Электронная торговая площадка ТЭК-Торг Секция малых и срочных закупок",
-                "https://www.tektorg.ru/market/procedures", 384,
-                new TypeTekMarket
-                {
-                    Href = "https://www.tektorg.ru/market/procedures/" + id,
-                    Status = status,
-                    DatePub = datePub,
-                    DateEnd = dateEnd,
-                    PurName = purName,
-                    PurNum = purNum,
-                    PwName = pwName,
-                    Down = tenderUrl
-                });
-            _tendersList.Add(tn);
+            var Href = "";
+            if (i == 0)
+            {
+                Href = "https://www.tektorg.ru/market/procedures/" + id;
+            }
+            else if (i == 1)
+            {
+                Href = "https://www.tektorg.ru/market/procedures/" + id;
+            }
+            else if (i == 2)
+            {
+                Href = "https://www.tektorg.ru/rosneft/procedures/" + id;
+            }
+            var tt = new TypeTekMarket
+            {
+                Href = Href,
+                Status = status,
+                DatePub = datePub,
+                DateEnd = dateEnd,
+                PurName = purName,
+                PurNum = purNum,
+                PwName = pwName,
+                Down = tenderUrl
+            };
+            if (i == 0)
+            {
+                var tn = new TenderTekMarketNew("Электронная торговая площадка ТЭК-Торг Секция малых и срочных закупок",
+                    "https://www.tektorg.ru/market/procedures", 384, tt
+                );
+                _tendersList.Add(tn);
+            }
+
+            if (i == 1)
+            {
+                var tn = new TenderTekMarketNew("ТЭК Торг ТЭК Роснефть Запросы (Т)КП",
+                    "https://www.tektorg.ru/rosneft/procedures", 362, tt
+                );
+                _tendersList.Add(tn);
+            }
+            if (i == 2)
+            {
+                var tn = new TenderTekMarketNew("ТЭК Торг ТЭК Роснефть",
+                    "https://www.tektorg.ru/rosnefttkp/procedures", 149, tt
+                );
+                _tendersList.Add(tn);
+            }
         }
     }
 }

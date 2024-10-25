@@ -87,7 +87,7 @@ namespace ParserWebCore.Parser
                 _driver.SwitchTo().DefaultContent();
                 wait.Until(dr =>
                     dr.FindElement(By.XPath(
-                        "//div[contains(@class, 'CardProcedureViewstyled__Container-sc')]")));
+                        "//div[contains(@class, 'sc-8d381391-0')]")));
                 ParsingPage(tektkp);
             }
             catch (Exception e)
@@ -103,7 +103,7 @@ namespace ParserWebCore.Parser
             _driver.SwitchTo().DefaultContent();
             var tens = _driver.FindElements(
                 By.XPath(
-                    "//div[contains(@class, 'CardProcedureViewstyled__Container-sc')]"));
+                    "//div[contains(@class, 'sc-8d381391-0')]"));
             foreach (var t in tens)
             {
                 try

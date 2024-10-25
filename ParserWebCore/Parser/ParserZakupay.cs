@@ -83,11 +83,11 @@ namespace ParserWebCore.Parser
         private void Auth()
         {
             var wait = new WebDriverWait(_driver, _timeoutB);
-            _driver.Navigate().GoToUrl("https://prodavay.sel-be.ru/core?signin");
+            _driver.Navigate().GoToUrl("https://prodavay.sel-be.ru/core/spa2#/prodavay-desktop/login");
             Thread.Sleep(5000);
             _driver.SwitchTo().DefaultContent();
-            _driver.FindElement(By.XPath("//input[@name = 'username']")).SendKeys(AppBuilder.ZakupayUser);
-            _driver.FindElement(By.XPath("//input[@name = 'password']")).SendKeys(AppBuilder.ZakupayPass);
+            _driver.FindElement(By.XPath("//input[@id = 'email']")).SendKeys(AppBuilder.ZakupayUser);
+            _driver.FindElement(By.XPath("//input[@id = 'password']")).SendKeys(AppBuilder.ZakupayPass);
             _driver.FindElement(By.XPath("//button[@type = 'submit']")).Click();
             Thread.Sleep(5000);
             foreach (var cookiesAllCookie in _driver.Manage().Cookies.AllCookies)

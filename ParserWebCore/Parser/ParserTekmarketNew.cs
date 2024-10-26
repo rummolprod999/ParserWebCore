@@ -233,10 +233,19 @@ namespace ParserWebCore.Parser
                 ((DateTime?)(t.SelectToken(
                      "$..datePublished")) ??
                  throw new ApplicationException($"datePub not found {id}"));
+            var dateBid =
+                ((DateTime?)(t.SelectToken(
+                     "$..dateEndRegistrationCom")) ??
+                 DateTime.MinValue);
+            var dateScor =
+                ((DateTime?)(t.SelectToken(
+                     "$..dateStartRegistrationCom")) ??
+                 DateTime.MinValue);
             var dateEnd =
                 ((DateTime?)(t.SelectToken(
-                     "$..dateEndRegistration")) ??
-                 throw new ApplicationException($"dateEnd not found {id}"));
+                     "$..dateEndRegistration")) ?? (DateTime?)(t.SelectToken(
+                        "$..dateRegistrationTech")) ??
+                    datePub.AddDays(2));
             var purNum = ((string)(t.SelectToken(
                               "registryNumber")) ??
                           throw new ApplicationException($"purNum not found {id}")).Trim();
@@ -265,7 +274,9 @@ namespace ParserWebCore.Parser
                 PurName = purName,
                 PurNum = purNum,
                 PwName = pwName,
-                Down = tenderUrl
+                Down = tenderUrl,
+                DateBid = dateBid,
+                DateScor = dateScor
             };
             if (i == 0)
             {

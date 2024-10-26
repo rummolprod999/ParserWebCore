@@ -85,8 +85,8 @@ namespace ParserWebCore.Tender
                 cmd9.Parameters.AddWithValue("@id_placing_way", idPlacingWay);
                 cmd9.Parameters.AddWithValue("@id_etp", idEtp);
                 cmd9.Parameters.AddWithValue("@end_date", _tn.DateEnd);
-                cmd9.Parameters.AddWithValue("@scoring_date", DateTime.MinValue);
-                cmd9.Parameters.AddWithValue("@bidding_date", DateTime.MinValue);
+                cmd9.Parameters.AddWithValue("@scoring_date", _tn.DateScor);
+                cmd9.Parameters.AddWithValue("@bidding_date", _tn.DateBid);
                 cmd9.Parameters.AddWithValue("@cancel", cancelStatus);
                 cmd9.Parameters.AddWithValue("@date_version", dateUpd);
                 cmd9.Parameters.AddWithValue("@num_version", 1);

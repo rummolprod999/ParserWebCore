@@ -216,6 +216,17 @@ namespace ParserWebCore.Tender
                         cmd19.Parameters.AddWithValue("@price", price);
                         cmd19.ExecuteNonQuery();
                     });
+                    if (purObjects.Count == 0)
+                    {
+                        var insertLotitem =
+                            $"INSERT INTO {AppBuilder.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name";
+                        var cmd19 = new MySqlCommand(insertLotitem, connect);
+                        cmd19.Prepare();
+                        cmd19.Parameters.AddWithValue("@id_lot", idLot);
+                        cmd19.Parameters.AddWithValue("@id_customer", customerId);
+                        cmd19.Parameters.AddWithValue("@name", _tn.PurName);
+                        cmd19.ExecuteNonQuery();
+                    }
                 }
                 catch (Exception e)
                 {

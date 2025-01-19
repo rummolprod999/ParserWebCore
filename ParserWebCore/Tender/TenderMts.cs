@@ -1,8 +1,11 @@
 using System;
 using System.Data;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json.Linq;
 using ParserWebCore.BuilderApp;
 using ParserWebCore.Connections;
+using ParserWebCore.Extensions;
+using ParserWebCore.NetworkLibrary;
 using ParserWebCore.TenderType;
 
 namespace ParserWebCore.Tender
@@ -25,11 +28,10 @@ namespace ParserWebCore.Tender
             {
                 connect.Open();
                 var selectTend =
-                    $"SELECT id_tender FROM {AppBuilder.Prefix}tender WHERE purchase_number = @purchase_number AND doc_publish_date = @doc_publish_date AND type_fz = @type_fz AND notice_version = @notice_version AND end_date = @end_date";
+                    $"SELECT id_tender FROM {AppBuilder.Prefix}tender WHERE purchase_number = @purchase_number AND type_fz = @type_fz AND notice_version = @notice_version AND end_date = @end_date";
                 var cmd = new MySqlCommand(selectTend, connect);
                 cmd.Prepare();
                 cmd.Parameters.AddWithValue("@purchase_number", _tn.PurNum);
-                cmd.Parameters.AddWithValue("@doc_publish_date", _tn.DatePub);
                 cmd.Parameters.AddWithValue("@type_fz", TypeFz);
                 cmd.Parameters.AddWithValue("@notice_version", _tn.Status);
                 cmd.Parameters.AddWithValue("@end_date", _tn.DateEnd);
@@ -43,12 +45,37 @@ namespace ParserWebCore.Tender
 
                 var dateUpd = DateTime.Now;
                 var (updated, cancelStatus) = UpdateTenderVersion(connect, _tn.PurNum, dateUpd);
+                var result = DownloadString.DownLUserAgent("https://tenders.mts.ru/api/v2/tender/" + _tn.Id);
+                var t = JObject.Parse(result);
+                var datePubS =
+                    ((string)(t.SelectToken(
+                         "publicationDate")) ??
+                     throw new ApplicationException($"datePub not found {_tn.Href}")).Trim();
+                _tn.DatePub = datePubS.ParseDateUn("yyyy-MM-dd");
                 CreaateOrganizer(connect, out var organiserId);
                 GetPlacingWay(connect, out var idPlacingWay);
                 GetEtp(connect, out var idEtp);
                 var idRegion = GetRegionFromString(_tn.Region, connect);
                 var idTender = CreateTender(connect, idRegion, organiserId, idPlacingWay, idEtp, cancelStatus, dateUpd,
                     updated);
+                var attacments = GetElements(t, "attachments");
+                foreach (var att in attacments)
+                {
+                    var name = ((string)att.SelectToken("name") ?? "").Trim();
+                    var url = ((string)att.SelectToken("url") ?? "").Trim();
+                    if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(url))
+                    {
+                        var insertAttach =
+                            $"INSERT INTO {AppBuilder.Prefix}attachment SET id_tender = @id_tender, file_name = @file_name, url = @url, description = @description";
+                        var cmd10 = new MySqlCommand(insertAttach, connect);
+                        cmd10.Prepare();
+                        cmd10.Parameters.AddWithValue("@id_tender", idTender);
+                        cmd10.Parameters.AddWithValue("@file_name", name);
+                        cmd10.Parameters.AddWithValue("@url", url);
+                        cmd10.Parameters.AddWithValue("@description", "");
+                        cmd10.ExecuteNonQuery();
+                    }
+                }
                 CreateCustomer(connect, out var customerId);
                 CreateLot(connect, idTender, customerId);
                 TenderKwords(connect, idTender);

@@ -36,7 +36,7 @@ namespace ParserWebCore.Parser
         private void GetPage(int num)
         {
             var url =
-                $"https://tenders.mts.ru/api/v1/tenders?pageSize=20&page={num}&isSubscribe=false&attributesForSort=tenders_publication_date,desc";
+                $"https://tenders.mts.ru/api/v2/tender?searchQuery=&pageSize=5&page={num}&attributesForSort=tenders_publication_date,desc";
             var result = DownloadString.DownLUserAgent(url);
             if (string.IsNullOrEmpty(result))
             {
@@ -66,25 +66,17 @@ namespace ParserWebCore.Parser
             var id = ((string)t.SelectToken("id") ?? throw new ApplicationException("id not found")).Trim();
             var purName =
                 ((string)(t.SelectToken(
-                     "$..attributeCategories[0].attributes[?(@.name == 'Название закупки')].value")) ??
+                     "name")) ??
                  throw new ApplicationException($"purName not found {id}")).Trim();
-            var datePubS =
-                ((string)(t.SelectToken(
-                     "$..attributeCategories[0].attributes[?(@.name == 'Дата публикации')].value")) ??
-                 throw new ApplicationException($"datePubS not found {id}")).Trim();
-            var publicationDate = datePubS.ParseDateUn("yyyy-MM-dd");
+            var publicationDate = DateTime.Now;
             var dateEndS =
                 ((string)(t.SelectToken(
-                     "$..attributeCategories[0].attributes[?(@.name == 'Дата окончания приема предложений')].value")) ??
+                     "endDateAcceptingOffers")) ??
                  publicationDate.AddDays(2).ToString("yyyy-MM-dd")).Trim();
             var endDate = dateEndS.ParseDateUn("yyyy-MM-dd");
             var purNum =
                 ((string)(t.SelectToken(
-                     "$..attributeCategories[0].attributes[?(@.name == 'Номер закупки в OeBS')].value")) ??
-                 (string)(t.SelectToken(
-                     "$..attributeCategories[0].attributes[?(@.name == 'Номер закупки на tenders')].value")) ??
-                 (string)(t.SelectToken(
-                     "$..attributeCategories[0].attributes[?(@.name == 'ID закупки в OeBS')].value")) ?? id).Trim();
+                     "number")) ?? id).Trim();
             if (purNum.Trim() == "")
             {
                 purNum = id;
@@ -92,17 +84,16 @@ namespace ParserWebCore.Parser
 
             var status =
                 ((string)(t.SelectToken(
-                    "$..attributeCategories[0].attributes[?(@.name == 'Статус закупки')].value.value")) ?? "").Trim();
-            var pwName =
-                ((string)(t.SelectToken(
-                    "$..attributeCategories[0].attributes[?(@.name == 'Статус закупки')].value.value")) ?? "").Trim();
+                    "status")) ?? "").Trim();
+            var pwName = "";
             var region =
                 ((string)(t.SelectToken(
-                    "$..attributeCategories[0].attributes[?(@.name == 'Регион')].value[0].value")) ?? "").Trim();
+                    "regions")) ?? "").Trim();
             var tender = new TypeMts
             {
                 Href = $"https://tenders.mts.ru/tenders/{id}",
                 PurNum = purNum,
+                Id = id,
                 PurName = purName,
                 DatePub = publicationDate,
                 DateEnd = endDate,

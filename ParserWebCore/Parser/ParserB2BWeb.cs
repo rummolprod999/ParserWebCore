@@ -14,7 +14,7 @@ namespace ParserWebCore.Parser
 {
     public class ParserB2BWeb : ParserAbstract, IParser
     {
-        private const int MaxPage = 5;
+        private const int MaxPage = 20;
         public static CookieCollection CookieCollection;
         private readonly CookiesB2B _cookieService = CookiesB2B.CreateInstance();
 

@@ -110,5 +110,6 @@
         Zakupay,
         J44,
         J223,
+        Samolet,
     }
 }

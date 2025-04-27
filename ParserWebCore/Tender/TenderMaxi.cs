@@ -183,13 +183,13 @@ namespace ParserWebCore.Tender
                 }
 
                 var docs = htmlDoc.DocumentNode.SelectNodes(
-                               "//td[contains(., 'Документы:')]/following-sibling::td/a") ??
+                               "//a[@class = 'tender-documents__list-item']") ??
                            new HtmlNodeCollection(null);
                 foreach (var doc in docs)
                 {
                     var urlAttT = (doc?.Attributes["href"]?.Value ?? "").Trim();
-                    var fName = "Документы";
-                    var urlAtt = $"http://maxi-cre.ru{urlAttT}";
+                    var fName =  doc.SelectSingleNode(".//span")?.InnerText?.Trim() ?? "Документы";
+                    var urlAtt = $"https://maxi-tender.ru{urlAttT}";
                     if (!string.IsNullOrEmpty(fName))
                     {
                         var insertAttach =

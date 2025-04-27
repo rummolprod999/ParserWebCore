@@ -10,7 +10,7 @@ namespace ParserWebCore.Parser
 {
     public class ParserMaxi : ParserAbstract, IParser
     {
-        private string _startPage = "http://maxi-cre.ru/tender/";
+        private string _startPage = "https://maxi-tender.ru/procurements";
 
         public void Parsing()
         {
@@ -42,7 +42,7 @@ namespace ParserWebCore.Parser
             htmlDoc.LoadHtml(s);
             var tens =
                 htmlDoc.DocumentNode.SelectNodes(
-                    "//tbody[contains(@class, 'pageTender-list')]/tr[contains(@class, '_all')]") ??
+                    "//a[contains(@class, 'tender-card')]") ??
                 new HtmlNodeCollection(null);
             foreach (var a in tens)
             {
@@ -59,7 +59,7 @@ namespace ParserWebCore.Parser
 
         private void ParserTender(HtmlNode n)
         {
-            var href = (n.SelectSingleNode(".//a")?.Attributes["href"]?.Value ?? "")
+            var href = (n.Attributes["href"]?.Value ?? "")
                 .Trim();
             if (string.IsNullOrEmpty(href))
             {
@@ -67,19 +67,19 @@ namespace ParserWebCore.Parser
                 return;
             }
 
-            href = $"http://maxi-cre.ru{href}";
-            var purNum = href.GetDataFromRegex(@"/(\d+)/$");
+            href = $"https://maxi-tender.ru{href}";
+            var purNum = href.GetDataFromRegex(@"-(\d+)$");
             if (string.IsNullOrEmpty(purNum))
             {
                 Log.Logger("Empty purNum", href);
                 return;
             }
 
-            var purName = n.SelectSingleNode(".//a")?.InnerText?.Trim() ?? throw new Exception(
+            var purName = n.SelectSingleNode(".//div[@class = 'tender-card__title']//span")?.InnerText?.Trim() ?? throw new Exception(
                 $"cannot find purName in {href}");
-            var dates = n.SelectSingleNode("./td[2]")?.InnerText?.DelDoubleWhitespace().Trim() ?? throw new Exception(
+            var dates = n.SelectSingleNode(".//div[@class = 'tender-card__date__item']//span")?.InnerText?.DelDoubleWhitespace().Trim() ?? throw new Exception(
                 $"cannot find dates in {href}");
-            var datePubT = dates.GetDataFromRegex(@"с\s*(\d{2}\.\d{2}\.\d{4})");
+            var datePubT = dates.GetDataFromRegex(@"^\s*(\d{2}\.\d{2}\.\d{4})");
             var datePub = datePubT.ParseDateUn("dd.MM.yyyy");
             if (datePub == DateTime.MinValue)
             {
@@ -87,7 +87,7 @@ namespace ParserWebCore.Parser
                 return;
             }
 
-            var dateEndT = dates.GetDataFromRegex(@"по\s*(\d{2}\.\d{2}\.\d{4})");
+            var dateEndT = dates.GetDataFromRegex(@"\s*(\d{2}\.\d{2}\.\d{4})$");
             var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy");
             if (dateEnd == DateTime.MinValue)
             {

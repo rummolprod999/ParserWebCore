@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Net;
 using System.Threading;
 using HtmlAgilityPack;
 using MySql.Data.MySqlClient;
@@ -8,6 +9,7 @@ using ParserWebCore.Connections;
 using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
+using ParserWebCore.Parser;
 using ParserWebCore.TenderType;
 
 namespace ParserWebCore.Tender
@@ -47,7 +49,9 @@ namespace ParserWebCore.Tender
                 }
 
                 Thread.Sleep(5000);
-                var s = DownloadString.DownL(_tn.Href);
+                var col = new CookieCollection();
+                col.Add(new Cookie("ebudget_authuser_sp_voroneg", ParserGzwSp.AuthCookieValue));
+                var s = DownloadString.DownLHttpPostWithCookiesAll(_tn.Href, "https://goszakupki.govvrn.ru/", col);
                 if (string.IsNullOrEmpty(s))
                 {
                     Log.Logger("Empty string in ParsingTender()", _tn.Href);

@@ -80,6 +80,7 @@ namespace ParserWebCore.Tender
                     var col = new CookieCollection();
                     col.Add(new Cookie("ebudget", ParserGzwSp.AuthCookieValue));
                     col.Add(new Cookie("ebudget_mz", ParserGzwSp.AuthCookieValue));
+                    col.Add(new Cookie("ebudget_authuser_sp_voroneg", ParserGzwSp.AuthCookieValue));
                     s = DownloadString.DownLHttpPostWithCookiesAll(_tn.Href, _baseUrl, col);
                     ;
                 }
@@ -367,7 +368,7 @@ namespace ParserWebCore.Tender
                     cmd16.ExecuteNonQuery();
                 }
 
-                if (_arg == Arguments.Midural || _arg == Arguments.Mordov || _arg == Arguments.MiduralGr)
+                if (_arg == Arguments.Midural || _arg == Arguments.Mordov || _arg == Arguments.MiduralGr || _arg == Arguments.Mzvoron)
                 {
                     var poList =
                         htmlDoc.DocumentNode.SelectNodes("//table[thead[tr[th[. = 'Количество']]]]/tbody/tr") ??

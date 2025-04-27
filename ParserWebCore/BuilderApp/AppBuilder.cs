@@ -51,6 +51,9 @@ namespace ParserWebCore.BuilderApp
         [Required] public static string SamarUser { get; set; }
         [Required] public static string KalugPass { get; set; }
         [Required] public static string KalugUser { get; set; }
+        
+        [Required] public static string MzVoronPass { get; set; }
+        [Required] public static string MzVoronUser { get; set; }
 
         [Required] public static string TambovPass { get; set; }
         [Required] public static string TambovUser { get; set; }
@@ -456,6 +459,8 @@ namespace ParserWebCore.BuilderApp
                 SamarUser = (string)o["usersamar"];
                 KalugPass = (string)o["passkalug"];
                 KalugUser = (string)o["userkalug"];
+                MzVoronPass = (string)o["passmzvoron"];
+                MzVoronUser = (string)o["usermzvoron"];
                 TambovPass = (string)o["passtambov"];
                 TambovUser = (string)o["usertambov"];
                 MiduralPass = (string)o["passmidural"];

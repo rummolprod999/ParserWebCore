@@ -1,9 +1,13 @@
+#region
+
 using System;
 using System.Data;
 using MySql.Data.MySqlClient;
 using ParserWebCore.BuilderApp;
 using ParserWebCore.Connections;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Tender
 {
@@ -161,7 +165,11 @@ namespace ParserWebCore.Tender
 
                 foreach (var dd in _tn.Attachments)
                 {
-                    if (string.IsNullOrEmpty(dd.Name)) continue;
+                    if (string.IsNullOrEmpty(dd.Name))
+                    {
+                        continue;
+                    }
+
                     var insertAttach =
                         $"INSERT INTO {AppBuilder.Prefix}attachment SET id_tender = @id_tender, file_name = @file_name, url = @url";
                     var cmd10 = new MySqlCommand(insertAttach, connect);

@@ -1,14 +1,18 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using ParserWebCore.BuilderApp;
 
+#endregion
+
 namespace ParserWebCore.NetworkLibrary
 {
     public class GetCookieServiceFederal : CookieService
     {
-        private static GetCookieServiceFederal service = new GetCookieServiceFederal();
+        private static readonly GetCookieServiceFederal service = new GetCookieServiceFederal();
         private readonly string BaseUrl = "https://t2.federal1.ru/login.php?externalErrMess=";
 
         private GetCookieServiceFederal()

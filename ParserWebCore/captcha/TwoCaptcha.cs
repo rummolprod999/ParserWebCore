@@ -1,10 +1,14 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using TwoCaptcha.Captcha;
 using TwoCaptcha.Exceptions;
 using TimeoutException = TwoCaptcha.Exceptions.TimeoutException;
+
+#endregion
 
 namespace TwoCaptcha
 {
@@ -125,7 +129,7 @@ namespace TwoCaptcha
          */
         public async Task WaitForResult(Captcha.Captcha captcha, Dictionary<string, int> waitOptions)
         {
-            long startedAt = CurrentTime();
+            var startedAt = CurrentTime();
 
             int timeout = waitOptions.TryGetValue("timeout", out timeout) ? timeout : DefaultTimeout;
             int pollingInterval = waitOptions.TryGetValue("pollingInterval", out pollingInterval)
@@ -134,7 +138,7 @@ namespace TwoCaptcha
 
             while (true)
             {
-                long now = CurrentTime();
+                var now = CurrentTime();
 
                 if (now - startedAt < timeout)
                 {
@@ -147,7 +151,7 @@ namespace TwoCaptcha
 
                 try
                 {
-                    string result = await GetResult(captcha.Id);
+                    var result = await GetResult(captcha.Id);
                     if (result != null)
                     {
                         captcha.Code = result;
@@ -184,7 +188,7 @@ namespace TwoCaptcha
 
             ValidateFiles(files);
 
-            string response = await apiClient.In(parameters, files);
+            var response = await apiClient.In(parameters, files);
 
             if (!response.StartsWith("OK|"))
             {
@@ -201,13 +205,13 @@ namespace TwoCaptcha
          * @return
          * @throws Exception
          */
-        public async Task<string> GetResult(String id)
+        public async Task<string> GetResult(string id)
         {
             var parameters = new Dictionary<string, string>();
             parameters["action"] = "get";
             parameters["id"] = id;
 
-            string response = await Res(parameters);
+            var response = await Res(parameters);
 
             if (response.Equals("CAPCHA_NOT_READY"))
             {
@@ -230,7 +234,7 @@ namespace TwoCaptcha
          */
         public async Task<double> Balance()
         {
-            string response = await Res("getbalance");
+            var response = await Res("getbalance");
             return Convert.ToDouble(response);
         }
 
@@ -322,9 +326,9 @@ namespace TwoCaptcha
          */
         private void ValidateFiles(Dictionary<string, FileInfo> files)
         {
-            foreach (KeyValuePair<string, FileInfo> entry in files)
+            foreach (var entry in files)
             {
-                FileInfo file = entry.Value;
+                var file = entry.Value;
 
                 if (!file.Exists)
                 {

@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -11,6 +13,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
 
+#endregion
+
 namespace ParserWebCore.Parser
 {
     public class ParserAkashevo : ParserAbstract, IParser
@@ -18,8 +22,8 @@ namespace ParserWebCore.Parser
         private const int Count = 5;
         private const string Url = "https://atp.akashevo.ru/lots";
         private readonly ChromeDriver _driver = CreateChomeDriverNoHeadless.GetChromeDriver();
-        private TimeSpan _timeoutB = TimeSpan.FromSeconds(120);
-        private List<TypeAgrokomplex> _urls = new List<TypeAgrokomplex>();
+        private readonly TimeSpan _timeoutB = TimeSpan.FromSeconds(120);
+        private readonly List<TypeAgrokomplex> _urls = new List<TypeAgrokomplex>();
 
         public void Parsing()
         {

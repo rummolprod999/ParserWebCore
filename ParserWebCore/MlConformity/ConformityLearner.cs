@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Data;
 using System.Globalization;
@@ -11,11 +13,13 @@ using MySql.Data.MySqlClient;
 using ParserWebCore.BuilderApp;
 using ParserWebCore.Logger;
 
+#endregion
+
 namespace ParserWebCore.MlConformity
 {
     public class ConformityLearner
     {
-        private MLContext _mlContext;
+        private readonly MLContext _mlContext;
         private PredictionEngine<ConformChecker, CheckerPrediction> _predEngine;
         private ITransformer _trainedModel;
         private IDataView _trainingDataView;
@@ -23,7 +27,7 @@ namespace ParserWebCore.MlConformity
         public ConformityLearner()
         {
             CreatePathModels();
-            _mlContext = new MLContext(seed: 0);
+            _mlContext = new MLContext(0);
             ModelLearner();
         }
 
@@ -41,8 +45,12 @@ namespace ParserWebCore.MlConformity
 
         private void ModelLearner()
         {
-            if (new FileInfo(ModelPath).Exists) return;
-            _trainingDataView = _mlContext.Data.CreateTextReader<ConformChecker>(hasHeader: true).Read(TrainDataPath);
+            if (new FileInfo(ModelPath).Exists)
+            {
+                return;
+            }
+
+            _trainingDataView = _mlContext.Data.CreateTextReader<ConformChecker>(true).Read(TrainDataPath);
             var pipeline = ProcessData();
             var trainingPipeline = BuildAndTrainModel(_trainingDataView, pipeline);
             Evaluate();
@@ -60,7 +68,7 @@ namespace ParserWebCore.MlConformity
         private EstimatorChain<KeyToValueMappingTransformer> BuildAndTrainModel(IDataView trainingDataView,
             EstimatorChain<ITransformer> pipeline)
         {
-            var trainer = new SdcaMultiClassTrainer(_mlContext, DefaultColumnNames.Label, DefaultColumnNames.Features);
+            var trainer = new SdcaMultiClassTrainer(_mlContext);
             var trainingPipeline = pipeline.Append(trainer)
                 .Append(_mlContext.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
             _trainedModel = trainingPipeline.Fit(trainingDataView);
@@ -77,7 +85,9 @@ namespace ParserWebCore.MlConformity
         private void SaveModelAsFile(MLContext mlContext, ITransformer model)
         {
             using (var fs = new FileStream(ModelPath, FileMode.Create, FileAccess.Write, FileShare.Write))
+            {
                 mlContext.Model.Save(model, fs);
+            }
 
             Console.WriteLine("The model is saved to {0}", ModelPath);
         }
@@ -86,21 +96,21 @@ namespace ParserWebCore.MlConformity
         {
             Console.WriteLine(
                 $"=============== Evaluating to get model's accuracy metrics - Starting time: {DateTime.Now.ToString()} ===============");
-            var testDataView = _mlContext.Data.CreateTextReader<ConformChecker>(hasHeader: true).Read(TestDataPath);
+            var testDataView = _mlContext.Data.CreateTextReader<ConformChecker>(true).Read(TestDataPath);
             var testMetrics = _mlContext.MulticlassClassification.Evaluate(_trainedModel.Transform(testDataView));
             Console.WriteLine(
                 $"=============== Evaluating to get model's accuracy metrics - Ending time: {DateTime.Now.ToString(CultureInfo.InvariantCulture)} ===============");
             Console.WriteLine(
-                $"*************************************************************************************************************");
-            Console.WriteLine($"*       Metrics for Multi-class Classification model - Test Data     ");
+                "*************************************************************************************************************");
+            Console.WriteLine("*       Metrics for Multi-class Classification model - Test Data     ");
             Console.WriteLine(
-                $"*------------------------------------------------------------------------------------------------------------");
+                "*------------------------------------------------------------------------------------------------------------");
             Console.WriteLine($"*       MicroAccuracy:    {testMetrics.AccuracyMicro:0.###}");
             Console.WriteLine($"*       MacroAccuracy:    {testMetrics.AccuracyMacro:0.###}");
             Console.WriteLine($"*       LogLoss:          {testMetrics.LogLoss:#.###}");
             Console.WriteLine($"*       LogLossReduction: {testMetrics.LogLossReduction:#.###}");
             Console.WriteLine(
-                $"*************************************************************************************************************");
+                "*************************************************************************************************************");
         }
 
         public void PredictConformity(DataRowCollection dr, MySqlConnection connect)

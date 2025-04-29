@@ -2,7 +2,7 @@ namespace TwoCaptcha.Captcha
 {
     public class FunCaptcha : Captcha
     {
-        public FunCaptcha() : base()
+        public FunCaptcha()
         {
             parameters["method"] = "funcaptcha";
         }

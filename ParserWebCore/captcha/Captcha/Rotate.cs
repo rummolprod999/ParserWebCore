@@ -1,17 +1,21 @@
+#region
+
 using System;
 using System.IO;
+
+#endregion
 
 namespace TwoCaptcha.Captcha
 {
     public class Rotate : Captcha
     {
-        public Rotate() : base()
+        public Rotate()
         {
             parameters["method"] = "rotatecaptcha";
         }
 
 
-        public void SetBase64(String base64)
+        public void SetBase64(string base64)
         {
             parameters["body"] = base64;
         }
@@ -21,17 +25,17 @@ namespace TwoCaptcha.Captcha
             parameters["angle"] = Convert.ToString(angle).Replace(',', '.');
         }
 
-        public void SetLang(String lang)
+        public void SetLang(string lang)
         {
             parameters["lang"] = lang;
         }
 
-        public void SetHintText(String hintText)
+        public void SetHintText(string hintText)
         {
             parameters["textinstructions"] = hintText;
         }
 
-        public void SetHintImg(String base64)
+        public void SetHintImg(string base64)
         {
             parameters["imginstructions"] = base64;
         }

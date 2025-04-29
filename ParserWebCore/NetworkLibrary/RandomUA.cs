@@ -1,5 +1,9 @@
+#region
+
 using System;
 using System.Collections.Generic;
+
+#endregion
 
 namespace ParserWebCore.NetworkLibrary
 {
@@ -1632,7 +1636,7 @@ namespace ParserWebCore.NetworkLibrary
                 }
 
                 var userAgents = UaMap[browser];
-                return userAgents[(int) Math.Floor((double) (new Random().Next(userAgents.Count)))];
+                return userAgents[(int)Math.Floor((double)new Random().Next(userAgents.Count))];
             }
         }
     }

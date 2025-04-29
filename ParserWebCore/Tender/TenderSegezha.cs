@@ -1,6 +1,9 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Net;
 using HtmlAgilityPack;
 using MySql.Data.MySqlClient;
 using ParserWebCore.BuilderApp;
@@ -9,6 +12,8 @@ using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Tender
 {
@@ -51,7 +56,7 @@ namespace ParserWebCore.Tender
                     ["sec-fetch-mode"] = "navigate",
                     ["sec-fetch-user"] = "?1",
                     ["sec-fetch-dest"] = "document",
-                    ["accept-language"] = "ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7",
+                    ["accept-language"] = "ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7"
                 };
                 var s = DownloadString.DownLUserAgent(_tn.Href, false, headers);
                 if (string.IsNullOrEmpty(s))
@@ -279,7 +284,7 @@ namespace ParserWebCore.Tender
                     cmd16.Parameters.AddWithValue("@delivery_place", "");
                     cmd16.Parameters.AddWithValue("@max_price", "");
                     cmd16.Parameters.AddWithValue("@delivery_term",
-                        System.Net.WebUtility.HtmlDecode(delivTerm).DelDoubleWhitespace());
+                        WebUtility.HtmlDecode(delivTerm).DelDoubleWhitespace());
                     cmd16.ExecuteNonQuery();
                 }
 

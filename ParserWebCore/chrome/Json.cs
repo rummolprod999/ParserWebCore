@@ -1,8 +1,12 @@
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
+#endregion
 
 namespace ParserWebCore.chrome
 {
@@ -12,7 +16,10 @@ namespace ParserWebCore.chrome
         {
             var obj = JsonConvert.DeserializeObject<Dictionary<string, object>>(data);
             if (obj == null)
+            {
                 throw new Exception("Json data cannot be null.");
+            }
+
             return (Dictionary<string, object>)DeserializeData(obj);
         }
 
@@ -26,16 +33,21 @@ namespace ParserWebCore.chrome
         {
             var list = data.ToObject<List<object>>() ?? new List<object>();
 
-            for (int i = 0; i < list.Count; i++)
+            for (var i = 0; i < list.Count; i++)
             {
                 var value = list[i];
 
                 if (value is JObject)
+                {
                     list[i] = DeserializeData((JObject)value);
+                }
 
                 if (value is JArray)
+                {
                     list[i] = DeserializeData((JArray)value);
+                }
             }
+
             return list;
         }
 
@@ -46,11 +58,16 @@ namespace ParserWebCore.chrome
                 var value = data[key];
 
                 if (value is JObject)
+                {
                     data[key] = DeserializeData((JObject)value);
+                }
 
                 if (value is JArray)
+                {
                     data[key] = DeserializeData((JArray)value);
+                }
             }
+
             return data;
         }
     }

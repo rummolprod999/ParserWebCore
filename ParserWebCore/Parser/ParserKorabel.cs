@@ -1,5 +1,8 @@
+#region
+
 using System;
 using System.Linq;
+using System.Reflection;
 using AngleSharp.Dom;
 using AngleSharp.Extensions;
 using AngleSharp.Parser.Html;
@@ -8,6 +11,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {
@@ -66,7 +71,7 @@ namespace ParserWebCore.Parser
             var urlT = (t.QuerySelector("a")?.GetAttribute("href") ?? "").Trim();
             if (string.IsNullOrEmpty(urlT))
             {
-                Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                Log.Logger($"Empty string in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     url);
             }
 
@@ -75,7 +80,7 @@ namespace ParserWebCore.Parser
             if (string.IsNullOrEmpty(purName))
             {
                 Log.Logger(
-                    $"Empty string purName in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                    $"Empty string purName in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     tenderUrl);
             }
 
@@ -84,7 +89,7 @@ namespace ParserWebCore.Parser
             if (datePub == DateTime.MinValue)
             {
                 Log.Logger(
-                    $"Empty dates in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name} datePubT: {datePubT}",
+                    $"Empty dates in {GetType().Name}.{MethodBase.GetCurrentMethod().Name} datePubT: {datePubT}",
                     tenderUrl);
                 return;
             }
@@ -103,7 +108,7 @@ namespace ParserWebCore.Parser
             if (string.IsNullOrEmpty(purNum))
             {
                 Log.Logger(
-                    $"Empty string purNum in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                    $"Empty string purNum in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     tenderUrl);
             }
 

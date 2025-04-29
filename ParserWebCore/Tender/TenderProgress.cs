@@ -1,6 +1,9 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Reflection;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json.Linq;
 using ParserWebCore.BuilderApp;
@@ -8,6 +11,8 @@ using ParserWebCore.Connections;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Tender
 {
@@ -52,7 +57,7 @@ namespace ParserWebCore.Tender
                 if (string.IsNullOrEmpty(s))
                 {
                     Log.Logger(
-                        $"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                        $"Empty string in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                         url);
                     return;
                 }
@@ -102,8 +107,8 @@ namespace ParserWebCore.Tender
 
         private void GetLots(MySqlConnection connect, int idTender, JToken t)
         {
-            var cusName = ((string)(t.SelectToken(
-                               "companies")) ??
+            var cusName = ((string)t.SelectToken(
+                               "companies") ??
                            EtpName).Trim();
             var customerId = 0;
             if (!string.IsNullOrEmpty(cusName))
@@ -148,14 +153,14 @@ namespace ParserWebCore.Tender
             cmd18.Parameters.AddWithValue("@finance_source", "");
             cmd18.ExecuteNonQuery();
             var idLot = (int)cmd18.LastInsertedId;
-            var delivT1 = ((string)(t.SelectToken(
-                               "$..deliveryTime")) ??
+            var delivT1 = ((string)t.SelectToken(
+                               "$..deliveryTime") ??
                            "").Trim();
-            var delivT2 = ((string)(t.SelectToken(
-                               "$..deliveryConditionDescription")) ??
+            var delivT2 = ((string)t.SelectToken(
+                               "$..deliveryConditionDescription") ??
                            "").Trim();
-            var delivT3 = ((string)(t.SelectToken(
-                               "$..paymentConditionDescription")) ??
+            var delivT3 = ((string)t.SelectToken(
+                               "$..paymentConditionDescription") ??
                            "").Trim();
             var delivTerm =
                 $"Срок поставки: {delivT1}\nУсловия поставки: {delivT2}\nУсловия оплаты: {delivT3}";
@@ -239,8 +244,8 @@ namespace ParserWebCore.Tender
         private int GetOrganizer(JToken t, MySqlConnection connect)
         {
             var organiserId = 0;
-            var orgFullName = ((string)(t.SelectToken(
-                                   "companies")) ??
+            var orgFullName = ((string)t.SelectToken(
+                                   "companies") ??
                                "").Trim();
             if (!string.IsNullOrEmpty(orgFullName))
             {
@@ -258,15 +263,15 @@ namespace ParserWebCore.Tender
                 }
                 else
                 {
-                    var phone = ((string)(t.SelectToken(
-                                     "contactPhone")) ??
+                    var phone = ((string)t.SelectToken(
+                                     "contactPhone") ??
                                  "").Trim();
-                    var email = ((string)(t.SelectToken(
-                                     "createdUser.email")) ??
+                    var email = ((string)t.SelectToken(
+                                     "createdUser.email") ??
                                  "").Trim();
                     var contactPerson =
-                        ((string)(t.SelectToken(
-                             "createdUser.name")) ??
+                        ((string)t.SelectToken(
+                             "createdUser.name") ??
                          "").Trim();
                     var addOrganizer =
                         $"INSERT INTO {AppBuilder.Prefix}organizer SET full_name = @full_name, contact_phone = @contact_phone, contact_person = @contact_person, contact_email = @contact_email";

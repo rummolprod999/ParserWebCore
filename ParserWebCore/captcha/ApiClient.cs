@@ -1,10 +1,14 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using TwoCaptcha.Exceptions;
+
+#endregion
 
 namespace TwoCaptcha
 {
@@ -18,7 +22,7 @@ namespace TwoCaptcha
         /**
          * API server
          */
-        private string baseUrl = "https://2captcha.com/";
+        private readonly string baseUrl = "https://2captcha.com/";
 
         public ApiClient()
         {
@@ -30,12 +34,12 @@ namespace TwoCaptcha
             var content =
                 new MultipartFormDataContent("Upload----" + DateTime.Now.ToString(CultureInfo.InvariantCulture));
 
-            foreach (KeyValuePair<string, string> p in parameters)
+            foreach (var p in parameters)
             {
                 content.Add(new StringContent(p.Value), p.Key);
             }
 
-            foreach (KeyValuePair<string, FileInfo> f in files)
+            foreach (var f in files)
             {
                 var fileStream = new StreamContent(new MemoryStream(File.ReadAllBytes(f.Value.FullName)));
                 content.Add(fileStream, f.Key, f.Value.Name);
@@ -58,9 +62,9 @@ namespace TwoCaptcha
 
         private string BuildQuery(Dictionary<string, string> parameters)
         {
-            string query = "";
+            var query = "";
 
-            foreach (KeyValuePair<string, string> p in parameters)
+            foreach (var p in parameters)
             {
                 if (query.Length > 0)
                 {
@@ -77,7 +81,7 @@ namespace TwoCaptcha
         {
             var response = await client.SendAsync(request);
 
-            string body = await response.Content.ReadAsStringAsync();
+            var body = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
             {

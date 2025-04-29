@@ -1,13 +1,18 @@
+#region
+
 using System;
+using System.Reflection;
 using Newtonsoft.Json.Linq;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
 
+#endregion
+
 namespace ParserWebCore.Parser
 {
-    public class ParserSamolet: ParserAbstract, IParser
+    public class ParserSamolet : ParserAbstract, IParser
     {
         private readonly int _countPage = 20;
 
@@ -26,7 +31,7 @@ namespace ParserWebCore.Parser
                 }
                 catch (Exception e)
                 {
-                    Log.Logger($"Error in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                    Log.Logger($"Error in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                         e);
                 }
             }
@@ -39,7 +44,7 @@ namespace ParserWebCore.Parser
             var result = DownloadString.DownLUserAgent(url);
             if (string.IsNullOrEmpty(result))
             {
-                Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                Log.Logger($"Empty string in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     url);
                 return;
             }
@@ -54,7 +59,7 @@ namespace ParserWebCore.Parser
                 }
                 catch (Exception e)
                 {
-                    Log.Logger($"Error in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                    Log.Logger($"Error in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                         e, t.ToString());
                 }
             }
@@ -64,18 +69,20 @@ namespace ParserWebCore.Parser
         {
             var id = ((string)t.SelectToken("id") ?? throw new ApplicationException("id not found")).Trim();
             var purName =
-                ((string)(t.SelectToken(
-                     "name")) ??
+                ((string)t.SelectToken(
+                     "name") ??
                  throw new ApplicationException($"purName not found {id}")).Trim();
             var purNum =
-                ((string)(t.SelectToken(
-                    "shortName")) ?? id).Trim();
+                ((string)t.SelectToken(
+                    "shortName") ?? id).Trim();
             if (purNum.Trim() == "")
             {
                 purNum = id;
             }
+
             var datePub = (DateTime?)t.SelectToken("created") ?? throw new ApplicationException("date pub not found");
-            var dateEnd = (DateTime?)t.SelectToken("offersEndDt") ?? throw new ApplicationException("date end not found");
+            var dateEnd = (DateTime?)t.SelectToken("offersEndDt") ??
+                          throw new ApplicationException("date end not found");
             var tender = new TypeSamolet
             {
                 Href = $"https://partner.samolet.ru/tenders/{id}/info",

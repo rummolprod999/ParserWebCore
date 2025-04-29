@@ -1,8 +1,13 @@
+#region
+
 using System.Threading;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 using ParserWebCore.BuilderApp;
+using Cookie = System.Net.Cookie;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {
@@ -30,7 +35,7 @@ namespace ParserWebCore.Parser
             Thread.Sleep(5000);
             foreach (var cookiesAllCookie in driver.Manage().Cookies.AllCookies)
             {
-                ParserGzwSp.col.Add(new System.Net.Cookie(cookiesAllCookie.Name, cookiesAllCookie.Value));
+                col.Add(new Cookie(cookiesAllCookie.Name, cookiesAllCookie.Value));
             }
         }
     }

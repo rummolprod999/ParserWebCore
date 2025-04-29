@@ -1,5 +1,8 @@
+#region
+
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -10,13 +13,15 @@ using ParserWebCore.Logger;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
 
+#endregion
+
 namespace ParserWebCore.Parser
 {
     public class ParserTekRn : ParserAbstract, IParser
     {
         private readonly ChromeDriver _driver = CreateChomeDriverNoHeadless.GetChromeDriver();
         private readonly List<TenderTekRn> tenderList = new List<TenderTekRn>();
-        private TimeSpan _timeoutB = TimeSpan.FromSeconds(120);
+        private readonly TimeSpan _timeoutB = TimeSpan.FromSeconds(120);
         private int DateMinus => 30;
 
         public void Parsing()
@@ -93,7 +98,7 @@ namespace ParserWebCore.Parser
             catch (Exception e)
             {
                 Log.Logger(
-                    $"Exception in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                    $"Exception in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     e, urlStart);
             }
         }
@@ -121,21 +126,25 @@ namespace ParserWebCore.Parser
         {
             var urlT = (t
                 .FindElementWithoutException(By.XPath(
-                    (".//a[contains(@class, 'CardProcedureViewstyled__Title')]")))
+                    ".//a[contains(@class, 'CardProcedureViewstyled__Title')]"))
                 ?.GetAttribute("href") ?? "").Trim();
             if (string.IsNullOrEmpty(urlT))
             {
-                Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}");
+                Log.Logger($"Empty string in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}");
             }
 
             var purName =
-                (t.FindElementWithoutException(By.XPath(
-                         ".//a[contains(@class, 'CardProcedureViewstyled__Title')]"))
-                     ?.Text ??
-                 "");
+                t.FindElementWithoutException(By.XPath(
+                        ".//a[contains(@class, 'CardProcedureViewstyled__Title')]"))
+                    ?.Text ??
+                "";
 
             var tenderUrl = urlT;
-            if (!urlT.Contains("https://")) tenderUrl = $"https://www.tektorg.ru{urlT}";
+            if (!urlT.Contains("https://"))
+            {
+                tenderUrl = $"https://www.tektorg.ru{urlT}";
+            }
+
             var status = (t
                     .FindElementWithoutException(By.XPath(
                         ".//span[contains(@class, 'ProcedureStatusstyled__StatusValue')]"))
@@ -155,7 +164,7 @@ namespace ParserWebCore.Parser
             var datePub = datePubT.ParseDateUn("dd.MM.yyyy HH:mm 'GMT'z");
             if (datePub == DateTime.MinValue)
             {
-                Log.Logger($"Empty dates in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                Log.Logger($"Empty dates in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     tenderUrl, datePubT);
                 return;
             }
@@ -199,7 +208,7 @@ namespace ParserWebCore.Parser
 
             if (string.IsNullOrEmpty(purNum))
             {
-                Log.Logger($"Empty purNum in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                Log.Logger($"Empty purNum in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     tenderUrl);
                 return;
             }
@@ -234,7 +243,7 @@ namespace ParserWebCore.Parser
                         OrgName = orgName,
                         DateEnd = dateEnd,
                         Nmck = nmck,
-                        PurName = purName,
+                        PurName = purName
                     }, _driver);
                 tenderList.Add(tn);
             }
@@ -251,7 +260,7 @@ namespace ParserWebCore.Parser
                         OrgName = orgName,
                         DateEnd = dateEnd,
                         Nmck = nmck,
-                        PurName = purName,
+                        PurName = purName
                     }, _driver);
                 tenderList.Add(tn);
             }

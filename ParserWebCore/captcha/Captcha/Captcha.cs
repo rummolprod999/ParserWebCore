@@ -1,6 +1,10 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.IO;
+
+#endregion
 
 namespace TwoCaptcha.Captcha
 {
@@ -30,7 +34,7 @@ namespace TwoCaptcha.Captcha
             parameters["soft_id"] = Convert.ToString(softId);
         }
 
-        public void SetCallback(String callback)
+        public void SetCallback(string callback)
         {
             parameters["pingback"] = callback;
         }

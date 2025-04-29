@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -10,6 +12,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
 
+#endregion
+
 namespace ParserWebCore.Parser
 {
     public class ParserFbRts : ParserAbstract, IParser
@@ -19,11 +23,11 @@ namespace ParserWebCore.Parser
 
         private readonly string[] Url =
         {
-            "https://fb.rts-tender.ru/trades",
+            "https://fb.rts-tender.ru/trades"
         };
 
-        private List<TenderFbRts> _tendersList = new List<TenderFbRts>();
-        private TimeSpan _timeoutB = TimeSpan.FromSeconds(60);
+        private readonly List<TenderFbRts> _tendersList = new List<TenderFbRts>();
+        private readonly TimeSpan _timeoutB = TimeSpan.FromSeconds(60);
 
         public ParserFbRts()
         {
@@ -254,11 +258,11 @@ namespace ParserWebCore.Parser
                     p.FindElementWithoutException(By.XPath(".//span[4]"))?.Text
                         .Replace("\u20bd", "").ExtractPriceNew().Trim() ??
                     "";
-                var obj = new TypeFbRtsPos() { Quantity = quant, Name = name, Okei = okei, Price = price, Sum = sum };
+                var obj = new TypeFbRtsPos { Quantity = quant, Name = name, Okei = okei, Price = price, Sum = sum };
                 pos.Add(obj);
             }
 
-            var type = new TypeFbRts()
+            var type = new TypeFbRts
             {
                 CusName = cusName, PurName = purName, PurNum = purNum, Status = status, positions = pos, Href = href,
                 Nmck = nmck, DateEnd = dateEnd, DatePub = datePub, OrgName = orgName, Region = region,

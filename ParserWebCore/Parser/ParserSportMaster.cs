@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -5,12 +7,13 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 using ParserWebCore.BuilderApp;
-using ParserWebCore.chrome;
 using ParserWebCore.Creators;
 using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {
@@ -20,8 +23,8 @@ namespace ParserWebCore.Parser
         private const string Url = "https://zakupki.sportmaster.ru/tender_list.php";
         private readonly ChromeDriver _driver = CreatorChromeDriverNotDetect.GetChromeDriver();
 
-        private TimeSpan _timeoutB = TimeSpan.FromSeconds(120);
-        private List<Tender> _urls = new List<Tender>();
+        private readonly TimeSpan _timeoutB = TimeSpan.FromSeconds(120);
+        private readonly List<Tender> _urls = new List<Tender>();
 
         public void Parsing()
         {

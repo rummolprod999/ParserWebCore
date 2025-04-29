@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Threading;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -9,6 +11,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
 
+#endregion
+
 namespace ParserWebCore.Parser
 {
     public class ParserSetOnline : ParserAbstract, IParser
@@ -16,7 +20,7 @@ namespace ParserWebCore.Parser
         private const int Count = 5;
         private const string Url = "https://etp.setonline.ru/app/SearchLots/page";
         private readonly ChromeDriver _driver = CreatorChromeDriver.GetChromeDriver();
-        private TimeSpan _timeoutB = TimeSpan.FromSeconds(120);
+        private readonly TimeSpan _timeoutB = TimeSpan.FromSeconds(120);
 
         public void Parsing()
         {

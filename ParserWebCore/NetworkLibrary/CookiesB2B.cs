@@ -1,13 +1,17 @@
+#region
+
 using System;
 using System.Net;
 using System.Net.Http;
 using ParserWebCore.BuilderApp;
 
+#endregion
+
 namespace ParserWebCore.NetworkLibrary
 {
     public class CookiesB2B
     {
-        private static CookiesB2B service = new CookiesB2B();
+        private static readonly CookiesB2B service = new CookiesB2B();
         private readonly string BaseUrl = "https://www.b2b-center.ru/market/";
 
         private CookiesB2B()
@@ -27,8 +31,8 @@ namespace ParserWebCore.NetworkLibrary
                     BypassProxyOnLocal = false,
                     UseDefaultCredentials = false,
                     Credentials = new NetworkCredential(
-                        userName: prixyEntity.User,
-                        password: prixyEntity.Pass)
+                        prixyEntity.User,
+                        prixyEntity.Pass)
                 };
                 handler.Proxy = proxy;
             }

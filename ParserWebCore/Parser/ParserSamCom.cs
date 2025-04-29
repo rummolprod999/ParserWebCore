@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -8,6 +10,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {
@@ -96,9 +100,13 @@ namespace ParserWebCore.Parser
             {
                 var name = a.InnerText.Trim();
                 var url = a.GetAttributeValue("href", "").Trim();
-                if (name == "" || url == "") continue;
+                if (name == "" || url == "")
+                {
+                    continue;
+                }
+
                 url = $"https://samcomsys.ru{url}";
-                attachments.Add(new TypeSamCom.Attachment {Name = name, Url = url});
+                attachments.Add(new TypeSamCom.Attachment { Name = name, Url = url });
             }
 
             var tn = new TenderSamCom("ООО «РКС-Холдинг»", "https://samcomsys.ru/", 251,

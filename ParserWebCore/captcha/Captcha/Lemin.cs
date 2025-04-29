@@ -2,7 +2,7 @@ namespace TwoCaptcha.Captcha
 {
     public class Lemin : Captcha
     {
-        public Lemin() : base()
+        public Lemin()
         {
             parameters["method"] = "lemin";
         }

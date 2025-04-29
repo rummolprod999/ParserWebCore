@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.ObjectModel;
 using System.Data;
@@ -11,12 +13,14 @@ using ParserWebCore.Connections;
 using ParserWebCore.Extensions;
 using ParserWebCore.TenderType;
 
+#endregion
+
 namespace ParserWebCore.Tender
 {
     public class TenderComRzd : TenderAbstract, ITender
     {
         private readonly TypeComRzd _tn;
-        private ChromeDriver _driver;
+        private readonly ChromeDriver _driver;
 
         public TenderComRzd(string etpName, string etpUrl, int typeFz, TypeComRzd tn, ChromeDriver driver) : base(
             etpName, etpUrl,
@@ -202,11 +206,11 @@ namespace ParserWebCore.Tender
                 {
                     var name = lot
                         .FindElementWithoutException(
-                            By.XPath($"./td[2]"))
+                            By.XPath("./td[2]"))
                         ?.Text.Trim() ?? "";
                     var okpd2 = lot
                         .FindElementWithoutException(
-                            By.XPath($"./td[5]"))
+                            By.XPath("./td[5]"))
                         ?.Text.Trim() ?? "";
                     var insertLotitem =
                         $"INSERT INTO {AppBuilder.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name, sum = @sum, quantity_value = @quantity_value, customer_quantity_value = @customer_quantity_value, okei = @okei, okpd2_code = @okpd2_code";

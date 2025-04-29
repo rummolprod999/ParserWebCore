@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Data;
 using HtmlAgilityPack;
@@ -9,6 +11,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Parser;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Tender
 {

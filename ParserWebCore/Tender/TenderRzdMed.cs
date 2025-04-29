@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -7,11 +9,13 @@ using ParserWebCore.BuilderApp;
 using ParserWebCore.Connections;
 using ParserWebCore.TenderType;
 
+#endregion
+
 namespace ParserWebCore.Tender
 {
     public class TenderRzdMed : TenderAbstract, ITender
     {
-        private RzdMed _tn;
+        private readonly RzdMed _tn;
 
         public TenderRzdMed(string etpName, string etpUrl, int typeFz, RzdMed tn) : base(etpName, etpUrl, typeFz)
         {
@@ -31,7 +35,7 @@ namespace ParserWebCore.Tender
                 cmd.Parameters.AddWithValue("@purchase_number", _tn.PurNum);
                 cmd.Parameters.AddWithValue("@doc_publish_date", _tn.DatePub);
                 cmd.Parameters.AddWithValue("@type_fz", TypeFz);
-                cmd.Parameters.AddWithValue("@notice_version", "");
+                cmd.Parameters.AddWithValue("@notice_version", _tn.Status);
                 cmd.Parameters.AddWithValue("@end_date", _tn.DateEnd);
                 var dt = new DataTable();
                 var adapter = new MySqlDataAdapter { SelectCommand = cmd };

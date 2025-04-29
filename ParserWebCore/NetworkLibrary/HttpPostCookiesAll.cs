@@ -1,6 +1,10 @@
+#region
+
 using System;
 using System.Net;
 using System.Net.Http;
+
+#endregion
 
 namespace ParserWebCore.NetworkLibrary
 {
@@ -33,8 +37,8 @@ namespace ParserWebCore.NetworkLibrary
                     BypassProxyOnLocal = false,
                     UseDefaultCredentials = false,
                     Credentials = new NetworkCredential(
-                        userName: prixyEntity.User,
-                        password: prixyEntity.Pass)
+                        prixyEntity.User,
+                        prixyEntity.Pass)
                 };
                 httpClientHandler.Proxy = proxy;
             }

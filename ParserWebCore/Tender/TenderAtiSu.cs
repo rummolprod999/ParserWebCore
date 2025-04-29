@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Data;
 using HtmlAgilityPack;
@@ -8,11 +10,13 @@ using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.TenderType;
 
+#endregion
+
 namespace ParserWebCore.Tender
 {
     public class TenderAtiSu : TenderAbstract, ITender
     {
-        private AtiSu _tn;
+        private readonly AtiSu _tn;
 
         public TenderAtiSu(string etpName, string etpUrl, int typeFz, AtiSu tn) : base(etpName, etpUrl, typeFz)
         {

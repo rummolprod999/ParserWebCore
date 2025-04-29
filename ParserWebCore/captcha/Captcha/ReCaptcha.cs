@@ -1,10 +1,14 @@
+#region
+
 using System;
+
+#endregion
 
 namespace TwoCaptcha.Captcha
 {
     public class ReCaptcha : Captcha
     {
-        public ReCaptcha() : base()
+        public ReCaptcha()
         {
             parameters["method"] = "userrecaptcha";
         }

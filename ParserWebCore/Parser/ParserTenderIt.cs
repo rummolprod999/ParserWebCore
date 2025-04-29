@@ -1,3 +1,5 @@
+#region
+
 using System;
 using HtmlAgilityPack;
 using ParserWebCore.Extensions;
@@ -5,6 +7,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {
@@ -82,11 +86,11 @@ namespace ParserWebCore.Parser
                 ?.InnerText ?? "").Trim().ReplaceHtmlEntyty();
             var orgName = (n.SelectSingleNode(".//td[3]")
                 ?.InnerText ?? "").ReplaceHtmlEntyty().Trim();
-            var city = (n.SelectSingleNode(".//td[5]")
-                ?.InnerText ?? "");
+            var city = n.SelectSingleNode(".//td[5]")
+                ?.InnerText ?? "";
             var datePubT =
-                (n.SelectSingleNode(".//td[1]")
-                    ?.InnerText ?? "");
+                n.SelectSingleNode(".//td[1]")
+                    ?.InnerText ?? "";
             var datePub = datePubT.ParseDateUn("dd.MM.yyyy");
             if (datePub == DateTime.MinValue)
             {

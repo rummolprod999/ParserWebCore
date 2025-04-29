@@ -1,10 +1,14 @@
+#region
+
 using System;
+
+#endregion
 
 namespace TwoCaptcha.Captcha
 {
     public class KeyCaptcha : Captcha
     {
-        public KeyCaptcha() : base()
+        public KeyCaptcha()
         {
             parameters["method"] = "keycaptcha";
         }

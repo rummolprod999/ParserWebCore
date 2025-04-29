@@ -1,3 +1,5 @@
+#region
+
 using System;
 using HtmlAgilityPack;
 using ParserWebCore.Extensions;
@@ -6,11 +8,13 @@ using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
 
+#endregion
+
 namespace ParserWebCore.Parser
 {
     public class ParserMaxi : ParserAbstract, IParser
     {
-        private string _startPage = "https://maxi-tender.ru/procurements";
+        private readonly string _startPage = "https://maxi-tender.ru/procurements";
 
         public void Parsing()
         {
@@ -75,9 +79,11 @@ namespace ParserWebCore.Parser
                 return;
             }
 
-            var purName = n.SelectSingleNode(".//div[@class = 'tender-card__title']//span")?.InnerText?.Trim() ?? throw new Exception(
-                $"cannot find purName in {href}");
-            var dates = n.SelectSingleNode(".//div[@class = 'tender-card__date__item']//span")?.InnerText?.DelDoubleWhitespace().Trim() ?? throw new Exception(
+            var purName = n.SelectSingleNode(".//div[@class = 'tender-card__title']//span")?.InnerText?.Trim() ??
+                          throw new Exception(
+                              $"cannot find purName in {href}");
+            var dates = n.SelectSingleNode(".//div[@class = 'tender-card__date__item']//span")?.InnerText
+                ?.DelDoubleWhitespace().Trim() ?? throw new Exception(
                 $"cannot find dates in {href}");
             var datePubT = dates.GetDataFromRegex(@"^\s*(\d{2}\.\d{2}\.\d{4})");
             var datePub = datePubT.ParseDateUn("dd.MM.yyyy");

@@ -1,5 +1,8 @@
+#region
+
 using System;
 using System.Data;
+using System.Reflection;
 using AngleSharp.Dom;
 using AngleSharp.Dom.Html;
 using AngleSharp.Parser.Html;
@@ -9,6 +12,8 @@ using ParserWebCore.Connections;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Tender
 {
@@ -47,10 +52,10 @@ namespace ParserWebCore.Tender
                 }
 
                 var s = DownloadString.DownLTektorg(_tn.Href);
-                if (String.IsNullOrEmpty(s))
+                if (string.IsNullOrEmpty(s))
                 {
                     Log.Logger(
-                        $"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                        $"Empty string in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                         _tn.Href);
                     return;
                 }

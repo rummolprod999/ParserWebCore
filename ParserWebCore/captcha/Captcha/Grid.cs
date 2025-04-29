@@ -1,11 +1,15 @@
+#region
+
 using System;
 using System.IO;
+
+#endregion
 
 namespace TwoCaptcha.Captcha
 {
     public class Grid : Captcha
     {
-        public Grid() : base()
+        public Grid()
         {
             parameters["recaptcha"] = "1";
         }
@@ -19,7 +23,7 @@ namespace TwoCaptcha.Captcha
             SetFile(file);
         }
 
-        public void SetFile(String filePath)
+        public void SetFile(string filePath)
         {
             SetFile(new FileInfo(filePath));
         }
@@ -29,7 +33,7 @@ namespace TwoCaptcha.Captcha
             files["file"] = file;
         }
 
-        public void SetBase64(String base64)
+        public void SetBase64(string base64)
         {
             parameters["body"] = base64;
         }
@@ -54,17 +58,17 @@ namespace TwoCaptcha.Captcha
             parameters["can_no_answer"] = canSkip ? "1" : "0";
         }
 
-        public void SetLang(String lang)
+        public void SetLang(string lang)
         {
             parameters["lang"] = lang;
         }
 
-        public void SetHintText(String hintText)
+        public void SetHintText(string hintText)
         {
             parameters["textinstructions"] = hintText;
         }
 
-        public void SetHintImg(String base64)
+        public void SetHintImg(string base64)
         {
             parameters["imginstructions"] = base64;
         }

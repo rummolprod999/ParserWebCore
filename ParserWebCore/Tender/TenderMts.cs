@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Data;
 using MySql.Data.MySqlClient;
@@ -7,6 +9,8 @@ using ParserWebCore.Connections;
 using ParserWebCore.Extensions;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Tender
 {
@@ -48,8 +52,8 @@ namespace ParserWebCore.Tender
                 var result = DownloadString.DownLUserAgent("https://tenders.mts.ru/api/v2/tender/" + _tn.Id);
                 var t = JObject.Parse(result);
                 var datePubS =
-                    ((string)(t.SelectToken(
-                         "publicationDate")) ??
+                    ((string)t.SelectToken(
+                         "publicationDate") ??
                      throw new ApplicationException($"datePub not found {_tn.Href}")).Trim();
                 _tn.DatePub = datePubS.ParseDateUn("yyyy-MM-dd");
                 CreaateOrganizer(connect, out var organiserId);
@@ -76,6 +80,7 @@ namespace ParserWebCore.Tender
                         cmd10.ExecuteNonQuery();
                     }
                 }
+
                 CreateCustomer(connect, out var customerId);
                 CreateLot(connect, idTender, customerId);
                 TenderKwords(connect, idTender);

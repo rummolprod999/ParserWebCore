@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Data;
 using AngleSharp.Parser.Html;
@@ -8,6 +10,8 @@ using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Tender
 {

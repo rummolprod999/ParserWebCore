@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Data;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
@@ -9,6 +11,8 @@ using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Tender
 {
@@ -228,9 +232,17 @@ namespace ParserWebCore.Tender
                 foreach (var doc in docs)
                 {
                     var nameDd = (doc.SelectSingleNode("./td[1]/a")?.InnerText ?? "").Trim();
-                    if (!nameDd.Contains("Извещение")) continue;
+                    if (!nameDd.Contains("Извещение"))
+                    {
+                        continue;
+                    }
+
                     var exp = (doc.SelectSingleNode("./td[2]")?.InnerText ?? "").Trim();
-                    if (!exp.Contains("(действующая)")) continue;
+                    if (!exp.Contains("(действующая)"))
+                    {
+                        continue;
+                    }
+
                     var documents = doc.SelectNodes("./td[4]/div/a") ??
                                     new HtmlNodeCollection(null);
                     foreach (var dd in documents)

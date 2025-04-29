@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -7,6 +9,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {
@@ -86,8 +90,8 @@ namespace ParserWebCore.Parser
             var purName = (n.SelectSingleNode(".//td[5]")
                 ?.InnerText ?? "").Trim().ReplaceHtmlEntyty();
             var datePubT =
-                (n.SelectSingleNode(".//td[3]")
-                    ?.InnerText ?? "");
+                n.SelectSingleNode(".//td[3]")
+                    ?.InnerText ?? "";
             var myCultureInfo = new CultureInfo("ru-RU");
             var datePub = DateTime.Parse(datePubT, myCultureInfo);
             if (datePub == DateTime.MinValue)
@@ -112,8 +116,12 @@ namespace ParserWebCore.Parser
             {
                 var name = a.InnerText.Trim();
                 var url = a.GetAttributeValue("href", "").Trim();
-                if (name == "" || url == "") continue;
-                attachments.Add(new TypeSamCom.Attachment {Name = name, Url = url});
+                if (name == "" || url == "")
+                {
+                    continue;
+                }
+
+                attachments.Add(new TypeSamCom.Attachment { Name = name, Url = url });
             }
 
             var tn = new TenderRcs("ООО «РКС-Инжиниринг»", "http://rcs-e.ru/", 338,
@@ -127,7 +135,7 @@ namespace ParserWebCore.Parser
                     PurName = purName,
                     Region = region,
                     Nmck = nmck,
-                    Attachments = attachments,
+                    Attachments = attachments
                 });
             ParserTender(tn);
         }

@@ -1,9 +1,13 @@
+#region
+
 using System;
 using OpenQA.Selenium;
 using ParserWebCore.BuilderApp;
 using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {

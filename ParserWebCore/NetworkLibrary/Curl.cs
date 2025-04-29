@@ -1,7 +1,12 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
+
+#endregion
 
 namespace ParserWebCore.NetworkLibrary
 {
@@ -10,7 +15,9 @@ namespace ParserWebCore.NetworkLibrary
         public static string ExecuteCurl(string curlCommand, int timeoutInSeconds = 60)
         {
             if (string.IsNullOrEmpty(curlCommand))
+            {
                 return "";
+            }
 
             curlCommand = curlCommand.Trim();
 
@@ -24,22 +31,22 @@ namespace ParserWebCore.NetworkLibrary
             {
                 curlCommand = curlCommand.Replace("--compressed", "");
 
-                var fullPath = System.IO.Path.Combine(Environment.SystemDirectory, "curl");
+                var fullPath = Path.Combine(Environment.SystemDirectory, "curl");
                 // on windows ' are not supported. For example: curl 'http://ublux.com' does not work and it needs to be replaced to curl "http://ublux.com"
-                List<string> parameters = new List<string>();
+                var parameters = new List<string>();
 
 
                 // separate parameters to escape quotes
                 try
                 {
-                    Queue<char> q = new Queue<char>();
+                    var q = new Queue<char>();
 
                     foreach (var c in curlCommand.ToCharArray())
                     {
                         q.Enqueue(c);
                     }
 
-                    StringBuilder currentParameter = new StringBuilder();
+                    var currentParameter = new StringBuilder();
 
                     void insertParameter()
                     {
@@ -60,7 +67,7 @@ namespace ParserWebCore.NetworkLibrary
                             break;
                         }
 
-                        char x = q.Dequeue();
+                        var x = q.Dequeue();
 
                         if (x == '\'')
                         {
@@ -130,7 +137,7 @@ namespace ParserWebCore.NetworkLibrary
                     throw new Exception("Invalid curl command");
                 }
 
-                StringBuilder finalCommand = new StringBuilder();
+                var finalCommand = new StringBuilder();
 
                 foreach (var p in parameters)
                 {

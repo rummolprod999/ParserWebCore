@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Data;
 using MySql.Data.MySqlClient;
@@ -5,11 +7,13 @@ using ParserWebCore.BuilderApp;
 using ParserWebCore.Connections;
 using ParserWebCore.TenderType;
 
+#endregion
+
 namespace ParserWebCore.Tender
 {
     public class TenderNazot : TenderAbstract, ITender
     {
-        private TypeNazot _tn;
+        private readonly TypeNazot _tn;
 
         public TenderNazot(string etpName, string etpUrl, int typeFz, TypeNazot tn) : base(etpName, etpUrl, typeFz)
         {

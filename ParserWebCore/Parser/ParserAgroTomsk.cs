@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using OpenQA.Selenium;
@@ -10,14 +12,16 @@ using ParserWebCore.Logger;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
 
+#endregion
+
 namespace ParserWebCore.Parser
 {
     public class ParserAgroTomsk : ParserAbstract, IParser
     {
         private const int Count = 5;
-        private TimeSpan _timeoutB = TimeSpan.FromSeconds(120);
+        private readonly TimeSpan _timeoutB = TimeSpan.FromSeconds(120);
         private const string Url = "http://agro.zakupki.tomsk.ru/Competition/Competition_Request_Cost.aspx?Sale=0";
-        private List<TypeAgroTomsk> _listTenders = new List<TypeAgroTomsk>();
+        private readonly List<TypeAgroTomsk> _listTenders = new List<TypeAgroTomsk>();
         private readonly ChromeDriver _driver = CreatorChromeDriver.GetChromeDriver();
 
         public void Parsing()

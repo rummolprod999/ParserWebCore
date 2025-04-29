@@ -1,6 +1,10 @@
+#region
+
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+
+#endregion
 
 namespace ParserWebCore.chrome
 {
@@ -21,13 +25,17 @@ namespace ParserWebCore.chrome
             CancellationToken cancellationToken = default)
         {
             if (process.HasExited)
+            {
                 return Task.FromResult(true);
+            }
 
             var tcs = new TaskCompletionSource<bool>();
             process.EnableRaisingEvents = true;
             process.Exited += (sender, args) => tcs.TrySetResult(true);
             if (cancellationToken != default)
+            {
                 cancellationToken.Register(() => tcs.SetCanceled());
+            }
 
             return process.HasExited ? Task.FromResult(true) : tcs.Task;
         }

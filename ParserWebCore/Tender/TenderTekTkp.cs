@@ -1,5 +1,8 @@
+#region
+
 using System;
 using System.Data;
+using System.Reflection;
 using AngleSharp.Dom;
 using AngleSharp.Dom.Html;
 using AngleSharp.Parser.Html;
@@ -11,6 +14,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.SharedLibraries;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Tender
 {
@@ -27,9 +32,9 @@ namespace ParserWebCore.Tender
         public void ParsingTender()
         {
             var s = DownloadString.DownLTektorg(_tn.Href);
-            if (String.IsNullOrEmpty(s))
+            if (string.IsNullOrEmpty(s))
             {
-                Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                Log.Logger($"Empty string in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     _tn.Href);
                 return;
             }
@@ -123,14 +128,22 @@ namespace ParserWebCore.Tender
                 var lotNumT = (lot.QuerySelector("div.procedure__lot-header span")?.TextContent ?? "").Trim();
                 lotNumT = lotNumT.GetDataFromRegex(@"Лот (\d+)");
                 int.TryParse(lotNumT, out var lotNum);
-                if (lotNum == 0) lotNum = 1;
+                if (lotNum == 0)
+                {
+                    lotNum = 1;
+                }
+
                 var currency = (lot.QuerySelector("td:contains('Валюта:') +  td")?.TextContent ?? "").Trim();
                 var nmckT = (lot.QuerySelector("td:contains('Начальная цена:') +  td")?.TextContent ?? "0.0")
                     .Trim();
                 var nmck = SharedTekTorg.ParsePrice(nmckT);
                 var purName =
                     (lot.QuerySelector("td:contains('Предмет договора:') +  td")?.TextContent ?? "").Trim();
-                if (string.IsNullOrEmpty(purName)) purName = purObjInfo;
+                if (string.IsNullOrEmpty(purName))
+                {
+                    purName = purObjInfo;
+                }
+
                 var insertLot =
                     $"INSERT INTO {AppBuilder.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency, lot_name = @lot_name";
                 var cmd18 = new MySqlCommand(insertLot, connect);
@@ -183,7 +196,7 @@ namespace ParserWebCore.Tender
                     var okpd2Code = okpd2Temp.GetDataFromRegex(@"^(\d[\.|\d]*\d)");
                     var okpd2GroupCode = 0;
                     var okpd2GroupLevel1Code = "";
-                    if (!String.IsNullOrEmpty(okpd2Code))
+                    if (!string.IsNullOrEmpty(okpd2Code))
                     {
                         GetOkpd(okpd2Code, out okpd2GroupCode, out okpd2GroupLevel1Code);
                     }
@@ -216,7 +229,7 @@ namespace ParserWebCore.Tender
                         var okpd2Code = okpd2Temp.GetDataFromRegex(@"^(\d[\.|\d]*\d)");
                         var okpd2GroupCode = 0;
                         var okpd2GroupLevel1Code = "";
-                        if (!String.IsNullOrEmpty(okpd2Code))
+                        if (!string.IsNullOrEmpty(okpd2Code))
                         {
                             GetOkpd(okpd2Code, out okpd2GroupCode, out okpd2GroupLevel1Code);
                         }

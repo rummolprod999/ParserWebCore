@@ -1,5 +1,8 @@
+#region
+
 using System;
 using System.Linq;
+using System.Reflection;
 using AngleSharp.Dom;
 using AngleSharp.Parser.Html;
 using ParserWebCore.Extensions;
@@ -8,6 +11,8 @@ using ParserWebCore.NetworkLibrary;
 using ParserWebCore.SharedLibraries;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {
@@ -32,14 +37,14 @@ namespace ParserWebCore.Parser
             catch (Exception e)
             {
                 Log.Logger(
-                    $"Exception recieve count page in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                    $"Exception recieve count page in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     e, urlStart);
             }
 
             if (max == 0)
             {
                 Log.Logger(
-                    $"Null count page in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                    $"Null count page in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     urlStart);
                 max = 1;
             }
@@ -59,7 +64,7 @@ namespace ParserWebCore.Parser
                 catch (Exception e)
                 {
                     Log.Logger(
-                        $"Exception in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                        $"Exception in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                         e, urlStart);
                 }
             }
@@ -70,7 +75,7 @@ namespace ParserWebCore.Parser
             var s = DownloadString.DownLTektorg(url);
             if (string.IsNullOrEmpty(s))
             {
-                Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                Log.Logger($"Empty string in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     url);
                 return;
             }
@@ -96,12 +101,16 @@ namespace ParserWebCore.Parser
             var urlT = (t.QuerySelector("a.section-procurement__item-title")?.GetAttribute("href") ?? "").Trim();
             if (string.IsNullOrEmpty(urlT))
             {
-                Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                Log.Logger($"Empty string in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     url);
             }
 
             var tenderUrl = urlT;
-            if (!urlT.Contains("https://")) tenderUrl = $"https://www.tektorg.ru{urlT}";
+            if (!urlT.Contains("https://"))
+            {
+                tenderUrl = $"https://www.tektorg.ru{urlT}";
+            }
+
             var status = (t.QuerySelector("div span:contains('Статус:')")?.TextContent?.Replace("Статус:", "") ?? "")
                 .Trim();
             if (status.Contains("Осталось:"))
@@ -136,7 +145,7 @@ namespace ParserWebCore.Parser
             var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm 'GMT'z");
             if (datePub == DateTime.MinValue || dateEnd == DateTime.MinValue)
             {
-                Log.Logger($"Empty dates in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                Log.Logger($"Empty dates in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     urlT, datePubT, dateEndT);
                 return;
             }
@@ -145,7 +154,7 @@ namespace ParserWebCore.Parser
             var purNum = purNumT.Replace("Номер закупки на сайте ЭТП:", "").Trim();
             if (string.IsNullOrEmpty(purNum))
             {
-                Log.Logger($"Empty purNum in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                Log.Logger($"Empty purNum in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     urlT, purNumT);
                 return;
             }

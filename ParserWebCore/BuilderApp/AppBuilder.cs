@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
@@ -6,6 +8,8 @@ using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+
+#endregion
 
 namespace ParserWebCore.BuilderApp
 {
@@ -51,7 +55,7 @@ namespace ParserWebCore.BuilderApp
         [Required] public static string SamarUser { get; set; }
         [Required] public static string KalugPass { get; set; }
         [Required] public static string KalugUser { get; set; }
-        
+
         [Required] public static string MzVoronPass { get; set; }
         [Required] public static string MzVoronUser { get; set; }
 

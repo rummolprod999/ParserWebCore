@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -10,6 +12,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
 
+#endregion
+
 namespace ParserWebCore.Parser
 {
     public class ParserUralair : ParserAbstract, IParser
@@ -17,7 +21,7 @@ namespace ParserWebCore.Parser
         private const int Count = 5;
         private const string Url = "https://www.uralairlines.ru/tenders/";
         private readonly ChromeDriver _driver = CreatorChromeDriver.GetChromeDriver();
-        private TimeSpan _timeoutB = TimeSpan.FromSeconds(120);
+        private readonly TimeSpan _timeoutB = TimeSpan.FromSeconds(120);
 
         public void Parsing()
         {
@@ -126,7 +130,11 @@ namespace ParserWebCore.Parser
             {
                 var name = a.Text.Trim();
                 var url = a.GetAttribute("href").Trim();
-                if (name == "" || url == "") continue;
+                if (name == "" || url == "")
+                {
+                    continue;
+                }
+
                 attachments.Add(new TypeUralair.Attachment { Name = name, Url = url });
             }
 

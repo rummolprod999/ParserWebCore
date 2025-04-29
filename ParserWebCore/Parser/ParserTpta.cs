@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using HtmlAgilityPack;
@@ -6,6 +8,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {
@@ -95,7 +99,7 @@ namespace ParserWebCore.Parser
                 var pQuant = poObject.SelectSingleNode("./td[3]")?.InnerText?.Trim() ?? "";
                 if (pName != "")
                 {
-                    pList.Add(new TypeObjectTpta {Name = pName, Okei = pOkei, Quantity = pQuant});
+                    pList.Add(new TypeObjectTpta { Name = pName, Okei = pOkei, Quantity = pQuant });
                 }
             }
 

@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Data;
 using HtmlAgilityPack;
@@ -9,6 +11,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Parser;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Tender
 {
@@ -29,7 +33,11 @@ namespace ParserWebCore.Tender
             {
                 var dateUpd = DateTime.Now;
                 connect.Open();
-                if (TenderExist(connect)) return;
+                if (TenderExist(connect))
+                {
+                    return;
+                }
+
                 var s = DownloadString.DownLHttpPostWithCookiesB2b(_tn.Href, ParserB2BWeb.CookieCollection,
                     useProxy: AppBuilder.UserProxy);
                 if (string.IsNullOrEmpty(s))
@@ -682,9 +690,17 @@ namespace ParserWebCore.Tender
             lotWasAdded = false;
             var lotNumT = lot.InnerText?.Trim().GetDataFromRegex(@"Лот № (\d+)");
             var succesLotNum = int.TryParse(lotNumT, out var lotNum);
-            if (!succesLotNum) lotNum = 1;
+            if (!succesLotNum)
+            {
+                lotNum = 1;
+            }
+
             var lotHref = lot.Attributes["href"]?.Value ?? "";
-            if (!string.IsNullOrEmpty(lotHref)) return;
+            if (!string.IsNullOrEmpty(lotHref))
+            {
+                return;
+            }
+
             lotHref = $"https://www.b2b-center.ru{lotHref}";
             var sLot = DownloadString.DownLHttpPostWithCookiesB2b(lotHref, ParserB2BWeb.CookieCollection,
                 useProxy: AppBuilder.UserProxy);
@@ -863,7 +879,11 @@ namespace ParserWebCore.Tender
             {
                 var urlAtt = (dd?.Attributes["href"]?.Value ?? "").Trim();
                 var fName = (dd?.InnerText ?? "").Trim();
-                if (string.IsNullOrEmpty(fName)) continue;
+                if (string.IsNullOrEmpty(fName))
+                {
+                    continue;
+                }
+
                 var insertAttach =
                     $"INSERT INTO {AppBuilder.Prefix}attachment SET id_tender = @id_tender, file_name = @file_name, url = @url";
                 var cmd10 = new MySqlCommand(insertAttach, connect);

@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -6,6 +8,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ParserWebCore.Logger;
+
+#endregion
 
 namespace ParserWebCore.NetworkLibrary
 {
@@ -27,7 +31,7 @@ namespace ParserWebCore.NetworkLibrary
             {
                 try
                 {
-                    var task = Task.Run(() => (new TimedWebClientUaEis()).DownloadString(url));
+                    var task = Task.Run(() => new TimedWebClientUaEis().DownloadString(url));
                     if (task.Wait(TimeSpan.FromSeconds(99)))
                     {
                         tmp = task.Result;
@@ -39,7 +43,11 @@ namespace ParserWebCore.NetworkLibrary
                 }
                 catch (WebException ex)
                 {
-                    if (ex.Response is HttpWebResponse r) Log.Logger("Response code: ", r.StatusCode);
+                    if (ex.Response is HttpWebResponse r)
+                    {
+                        Log.Logger("Response code: ", r.StatusCode);
+                    }
+
                     if (ex.Response is HttpWebResponse errorResponse &&
                         errorResponse.StatusCode == HttpStatusCode.Forbidden)
                     {
@@ -103,8 +111,12 @@ namespace ParserWebCore.NetworkLibrary
             {
                 try
                 {
-                    var task = Task.Run(() => (new TimedWebClient()).DownloadString(url));
-                    if (!task.Wait(TimeSpan.FromSeconds(60))) throw new TimeoutException();
+                    var task = Task.Run(() => new TimedWebClient().DownloadString(url));
+                    if (!task.Wait(TimeSpan.FromSeconds(60)))
+                    {
+                        throw new TimeoutException();
+                    }
+
                     tmp = task.Result;
                     break;
                 }
@@ -151,8 +163,12 @@ namespace ParserWebCore.NetworkLibrary
             {
                 try
                 {
-                    var task = Task.Run(() => (new TimedWebClientTektorg()).DownloadString(url));
-                    if (!task.Wait(TimeSpan.FromSeconds(30))) throw new TimeoutException();
+                    var task = Task.Run(() => new TimedWebClientTektorg().DownloadString(url));
+                    if (!task.Wait(TimeSpan.FromSeconds(30)))
+                    {
+                        throw new TimeoutException();
+                    }
+
                     tmp = task.Result;
                     break;
                 }
@@ -200,14 +216,22 @@ namespace ParserWebCore.NetworkLibrary
             {
                 try
                 {
-                    var task = Task.Run(() => (new TimedWebClientUa(randomUa, headers)).DownloadString(url));
-                    if (!task.Wait(TimeSpan.FromSeconds(60))) throw new TimeoutException();
+                    var task = Task.Run(() => new TimedWebClientUa(randomUa, headers).DownloadString(url));
+                    if (!task.Wait(TimeSpan.FromSeconds(60)))
+                    {
+                        throw new TimeoutException();
+                    }
+
                     tmp = task.Result;
                     break;
                 }
                 catch (WebException ex)
                 {
-                    if (ex.Response is HttpWebResponse r) Log.Logger("Response code: ", r.StatusCode);
+                    if (ex.Response is HttpWebResponse r)
+                    {
+                        Log.Logger("Response code: ", r.StatusCode);
+                    }
+
                     if (ex.Response is HttpWebResponse errorResponse &&
                         errorResponse.StatusCode == HttpStatusCode.Forbidden)
                     {
@@ -274,7 +298,11 @@ namespace ParserWebCore.NetworkLibrary
                         var v = new TimedWebClient { Encoding = Encoding.GetEncoding("windows-1251") };
                         return v.DownloadString(url);
                     });
-                    if (!task.Wait(TimeSpan.FromSeconds(60))) throw new TimeoutException();
+                    if (!task.Wait(TimeSpan.FromSeconds(60)))
+                    {
+                        throw new TimeoutException();
+                    }
+
                     tmp = task.Result;
                     break;
                 }
@@ -303,14 +331,22 @@ namespace ParserWebCore.NetworkLibrary
             {
                 try
                 {
-                    var task = Task.Run(() => (new HttpPostSberB2B(num)).DownloadString(url));
-                    if (!task.Wait(TimeSpan.FromSeconds(60))) throw new TimeoutException();
+                    var task = Task.Run(() => new HttpPostSberB2B(num).DownloadString(url));
+                    if (!task.Wait(TimeSpan.FromSeconds(60)))
+                    {
+                        throw new TimeoutException();
+                    }
+
                     tmp = task.Result;
                     break;
                 }
                 catch (WebException ex)
                 {
-                    if (ex.Response is HttpWebResponse r) Log.Logger("Response code: ", r.StatusCode);
+                    if (ex.Response is HttpWebResponse r)
+                    {
+                        Log.Logger("Response code: ", r.StatusCode);
+                    }
+
                     if (ex.Response is HttpWebResponse errorResponse &&
                         errorResponse.StatusCode == HttpStatusCode.Forbidden)
                     {
@@ -371,14 +407,22 @@ namespace ParserWebCore.NetworkLibrary
             {
                 try
                 {
-                    var task = Task.Run(() => (new HttpPostZakMos()).DownloadString(url, data));
-                    if (!task.Wait(TimeSpan.FromSeconds(60))) throw new TimeoutException();
+                    var task = Task.Run(() => new HttpPostZakMos().DownloadString(url, data));
+                    if (!task.Wait(TimeSpan.FromSeconds(60)))
+                    {
+                        throw new TimeoutException();
+                    }
+
                     tmp = task.Result;
                     break;
                 }
                 catch (WebException ex)
                 {
-                    if (ex.Response is HttpWebResponse r) Log.Logger("Response code: ", r.StatusCode);
+                    if (ex.Response is HttpWebResponse r)
+                    {
+                        Log.Logger("Response code: ", r.StatusCode);
+                    }
+
                     if (ex.Response is HttpWebResponse errorResponse &&
                         errorResponse.StatusCode == HttpStatusCode.Forbidden)
                     {
@@ -439,14 +483,22 @@ namespace ParserWebCore.NetworkLibrary
             {
                 try
                 {
-                    var task = Task.Run(() => (new HttpZmoRts()).DownloadString(url, data, section));
-                    if (!task.Wait(TimeSpan.FromSeconds(60))) throw new TimeoutException();
+                    var task = Task.Run(() => new HttpZmoRts().DownloadString(url, data, section));
+                    if (!task.Wait(TimeSpan.FromSeconds(60)))
+                    {
+                        throw new TimeoutException();
+                    }
+
                     tmp = task.Result;
                     break;
                 }
                 catch (WebException ex)
                 {
-                    if (ex.Response is HttpWebResponse r) Log.Logger("Response code: ", r.StatusCode);
+                    if (ex.Response is HttpWebResponse r)
+                    {
+                        Log.Logger("Response code: ", r.StatusCode);
+                    }
+
                     if (ex.Response is HttpWebResponse errorResponse &&
                         errorResponse.StatusCode == HttpStatusCode.Forbidden)
                     {
@@ -508,14 +560,22 @@ namespace ParserWebCore.NetworkLibrary
             {
                 try
                 {
-                    var task = Task.Run(() => (HttpPostAll.CreateInstance()).DownloadString(url));
-                    if (!task.Wait(TimeSpan.FromSeconds(60))) throw new TimeoutException();
+                    var task = Task.Run(() => HttpPostAll.CreateInstance().DownloadString(url));
+                    if (!task.Wait(TimeSpan.FromSeconds(60)))
+                    {
+                        throw new TimeoutException();
+                    }
+
                     tmp = task.Result;
                     break;
                 }
                 catch (WebException ex)
                 {
-                    if (ex.Response is HttpWebResponse r) Log.Logger("Response code: ", r.StatusCode);
+                    if (ex.Response is HttpWebResponse r)
+                    {
+                        Log.Logger("Response code: ", r.StatusCode);
+                    }
+
                     if (ex.Response is HttpWebResponse errorResponse &&
                         errorResponse.StatusCode == HttpStatusCode.Forbidden)
                     {
@@ -579,14 +639,22 @@ namespace ParserWebCore.NetworkLibrary
                 try
                 {
                     var task = Task.Run(() =>
-                        (HttpPostCookies.CreateInstance()).DownloadString(url, baseUrl, cookie, postContent));
-                    if (!task.Wait(TimeSpan.FromSeconds(60))) throw new TimeoutException();
+                        HttpPostCookies.CreateInstance().DownloadString(url, baseUrl, cookie, postContent));
+                    if (!task.Wait(TimeSpan.FromSeconds(60)))
+                    {
+                        throw new TimeoutException();
+                    }
+
                     tmp = task.Result;
                     break;
                 }
                 catch (WebException ex)
                 {
-                    if (ex.Response is HttpWebResponse r) Log.Logger("Response code: ", r.StatusCode);
+                    if (ex.Response is HttpWebResponse r)
+                    {
+                        Log.Logger("Response code: ", r.StatusCode);
+                    }
+
                     if (ex.Response is HttpWebResponse errorResponse &&
                         errorResponse.StatusCode == HttpStatusCode.Forbidden)
                     {
@@ -649,15 +717,23 @@ namespace ParserWebCore.NetworkLibrary
                 try
                 {
                     var task = Task.Run(() =>
-                        (HttpPostCookiesAll.CreateInstance()).DownloadString(url, baseUrl, cookie, postContent,
-                            useProxy: useProxy));
-                    if (!task.Wait(TimeSpan.FromSeconds(60))) throw new TimeoutException();
+                        HttpPostCookiesAll.CreateInstance().DownloadString(url, baseUrl, cookie, postContent,
+                            useProxy));
+                    if (!task.Wait(TimeSpan.FromSeconds(60)))
+                    {
+                        throw new TimeoutException();
+                    }
+
                     tmp = task.Result;
                     break;
                 }
                 catch (WebException ex)
                 {
-                    if (ex.Response is HttpWebResponse r) Log.Logger("Response code: ", r.StatusCode);
+                    if (ex.Response is HttpWebResponse r)
+                    {
+                        Log.Logger("Response code: ", r.StatusCode);
+                    }
+
                     if (ex.Response is HttpWebResponse errorResponse &&
                         errorResponse.StatusCode == HttpStatusCode.Forbidden)
                     {
@@ -719,14 +795,22 @@ namespace ParserWebCore.NetworkLibrary
                 try
                 {
                     var task = Task.Run(() =>
-                        (HttpPostSpg.CreateInstance()).DownloadString(url));
-                    if (!task.Wait(TimeSpan.FromSeconds(60))) throw new TimeoutException();
+                        HttpPostSpg.CreateInstance().DownloadString(url));
+                    if (!task.Wait(TimeSpan.FromSeconds(60)))
+                    {
+                        throw new TimeoutException();
+                    }
+
                     tmp = task.Result;
                     break;
                 }
                 catch (WebException ex)
                 {
-                    if (ex.Response is HttpWebResponse r) Log.Logger("Response code: ", r.StatusCode);
+                    if (ex.Response is HttpWebResponse r)
+                    {
+                        Log.Logger("Response code: ", r.StatusCode);
+                    }
+
                     if (ex.Response is HttpWebResponse errorResponse &&
                         errorResponse.StatusCode == HttpStatusCode.Forbidden)
                     {
@@ -787,8 +871,12 @@ namespace ParserWebCore.NetworkLibrary
             {
                 try
                 {
-                    var task = Task.Run(() => (new TimedWebClientFederal()).DownloadString(url));
-                    if (!task.Wait(TimeSpan.FromSeconds(30))) throw new TimeoutException();
+                    var task = Task.Run(() => new TimedWebClientFederal().DownloadString(url));
+                    if (!task.Wait(TimeSpan.FromSeconds(30)))
+                    {
+                        throw new TimeoutException();
+                    }
+
                     tmp = task.Result;
                     break;
                 }
@@ -835,14 +923,22 @@ namespace ParserWebCore.NetworkLibrary
             {
                 try
                 {
-                    var task = Task.Run(() => (new TimedWebClientUaB2B(randomUa)).DownloadString(url));
-                    if (!task.Wait(TimeSpan.FromSeconds(60))) throw new TimeoutException();
+                    var task = Task.Run(() => new TimedWebClientUaB2B(randomUa).DownloadString(url));
+                    if (!task.Wait(TimeSpan.FromSeconds(60)))
+                    {
+                        throw new TimeoutException();
+                    }
+
                     tmp = task.Result;
                     break;
                 }
                 catch (WebException ex)
                 {
-                    if (ex.Response is HttpWebResponse r) Log.Logger("Response code: ", r.StatusCode);
+                    if (ex.Response is HttpWebResponse r)
+                    {
+                        Log.Logger("Response code: ", r.StatusCode);
+                    }
+
                     if (ex.Response is HttpWebResponse errorResponse &&
                         errorResponse.StatusCode == HttpStatusCode.Forbidden)
                     {
@@ -905,15 +1001,23 @@ namespace ParserWebCore.NetworkLibrary
                 try
                 {
                     var task = Task.Run(() =>
-                        (HttpPostCookiesB2b.CreateInstance()).DownloadString(url, cookie, postContent,
-                            useProxy: useProxy, headers));
-                    if (!task.Wait(TimeSpan.FromSeconds(60))) throw new TimeoutException();
+                        HttpPostCookiesB2b.CreateInstance().DownloadString(url, cookie, postContent,
+                            useProxy, headers));
+                    if (!task.Wait(TimeSpan.FromSeconds(60)))
+                    {
+                        throw new TimeoutException();
+                    }
+
                     tmp = task.Result;
                     break;
                 }
                 catch (WebException ex)
                 {
-                    if (ex.Response is HttpWebResponse r) Log.Logger("Response code: ", r.StatusCode);
+                    if (ex.Response is HttpWebResponse r)
+                    {
+                        Log.Logger("Response code: ", r.StatusCode);
+                    }
+
                     if (ex.Response is HttpWebResponse errorResponse &&
                         errorResponse.StatusCode == HttpStatusCode.Forbidden)
                     {
@@ -974,14 +1078,22 @@ namespace ParserWebCore.NetworkLibrary
             {
                 try
                 {
-                    var task = Task.Run(() => (new HttpPostMedsi(num)).DownloadString(url));
-                    if (!task.Wait(TimeSpan.FromSeconds(60))) throw new TimeoutException();
+                    var task = Task.Run(() => new HttpPostMedsi(num).DownloadString(url));
+                    if (!task.Wait(TimeSpan.FromSeconds(60)))
+                    {
+                        throw new TimeoutException();
+                    }
+
                     tmp = task.Result;
                     break;
                 }
                 catch (WebException ex)
                 {
-                    if (ex.Response is HttpWebResponse r) Log.Logger("Response code: ", r.StatusCode);
+                    if (ex.Response is HttpWebResponse r)
+                    {
+                        Log.Logger("Response code: ", r.StatusCode);
+                    }
+
                     if (ex.Response is HttpWebResponse errorResponse &&
                         errorResponse.StatusCode == HttpStatusCode.Forbidden)
                     {

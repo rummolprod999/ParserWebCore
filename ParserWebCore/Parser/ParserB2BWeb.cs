@@ -1,5 +1,8 @@
+#region
+
 using System;
 using System.Net;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
 using HtmlAgilityPack;
@@ -9,6 +12,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {
@@ -34,7 +39,7 @@ namespace ParserWebCore.Parser
                 }
                 catch (Exception e)
                 {
-                    Log.Logger($"Error in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}", e);
+                    Log.Logger($"Error in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", e);
                 }
             }
         }
@@ -45,7 +50,7 @@ namespace ParserWebCore.Parser
                 DownloadString.DownLHttpPostWithCookiesB2b(url, CookieCollection, useProxy: AppBuilder.UserProxy);
             if (string.IsNullOrEmpty(result))
             {
-                Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                Log.Logger($"Empty string in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     url);
                 return;
             }

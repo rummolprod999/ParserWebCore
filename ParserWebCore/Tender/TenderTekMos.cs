@@ -1,5 +1,8 @@
+#region
+
 using System;
 using System.Data;
+using System.Reflection;
 using AngleSharp.Dom;
 using AngleSharp.Dom.Html;
 using AngleSharp.Parser.Html;
@@ -11,6 +14,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.SharedLibraries;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Tender
 {
@@ -27,9 +32,9 @@ namespace ParserWebCore.Tender
         public void ParsingTender()
         {
             var s = DownloadString.DownL(_tn.Href);
-            if (String.IsNullOrEmpty(s))
+            if (string.IsNullOrEmpty(s))
             {
-                Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                Log.Logger($"Empty string in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     _tn.Href);
             }
 
@@ -49,7 +54,7 @@ namespace ParserWebCore.Tender
             var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm 'GMT'z");
             if (datePub == DateTime.MinValue || dateEnd == DateTime.MinValue)
             {
-                Log.Logger($"Empty dates in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                Log.Logger($"Empty dates in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     _tn.Href, datePubT, dateEndT);
                 return;
             }
@@ -58,7 +63,7 @@ namespace ParserWebCore.Tender
             var purNum = purNumT.GetDataFromRegex("Извещение о процедуре (.+)");
             if (string.IsNullOrEmpty(purNum))
             {
-                Log.Logger($"Empty purNum in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                Log.Logger($"Empty purNum in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     _tn.Href, purNumT);
                 return;
             }
@@ -148,7 +153,11 @@ namespace ParserWebCore.Tender
                 var lotNumT = (lot.QuerySelector("div.procedure__lot-header span")?.TextContent ?? "").Trim();
                 lotNumT = lotNumT.GetDataFromRegex(@"Лот (\d+)");
                 int.TryParse(lotNumT, out var lotNum);
-                if (lotNum == 0) lotNum = 1;
+                if (lotNum == 0)
+                {
+                    lotNum = 1;
+                }
+
                 var currency = (lot.QuerySelector("td:contains('Валюта:') +  td")?.TextContent ?? "").Trim();
                 var nmckT = (lot.QuerySelector("td:contains('Начальная цена:') +  td")?.TextContent ?? "0.0")
                     .Trim();
@@ -202,7 +211,7 @@ namespace ParserWebCore.Tender
                 var okpd2Code = okpd2Temp.GetDataFromRegex(@"^(\d[\.|\d]*\d)");
                 var okpd2GroupCode = 0;
                 var okpd2GroupLevel1Code = "";
-                if (!String.IsNullOrEmpty(okpd2Code))
+                if (!string.IsNullOrEmpty(okpd2Code))
                 {
                     GetOkpd(okpd2Code, out okpd2GroupCode, out okpd2GroupLevel1Code);
                 }

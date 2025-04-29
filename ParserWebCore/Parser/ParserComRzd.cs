@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -10,6 +12,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
 
+#endregion
+
 namespace ParserWebCore.Parser
 {
     public class ParserComRzd : ParserAbstract, IParser
@@ -17,8 +21,8 @@ namespace ParserWebCore.Parser
         private const string Urlpage = "https://company.rzd.ru/ru/9395?f1465_pagesize=100";
         private const int Count = 10;
         private readonly ChromeDriver _driver = CreatorChromeDriver.GetChromeDriver();
-        private List<TypeComRzd> _listTenders = new List<TypeComRzd>();
-        private TimeSpan _timeoutB = TimeSpan.FromSeconds(120);
+        private readonly List<TypeComRzd> _listTenders = new List<TypeComRzd>();
+        private readonly TimeSpan _timeoutB = TimeSpan.FromSeconds(120);
 
         public void Parsing()
         {

@@ -1,3 +1,5 @@
+#region
+
 using System;
 using HtmlAgilityPack;
 using ParserWebCore.Extensions;
@@ -6,11 +8,13 @@ using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
 
+#endregion
+
 namespace ParserWebCore.Parser
 {
     public class ParserDpd : ParserAbstract, IParser
     {
-        private static string _startUrl = "https://www1.dpd.ru/tenders/";
+        private static readonly string _startUrl = "https://www1.dpd.ru/tenders/";
 
         public void Parsing()
         {

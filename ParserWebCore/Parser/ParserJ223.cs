@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using HtmlAgilityPack;
@@ -8,6 +10,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {
@@ -45,7 +49,11 @@ namespace ParserWebCore.Parser
 
         private void ParserPage(string url)
         {
-            if (DownloadString.MaxDownload > 1000) return;
+            if (DownloadString.MaxDownload > 1000)
+            {
+                return;
+            }
+
             var s = DownloadString.DownLUserAgentEis(url);
             if (string.IsNullOrEmpty(s))
             {
@@ -73,13 +81,21 @@ namespace ParserWebCore.Parser
 
         private void ParserLink(HtmlNode n)
         {
-            if (DownloadString.MaxDownload > 1000) return;
+            if (DownloadString.MaxDownload > 1000)
+            {
+                return;
+            }
+
             var url =
                 (n.SelectSingleNode(".//div[contains(@class, 'registry-entry__header-mid__number')]/a")
                     ?.Attributes["href"]?.Value ?? "").Trim();
             var purNumT = (n.SelectSingleNode(".//div[contains(@class, 'registry-entry__header-mid__number')]/a")
                 ?.InnerText.Replace("№", "") ?? "").Trim();
-            if (string.IsNullOrEmpty(url) || string.IsNullOrEmpty(purNumT)) return;
+            if (string.IsNullOrEmpty(url) || string.IsNullOrEmpty(purNumT))
+            {
+                return;
+            }
+
             var purNum = purNumT;
             if (purNum == "")
             {
@@ -87,7 +103,11 @@ namespace ParserWebCore.Parser
                 return;
             }
 
-            if (DownloadString.MaxDownload > 1000) return;
+            if (DownloadString.MaxDownload > 1000)
+            {
+                return;
+            }
+
             url = "https://zakupki.gov.ru" + url.Replace("common-info.html", "event-journal.html");
             var s = DownloadString.DownLUserAgentEis(url);
             if (string.IsNullOrEmpty(s))
@@ -105,7 +125,11 @@ namespace ParserWebCore.Parser
                 return;
             }
 
-            if (DownloadString.MaxDownload > 1000) return;
+            if (DownloadString.MaxDownload > 1000)
+            {
+                return;
+            }
+
             var urlEvent =
                 $"https://zakupki.gov.ru/epz/order/notice/card/event/journal/list.html?number=&sid={sid}&entityId=&defaultEntityTypes=false&page=1&pageSize=100&qualifier=order223EventJournalService&sorted=false";
             var s2 = DownloadString.DownLUserAgentEis(urlEvent);
@@ -126,11 +150,11 @@ namespace ParserWebCore.Parser
             {
                 connect.Open();
                 var selectTender =
-                    $"SELECT count(*) FROM event_log WHERE   notification_number = @notification_number";
+                    "SELECT count(*) FROM event_log WHERE   notification_number = @notification_number";
                 var cmd = new MySqlCommand(selectTender, connect);
                 cmd.Prepare();
                 cmd.Parameters.AddWithValue("@notification_number", purNum);
-                var count = (Int64)cmd.ExecuteScalar();
+                var count = (long)cmd.ExecuteScalar();
                 if (count == tens.Count)
                 {
                     return;
@@ -147,7 +171,7 @@ namespace ParserWebCore.Parser
                     .Trim();
                 dtime = dtime.Replace(timezone, "").Trim();
                 var dateTime = dtime.ParseDateUn("dd.MM.yyyy HH:mm");
-                var tn = new TypeJ()
+                var tn = new TypeJ
                 {
                     NotificationNumber = purNum, DateTime = dateTime, TimeZone = timezone, TypeFz = "223", Event = ev
                 };
@@ -158,7 +182,11 @@ namespace ParserWebCore.Parser
 
         protected int MaxPage(string u)
         {
-            if (DownloadString.MaxDownload >= 1000) return 1;
+            if (DownloadString.MaxDownload >= 1000)
+            {
+                return 1;
+            }
+
             var s = DownloadString.DownLUserAgentEis(u);
             if (string.IsNullOrEmpty(s))
             {

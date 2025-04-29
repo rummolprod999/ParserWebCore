@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Web;
 using HtmlAgilityPack;
@@ -7,11 +9,13 @@ using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
 
+#endregion
+
 namespace ParserWebCore.Parser
 {
     public class ParserAbsGroup : ParserAbstract, IParser
     {
-        private string _startPage = "https://tender.absgroup.ru/tenders/?PAGEN_1=";
+        private readonly string _startPage = "https://tender.absgroup.ru/tenders/?PAGEN_1=";
         private const int maxPage = 5;
 
         public void Parsing()

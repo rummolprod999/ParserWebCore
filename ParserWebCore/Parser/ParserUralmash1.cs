@@ -1,4 +1,7 @@
+#region
+
 using System;
+using System.Reflection;
 using System.Web;
 using HtmlAgilityPack;
 using ParserWebCore.Extensions;
@@ -6,6 +9,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {
@@ -23,7 +28,7 @@ namespace ParserWebCore.Parser
             var s = DownloadString.DownLUserAgent(_href);
             if (string.IsNullOrEmpty(s))
             {
-                Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                Log.Logger($"Empty string in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     _href);
                 return;
             }

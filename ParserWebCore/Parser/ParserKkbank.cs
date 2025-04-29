@@ -1,3 +1,5 @@
+#region
+
 using System;
 using HtmlAgilityPack;
 using ParserWebCore.Extensions;
@@ -6,12 +8,14 @@ using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
 
+#endregion
+
 namespace ParserWebCore.Parser
 {
     public class ParserKkbank : ParserAbstract, IParser
     {
         private const int maxPage = 10;
-        private string _startPage = "https://kk.bank/o-banke/zakupki/?PAGEN_1=";
+        private readonly string _startPage = "https://kk.bank/o-banke/zakupki/?PAGEN_1=";
 
         public void Parsing()
         {

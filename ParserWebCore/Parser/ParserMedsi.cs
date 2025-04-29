@@ -1,10 +1,15 @@
+#region
+
 using System;
+using System.Reflection;
 using Newtonsoft.Json.Linq;
 using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {
@@ -28,7 +33,7 @@ namespace ParserWebCore.Parser
                 }
                 catch (Exception e)
                 {
-                    Log.Logger($"Error in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}", e);
+                    Log.Logger($"Error in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", e);
                 }
             }
         }
@@ -38,7 +43,7 @@ namespace ParserWebCore.Parser
             var s = DownloadString.DownLMedsi(_url, num);
             if (string.IsNullOrEmpty(s))
             {
-                Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                Log.Logger($"Empty string in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     _url);
                 return;
             }
@@ -53,7 +58,7 @@ namespace ParserWebCore.Parser
                 }
                 catch (Exception e)
                 {
-                    Log.Logger($"Error in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                    Log.Logger($"Error in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                         e);
                 }
             }
@@ -61,15 +66,15 @@ namespace ParserWebCore.Parser
 
         private void ParserTenderObj(JToken t)
         {
-            var id = ((string) t.SelectToken("id") ?? "").Trim();
-            var href = ((string) t.SelectToken("detail_page_url") ?? "").Trim();
+            var id = ((string)t.SelectToken("id") ?? "").Trim();
+            var href = ((string)t.SelectToken("detail_page_url") ?? "").Trim();
             href = $"https://medsi.ru{href}";
-            var purName = ((string) t.SelectToken("type_of_service") ?? "").Trim();
-            var pubDateT = ((string) t.SelectToken("publish_date") ?? "").Trim();
-            var endDateT = ((string) t.SelectToken("finish_date") ?? "").Trim();
+            var purName = ((string)t.SelectToken("type_of_service") ?? "").Trim();
+            var pubDateT = ((string)t.SelectToken("publish_date") ?? "").Trim();
+            var endDateT = ((string)t.SelectToken("finish_date") ?? "").Trim();
             var datePub = pubDateT.ParseDateUn("dd.MM.yyyy");
             var dateEnd = endDateT.ParseDateUn("dd.MM.yyyy HH:mm:ss");
-            var orgContact = ((string) t.SelectToken("organizer[0]") ?? "").Trim();
+            var orgContact = ((string)t.SelectToken("organizer[0]") ?? "").Trim();
             var tn = new TenderMedsi("Медицинская корпорация МЕДСИ", "https://medsi.ru/", 190,
                 new TypeMedsi
                 {

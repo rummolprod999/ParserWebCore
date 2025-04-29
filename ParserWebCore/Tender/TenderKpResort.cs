@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Data;
 using System.Threading;
@@ -8,6 +10,8 @@ using ParserWebCore.Connections;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Tender
 {
@@ -44,7 +48,7 @@ namespace ParserWebCore.Tender
                 }
 
                 Thread.Sleep(3000);
-                var s = DownloadString.DownL(_tn.Href, tryCount: 5);
+                var s = DownloadString.DownL(_tn.Href, 5);
                 if (string.IsNullOrEmpty(s))
                 {
                     Log.Logger("Empty string in ParsingTender()", _tn.Href);
@@ -178,7 +182,11 @@ namespace ParserWebCore.Tender
                 var urlAtt = (dd?.Attributes["href"]?.Value ?? "").Trim();
                 urlAtt = $"https://zakup.kpresort.ru{urlAtt}";
                 var fName = (dd?.InnerText ?? "").Trim();
-                if (string.IsNullOrEmpty(fName)) continue;
+                if (string.IsNullOrEmpty(fName))
+                {
+                    continue;
+                }
+
                 var insertAttach =
                     $"INSERT INTO {AppBuilder.Prefix}attachment SET id_tender = @id_tender, file_name = @file_name, url = @url";
                 var cmd10 = new MySqlCommand(insertAttach, connect);

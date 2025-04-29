@@ -2,7 +2,7 @@ namespace TwoCaptcha.Captcha
 {
     public class Turnstile : Captcha
     {
-        public Turnstile() : base()
+        public Turnstile()
         {
             parameters["method"] = "turnstile";
         }

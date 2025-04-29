@@ -1,5 +1,9 @@
+#region
+
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {

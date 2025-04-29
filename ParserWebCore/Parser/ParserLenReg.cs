@@ -1,3 +1,5 @@
+#region
+
 using System;
 using HtmlAgilityPack;
 using ParserWebCore.Extensions;
@@ -5,6 +7,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {
@@ -35,7 +39,7 @@ namespace ParserWebCore.Parser
 
         private void ParsingPage(string url)
         {
-            var s = DownloadString.DownL(url, tryCount: 5);
+            var s = DownloadString.DownL(url, 5);
             if (string.IsNullOrEmpty(s))
             {
                 Log.Logger("Empty string in ParserPage()", url);

@@ -1,7 +1,11 @@
+#region
+
 using System;
 using System.Net;
 using System.Net.Http;
- 
+
+#endregion
+
 namespace ParserWebCore.chrome
 {
     internal static class Http
@@ -14,7 +18,9 @@ namespace ParserWebCore.chrome
             };
 
             if (handler.SupportsAutomaticDecompression)
+            {
                 handler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+            }
 
             return new HttpClient(handler, true);
         });

@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Text;
 using System.Threading;
@@ -11,6 +13,8 @@ using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
 
+#endregion
+
 namespace ParserWebCore.Parser
 {
     public class ParserStPo : ParserAbstract, IParser
@@ -18,7 +22,7 @@ namespace ParserWebCore.Parser
         public static string cookie = "";
         public static string ua = "";
         private readonly ChromeDriver _driver = CreateChomeDriverNoHeadless.GetChromeDriver();
-        private TimeSpan _timeoutB = TimeSpan.FromSeconds(60);
+        private readonly TimeSpan _timeoutB = TimeSpan.FromSeconds(60);
 
         public void Parsing()
         {
@@ -52,8 +56,8 @@ namespace ParserWebCore.Parser
                 _driver.Quit();
             }
 
-            ParsingPage($"https://www.stroyportal.ru/tender/?region_id=all&type=");
-            for (int i = 45; i <= 45 * 5; i = i + 45)
+            ParsingPage("https://www.stroyportal.ru/tender/?region_id=all&type=");
+            for (var i = 45; i <= 45 * 5; i = i + 45)
             {
                 try
                 {

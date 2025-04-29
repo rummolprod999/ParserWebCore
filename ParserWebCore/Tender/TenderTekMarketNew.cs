@@ -1,6 +1,9 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Reflection;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json.Linq;
 using ParserWebCore.BuilderApp;
@@ -9,6 +12,8 @@ using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Tender
 {
@@ -47,10 +52,10 @@ namespace ParserWebCore.Tender
                 }
 
                 var s = DownloadString.DownL(_tn.Down);
-                if (String.IsNullOrEmpty(s))
+                if (string.IsNullOrEmpty(s))
                 {
                     Log.Logger(
-                        $"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                        $"Empty string in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                         _tn.Href);
                     return;
                 }
@@ -66,8 +71,8 @@ namespace ParserWebCore.Tender
                 organiserId = GetOrganizer(t, connect);
                 GetPlacingWay(connect, out var idPlacingWay);
                 GetEtp(connect, out var idEtp);
-                var regPlace = ((string)(t.SelectToken(
-                                    "lots[0].deliveryPlace.region")) ??
+                var regPlace = ((string)t.SelectToken(
+                                    "lots[0].deliveryPlace.region") ??
                                 "").Trim();
                 var idRegion = GetRegionFromString(regPlace, connect);
                 var insertTender =
@@ -124,8 +129,8 @@ namespace ParserWebCore.Tender
                     cmd18.ExecuteNonQuery();
                     var idLot = (int)cmd18.LastInsertedId;
                     lotNum++;
-                    var cusName = ((string)(lot.SelectToken(
-                                       "customerName[0]")) ??
+                    var cusName = ((string)lot.SelectToken(
+                                       "customerName[0]") ??
                                    EtpName).Trim();
                     var customerId = 0;
                     if (!string.IsNullOrEmpty(cusName))
@@ -158,11 +163,11 @@ namespace ParserWebCore.Tender
                         }
                     }
 
-                    var delivterm = ((string)(lot.SelectToken(
-                                         "deliveryPlace.term")) ??
+                    var delivterm = ((string)lot.SelectToken(
+                                         "deliveryPlace.term") ??
                                      "").Trim();
-                    var delivpalce = ((string)(lot.SelectToken(
-                                          "deliveryPlace.address")) ??
+                    var delivpalce = ((string)lot.SelectToken(
+                                          "deliveryPlace.address") ??
                                       "").Trim();
                     var insertCustomerRequirement =
                         $"INSERT INTO {AppBuilder.Prefix}customer_requirement SET id_lot = @id_lot, id_customer = @id_customer, delivery_place = @delivery_place, max_price = @max_price, delivery_term = @delivery_term";
@@ -261,8 +266,8 @@ namespace ParserWebCore.Tender
         private int GetOrganizer(JToken t, MySqlConnection connect)
         {
             var organiserId = 0;
-            var orgFullName = ((string)(t.SelectToken(
-                                   "organizerName")) ??
+            var orgFullName = ((string)t.SelectToken(
+                                   "organizerName") ??
                                "").Trim();
             if (!string.IsNullOrEmpty(orgFullName))
             {
@@ -280,15 +285,15 @@ namespace ParserWebCore.Tender
                 }
                 else
                 {
-                    var phone = ((string)(t.SelectToken(
-                                     "contactPhone")) ??
+                    var phone = ((string)t.SelectToken(
+                                     "contactPhone") ??
                                  "").Trim();
-                    var email = ((string)(t.SelectToken(
-                                     "contactEmail")) ??
+                    var email = ((string)t.SelectToken(
+                                     "contactEmail") ??
                                  "").Trim();
                     var contactPerson =
-                        ((string)(t.SelectToken(
-                             "contactPerson")) ??
+                        ((string)t.SelectToken(
+                             "contactPerson") ??
                          "").Trim();
                     var addOrganizer =
                         $"INSERT INTO {AppBuilder.Prefix}organizer SET full_name = @full_name, contact_phone = @contact_phone, contact_person = @contact_person, contact_email = @contact_email";

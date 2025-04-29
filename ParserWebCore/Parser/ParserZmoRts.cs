@@ -1,11 +1,16 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Newtonsoft.Json.Linq;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {
@@ -95,7 +100,7 @@ namespace ParserWebCore.Parser
                     }
                     catch (Exception e)
                     {
-                        Log.Logger($"Error in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                        Log.Logger($"Error in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                             e);
                     }
                 }
@@ -109,7 +114,7 @@ namespace ParserWebCore.Parser
             var s = DownloadString.DownLRtsZmo(_apiUrl, data, section.Values.First());
             if (string.IsNullOrEmpty(s))
             {
-                Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                Log.Logger($"Empty string in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     _apiUrl);
                 return;
             }
@@ -130,7 +135,7 @@ namespace ParserWebCore.Parser
                 }
                 catch (Exception e)
                 {
-                    Log.Logger($"Error in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                    Log.Logger($"Error in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                         e, t.ToString());
                 }
             }

@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -11,6 +13,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
 
+#endregion
+
 namespace ParserWebCore.Parser
 {
     public class ParserWorkspace : ParserAbstract, IParser
@@ -19,7 +23,7 @@ namespace ParserWebCore.Parser
         private readonly ChromeDriver _driver = CreatorChromeDriver.GetChromeDriver();
 
         private readonly TimeSpan _timeoutB = TimeSpan.FromSeconds(30);
-        private List<TenderWorkspace> _listTenders = new List<TenderWorkspace>();
+        private readonly List<TenderWorkspace> _listTenders = new List<TenderWorkspace>();
 
         public void Parsing()
         {

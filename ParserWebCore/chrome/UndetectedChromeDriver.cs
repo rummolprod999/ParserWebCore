@@ -1,6 +1,5 @@
-using Newtonsoft.Json;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,44 +13,63 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+
+#endregion
 
 namespace ParserWebCore.chrome
 {
-   public class UndetectedChromeDriver : ChromeDriver
+    public class UndetectedChromeDriver : ChromeDriver
     {
-        private UndetectedChromeDriver(ChromeDriverService service, ChromeOptions options, 
-            TimeSpan commandTimeout) : base(service, options, commandTimeout) { }
+        private UndetectedChromeDriver(ChromeDriverService service, ChromeOptions options,
+            TimeSpan commandTimeout) : base(service, options, commandTimeout)
+        {
+        }
 
-        private bool _headless = false;
-        private ChromeOptions _options = null;
-        private ChromeDriverService _service = null;
-        private Process _browser = null;
+        private bool _headless;
+        private ChromeOptions _options;
+        private ChromeDriverService _service;
+        private Process _browser;
         private bool _keepUserDataDir = true;
-        private string _userDataDir = null;
+        private string _userDataDir;
 
         /// <summary>
-        /// Creates a new instance of the chrome driver.
+        ///     Creates a new instance of the chrome driver.
         /// </summary>
         /// <param name="options">Used to define browser behavior.</param>
-        /// <param name="userDataDir">Set chrome user profile directory.
-        /// creates a temporary profile if userDataDir is null,
-        /// and automatically deletes it after exiting.</param>
+        /// <param name="userDataDir">
+        ///     Set chrome user profile directory.
+        ///     creates a temporary profile if userDataDir is null,
+        ///     and automatically deletes it after exiting.
+        /// </param>
         /// <param name="driverExecutablePath">Set chrome driver executable file path. (patches new binary)</param>
-        /// <param name="browserExecutablePath">Set browser executable file path.
-        /// default using $PATH to execute.</param>
+        /// <param name="browserExecutablePath">
+        ///     Set browser executable file path.
+        ///     default using $PATH to execute.
+        /// </param>
         /// <param name="port">Set the port used by the chromedriver executable. (not debugger port)</param>
         /// <param name="logLevel">Set chrome logLevel.</param>
-        /// <param name="headless">Specifies to use the browser in headless mode.
-        /// warning: This reduces undetectability and is not fully supported.</param>
-        /// <param name="noSandbox">Set use --no-sandbox, and suppress the "unsecure option" status bar.
-        /// this option has a default of true since many people seem to run this as root(....) ,
-        /// and chrome does not start when running as root without using --no-sandbox flag.</param>
+        /// <param name="headless">
+        ///     Specifies to use the browser in headless mode.
+        ///     warning: This reduces undetectability and is not fully supported.
+        /// </param>
+        /// <param name="noSandbox">
+        ///     Set use --no-sandbox, and suppress the "unsecure option" status bar.
+        ///     this option has a default of true since many people seem to run this as root(....) ,
+        ///     and chrome does not start when running as root without using --no-sandbox flag.
+        /// </param>
         /// <param name="suppressWelcome">First launch using the welcome page.</param>
         /// <param name="hideCommandPromptWindow">Hide selenium command prompt window.</param>
-        /// <param name="commandTimeout">The maximum amount of time to wait for each command.
-        /// default value is 60 seconds.</param>
-        /// <param name="prefs">Prefs is meant to store lightweight state that reflects user preferences.
-        /// dict value can be value or json.</param>
+        /// <param name="commandTimeout">
+        ///     The maximum amount of time to wait for each command.
+        ///     default value is 60 seconds.
+        /// </param>
+        /// <param name="prefs">
+        ///     Prefs is meant to store lightweight state that reflects user preferences.
+        ///     dict value can be value or json.
+        /// </param>
         /// <param name="configureService">Initialize configuration ChromeDriverService.</param>
         /// <returns>UndetectedChromeDriver</returns>
         public static UndetectedChromeDriver Create(
@@ -71,7 +89,10 @@ namespace ParserWebCore.chrome
         {
             //----- Patcher ChromeDriver -----
             if (driverExecutablePath == null)
+            {
                 throw new Exception("Parameter driverExecutablePath is required.");
+            }
+
             var patcher = new Patcher(
                 driverExecutablePath);
             patcher.Auto();
@@ -79,12 +100,17 @@ namespace ParserWebCore.chrome
 
             //----- Options -----
             if (options == null)
+            {
                 options = new ChromeOptions();
+            }
             //----- Options -----
 
             //----- DebugPort -----
             if (options.DebuggerAddress != null)
+            {
                 throw new Exception("Options is already used, please create new ChromeOptions.");
+            }
+
             var debugHost = "127.0.0.1";
             var debugPort = findFreePort();
             options.AddArgument($"--remote-debugging-host={debugHost}");
@@ -100,7 +126,9 @@ namespace ParserWebCore.chrome
                 .Select(it => it.Groups[1].Value)
                 .FirstOrDefault(it => !string.IsNullOrEmpty(it));
             if (userDataDirArg != null)
+            {
                 userDataDir = userDataDirArg;
+            }
             else
             {
                 if (userDataDir == null)
@@ -109,6 +137,7 @@ namespace ParserWebCore.chrome
                     userDataDir = Path.Combine(
                         Path.GetTempPath(), Guid.NewGuid().ToString());
                 }
+
                 options.AddArgument($"--user-data-dir={userDataDir}");
             }
             //----- UserDataDir -----
@@ -116,7 +145,9 @@ namespace ParserWebCore.chrome
             //----- Language -----
             var language = CultureInfo.CurrentCulture.Name;
             if (!options.Arguments.Any(it => it.Contains("--lang")))
+            {
                 options.AddArgument($"--lang={language}");
+            }
             //----- Language -----
 
             //----- BinaryLocation -----
@@ -125,19 +156,26 @@ namespace ParserWebCore.chrome
                 var executable = new ChromeExecutable();
                 browserExecutablePath = executable.GetExecutablePath();
                 if (browserExecutablePath == null)
+                {
                     throw new Exception("Not found chrome.exe.");
+                }
             }
+
             options.BinaryLocation = browserExecutablePath;
             //----- BinaryLocation -----
 
             //----- SuppressWelcome -----
             if (suppressWelcome)
+            {
                 options.AddArguments("--no-default-browser-check", "--no-first-run");
+            }
             //----- SuppressWelcome -----
 
             //----- NoSandbox -----
             if (noSandbox)
+            {
                 options.AddArguments("--no-sandbox", "--test-type");
+            }
             //----- NoSandbox -----
 
             //----- Headless -----
@@ -150,9 +188,13 @@ namespace ParserWebCore.chrome
                         .GetAwaiter().GetResult();
                     var versionMain = version.Substring(0, version.IndexOf('.'));
                     if (int.Parse(versionMain) < 108)
+                    {
                         options.AddArguments("--headless=chrome");
+                    }
                     else
+                    {
                         options.AddArguments("--headless=new");
+                    }
                 }
                 catch
                 {
@@ -171,7 +213,9 @@ namespace ParserWebCore.chrome
 
             //----- Prefs -----
             if (prefs != null)
+            {
                 handlePrefs(userDataDir, prefs);
+            }
             //----- Prefs -----
 
             //----- Fix exit_type -----
@@ -189,14 +233,16 @@ namespace ParserWebCore.chrome
                         Encoding.GetEncoding("ISO-8859-1"));
                 }
             }
-            catch (Exception) { }
+            catch (Exception)
+            {
+            }
             //----- Fix exit_type -----
 
             //----- Start Process -----
             var args = options.Arguments
                 .Select(it => it.Trim())
                 .Aggregate("", (r, it) => r + " " +
-                    (it.Contains(" ") ? $"\"{it}\"" : it));
+                                          (it.Contains(" ") ? $"\"{it}\"" : it));
             var info = new ProcessStartInfo(options.BinaryLocation, args);
             info.UseShellExecute = false;
             info.RedirectStandardInput = true;
@@ -204,9 +250,11 @@ namespace ParserWebCore.chrome
             info.RedirectStandardError = true;
             var browser = Process.Start(info);
             if (browser == null)
+            {
                 throw new Exception("Browser process start error.");
+            }
             //----- Start Process -----
-            
+
             try
             {
                 //----- Create ChromeDriver -----
@@ -215,11 +263,20 @@ namespace ParserWebCore.chrome
                     Path.GetFileName(driverExecutablePath));
                 service.HideCommandPromptWindow = hideCommandPromptWindow;
                 if (port != 0)
+                {
                     service.Port = port;
+                }
+
                 if (configureService != null)
+                {
                     configureService(service);
+                }
+
                 if (commandTimeout == null)
+                {
                     commandTimeout = TimeSpan.FromSeconds(60);
+                }
+
                 var driver = new UndetectedChromeDriver(service, options, commandTimeout.Value);
                 //----- Create ChromeDriver -----
 
@@ -242,7 +299,10 @@ namespace ParserWebCore.chrome
         public void GoToUrl(string url)
         {
             if (_headless)
+            {
                 configureHeadless();
+            }
+
             //if (hasCdcProps())
             //    hookRemoveCdcProps();
             Navigate().GoToUrl(url);
@@ -257,7 +317,7 @@ namespace ParserWebCore.chrome
                     new Dictionary<string, object>
                     {
                         ["source"] =
-                        @"
+                            @"
                             Object.defineProperty(window, ""navigator"", {
                                 Object.defineProperty(window, ""navigator"", {
                                   value: new Proxy(navigator, {
@@ -277,16 +337,16 @@ namespace ParserWebCore.chrome
                     new Dictionary<string, object>
                     {
                         ["userAgent"] =
-                        ((string)ExecuteScript(
-                            "return navigator.userAgent"
-                        )).Replace("Headless", "")
+                            ((string)ExecuteScript(
+                                "return navigator.userAgent"
+                            )).Replace("Headless", "")
                     });
                 ExecuteCdpCommand(
                     "Page.addScriptToEvaluateOnNewDocument",
                     new Dictionary<string, object>
                     {
                         ["source"] =
-                        @"
+                            @"
                             Object.defineProperty(navigator, 'maxTouchPoints', {get: () => 1});
                             Object.defineProperty(navigator.connection, 'rtt', {get: () => 100});
 
@@ -387,10 +447,10 @@ namespace ParserWebCore.chrome
         }
 
         /// <summary>
-        /// This can be useful in case of heavy detection methods.
-        /// -stops the chromedriver service which runs in the background
-        /// -starts the chromedriver service which runs in the background
-        /// -recreate session
+        ///     This can be useful in case of heavy detection methods.
+        ///     -stops the chromedriver service which runs in the background
+        ///     -starts the chromedriver service which runs in the background
+        ///     -recreate session
         /// </summary>
         /// <param name="timeout"></param>
         /// <returns></returns>
@@ -398,46 +458,63 @@ namespace ParserWebCore.chrome
         public async Task Reconnect(int timeout = 100)
         {
             if (_service == null)
+            {
                 throw new Exception("ChromeDriverService cannot be null.");
+            }
 
             var methodInfo = typeof(DriverService).GetMethod("Stop",
                 BindingFlags.NonPublic | BindingFlags.Instance);
             if (methodInfo == null)
+            {
                 throw new Exception(@"Not found ChromeDriverService.Stop method.");
+            }
 
             try
             {
                 methodInfo.Invoke(_service, new object[] { });
             }
-            catch { }
+            catch
+            {
+            }
+
             await Task.Delay(timeout);
 
             try
             {
                 _service.Start();
             }
-            catch { }
+            catch
+            {
+            }
 
             try
             {
                 StartSession();
             }
-            catch { }
+            catch
+            {
+            }
         }
 
         /// <summary>
-        /// Differentiates from the regular method in that it does not
-        /// require a capabilities argument.The capabilities are automatically
-        /// recreated from the options at creation time.
+        ///     Differentiates from the regular method in that it does not
+        ///     require a capabilities argument.The capabilities are automatically
+        ///     recreated from the options at creation time.
         /// </summary>
         /// <param name="capabilities"></param>
         /// <exception cref="Exception"></exception>
         public new void StartSession(ICapabilities capabilities = null)
         {
             if (_options == null)
+            {
                 throw new Exception("ChromeOptions cannot be null.");
+            }
+
             if (capabilities == null)
+            {
                 capabilities = _options.ToCapabilities();
+            }
+
             base.StartSession(capabilities);
         }
 
@@ -484,7 +561,10 @@ namespace ParserWebCore.chrome
                 socket.Bind(localEP);
                 var freeEP = (IPEndPoint)socket.LocalEndPoint;
                 if (freeEP == null)
+                {
                     throw new Exception("Not found free port.");
+                }
+
                 return freeEP.Port;
             }
             finally
@@ -498,7 +578,9 @@ namespace ParserWebCore.chrome
             //_service.Dispose();
             base.Dispose(disposing);
             if (disposing)
+            {
                 disposeBrowser(_browser, _userDataDir, _keepUserDataDir);
+            }
         }
 
         private static void disposeBrowser(
@@ -512,7 +594,9 @@ namespace ParserWebCore.chrome
                     browser.Dispose();
                 }
             }
-            catch (Exception) { }
+            catch (Exception)
+            {
+            }
 
             if (!keepUserDataDir)
             {
@@ -523,8 +607,11 @@ namespace ParserWebCore.chrome
                         if (userDataDir != null)
                         {
                             if (Directory.Exists(userDataDir))
+                            {
                                 Directory.Delete(userDataDir, true);
+                            }
                         }
+
                         break;
                     }
                     catch (Exception)
@@ -539,7 +626,9 @@ namespace ParserWebCore.chrome
         {
             var defaultPath = Path.Combine(userDataDir, "Default");
             if (!Directory.Exists(defaultPath))
+            {
                 Directory.CreateDirectory(defaultPath);
+            }
 
             var newPrefs = new Dictionary<string, object>();
 
@@ -554,7 +643,9 @@ namespace ParserWebCore.chrome
                         var json = reader.ReadToEnd();
                         newPrefs = Json.DeserializeData(json);
                     }
-                    catch (Exception) { }
+                    catch (Exception)
+                    {
+                    }
                 }
             }
 
@@ -563,14 +654,18 @@ namespace ParserWebCore.chrome
             {
                 if (key.Contains("."))
                 {
-                    var split = key.Split(new char[] { '.' }, 2);
+                    var split = key.Split(new[] { '.' }, 2);
                     var k1 = split[0];
                     var k2 = split[1];
                     if (!dict.ContainsKey(k1))
+                    {
                         dict[k1] = new Dictionary<string, object>();
+                    }
+
                     undotMerge(k2, value, (Dictionary<string, object>)dict[k1]);
                     return;
                 }
+
                 dict[key] = value;
             }
 
@@ -581,7 +676,7 @@ namespace ParserWebCore.chrome
                     undotMerge(pair.Key, pair.Value, newPrefs);
                 }
             }
-            catch(Exception)
+            catch (Exception)
             {
                 throw new Exception("Prefs merge faild.");
             }

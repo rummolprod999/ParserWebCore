@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Data;
 using HtmlAgilityPack;
@@ -7,6 +9,8 @@ using ParserWebCore.Connections;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Tender
 {
@@ -188,7 +192,7 @@ namespace ParserWebCore.Tender
                 foreach (var doc in docs)
                 {
                     var urlAttT = (doc?.Attributes["href"]?.Value ?? "").Trim();
-                    var fName =  doc.SelectSingleNode(".//span")?.InnerText?.Trim() ?? "Документы";
+                    var fName = doc.SelectSingleNode(".//span")?.InnerText?.Trim() ?? "Документы";
                     var urlAtt = $"https://maxi-tender.ru{urlAttT}";
                     if (!string.IsNullOrEmpty(fName))
                     {

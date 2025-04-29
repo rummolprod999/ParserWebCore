@@ -2,7 +2,7 @@ namespace TwoCaptcha.Captcha
 {
     public class Text : Captcha
     {
-        public Text() : base()
+        public Text()
         {
             parameters["method"] = "post";
         }

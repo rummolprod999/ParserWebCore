@@ -1,5 +1,8 @@
+#region
+
 using System;
 using System.Data;
+using System.Reflection;
 using HtmlAgilityPack;
 using MySql.Data.MySqlClient;
 using ParserWebCore.BuilderApp;
@@ -9,6 +12,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Parser;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Tender
 {
@@ -49,7 +54,7 @@ namespace ParserWebCore.Tender
                 if (string.IsNullOrEmpty(s))
                 {
                     Log.Logger(
-                        $"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                        $"Empty string in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                         _tn.Href);
                     return;
                 }
@@ -254,7 +259,11 @@ namespace ParserWebCore.Tender
                 var urlAttT = (dd?.Attributes["href"]?.Value ?? "").Trim();
                 var fName = (dd?.InnerText ?? "").Trim();
                 var urlAtt = $"https://procurement.spgr.ru/tender/{urlAttT}";
-                if (string.IsNullOrEmpty(fName)) continue;
+                if (string.IsNullOrEmpty(fName))
+                {
+                    continue;
+                }
+
                 var insertAttach =
                     $"INSERT INTO {AppBuilder.Prefix}attachment SET id_tender = @id_tender, file_name = @file_name, url = @url";
                 var cmd10 = new MySqlCommand(insertAttach, connect);

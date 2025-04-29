@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Data;
 using System.Net;
@@ -12,13 +14,15 @@ using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Parser;
 using ParserWebCore.TenderType;
 
+#endregion
+
 namespace ParserWebCore.Tender
 {
     public class TenderGzwSp : TenderAbstract, ITender
     {
         private readonly Arguments _arg;
         private readonly TypeMzVoron _tn;
-        private string _baseUrl;
+        private readonly string _baseUrl;
 
         public TenderGzwSp(string etpName, string etpUrl, int typeFz, TypeMzVoron tn, string baseurl, Arguments arg) :
             base(etpName,
@@ -368,7 +372,8 @@ namespace ParserWebCore.Tender
                     cmd16.ExecuteNonQuery();
                 }
 
-                if (_arg == Arguments.Midural || _arg == Arguments.Mordov || _arg == Arguments.MiduralGr || _arg == Arguments.Mzvoron)
+                if (_arg == Arguments.Midural || _arg == Arguments.Mordov || _arg == Arguments.MiduralGr ||
+                    _arg == Arguments.Mzvoron)
                 {
                     var poList =
                         htmlDoc.DocumentNode.SelectNodes("//table[thead[tr[th[. = 'Количество']]]]/tbody/tr") ??

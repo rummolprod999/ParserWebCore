@@ -1,3 +1,5 @@
+#region
+
 using System;
 using HtmlAgilityPack;
 using ParserWebCore.Extensions;
@@ -5,6 +7,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {
@@ -81,7 +85,7 @@ namespace ParserWebCore.Parser
             }
 
             var tn = new TenderRwBy("Белорусская железная дорога", "https://www.rw.by", 128,
-                new TypeRwBy {PurName = purName, PurNum = purNum, DatePub = datePub, Href = href});
+                new TypeRwBy { PurName = purName, PurNum = purNum, DatePub = datePub, Href = href });
             ParserTender(tn);
         }
     }

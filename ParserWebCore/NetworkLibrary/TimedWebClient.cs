@@ -1,13 +1,16 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
-using OpenQA.Selenium.Chrome;
 using ParserWebCore.Creators;
 using ParserWebCore.Logger;
+
+#endregion
 
 namespace ParserWebCore.NetworkLibrary
 {
@@ -117,13 +120,13 @@ namespace ParserWebCore.NetworkLibrary
 
     public class TimedWebClientTektorg : WebClient
     {
-        private static String cookieTekTorg = null;
+        private static readonly string cookieTekTorg;
 
         static TimedWebClientTektorg()
         {
             if (cookieTekTorg == null)
             {
-                ChromeDriver _driver = CreateChomeDriverNoHeadless.GetChromeDriver();
+                var _driver = CreateChomeDriverNoHeadless.GetChromeDriver();
                 try
                 {
                     _driver.Navigate().GoToUrl("https://www.tektorg.ru/rosneft/procedures");

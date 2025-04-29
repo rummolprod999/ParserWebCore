@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -10,14 +12,16 @@ using ParserWebCore.Logger;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
 
+#endregion
+
 namespace ParserWebCore.Parser
 {
     public class ParserBoaz : ParserAbstract, IParser
     {
         private const string Url = "https://boaz-zavod.ru/suppliers/tenders/";
         private readonly ChromeDriver _driver = CreatorChromeDriver.GetChromeDriver();
-        private List<TypeBoaz> _tendersList = new List<TypeBoaz>();
-        private TimeSpan _timeoutB = TimeSpan.FromSeconds(120);
+        private readonly List<TypeBoaz> _tendersList = new List<TypeBoaz>();
+        private readonly TimeSpan _timeoutB = TimeSpan.FromSeconds(120);
 
         public void Parsing()
         {

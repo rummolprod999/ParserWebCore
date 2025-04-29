@@ -1,12 +1,17 @@
+#region
+
 using System;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using AngleSharp.Parser.Html;
 using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
+
+#endregion
 
 namespace ParserWebCore.SharedLibraries
 {
@@ -16,10 +21,10 @@ namespace ParserWebCore.SharedLibraries
         {
             var i = 1;
             var s = DownloadString.DownLTektorg(url);
-            if (String.IsNullOrEmpty(s))
+            if (string.IsNullOrEmpty(s))
             {
                 Log.Logger(
-                    $"Empty string in {typeof(SharedTekTorg).Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                    $"Empty string in {typeof(SharedTekTorg).Name}.{MethodBase.GetCurrentMethod().Name}",
                     url);
                 return i;
             }
@@ -50,7 +55,7 @@ namespace ParserWebCore.SharedLibraries
             try
             {
                 IFormatProvider formatter = new NumberFormatInfo { NumberDecimalSeparator = "," };
-                d = Decimal.Parse(s, formatter);
+                d = decimal.Parse(s, formatter);
             }
             catch (Exception)
             {

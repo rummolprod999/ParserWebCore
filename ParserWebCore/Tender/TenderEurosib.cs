@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Data;
 using HtmlAgilityPack;
@@ -8,6 +10,8 @@ using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Tender
 {
@@ -58,7 +62,7 @@ namespace ParserWebCore.Tender
                 _tn.PurName =
                     navigator.SelectSingleNode("//td[. = 'Предмет']/following-sibling::td")?.Value?
                         .Trim().ReplaceHtmlEntyty() ?? throw new Exception(
-                        $"cannot find purNum");
+                        "cannot find purNum");
                 _tn.CusName =
                     navigator.SelectSingleNode("//td[. = 'Заказчик']/following-sibling::td")?.Value?
                         .Trim().ReplaceHtmlEntyty() ?? "";

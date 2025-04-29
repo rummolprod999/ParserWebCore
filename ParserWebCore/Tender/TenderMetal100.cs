@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Data;
 using System.Threading;
@@ -9,6 +11,8 @@ using ParserWebCore.BuilderApp;
 using ParserWebCore.Connections;
 using ParserWebCore.Extensions;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Tender
 {
@@ -230,7 +234,7 @@ namespace ParserWebCore.Tender
                 {
                     var name = lot
                         .FindElementWithoutException(
-                            By.XPath($"./td[2]/strong"))
+                            By.XPath("./td[2]/strong"))
                         ?.Text.Trim() ?? "";
                     var insertLotitem =
                         $"INSERT INTO {AppBuilder.Prefix}purchase_object SET id_lot = @id_lot, id_customer = @id_customer, name = @name, sum = @sum, quantity_value = @quantity_value, customer_quantity_value = @customer_quantity_value, okei = @okei";

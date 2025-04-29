@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Data;
 using System.Net;
 using System.Threading;
@@ -11,6 +13,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Parser;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Tender
 {

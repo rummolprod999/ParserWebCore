@@ -2,7 +2,7 @@ namespace TwoCaptcha.Captcha
 {
     public class HCaptcha : Captcha
     {
-        public HCaptcha() : base()
+        public HCaptcha()
         {
             parameters["method"] = "hcaptcha";
         }

@@ -1,11 +1,15 @@
+#region
+
 using System;
 using System.IO;
+
+#endregion
 
 namespace TwoCaptcha.Captcha
 {
     public class Canvas : Captcha
     {
-        public Canvas() : base()
+        public Canvas()
         {
             parameters["canvas"] = "1";
             parameters["recaptcha"] = "1";

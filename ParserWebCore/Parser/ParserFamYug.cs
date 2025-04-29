@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -11,6 +13,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
 
+#endregion
+
 namespace ParserWebCore.Parser
 {
     public class ParserFamYug : ParserAbstract, IParser
@@ -18,8 +22,8 @@ namespace ParserWebCore.Parser
         private const int Count = 5;
         private const string Url = "https://etp.family-yug.ru/index.php?r=trades%2Findex";
         private readonly ChromeDriver _driver = CreatorChromeDriver.GetChromeDriver();
-        private TimeSpan _timeoutB = TimeSpan.FromSeconds(60);
-        private List<TypeFamYug> _urls = new List<TypeFamYug>();
+        private readonly TimeSpan _timeoutB = TimeSpan.FromSeconds(60);
+        private readonly List<TypeFamYug> _urls = new List<TypeFamYug>();
 
         public void Parsing()
         {

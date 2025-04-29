@@ -1,6 +1,9 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Reflection;
 using System.Threading;
 using Newtonsoft.Json.Linq;
 using OpenQA.Selenium;
@@ -12,6 +15,9 @@ using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
+using Cookie = System.Net.Cookie;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {
@@ -21,8 +27,8 @@ namespace ParserWebCore.Parser
         private const string Url = "https://prodavay.sel-be.ru/core/supplier/registry#?category=75";
         public static CookieCollection col = new CookieCollection();
         private readonly ChromeDriver _driver = CreatorChromeDriver.GetChromeDriver();
-        private TimeSpan _timeoutB = TimeSpan.FromSeconds(120);
-        private List<TypeZakupay> tenders = new List<TypeZakupay>();
+        private readonly TimeSpan _timeoutB = TimeSpan.FromSeconds(120);
+        private readonly List<TypeZakupay> tenders = new List<TypeZakupay>();
 
 
         public void Parsing()
@@ -92,7 +98,7 @@ namespace ParserWebCore.Parser
             Thread.Sleep(5000);
             foreach (var cookiesAllCookie in _driver.Manage().Cookies.AllCookies)
             {
-                col.Add(new System.Net.Cookie(cookiesAllCookie.Name, cookiesAllCookie.Value));
+                col.Add(new Cookie(cookiesAllCookie.Name, cookiesAllCookie.Value));
             }
         }
 
@@ -131,7 +137,7 @@ namespace ParserWebCore.Parser
             //Console.WriteLine(s);
             if (string.IsNullOrEmpty(s))
             {
-                Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}"
+                Log.Logger($"Empty string in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}"
                 );
                 return;
             }
@@ -148,12 +154,12 @@ namespace ParserWebCore.Parser
                 }
                 catch (Exception e)
                 {
-                    Log.Logger($"Error in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                    Log.Logger($"Error in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                         e);
                 }
             }
 
-            for (int i = 0; i < 20; i++)
+            for (var i = 0; i < 20; i++)
             {
                 var combined = string.Join(",", excludedId);
                 var data1 =
@@ -164,7 +170,7 @@ namespace ParserWebCore.Parser
                 if (string.IsNullOrEmpty(s1))
                 {
                     Log.Logger(
-                        $"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}"
+                        $"Empty string in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}"
                     );
                     return;
                 }
@@ -179,7 +185,7 @@ namespace ParserWebCore.Parser
                     }
                     catch (Exception e)
                     {
-                        Log.Logger($"Error in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                        Log.Logger($"Error in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                             e);
                     }
                 }
@@ -219,10 +225,10 @@ namespace ParserWebCore.Parser
                 var okpd = ((string)c.SelectToken("managedCategory.name") ?? "").Trim();
                 var okei = ((string)c.SelectToken("unit.name") ?? "").Trim();
                 var quant = ((string)c.SelectToken("count") ?? "").Trim();
-                var tt = new TypeZakupay.TypeObject() { Name = name, Okei = okei, Quantity = quant, OKPD = okpd };
+                var tt = new TypeZakupay.TypeObject { Name = name, Okei = okei, Quantity = quant, OKPD = okpd };
                 ob.Add(tt);
             });
-            var typeZ = new TypeZakupay()
+            var typeZ = new TypeZakupay
             {
                 DatePub = datePub, DateEnd = datePub.AddDays(2), PurName = purName, PurNum = id,
                 Href = "https://prodavay.sel-be.ru/", Status = status, DelivPlace = delivPlace, DelivTerm = delivTerm,

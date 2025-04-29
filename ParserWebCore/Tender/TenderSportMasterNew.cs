@@ -1,5 +1,8 @@
+#region
+
 using System;
 using System.Data;
+using System.Reflection;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json.Linq;
 using ParserWebCore.BuilderApp;
@@ -8,6 +11,8 @@ using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Tender
 {
@@ -47,10 +52,10 @@ namespace ParserWebCore.Tender
                     $"\"{_tn.Href}\" -H \"Connection: keep-alive\" -H \"Cache-Control: max-age=0\" -H \"sec-ch-ua: \\\"Chromium\\\";v=\\\"88\\\", \\\"Google Chrome\\\";v=\\\"88\\\", \\\";Not A Brand\\\";v=\\\"99\\\"\" -H \"sec-ch-ua-mobile: ?0\" -H \"Upgrade-Insecure-Requests: 1\" -H \"User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.50 Safari/537.36\" -H \"Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9\" -H \"Sec-Fetch-Site: same-origin\" -H \"Sec-Fetch-Mode: navigate\" -H \"Sec-Fetch-User: ?1\" -H \"Sec-Fetch-Dest: document\" -H \"Referer: https://zakupki.sportmaster.ru/tender_list.php?page=1\" -H \"Accept-Language: ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7\" -H \"Cookie: BITRIX_SM_SALE_UID=0; BITRIX_SM_SOUND_LOGIN_PLAYED=Y; BX_USER_ID=0456474427dd6510c97b47071dfe2b84; BITRIX_SM_LOGIN=info%40enter-it.ru; PHPSESSID=abl1r4870cr1r9c5qpns4f1812; BITRIX_SM_UIDH=b04205255ca18ad4cdebabdb60e90ac5; BITRIX_SM_UIDL=info%40enter-it.ru\"";
                 var docString =
                     CurlDownloadSportMaster.DownL(arguments);
-                if (String.IsNullOrEmpty(docString))
+                if (string.IsNullOrEmpty(docString))
                 {
                     Log.Logger(
-                        $"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                        $"Empty string in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                         _tn.Href);
                     return;
                 }

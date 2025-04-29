@@ -1,6 +1,9 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Reflection;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json.Linq;
 using ParserWebCore.BuilderApp;
@@ -9,13 +12,15 @@ using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.TenderType;
 
+#endregion
+
 namespace ParserWebCore.Tender
 {
     public class TenderBash : TenderAbstract, ITender
     {
         private readonly TypeBash _tn;
 
-        private Dictionary<string, string> headers = new Dictionary<string, string>
+        private readonly Dictionary<string, string> headers = new Dictionary<string, string>
         {
             ["authority"] = "api-zakaz.bashkortostan.ru",
             ["sec-ch-ua"] = "\"Not_A Brand\";v=\"99\", \"Google Chrome\";v=\"109\", \"Chromium\";v=\"109\"",
@@ -60,12 +65,12 @@ namespace ParserWebCore.Tender
                 var dateUpd = DateTime.Now;
                 var url =
                     $"https://api-zakaz.bashkortostan.ru/apifront/purchases/{_tn.Id}";
-                var result = DownloadString.DownLHttpPostWithCookiesB2b(url, cookie: null,
+                var result = DownloadString.DownLHttpPostWithCookiesB2b(url, null,
                     useProxy: AppBuilder.UserProxy, headers: headers);
                 if (string.IsNullOrEmpty(result))
                 {
                     Log.Logger(
-                        $"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                        $"Empty string in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                         url);
                     return;
                 }
@@ -76,8 +81,8 @@ namespace ParserWebCore.Tender
                 CreaateOrganizer(connect, out var organiserId);
                 GetEtp(connect, out var idEtp);
                 var idRegion = GetRegionFromString("башкор", connect);
-                PlacingWay = ((string)(t.SelectToken(
-                                  "$..purchase_method")) ??
+                PlacingWay = ((string)t.SelectToken(
+                                  "$..purchase_method") ??
                               "").Trim();
                 GetPlacingWay(connect, out var idPlacingWay);
                 var idTender = CreateTender(connect, 0, organiserId, idPlacingWay, idEtp, cancelStatus, dateUpd,
@@ -105,14 +110,14 @@ namespace ParserWebCore.Tender
             cmd18.Parameters.AddWithValue("@finance_source", "");
             cmd18.ExecuteNonQuery();
             var idLot = (int)cmd18.LastInsertedId;
-            var delivT1 = ((string)(t.SelectToken(
-                               "$..order_plan")) ??
+            var delivT1 = ((string)t.SelectToken(
+                               "$..order_plan") ??
                            "").Trim();
-            var delivT2 = ((string)(t.SelectToken(
-                               "$..payment_type")) ??
+            var delivT2 = ((string)t.SelectToken(
+                               "$..payment_type") ??
                            "").Trim();
-            var delivT3 = ((string)(t.SelectToken(
-                               "$..payment_term")) ??
+            var delivT3 = ((string)t.SelectToken(
+                               "$..payment_term") ??
                            "").Trim();
             var delivTerm =
                 $"Планируемая дата заключения договора: {_tn.ContractDate:yyyy-MM-dd}\nВид оплаты: {delivT2}\nГрафик поставки товаров (выполнения работ, оказания услуг): {delivT1}\nУсловия оплаты: {delivT3}";
@@ -172,11 +177,11 @@ namespace ParserWebCore.Tender
 
         private void CreateCustomer(MySqlConnection connect, out int customerId, JToken jToken)
         {
-            var inn = ((string)(jToken.SelectToken(
-                           "$..organization.inn")) ??
+            var inn = ((string)jToken.SelectToken(
+                           "$..organization.inn") ??
                        "").Trim();
-            var cusName = ((string)(jToken.SelectToken(
-                               "$..organization.full_name")) ??
+            var cusName = ((string)jToken.SelectToken(
+                               "$..organization.full_name") ??
                            EtpName).Trim();
             customerId = 0;
             if (!string.IsNullOrEmpty(cusName))

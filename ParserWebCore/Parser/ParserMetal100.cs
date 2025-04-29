@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +13,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
 
+#endregion
+
 namespace ParserWebCore.Parser
 {
     public class ParserMetal100 : ParserAbstract, IParser
@@ -23,8 +27,8 @@ namespace ParserWebCore.Parser
             "https://metal100.ru/tenders"
         };
 
-        private List<TypeMetal100> _tendersList = new List<TypeMetal100>();
-        private TimeSpan _timeoutB = TimeSpan.FromSeconds(60);
+        private readonly List<TypeMetal100> _tendersList = new List<TypeMetal100>();
+        private readonly TimeSpan _timeoutB = TimeSpan.FromSeconds(60);
 
         public void Parsing()
         {
@@ -77,7 +81,7 @@ namespace ParserWebCore.Parser
         private void ParsingList(WebDriverWait wait, string Url)
         {
             _driver.SwitchTo().DefaultContent();
-            for (int i = 0; i < 20; i++)
+            for (var i = 0; i < 20; i++)
             {
                 try
                 {

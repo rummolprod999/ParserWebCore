@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -9,6 +11,8 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 using ParserWebCore.BuilderApp;
 using TwoCaptcha.Captcha;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {

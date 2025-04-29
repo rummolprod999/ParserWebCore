@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,6 +12,8 @@ using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Tender
 {
@@ -220,9 +224,15 @@ namespace ParserWebCore.Tender
                         "//td[contains(text(), 'Квалификационные требования')]/following-sibling::td")
                     ?.Value?.Trim() ?? "";
                 if (!string.IsNullOrEmpty(req1))
+                {
                     requirements.Add(new Req { Name = "Требования к составу участников", Content = req1 });
+                }
+
                 if (!string.IsNullOrEmpty(req2))
+                {
                     requirements.Add(new Req { Name = "Квалификационные требования", Content = req2 });
+                }
+
                 GetLots(htmlDoc, connect, idTender, requirements, customerId);
                 TenderKwords(connect, idTender);
                 AddVerNumber(connect, _tn.PurNum, TypeFz);
@@ -272,7 +282,11 @@ namespace ParserWebCore.Tender
                 ?.Value ?? "").Trim();
             var purObjects = lotNav.Select(
                 "./td[2]/text()");
-            if (purObjects is null) return;
+            if (purObjects is null)
+            {
+                return;
+            }
+
             foreach (XPathNavigator po in purObjects)
             {
                 var namePo = po?.Value?.ReplaceHtmlEntyty()?.Trim() ?? "";
@@ -344,7 +358,11 @@ namespace ParserWebCore.Tender
                 var urlAttT = (doc?.Attributes["href"]?.Value ?? "").Trim();
                 var fName = doc?.InnerText?.Trim() ?? "";
                 var urlAtt = $"https://www.rw.by{urlAttT}";
-                if (string.IsNullOrEmpty(fName)) continue;
+                if (string.IsNullOrEmpty(fName))
+                {
+                    continue;
+                }
+
                 var insertAttach =
                     $"INSERT INTO {AppBuilder.Prefix}attachment SET id_tender = @id_tender, file_name = @file_name, url = @url";
                 var cmd10 = new MySqlCommand(insertAttach, connect);
@@ -356,7 +374,7 @@ namespace ParserWebCore.Tender
             }
         }
 
-        class Req
+        private class Req
         {
             public string Name { get; set; }
             public string Content { get; set; }

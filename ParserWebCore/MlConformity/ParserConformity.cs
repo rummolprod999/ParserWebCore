@@ -1,3 +1,5 @@
+#region
+
 using System.Data;
 using MySql.Data.MySqlClient;
 using ParserWebCore.BuilderApp;
@@ -5,11 +7,13 @@ using ParserWebCore.Connections;
 using ParserWebCore.Logger;
 using ParserWebCore.Parser;
 
+#endregion
+
 namespace ParserWebCore.MlConformity
 {
     public class ParserConformity : IParser
     {
-        private DataTable _dt = new DataTable();
+        private readonly DataTable _dt = new DataTable();
 
         public void Parsing()
         {

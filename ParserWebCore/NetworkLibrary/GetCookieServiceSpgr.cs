@@ -1,14 +1,18 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using ParserWebCore.BuilderApp;
 
+#endregion
+
 namespace ParserWebCore.NetworkLibrary
 {
     public class GetCookieServiceSpgr
     {
-        private static GetCookieServiceSpgr service = new GetCookieServiceSpgr();
+        private static readonly GetCookieServiceSpgr service = new GetCookieServiceSpgr();
         private readonly string BaseUrl = "https://procurement.spgr.ru/tender/?login=yes";
 
         private GetCookieServiceSpgr()

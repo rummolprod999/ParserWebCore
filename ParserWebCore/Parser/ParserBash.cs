@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -9,18 +11,20 @@ using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
 
+#endregion
+
 namespace ParserWebCore.Parser
 {
     public class ParserBash : ParserAbstract, IParser
     {
         private readonly int _countPage = 20;
 
-        private Dictionary<BashType, int> types = new Dictionary<BashType, int>()
+        private readonly Dictionary<BashType, int> types = new Dictionary<BashType, int>
         {
             { BashType.t44, 8 },
             { BashType.t223, 1 },
             { BashType.com, 1 },
-            { BashType.req, 1 },
+            { BashType.req, 1 }
         };
 
         public void Parsing()
@@ -77,7 +81,7 @@ namespace ParserWebCore.Parser
                     break;
             }
 
-            var result = DownloadString.DownLHttpPostWithCookiesB2b(url, cookie: null, useProxy: AppBuilder.UserProxy,
+            var result = DownloadString.DownLHttpPostWithCookiesB2b(url, null, useProxy: AppBuilder.UserProxy,
                 headers: headers);
             if (string.IsNullOrEmpty(result))
             {
@@ -114,21 +118,21 @@ namespace ParserWebCore.Parser
         {
             var id = ((string)t.SelectToken("id") ?? throw new ApplicationException("id not found")).Trim();
             var purName =
-                ((string)(t.SelectToken(
-                     "$..purchase_object")) ??
+                ((string)t.SelectToken(
+                     "$..purchase_object") ??
                  throw new ApplicationException($"purName not found {id}")).Trim();
             var purNum =
-                ((string)(t.SelectToken(
-                     "$..registration_number")) ??
+                ((string)t.SelectToken(
+                     "$..registration_number") ??
                  throw new ApplicationException($"purNum not found {id}")).Trim();
             var datePub =
-                ((DateTime?)(t.SelectToken(
-                     "$..purchase_publish_date")) ??
-                 throw new ApplicationException($"datePub not found {id}"));
+                (DateTime?)t.SelectToken(
+                    "$..purchase_publish_date") ??
+                throw new ApplicationException($"datePub not found {id}");
             var dateEnd =
-                ((DateTime?)(t.SelectToken(
-                     "$..proposal_accept_end_date")) ??
-                 throw new ApplicationException($"dateEnd not found {id}"));
+                (DateTime?)t.SelectToken(
+                    "$..proposal_accept_end_date") ??
+                throw new ApplicationException($"dateEnd not found {id}");
             var href = "";
             switch (bashType)
             {
@@ -147,20 +151,20 @@ namespace ParserWebCore.Parser
             }
 
             var nmck =
-                ((string)(t.SelectToken(
-                     "$..starting_price")) ??
+                ((string)t.SelectToken(
+                     "$..starting_price") ??
                  "").Trim();
             var status =
-                ((string)(t.SelectToken(
-                     "$..status.title")) ??
+                ((string)t.SelectToken(
+                     "$..status.title") ??
                  "").Trim();
             var dateContract =
-                ((DateTime?)(t.SelectToken(
-                     "$..planned_date_contract_fulfilled")) ??
-                 DateTime.MinValue);
+                (DateTime?)t.SelectToken(
+                    "$..planned_date_contract_fulfilled") ??
+                DateTime.MinValue;
             var delivPlace =
-                ((string)(t.SelectToken(
-                     "$..delivery_addresses[0]")) ??
+                ((string)t.SelectToken(
+                     "$..delivery_addresses[0]") ??
                  "").Trim();
             var tender = new TypeBash
             {

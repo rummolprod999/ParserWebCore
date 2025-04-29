@@ -2,7 +2,7 @@ namespace TwoCaptcha.Captcha
 {
     public class GeeTest : Captcha
     {
-        public GeeTest() : base()
+        public GeeTest()
         {
             parameters["method"] = "geetest";
         }

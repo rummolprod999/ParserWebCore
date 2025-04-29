@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Globalization;
 using HtmlAgilityPack;
@@ -7,11 +9,13 @@ using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
 
+#endregion
+
 namespace ParserWebCore.Parser
 {
     public class ParserGipVn : ParserAbstract, IParser
     {
-        private static string _url = "http://gipvn.ru/zakupki/";
+        private static readonly string _url = "http://gipvn.ru/zakupki/";
 
         public void Parsing()
         {

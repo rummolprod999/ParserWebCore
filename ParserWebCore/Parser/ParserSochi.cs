@@ -1,5 +1,9 @@
+#region
+
 using System;
 using ParserWebCore.Logger;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {

@@ -1,6 +1,10 @@
+#region
+
 using System;
 using OpenQA.Selenium.Chrome;
 using ParserWebCore.Logger;
+
+#endregion
 
 namespace ParserWebCore.Creators
 {

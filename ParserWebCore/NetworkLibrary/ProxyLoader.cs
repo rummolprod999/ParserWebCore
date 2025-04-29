@@ -1,13 +1,17 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.IO;
 using ParserWebCore.BuilderApp;
 
+#endregion
+
 namespace ParserWebCore.NetworkLibrary
 {
     public class ProxyLoader
     {
-        private static List<ProxyEntity> proxyList = new List<ProxyEntity>();
+        private static readonly List<ProxyEntity> proxyList = new List<ProxyEntity>();
 
         static ProxyLoader()
         {

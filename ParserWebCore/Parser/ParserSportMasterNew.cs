@@ -1,9 +1,14 @@
+#region
+
 using System;
+using System.Reflection;
 using Newtonsoft.Json.Linq;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {
@@ -45,7 +50,7 @@ namespace ParserWebCore.Parser
                 }
                 catch (Exception e)
                 {
-                    Log.Logger($"Error in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                    Log.Logger($"Error in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                         e);
                 }
             }
@@ -53,15 +58,15 @@ namespace ParserWebCore.Parser
 
         private void ParserTenderObj(JToken t)
         {
-            var id = ((string) t.SelectToken("id") ?? "").Trim();
-            var detailUrl = ((string) t.SelectToken("detailUrl") ?? "").Trim();
+            var id = ((string)t.SelectToken("id") ?? "").Trim();
+            var detailUrl = ((string)t.SelectToken("detailUrl") ?? "").Trim();
             var href = $"https://zakupki.sportmaster.ru{detailUrl}";
-            var pwName = ((string) t.SelectToken("typeName") ?? "").Trim();
-            var purName = ((string) t.SelectToken("name") ?? "").Trim();
-            var pubDate = (DateTime?) t.SelectToken("startDate") ?? DateTime.Now;
-            var endDate = (DateTime?) t.SelectToken("endDate") ?? DateTime.Now;
-            var person = ((string) t.SelectToken("responsibleName") ?? "").Trim();
-            var phoneEmail = ((string) t.SelectToken("responsiblePhone") ?? "").Trim();
+            var pwName = ((string)t.SelectToken("typeName") ?? "").Trim();
+            var purName = ((string)t.SelectToken("name") ?? "").Trim();
+            var pubDate = (DateTime?)t.SelectToken("startDate") ?? DateTime.Now;
+            var endDate = (DateTime?)t.SelectToken("endDate") ?? DateTime.Now;
+            var person = ((string)t.SelectToken("responsibleName") ?? "").Trim();
+            var phoneEmail = ((string)t.SelectToken("responsiblePhone") ?? "").Trim();
             var tn = new TenderSportMasterNew("ООО «Спортмастер»", "http://zakupki.sportmaster.ru/", 216,
                 new TypeSport1
                 {

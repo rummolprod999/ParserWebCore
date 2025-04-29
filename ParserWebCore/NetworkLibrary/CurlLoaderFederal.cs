@@ -1,4 +1,8 @@
+#region
+
 using System.Diagnostics;
+
+#endregion
 
 namespace ParserWebCore.NetworkLibrary
 {
@@ -6,7 +10,7 @@ namespace ParserWebCore.NetworkLibrary
     {
         public static string DownL(string url, string cookie)
         {
-            var cliProcess = new Process()
+            var cliProcess = new Process
             {
                 StartInfo = new ProcessStartInfo("curl", $"\"{url}\" -H \"Cookie: PHPSESSID={cookie}\"")
                 {

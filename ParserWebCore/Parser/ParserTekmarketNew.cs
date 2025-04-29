@@ -1,5 +1,8 @@
+#region
+
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Newtonsoft.Json.Linq;
 using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
@@ -7,13 +10,15 @@ using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
 
+#endregion
+
 namespace ParserWebCore.Parser
 {
     public class ParserTekmarketNew : ParserAbstract, IParser
     {
         private readonly string url = "https://www.tektorg.ru/api/getProcedures";
 
-        private List<TenderTekMarketNew> _tendersList = new List<TenderTekMarketNew>();
+        private readonly List<TenderTekMarketNew> _tendersList = new List<TenderTekMarketNew>();
         private int DateMinus => 3;
 
         public void Parsing()
@@ -43,7 +48,7 @@ namespace ParserWebCore.Parser
                 catch (Exception e)
                 {
                     Log.Logger(
-                        $"Exception in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                        $"Exception in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                         e, url);
                 }
             }
@@ -59,7 +64,7 @@ namespace ParserWebCore.Parser
                 catch (Exception e)
                 {
                     Log.Logger(
-                        $"Exception in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                        $"Exception in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                         e, url);
                 }
             }
@@ -95,7 +100,7 @@ namespace ParserWebCore.Parser
                 catch (Exception e)
                 {
                     Log.Logger(
-                        $"Exception in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                        $"Exception in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                         e, url);
                 }
             }
@@ -111,7 +116,7 @@ namespace ParserWebCore.Parser
                 catch (Exception e)
                 {
                     Log.Logger(
-                        $"Exception in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                        $"Exception in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                         e, url);
                 }
             }
@@ -128,7 +133,7 @@ namespace ParserWebCore.Parser
                 }
             }
         }
-        
+
         private void ParsingRosneftTkp()
         {
             var dateM = DateTime.Now.AddMinutes(-1 * DateMinus * 24 * 60);
@@ -147,7 +152,7 @@ namespace ParserWebCore.Parser
                 catch (Exception e)
                 {
                     Log.Logger(
-                        $"Exception in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                        $"Exception in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                         e, url);
                 }
             }
@@ -163,7 +168,7 @@ namespace ParserWebCore.Parser
                 catch (Exception e)
                 {
                     Log.Logger(
-                        $"Exception in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                        $"Exception in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                         e, url);
                 }
             }
@@ -186,7 +191,7 @@ namespace ParserWebCore.Parser
             var s = DownloadString.DownLZakMos(url, data);
             if (string.IsNullOrEmpty(s))
             {
-                Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                Log.Logger($"Empty string in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     url);
             }
 
@@ -200,7 +205,7 @@ namespace ParserWebCore.Parser
                 }
                 catch (Exception e)
                 {
-                    Log.Logger($"Error in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                    Log.Logger($"Error in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                         e, t.ToString());
                 }
             }
@@ -223,34 +228,34 @@ namespace ParserWebCore.Parser
                 tenderUrl = $"https://www.tektorg.ru/_next/data/{buildid}/ru/rosnefttkp/procedures/{id}.json?id={id}";
             }
 
-            var status = ((string)(t.SelectToken(
-                              "statusName")) ??
+            var status = ((string)t.SelectToken(
+                              "statusName") ??
                           "").Trim();
-            var purName = ((string)(t.SelectToken(
-                               "title")) ??
+            var purName = ((string)t.SelectToken(
+                               "title") ??
                            throw new ApplicationException($"purName not found {id}")).Trim();
             var datePub =
-                ((DateTime?)(t.SelectToken(
-                     "$..datePublished")) ??
-                 throw new ApplicationException($"datePub not found {id}"));
+                (DateTime?)t.SelectToken(
+                    "$..datePublished") ??
+                throw new ApplicationException($"datePub not found {id}");
             var dateBid =
-                ((DateTime?)(t.SelectToken(
-                     "$..dateEndRegistrationCom")) ??
-                 DateTime.MinValue);
+                (DateTime?)t.SelectToken(
+                    "$..dateEndRegistrationCom") ??
+                DateTime.MinValue;
             var dateScor =
-                ((DateTime?)(t.SelectToken(
-                     "$..dateStartRegistrationCom")) ??
-                 DateTime.MinValue);
+                (DateTime?)t.SelectToken(
+                    "$..dateStartRegistrationCom") ??
+                DateTime.MinValue;
             var dateEnd =
-                ((DateTime?)(t.SelectToken(
-                     "$..dateEndRegistration")) ?? (DateTime?)(t.SelectToken(
-                        "$..dateRegistrationTech")) ??
-                    datePub.AddDays(2));
-            var purNum = ((string)(t.SelectToken(
-                              "registryNumber")) ??
+                (DateTime?)t.SelectToken(
+                    "$..dateEndRegistration") ?? (DateTime?)t.SelectToken(
+                    "$..dateRegistrationTech") ??
+                datePub.AddDays(2);
+            var purNum = ((string)t.SelectToken(
+                              "registryNumber") ??
                           throw new ApplicationException($"purNum not found {id}")).Trim();
-            var pwName = ((string)(t.SelectToken(
-                              "typeName")) ??
+            var pwName = ((string)t.SelectToken(
+                              "typeName") ??
                           "").Trim();
             var Href = "";
             if (i == 0)
@@ -265,6 +270,7 @@ namespace ParserWebCore.Parser
             {
                 Href = "https://www.tektorg.ru/rosneft/procedures/" + id;
             }
+
             var tt = new TypeTekMarket
             {
                 Href = Href,
@@ -293,6 +299,7 @@ namespace ParserWebCore.Parser
                 );
                 _tendersList.Add(tn);
             }
+
             if (i == 2)
             {
                 var tn = new TenderTekMarketNew("ТЭК Торг ТЭК Роснефть",

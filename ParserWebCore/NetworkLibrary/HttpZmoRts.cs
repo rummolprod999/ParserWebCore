@@ -1,15 +1,15 @@
+#region
+
 using System.Net;
 using System.Net.Http;
 using System.Text;
+
+#endregion
 
 namespace ParserWebCore.NetworkLibrary
 {
     public class HttpZmoRts1
     {
-        public HttpZmoRts1()
-        {
-        }
-
         public string DownloadString(string url, string data, int section)
         {
             using (var client = new HttpClient())
@@ -28,10 +28,6 @@ namespace ParserWebCore.NetworkLibrary
 
     public class HttpZmoRts
     {
-        public HttpZmoRts()
-        {
-        }
-
         public string DownloadString(string url, string data, int section)
         {
             var result = "";

@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.ObjectModel;
 using System.Data;
@@ -12,6 +14,8 @@ using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
 using ParserWebCore.SharedLibraries;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Tender
 {
@@ -186,7 +190,11 @@ namespace ParserWebCore.Tender
                     .Trim();
                 lotNumT = lotNumT.GetDataFromRegex(@"Лот\s+(\d+)");
                 int.TryParse(lotNumT, out var lotNum);
-                if (lotNum == 0) lotNum = 1;
+                if (lotNum == 0)
+                {
+                    lotNum = 1;
+                }
+
                 var nmckT = (lot.FindElementWithoutException(By.XPath(
                             ".//div[contains(@class, 'ProcedurePricestyled__Container-sc')]"))
                         ?.Text ?? "0.0")
@@ -207,7 +215,11 @@ namespace ParserWebCore.Tender
                     (lot.FindElementWithoutException(By.XPath(
                             ".//td[contains(normalize-space(),\"Предмет договора:\")]/following-sibling::*[1]/self::td"))
                         ?.Text ?? "").Trim();
-                if (string.IsNullOrEmpty(purName)) purName = purObjInfo;
+                if (string.IsNullOrEmpty(purName))
+                {
+                    purName = purObjInfo;
+                }
+
                 var insertLot =
                     $"INSERT INTO {AppBuilder.Prefix}lot SET id_tender = @id_tender, lot_number = @lot_number, max_price = @max_price, currency = @currency, lot_name = @lot_name";
                 var cmd18 = new MySqlCommand(insertLot, connect);
@@ -261,7 +273,7 @@ namespace ParserWebCore.Tender
                 var okpd2Code = okpd2Temp.GetDataFromRegex(@"^(\d[\.|\d]*\d)");
                 var okpd2GroupCode = 0;
                 var okpd2GroupLevel1Code = "";
-                if (!String.IsNullOrEmpty(okpd2Code))
+                if (!string.IsNullOrEmpty(okpd2Code))
                 {
                     GetOkpd(okpd2Code, out okpd2GroupCode, out okpd2GroupLevel1Code);
                 }
@@ -356,7 +368,7 @@ namespace ParserWebCore.Tender
                 else
                 {
                     var phone = (_driver.FindElementWithoutException(By.XPath(
-                                         (".//p[. = 'Контактный телефон']//following-sibling::div")))
+                                         ".//p[. = 'Контактный телефон']//following-sibling::div"))
                                      ?.Text ??
                                  "")
                         .Trim();

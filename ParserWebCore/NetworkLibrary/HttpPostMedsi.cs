@@ -1,5 +1,9 @@
+#region
+
 using System.Net.Http;
 using System.Text;
+
+#endregion
 
 namespace ParserWebCore.NetworkLibrary
 {

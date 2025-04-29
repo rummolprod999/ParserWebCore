@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using OpenQA.Selenium;
@@ -11,6 +13,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
 
+#endregion
+
 namespace ParserWebCore.Parser
 {
     public class ParserMzVoron : ParserAbstract, IParser
@@ -21,8 +25,8 @@ namespace ParserWebCore.Parser
             "https://goszakupki.govvrn.ru/mzvoron/GzwSP/NoticesGrid?ItemId=16&show_title=on&expanded=0";
 
         private readonly ChromeDriver _driver = CreatorChromeDriver.GetChromeDriver();
-        private List<TypeMzVoron> _tendersList = new List<TypeMzVoron>();
-        private TimeSpan _timeoutB = TimeSpan.FromSeconds(30);
+        private readonly List<TypeMzVoron> _tendersList = new List<TypeMzVoron>();
+        private readonly TimeSpan _timeoutB = TimeSpan.FromSeconds(30);
 
         public void Parsing()
         {
@@ -154,7 +158,11 @@ namespace ParserWebCore.Parser
                     catch (Exception e)
                     {
                         dd--;
-                        if (dd != 0) continue;
+                        if (dd != 0)
+                        {
+                            continue;
+                        }
+
                         Log.Logger(e);
                         break;
                     }

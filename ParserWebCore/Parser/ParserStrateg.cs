@@ -1,5 +1,8 @@
+#region
+
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Xml;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -8,6 +11,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {
@@ -34,7 +39,7 @@ namespace ParserWebCore.Parser
             }
             catch (Exception e)
             {
-                Log.Logger($"Error in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}", e);
+                Log.Logger($"Error in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", e);
             }
         }
 
@@ -54,7 +59,7 @@ namespace ParserWebCore.Parser
                 }
                 catch (Exception e)
                 {
-                    Log.Logger($"Error in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                    Log.Logger($"Error in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                         e);
                 }
             }
@@ -62,14 +67,14 @@ namespace ParserWebCore.Parser
 
         private void ParserTenderObj(JToken t)
         {
-            var purNum = ((string) t.SelectToken("@NoticeNumb") ?? "").Trim();
-            var href = ((string) t.SelectToken("@Link") ?? "").Trim();
-            var purName = ((string) t.SelectToken("@Name") ?? "").Trim();
-            var pubDateT = ((string) t.SelectToken("@PurchaseStart") ?? "").Trim();
+            var purNum = ((string)t.SelectToken("@NoticeNumb") ?? "").Trim();
+            var href = ((string)t.SelectToken("@Link") ?? "").Trim();
+            var purName = ((string)t.SelectToken("@Name") ?? "").Trim();
+            var pubDateT = ((string)t.SelectToken("@PurchaseStart") ?? "").Trim();
             var datePub = pubDateT.ParseDateUn("dd.MM.yyyy");
-            var endDateT = ((string) t.SelectToken("@PurchaseFinishDate") ?? "").Trim();
+            var endDateT = ((string)t.SelectToken("@PurchaseFinishDate") ?? "").Trim();
             var endDate = endDateT.ParseDateUn("dd.MM.yyyy");
-            var status = ((string) t.SelectToken("@PurchaseStatus") ?? "").Trim();
+            var status = ((string)t.SelectToken("@PurchaseStatus") ?? "").Trim();
             var tn = new TenderStrateg("ЭТП Стратег", "https://strateg-etp.ru/", 302,
                 new TypeRb2b
                 {

@@ -1,11 +1,15 @@
+#region
+
 using System;
 using ParserWebCore.BuilderApp;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {
     public class ParserDecoratorGzwSp : IParser
     {
-        private Arguments _arguments;
+        private readonly Arguments _arguments;
 
         public ParserDecoratorGzwSp(Arguments arg)
         {

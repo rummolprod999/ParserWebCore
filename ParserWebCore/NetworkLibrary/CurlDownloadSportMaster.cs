@@ -1,5 +1,9 @@
+#region
+
 using System;
 using System.Diagnostics;
+
+#endregion
 
 namespace ParserWebCore.NetworkLibrary
 {
@@ -7,7 +11,7 @@ namespace ParserWebCore.NetworkLibrary
     {
         public static string DownL(string arguments)
         {
-            var cliProcess = new Process()
+            var cliProcess = new Process
             {
                 StartInfo = new ProcessStartInfo("curl", arguments)
                 {

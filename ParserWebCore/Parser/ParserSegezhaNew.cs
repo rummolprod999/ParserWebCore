@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +12,8 @@ using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {
@@ -24,8 +28,8 @@ namespace ParserWebCore.Parser
             "https://segezha-group.com/providers/qualification/"
         };
 
-        private List<TypeSegezha> _tendersList = new List<TypeSegezha>();
-        private TimeSpan _timeoutB = TimeSpan.FromSeconds(60);
+        private readonly List<TypeSegezha> _tendersList = new List<TypeSegezha>();
+        private readonly TimeSpan _timeoutB = TimeSpan.FromSeconds(60);
 
         public void Parsing()
         {
@@ -77,7 +81,7 @@ namespace ParserWebCore.Parser
         private void ParsingList(WebDriverWait wait, string Url)
         {
             _driver.SwitchTo().DefaultContent();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
                 try
                 {

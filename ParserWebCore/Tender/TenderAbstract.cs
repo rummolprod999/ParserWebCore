@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -7,6 +9,8 @@ using MySql.Data.MySqlClient;
 using Newtonsoft.Json.Linq;
 using ParserWebCore.BuilderApp;
 using ParserWebCore.Logger;
+
+#endregion
 
 namespace ParserWebCore.Tender
 {
@@ -22,11 +26,17 @@ namespace ParserWebCore.Tender
             CountTender += delegate(int d, bool b)
             {
                 if (!b && d > 0)
+                {
                     Count++;
+                }
                 else if (b && d > 0)
+                {
                     UpCount++;
+                }
                 else
+                {
                     Log.Logger("Не удалось добавить Tender");
+                }
             };
         }
 
@@ -46,7 +56,11 @@ namespace ParserWebCore.Tender
         {
             var els = new List<JToken>();
             var elsObj = j.SelectToken(s);
-            if (elsObj == null || elsObj.Type == JTokenType.Null) return els;
+            if (elsObj == null || elsObj.Type == JTokenType.Null)
+            {
+                return els;
+            }
+
             switch (elsObj.Type)
             {
                 case JTokenType.Object:
@@ -203,8 +217,8 @@ namespace ParserWebCore.Tender
                 var distrDt = dt.AsEnumerable().Distinct(DataRowComparer.Default);
                 foreach (var row in distrDt)
                 {
-                    var name = !row.IsNull("name") ? ((string)row["name"]) : "";
-                    var okpdName = (!row.IsNull("okpd_name")) ? ((string)row["okpd_name"]) : "";
+                    var name = !row.IsNull("name") ? (string)row["name"] : "";
+                    var okpdName = !row.IsNull("okpd_name") ? (string)row["okpd_name"] : "";
                     resString += $"{name} {okpdName} ";
                 }
             }
@@ -222,7 +236,7 @@ namespace ParserWebCore.Tender
                 var distrDeliv = dt7.AsEnumerable().Distinct(DataRowComparer.Default);
                 foreach (var row in distrDeliv)
                 {
-                    var delivTerm = !row.IsNull("delivery_term") ? ((string)row["delivery_term"]) : "";
+                    var delivTerm = !row.IsNull("delivery_term") ? (string)row["delivery_term"] : "";
                     resString += $"{delivTerm} ";
                 }
             }
@@ -239,7 +253,7 @@ namespace ParserWebCore.Tender
                 var distrDt = dt2.AsEnumerable().Distinct(DataRowComparer.Default);
                 foreach (var row in distrDt)
                 {
-                    var attName = (!row.IsNull("file_name")) ? ((string)row["file_name"]) : "";
+                    var attName = !row.IsNull("file_name") ? (string)row["file_name"] : "";
                     resString += $" {attName}";
                 }
             }
@@ -257,10 +271,10 @@ namespace ParserWebCore.Tender
             {
                 foreach (DataRow row in dt3.Rows)
                 {
-                    var purOb = (!row.IsNull("purchase_object_info"))
-                        ? ((string)row["purchase_object_info"])
+                    var purOb = !row.IsNull("purchase_object_info")
+                        ? (string)row["purchase_object_info"]
                         : "";
-                    idOrg = (!row.IsNull("id_organizer")) ? (int)row["id_organizer"] : 0;
+                    idOrg = !row.IsNull("id_organizer") ? (int)row["id_organizer"] : 0;
                     resString = $"{purOb} {resString}";
                 }
             }
@@ -279,8 +293,8 @@ namespace ParserWebCore.Tender
                 {
                     foreach (DataRow row in dt4.Rows)
                     {
-                        var innOrg = (!row.IsNull("inn")) ? ((string)row["inn"]) : "";
-                        var nameOrg = (!row.IsNull("full_name")) ? ((string)row["full_name"]) : "";
+                        var innOrg = !row.IsNull("inn") ? (string)row["inn"] : "";
+                        var nameOrg = !row.IsNull("full_name") ? (string)row["full_name"] : "";
                         resString += $" {innOrg} {nameOrg}";
                     }
                 }
@@ -299,8 +313,8 @@ namespace ParserWebCore.Tender
                 var distrDt = dt5.AsEnumerable().Distinct(DataRowComparer.Default);
                 foreach (var row in distrDt)
                 {
-                    var innC = (!row.IsNull("inn")) ? ((string)row["inn"]) : "";
-                    var fullNameC = (!row.IsNull("full_name")) ? ((string)row["full_name"]) : "";
+                    var innC = !row.IsNull("inn") ? (string)row["inn"] : "";
+                    var fullNameC = !row.IsNull("full_name") ? (string)row["full_name"] : "";
                     resString += $" {innC} {fullNameC}";
                 }
             }
@@ -368,7 +382,11 @@ namespace ParserWebCore.Tender
         {
             var idRegion = 0;
             var regionS = IsContainsRegion(st);
-            if (regionS == "") return idRegion;
+            if (regionS == "")
+            {
+                return idRegion;
+            }
+
             var selectReg = $"SELECT id FROM {AppBuilder.Prefix}region WHERE name LIKE @name";
             var cmd46 = new MySqlCommand(selectReg, connect);
             cmd46.Prepare();
@@ -391,94 +409,446 @@ namespace ParserWebCore.Tender
         private string IsContainsRegion(string s)
         {
             s = s.ToLower();
-            if (s.Contains("отсуств")) return "";
-            if (s.Contains("белгор")) return "белгор";
-            if (s.Contains("брянск")) return "брянск";
-            if (s.Contains("владимир")) return "владимир";
-            if (s.Contains("воронеж")) return "воронеж";
-            if (s.Contains("иванов")) return "иванов";
-            if (s.Contains("калужск")) return "калужск";
-            if (s.Contains("костром")) return "костром";
-            if (s.Contains("курск")) return "курск";
-            if (s.Contains("липецк")) return "липецк";
-            if (s.Contains("москва")) return "москва";
-            if (s.Contains("московск")) return "московск";
-            if (s.Contains("орлов")) return "орлов";
-            if (s.Contains("рязан")) return "рязан";
-            if (s.Contains("смолен")) return "смолен";
-            if (s.Contains("тамбов")) return "тамбов";
-            if (s.Contains("твер")) return "твер";
-            if (s.Contains("тульс")) return "тульс";
-            if (s.Contains("яросл")) return "яросл";
-            if (s.Contains("архан")) return "архан";
-            if (s.Contains("вологод")) return "вологод";
-            if (s.Contains("калинин")) return "калинин";
-            if (s.Contains("карел")) return "карел";
-            if (s.Contains("коми")) return "коми";
-            if (s.Contains("ленинг")) return "ленинг";
-            if (s.Contains("мурм")) return "мурм";
-            if (s.Contains("ненец")) return "ненец";
-            if (s.Contains("новгор")) return "новгор";
-            if (s.Contains("псков")) return "псков";
-            if (s.Contains("санкт")) return "санкт";
-            if (s.Contains("адыг")) return "адыг";
-            if (s.Contains("астрахан")) return "астрахан";
-            if (s.Contains("волгог")) return "волгог";
-            if (s.Contains("калмык")) return "калмык";
-            if (s.Contains("краснод")) return "краснод";
-            if (s.Contains("ростов")) return "ростов";
-            if (s.Contains("дагест")) return "дагест";
-            if (s.Contains("ингуш")) return "ингуш";
-            if (s.Contains("кабардин")) return "кабардин";
-            if (s.Contains("карача")) return "карача";
-            if (s.Contains("осети")) return "осети";
-            if (s.Contains("ставроп")) return "ставроп";
-            if (s.Contains("чечен")) return "чечен";
-            if (s.Contains("башкор")) return "башкор";
-            if (s.Contains("киров")) return "киров";
-            if (s.Contains("марий")) return "марий";
-            if (s.Contains("мордов")) return "мордов";
-            if (s.Contains("нижегор")) return "нижегор";
-            if (s.Contains("оренбур")) return "оренбур";
-            if (s.Contains("пензен")) return "пензен";
-            if (s.Contains("пермс")) return "пермс";
-            if (s.Contains("самар")) return "самар";
-            if (s.Contains("сарат")) return "сарат";
-            if (s.Contains("татарс")) return "татарс";
-            if (s.Contains("удмурт")) return "удмурт";
-            if (s.Contains("ульян")) return "ульян";
-            if (s.Contains("чуваш")) return "чуваш";
-            if (s.Contains("курган")) return "курган";
-            if (s.Contains("свердлов")) return "свердлов";
-            if (s.Contains("тюмен")) return "тюмен";
-            if (s.Contains("ханты")) return "ханты";
-            if (s.Contains("челяб")) return "челяб";
-            if (s.Contains("ямало")) return "ямало";
-            if (s.Contains("алтайск")) return "алтайск";
-            if (s.Contains("алтай")) return "алтай";
-            if (s.Contains("бурят")) return "бурят";
-            if (s.Contains("забайк")) return "забайк";
-            if (s.Contains("иркут")) return "иркут";
-            if (s.Contains("кемеров")) return "кемеров";
-            if (s.Contains("краснояр")) return "краснояр";
-            if (s.Contains("новосиб")) return "новосиб";
-            if (s.Contains("томск")) return "томск";
-            if (s.Contains("омск")) return "омск";
-            if (s.Contains("тыва")) return "тыва";
-            if (s.Contains("хакас")) return "хакас";
-            if (s.Contains("амурск")) return "амурск";
-            if (s.Contains("еврей")) return "еврей";
-            if (s.Contains("камчат")) return "камчат";
-            if (s.Contains("магад")) return "магад";
-            if (s.Contains("примор")) return "примор";
-            if (s.Contains("сахалин")) return "сахалин";
-            if (s.Contains("якут")) return "якут";
-            if (s.Contains("саха")) return "саха";
-            if (s.Contains("хабар")) return "хабар";
-            if (s.Contains("чукот")) return "чукот";
-            if (s.Contains("крым")) return "крым";
-            if (s.Contains("севастоп")) return "севастоп";
-            if (s.Contains("байкон")) return "байкон";
+            if (s.Contains("отсуств"))
+            {
+                return "";
+            }
+
+            if (s.Contains("белгор"))
+            {
+                return "белгор";
+            }
+
+            if (s.Contains("брянск"))
+            {
+                return "брянск";
+            }
+
+            if (s.Contains("владимир"))
+            {
+                return "владимир";
+            }
+
+            if (s.Contains("воронеж"))
+            {
+                return "воронеж";
+            }
+
+            if (s.Contains("иванов"))
+            {
+                return "иванов";
+            }
+
+            if (s.Contains("калужск"))
+            {
+                return "калужск";
+            }
+
+            if (s.Contains("костром"))
+            {
+                return "костром";
+            }
+
+            if (s.Contains("курск"))
+            {
+                return "курск";
+            }
+
+            if (s.Contains("липецк"))
+            {
+                return "липецк";
+            }
+
+            if (s.Contains("москва"))
+            {
+                return "москва";
+            }
+
+            if (s.Contains("московск"))
+            {
+                return "московск";
+            }
+
+            if (s.Contains("орлов"))
+            {
+                return "орлов";
+            }
+
+            if (s.Contains("рязан"))
+            {
+                return "рязан";
+            }
+
+            if (s.Contains("смолен"))
+            {
+                return "смолен";
+            }
+
+            if (s.Contains("тамбов"))
+            {
+                return "тамбов";
+            }
+
+            if (s.Contains("твер"))
+            {
+                return "твер";
+            }
+
+            if (s.Contains("тульс"))
+            {
+                return "тульс";
+            }
+
+            if (s.Contains("яросл"))
+            {
+                return "яросл";
+            }
+
+            if (s.Contains("архан"))
+            {
+                return "архан";
+            }
+
+            if (s.Contains("вологод"))
+            {
+                return "вологод";
+            }
+
+            if (s.Contains("калинин"))
+            {
+                return "калинин";
+            }
+
+            if (s.Contains("карел"))
+            {
+                return "карел";
+            }
+
+            if (s.Contains("коми"))
+            {
+                return "коми";
+            }
+
+            if (s.Contains("ленинг"))
+            {
+                return "ленинг";
+            }
+
+            if (s.Contains("мурм"))
+            {
+                return "мурм";
+            }
+
+            if (s.Contains("ненец"))
+            {
+                return "ненец";
+            }
+
+            if (s.Contains("новгор"))
+            {
+                return "новгор";
+            }
+
+            if (s.Contains("псков"))
+            {
+                return "псков";
+            }
+
+            if (s.Contains("санкт"))
+            {
+                return "санкт";
+            }
+
+            if (s.Contains("адыг"))
+            {
+                return "адыг";
+            }
+
+            if (s.Contains("астрахан"))
+            {
+                return "астрахан";
+            }
+
+            if (s.Contains("волгог"))
+            {
+                return "волгог";
+            }
+
+            if (s.Contains("калмык"))
+            {
+                return "калмык";
+            }
+
+            if (s.Contains("краснод"))
+            {
+                return "краснод";
+            }
+
+            if (s.Contains("ростов"))
+            {
+                return "ростов";
+            }
+
+            if (s.Contains("дагест"))
+            {
+                return "дагест";
+            }
+
+            if (s.Contains("ингуш"))
+            {
+                return "ингуш";
+            }
+
+            if (s.Contains("кабардин"))
+            {
+                return "кабардин";
+            }
+
+            if (s.Contains("карача"))
+            {
+                return "карача";
+            }
+
+            if (s.Contains("осети"))
+            {
+                return "осети";
+            }
+
+            if (s.Contains("ставроп"))
+            {
+                return "ставроп";
+            }
+
+            if (s.Contains("чечен"))
+            {
+                return "чечен";
+            }
+
+            if (s.Contains("башкор"))
+            {
+                return "башкор";
+            }
+
+            if (s.Contains("киров"))
+            {
+                return "киров";
+            }
+
+            if (s.Contains("марий"))
+            {
+                return "марий";
+            }
+
+            if (s.Contains("мордов"))
+            {
+                return "мордов";
+            }
+
+            if (s.Contains("нижегор"))
+            {
+                return "нижегор";
+            }
+
+            if (s.Contains("оренбур"))
+            {
+                return "оренбур";
+            }
+
+            if (s.Contains("пензен"))
+            {
+                return "пензен";
+            }
+
+            if (s.Contains("пермс"))
+            {
+                return "пермс";
+            }
+
+            if (s.Contains("самар"))
+            {
+                return "самар";
+            }
+
+            if (s.Contains("сарат"))
+            {
+                return "сарат";
+            }
+
+            if (s.Contains("татарс"))
+            {
+                return "татарс";
+            }
+
+            if (s.Contains("удмурт"))
+            {
+                return "удмурт";
+            }
+
+            if (s.Contains("ульян"))
+            {
+                return "ульян";
+            }
+
+            if (s.Contains("чуваш"))
+            {
+                return "чуваш";
+            }
+
+            if (s.Contains("курган"))
+            {
+                return "курган";
+            }
+
+            if (s.Contains("свердлов"))
+            {
+                return "свердлов";
+            }
+
+            if (s.Contains("тюмен"))
+            {
+                return "тюмен";
+            }
+
+            if (s.Contains("ханты"))
+            {
+                return "ханты";
+            }
+
+            if (s.Contains("челяб"))
+            {
+                return "челяб";
+            }
+
+            if (s.Contains("ямало"))
+            {
+                return "ямало";
+            }
+
+            if (s.Contains("алтайск"))
+            {
+                return "алтайск";
+            }
+
+            if (s.Contains("алтай"))
+            {
+                return "алтай";
+            }
+
+            if (s.Contains("бурят"))
+            {
+                return "бурят";
+            }
+
+            if (s.Contains("забайк"))
+            {
+                return "забайк";
+            }
+
+            if (s.Contains("иркут"))
+            {
+                return "иркут";
+            }
+
+            if (s.Contains("кемеров"))
+            {
+                return "кемеров";
+            }
+
+            if (s.Contains("краснояр"))
+            {
+                return "краснояр";
+            }
+
+            if (s.Contains("новосиб"))
+            {
+                return "новосиб";
+            }
+
+            if (s.Contains("томск"))
+            {
+                return "томск";
+            }
+
+            if (s.Contains("омск"))
+            {
+                return "омск";
+            }
+
+            if (s.Contains("тыва"))
+            {
+                return "тыва";
+            }
+
+            if (s.Contains("хакас"))
+            {
+                return "хакас";
+            }
+
+            if (s.Contains("амурск"))
+            {
+                return "амурск";
+            }
+
+            if (s.Contains("еврей"))
+            {
+                return "еврей";
+            }
+
+            if (s.Contains("камчат"))
+            {
+                return "камчат";
+            }
+
+            if (s.Contains("магад"))
+            {
+                return "магад";
+            }
+
+            if (s.Contains("примор"))
+            {
+                return "примор";
+            }
+
+            if (s.Contains("сахалин"))
+            {
+                return "сахалин";
+            }
+
+            if (s.Contains("якут"))
+            {
+                return "якут";
+            }
+
+            if (s.Contains("саха"))
+            {
+                return "саха";
+            }
+
+            if (s.Contains("хабар"))
+            {
+                return "хабар";
+            }
+
+            if (s.Contains("чукот"))
+            {
+                return "чукот";
+            }
+
+            if (s.Contains("крым"))
+            {
+                return "крым";
+            }
+
+            if (s.Contains("севастоп"))
+            {
+                return "севастоп";
+            }
+
+            if (s.Contains("байкон"))
+            {
+                return "байкон";
+            }
+
             return "";
         }
 

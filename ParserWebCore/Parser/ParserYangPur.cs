@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Linq;
 using HtmlAgilityPack;
@@ -6,6 +8,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {
@@ -60,7 +64,7 @@ namespace ParserWebCore.Parser
 
         private void ParserTender(HtmlNode n)
         {
-            var tenders = n.InnerHtml.Split(new string[] {"<hr>"}, StringSplitOptions.None);
+            var tenders = n.InnerHtml.Split(new[] { "<hr>" }, StringSplitOptions.None);
             tenders.ToList().ForEach(x =>
             {
                 try
@@ -169,7 +173,7 @@ namespace ParserWebCore.Parser
                     Href = href,
                     PurNum = purNum,
                     PurName = purName,
-                    Attachments = attachments,
+                    Attachments = attachments
                 });
             ParserTender(tn);
         }

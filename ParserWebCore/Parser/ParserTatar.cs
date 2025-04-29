@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Threading;
 using OpenQA.Selenium;
@@ -9,6 +11,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
 
+#endregion
+
 namespace ParserWebCore.Parser
 {
     public class ParserTatar : ParserAbstract, IParser
@@ -16,7 +20,7 @@ namespace ParserWebCore.Parser
         private const int Count = 5;
         private const string Url = "https://etpzakupki.tatar/app/SearchLots/page";
         private readonly ChromeDriver _driver = CreatorChromeDriver.GetChromeDriver();
-        private TimeSpan _timeoutB = TimeSpan.FromSeconds(120);
+        private readonly TimeSpan _timeoutB = TimeSpan.FromSeconds(120);
 
         public void Parsing()
         {

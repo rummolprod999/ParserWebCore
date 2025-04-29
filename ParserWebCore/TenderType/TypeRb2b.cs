@@ -1,4 +1,8 @@
+#region
+
 using Newtonsoft.Json.Linq;
+
+#endregion
 
 namespace ParserWebCore.TenderType
 {

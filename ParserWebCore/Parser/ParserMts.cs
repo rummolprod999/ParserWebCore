@@ -1,10 +1,15 @@
+#region
+
 using System;
+using System.Reflection;
 using Newtonsoft.Json.Linq;
 using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {
@@ -27,7 +32,7 @@ namespace ParserWebCore.Parser
                 }
                 catch (Exception e)
                 {
-                    Log.Logger($"Error in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                    Log.Logger($"Error in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                         e);
                 }
             }
@@ -40,7 +45,7 @@ namespace ParserWebCore.Parser
             var result = DownloadString.DownLUserAgent(url);
             if (string.IsNullOrEmpty(result))
             {
-                Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                Log.Logger($"Empty string in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     url);
                 return;
             }
@@ -55,7 +60,7 @@ namespace ParserWebCore.Parser
                 }
                 catch (Exception e)
                 {
-                    Log.Logger($"Error in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                    Log.Logger($"Error in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                         e, t.ToString());
                 }
             }
@@ -65,30 +70,30 @@ namespace ParserWebCore.Parser
         {
             var id = ((string)t.SelectToken("id") ?? throw new ApplicationException("id not found")).Trim();
             var purName =
-                ((string)(t.SelectToken(
-                     "name")) ??
+                ((string)t.SelectToken(
+                     "name") ??
                  throw new ApplicationException($"purName not found {id}")).Trim();
             var publicationDate = DateTime.Now;
             var dateEndS =
-                ((string)(t.SelectToken(
-                     "endDateAcceptingOffers")) ??
+                ((string)t.SelectToken(
+                     "endDateAcceptingOffers") ??
                  publicationDate.AddDays(2).ToString("yyyy-MM-dd")).Trim();
             var endDate = dateEndS.ParseDateUn("yyyy-MM-dd");
             var purNum =
-                ((string)(t.SelectToken(
-                     "number")) ?? id).Trim();
+                ((string)t.SelectToken(
+                    "number") ?? id).Trim();
             if (purNum.Trim() == "")
             {
                 purNum = id;
             }
 
             var status =
-                ((string)(t.SelectToken(
-                    "status")) ?? "").Trim();
+                ((string)t.SelectToken(
+                    "status") ?? "").Trim();
             var pwName = "";
             var region =
-                ((string)(t.SelectToken(
-                    "regions")) ?? "").Trim();
+                ((string)t.SelectToken(
+                    "regions") ?? "").Trim();
             var tender = new TypeMts
             {
                 Href = $"https://tenders.mts.ru/tenders/{id}",
@@ -99,7 +104,7 @@ namespace ParserWebCore.Parser
                 DateEnd = endDate,
                 Region = region,
                 Status = status,
-                PlacingWay = pwName,
+                PlacingWay = pwName
             };
             ParserTender(new TenderMts("ПАО «Мобильные ТелеСистемы»", "https://tenders.mts.ru/", 131,
                 tender));

@@ -1,10 +1,15 @@
+#region
+
 using System;
+using System.Reflection;
 using Newtonsoft.Json.Linq;
 using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {
@@ -33,13 +38,13 @@ namespace ParserWebCore.Parser
             var s = DownloadString.DownLUserAgent(_url);
             if (string.IsNullOrEmpty(s))
             {
-                Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                Log.Logger($"Empty string in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     _url);
                 return;
             }
 
             var jObj = JObject.Parse(s);
-            var totalCount = (int?) jObj.SelectToken("totalCount") ?? 0;
+            var totalCount = (int?)jObj.SelectToken("totalCount") ?? 0;
             if (_countPage == 0)
             {
                 _countPage = totalCount / 50 + 1;
@@ -54,7 +59,7 @@ namespace ParserWebCore.Parser
                 }
                 catch (Exception e)
                 {
-                    Log.Logger($"Error in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                    Log.Logger($"Error in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                         e, t.ToString());
                 }
             }
@@ -62,11 +67,11 @@ namespace ParserWebCore.Parser
 
         private void ParserTenderObj(JToken t)
         {
-            var id = ((string) t.SelectToken("id") ?? "").Trim();
-            var purName = ((string) t.SelectToken("title") ?? "").Trim();
-            var pubDateS = (string) t.SelectToken("date_sent") ?? "";
+            var id = ((string)t.SelectToken("id") ?? "").Trim();
+            var purName = ((string)t.SelectToken("title") ?? "").Trim();
+            var pubDateS = (string)t.SelectToken("date_sent") ?? "";
             var datePub = pubDateS.ParseDateUn("yyyy-MM-dd HH:mm:sszz");
-            var endDateS = (string) t.SelectToken("date_response") ?? "";
+            var endDateS = (string)t.SelectToken("date_response") ?? "";
             var dateEnd = endDateS.ParseDateUn("yyyy-MM-dd HH:mm:sszz");
             var typeT = new TypeGpb
             {

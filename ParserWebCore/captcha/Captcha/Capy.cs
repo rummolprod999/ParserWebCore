@@ -2,7 +2,7 @@ namespace TwoCaptcha.Captcha
 {
     public class Capy : Captcha
     {
-        public Capy() : base()
+        public Capy()
         {
             parameters["method"] = "capy";
         }

@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.ObjectModel;
 using System.Data;
@@ -9,6 +11,8 @@ using OpenQA.Selenium.Support.UI;
 using ParserWebCore.BuilderApp;
 using ParserWebCore.Connections;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Tender
 {
@@ -220,7 +224,11 @@ namespace ParserWebCore.Tender
                 {
                     var urlAtt = (doc.GetAttribute("href") ?? "").Trim();
                     var fName = (doc.Text ?? "").Trim();
-                    if (string.IsNullOrEmpty(fName)) continue;
+                    if (string.IsNullOrEmpty(fName))
+                    {
+                        continue;
+                    }
+
                     var insertAttach =
                         $"INSERT INTO {AppBuilder.Prefix}attachment SET id_tender = @id_tender, file_name = @file_name, url = @url";
                     var cmd10 = new MySqlCommand(insertAttach, con);

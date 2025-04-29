@@ -1,10 +1,14 @@
-﻿using System;
+﻿#region
+
+using System;
 using HtmlAgilityPack;
 using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {
@@ -117,7 +121,7 @@ namespace ParserWebCore.Parser
                     DatePub = datePub,
                     Href = href,
                     PurNum = purNum,
-                    PurName = purName,
+                    PurName = purName
                 });
             ParserTender(tn);
         }

@@ -1,4 +1,9 @@
-﻿using MySql.Data.MySqlClient;
+﻿#region
+
+using MySql.Data.MySqlClient;
+using ParserWebCore.BuilderApp;
+
+#endregion
 
 namespace ParserWebCore.Connections
 {
@@ -6,7 +11,7 @@ namespace ParserWebCore.Connections
     {
         static ConnectToDb()
         {
-            ConnectString = BuilderApp.AppBuilder.ConnectString;
+            ConnectString = AppBuilder.ConnectString;
         }
 
         private static string ConnectString { get; }

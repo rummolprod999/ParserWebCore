@@ -1,14 +1,18 @@
-﻿using System;
+﻿#region
+
+using System;
 using ParserWebCore.BuilderApp;
 using ParserWebCore.ParserExecutor;
 
+#endregion
+
 namespace ParserWebCore
 {
-    class Program
+    internal class Program
     {
         private static Arguments Arg { get; set; }
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             if (args.Length == 0)
             {

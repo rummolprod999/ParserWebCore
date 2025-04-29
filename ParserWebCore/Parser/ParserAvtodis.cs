@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Web;
 using HtmlAgilityPack;
@@ -6,6 +8,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {
@@ -18,7 +22,7 @@ namespace ParserWebCore.Parser
 
         private void ParsingAvtodis()
         {
-            for (int i = 1; i <= 4; i++)
+            for (var i = 1; i <= 4; i++)
             {
                 try
                 {
@@ -80,7 +84,7 @@ namespace ParserWebCore.Parser
                     DatePub = DateTime.Now,
                     Href = href,
                     PurNum = purNum,
-                    PurName = purName,
+                    PurName = purName
                 });
             ParserTender(tn);
         }

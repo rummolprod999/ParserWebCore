@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Data;
 using MySql.Data.MySqlClient;
@@ -5,6 +7,8 @@ using OpenQA.Selenium.Chrome;
 using ParserWebCore.BuilderApp;
 using ParserWebCore.Connections;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Tender
 {

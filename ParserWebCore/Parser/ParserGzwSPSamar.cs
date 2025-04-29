@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -15,6 +17,9 @@ using ParserWebCore.Logger;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
 using TwoCaptcha.Captcha;
+using Cookie = System.Net.Cookie;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {
@@ -22,14 +27,14 @@ namespace ParserWebCore.Parser
     {
         private const int Count = 10;
         private readonly ChromeDriver _driver = CreatorChromeDriverNoSsl.GetChromeDriver();
-        private Arguments _arg;
-        private string _baseUrl;
-        private string _etpName;
-        private string _etpUrl;
-        private List<TypeMzVoron> _tendersList = new List<TypeMzVoron>();
-        private TimeSpan _timeoutB = TimeSpan.FromSeconds(30);
-        private int _typeFz;
-        private string _url;
+        private readonly Arguments _arg;
+        private readonly string _baseUrl;
+        private readonly string _etpName;
+        private readonly string _etpUrl;
+        private readonly List<TypeMzVoron> _tendersList = new List<TypeMzVoron>();
+        private readonly TimeSpan _timeoutB = TimeSpan.FromSeconds(30);
+        private readonly int _typeFz;
+        private readonly string _url;
 
         public ParserGzwSpSamar(string url, string baseurl, string etpName, string etpUrl, int typeFz, Arguments arg)
         {
@@ -162,7 +167,7 @@ namespace ParserWebCore.Parser
                     Thread.Sleep(5000);
                     foreach (var cookiesAllCookie in driver.Manage().Cookies.AllCookies)
                     {
-                        ParserGzwSp.col.Add(new System.Net.Cookie(cookiesAllCookie.Name, cookiesAllCookie.Value));
+                        ParserGzwSp.col.Add(new Cookie(cookiesAllCookie.Name, cookiesAllCookie.Value));
                     }
 
                     break;
@@ -229,7 +234,11 @@ namespace ParserWebCore.Parser
                         }
 
                         dd--;
-                        if (dd != 0) continue;
+                        if (dd != 0)
+                        {
+                            continue;
+                        }
+
                         Log.Logger(e);
                         break;
                     }

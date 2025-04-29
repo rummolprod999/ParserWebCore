@@ -1,6 +1,9 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Reflection;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json.Linq;
 using ParserWebCore.BuilderApp;
@@ -8,6 +11,8 @@ using ParserWebCore.Connections;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Tender
 {
@@ -61,17 +66,17 @@ namespace ParserWebCore.Tender
         private void ParserNeed(MySqlConnection connect)
         {
             var url = $"https://old.zakupki.mos.ru/api/Cssp/Need/GetEntity?id={_tn.NeedId}";
-            var s = DownloadString.DownLHttpPostWithCookiesB2b(url, cookie: null, useProxy: AppBuilder.UserProxy);
+            var s = DownloadString.DownLHttpPostWithCookiesB2b(url, null, useProxy: AppBuilder.UserProxy);
             if (s.Contains("\"tag\":\"nopermission\""))
             {
                 url = $"https://zakupki.mos.ru/newapi/api/Need/Get?needId={_tn.NeedId}";
-                s = DownloadString.DownLHttpPostWithCookiesB2b(url, cookie: null, useProxy: AppBuilder.UserProxy);
+                s = DownloadString.DownLHttpPostWithCookiesB2b(url, null, useProxy: AppBuilder.UserProxy);
             }
 
             if (string.IsNullOrEmpty(s))
             {
                 Log.Logger(
-                    $"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                    $"Empty string in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     _tn.Href);
                 return;
             }
@@ -301,11 +306,11 @@ namespace ParserWebCore.Tender
         private void ParserTender(MySqlConnection connect)
         {
             var url = $"https://old.zakupki.mos.ru/api/Cssp/Tender/GetEntity?id={_tn.TenderId}";
-            var s = DownloadString.DownLHttpPostWithCookiesB2b(url, cookie: null, useProxy: AppBuilder.UserProxy);
+            var s = DownloadString.DownLHttpPostWithCookiesB2b(url, null, useProxy: AppBuilder.UserProxy);
             if (string.IsNullOrEmpty(s))
             {
                 Log.Logger(
-                    $"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                    $"Empty string in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     _tn.Href);
                 return;
             }
@@ -505,11 +510,11 @@ namespace ParserWebCore.Tender
         private void ParserAuction(MySqlConnection connect)
         {
             var url = $"https://zakupki.mos.ru/newapi/api/Auction/Get?auctionId={_tn.AuctionId}";
-            var s = DownloadString.DownLHttpPostWithCookiesB2b(url, cookie: null, useProxy: AppBuilder.UserProxy);
+            var s = DownloadString.DownLHttpPostWithCookiesB2b(url, null, useProxy: AppBuilder.UserProxy);
             if (string.IsNullOrEmpty(s))
             {
                 Log.Logger(
-                    $"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                    $"Empty string in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     _tn.Href);
                 return;
             }

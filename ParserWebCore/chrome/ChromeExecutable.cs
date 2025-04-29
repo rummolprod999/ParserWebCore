@@ -1,9 +1,13 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+
+#endregion
 
 namespace ParserWebCore.chrome
 {
@@ -13,9 +17,14 @@ namespace ParserWebCore.chrome
         public async Task<string> GetVersion(string browserExecutablePath = null)
         {
             if (browserExecutablePath == null)
+            {
                 browserExecutablePath = GetExecutablePath();
+            }
+
             if (browserExecutablePath == null)
+            {
                 throw new Exception("Not found chrome.exe.");
+            }
 
 #if (NET48 || NET47 || NET46 || NET45)
             return await Task.Run(()=>
@@ -27,9 +36,10 @@ namespace ParserWebCore.chrome
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 return FileVersionInfo.GetVersionInfo(browserExecutablePath).FileVersion
-                    ?? throw new Exception("Chrome version not found in chrome.exe.");
+                       ?? throw new Exception("Chrome version not found in chrome.exe.");
             }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
                 var args = "--product-version";
                 var info = new ProcessStartInfo(browserExecutablePath, args);
@@ -39,7 +49,10 @@ namespace ParserWebCore.chrome
                 info.RedirectStandardError = true;
                 var process = Process.Start(info);
                 if (process == null)
+                {
                     throw new Exception("Process start error.");
+                }
+
                 try
                 {
                     var output = await process.StandardOutput.ReadToEndAsync();
@@ -49,7 +62,10 @@ namespace ParserWebCore.chrome
                     process.Dispose();
 
                     if (!string.IsNullOrEmpty(error))
+                    {
                         throw new Exception(error);
+                    }
+
                     return output;
                 }
                 catch
@@ -58,7 +74,8 @@ namespace ParserWebCore.chrome
                     throw;
                 }
             }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
                 var args = "--version";
                 var info = new ProcessStartInfo(browserExecutablePath, args);
@@ -68,7 +85,10 @@ namespace ParserWebCore.chrome
                 info.RedirectStandardError = true;
                 var process = Process.Start(info);
                 if (process == null)
+                {
                     throw new Exception("Process start error.");
+                }
+
                 try
                 {
                     var output = await process.StandardOutput.ReadToEndAsync();
@@ -78,7 +98,10 @@ namespace ParserWebCore.chrome
                     process.Dispose();
 
                     if (!string.IsNullOrEmpty(error))
+                    {
                         throw new Exception(error);
+                    }
+
                     return output.Replace("Google Chrome ", "");
                 }
                 catch
@@ -87,8 +110,8 @@ namespace ParserWebCore.chrome
                     throw;
                 }
             }
-            else
-                throw new PlatformNotSupportedException("Your operating system is not supported.");
+
+            throw new PlatformNotSupportedException("Your operating system is not supported.");
 #endif
         }
 
@@ -99,11 +122,19 @@ namespace ParserWebCore.chrome
             result = findChromeExecutable();
 #else
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
                 result = findChromeExecutable();
+            }
+
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
                 result = findChromeExecutableLinux();
+            }
+
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
                 result = findChromeExecutableMacos();
+            }
 #endif
             return result;
         }
@@ -112,25 +143,34 @@ namespace ParserWebCore.chrome
         {
             var candidates = new List<string>();
 
-            foreach (var item in new[] {
-                "PROGRAMFILES", "PROGRAMFILES(X86)", "LOCALAPPDATA", "PROGRAMW6432"
-            })
+            foreach (var item in new[]
+                     {
+                         "PROGRAMFILES", "PROGRAMFILES(X86)", "LOCALAPPDATA", "PROGRAMW6432"
+                     })
             {
-                foreach (var subitem in new[] {
-                    @"Google\Chrome\Application",
-                    @"Google\Chrome Beta\Application",
-                    @"Google\Chrome Canary\Application"
-                })
+                foreach (var subitem in new[]
+                         {
+                             @"Google\Chrome\Application",
+                             @"Google\Chrome Beta\Application",
+                             @"Google\Chrome Canary\Application"
+                         })
                 {
                     var variable = Environment.GetEnvironmentVariable(item);
                     if (variable != null)
+                    {
                         candidates.Add(Path.Combine(variable, subitem, "chrome.exe"));
+                    }
                 }
             }
 
             foreach (var candidate in candidates)
+            {
                 if (File.Exists(candidate))
+                {
                     return candidate;
+                }
+            }
+
             return null;
         }
 
@@ -140,26 +180,34 @@ namespace ParserWebCore.chrome
 
             var environmentPATH = Environment.GetEnvironmentVariable("PATH");
             if (environmentPATH == null)
+            {
                 throw new Exception("Not found environment PATH.");
+            }
 
             var variables = environmentPATH.Split(Path.PathSeparator);
             foreach (var item in variables)
             {
-                foreach (var subitem in new[] {
-                    "google-chrome",
-                    "chromium",
-                    "chromium-browser",
-                    "chrome",
-                    "google-chrome-stable",
-                })
+                foreach (var subitem in new[]
+                         {
+                             "google-chrome",
+                             "chromium",
+                             "chromium-browser",
+                             "chrome",
+                             "google-chrome-stable"
+                         })
                 {
                     candidates.Add(Path.Combine(item, subitem));
                 }
             }
 
             foreach (var candidate in candidates)
+            {
                 if (File.Exists(candidate))
+                {
                     return candidate;
+                }
+            }
+
             return null;
         }
 
@@ -169,31 +217,40 @@ namespace ParserWebCore.chrome
 
             var environmentPATH = Environment.GetEnvironmentVariable("PATH");
             if (environmentPATH == null)
+            {
                 throw new Exception("Not found environment PATH.");
+            }
 
             var variables = environmentPATH.Split(Path.PathSeparator);
             foreach (var item in variables)
             {
-                foreach (var subitem in new[] {
-                    "google-chrome",
-                    "chromium",
-                    "chromium-browser",
-                    "chrome",
-                    "google-chrome-stable",
-                })
+                foreach (var subitem in new[]
+                         {
+                             "google-chrome",
+                             "chromium",
+                             "chromium-browser",
+                             "chrome",
+                             "google-chrome-stable"
+                         })
                 {
                     candidates.Add(Path.Combine(item, subitem));
                 }
             }
 
-            candidates.AddRange(new string[] {
+            candidates.AddRange(new[]
+            {
                 "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
                 "/Applications/Chromium.app/Contents/MacOS/Chromium"
             });
 
             foreach (var candidate in candidates)
+            {
                 if (File.Exists(candidate))
+                {
                     return candidate;
+                }
+            }
+
             return null;
         }
     }

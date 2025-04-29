@@ -1,10 +1,14 @@
+#region
+
 using System.IO;
+
+#endregion
 
 namespace TwoCaptcha.Captcha
 {
     public class Coordinates : Captcha
     {
-        public Coordinates() : base()
+        public Coordinates()
         {
             parameters["coordinatescaptcha"] = "1";
         }

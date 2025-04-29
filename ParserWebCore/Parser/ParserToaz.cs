@@ -1,3 +1,5 @@
+#region
+
 using System;
 using HtmlAgilityPack;
 using ParserWebCore.Extensions;
@@ -5,6 +7,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {
@@ -19,12 +23,12 @@ namespace ParserWebCore.Parser
         {
             try
             {
-                for (int i = 1; i < 10; i++)
+                for (var i = 1; i < 10; i++)
                 {
                     ParsingPage($"https://www.toaz.ru/zakupki/zakupki-tovarov/?page={i}");
                 }
 
-                for (int i = 1; i < 10; i++)
+                for (var i = 1; i < 10; i++)
                 {
                     ParsingPage($"https://www.toaz.ru/zakupki/zakupki-uslug/?page={i}");
                 }
@@ -81,13 +85,13 @@ namespace ParserWebCore.Parser
             var status = (n.SelectSingleNode(".//span[contains(.,'Пароль для скачивания')]")?.InnerText ?? "")
                 .Trim();
             var datePubT =
-                (n.SelectSingleNode(".//span[contains(.,'Дата размещения')]")
-                    ?.InnerText ?? "");
+                n.SelectSingleNode(".//span[contains(.,'Дата размещения')]")
+                    ?.InnerText ?? "";
             datePubT = datePubT.GetDataFromRegex(@"(\d{2}\.\d{2}\.\d{4})");
             var datePub = datePubT.ParseDateUn("dd.MM.yyyy");
             var dateEndT =
-                (n.SelectSingleNode(".//span[contains(.,'Дата окончания приема')]")
-                    ?.InnerText ?? "");
+                n.SelectSingleNode(".//span[contains(.,'Дата окончания приема')]")
+                    ?.InnerText ?? "";
             dateEndT = dateEndT.GetDataFromRegex(@"(\d{2}\.\d{2}\.\d{4} \d{2}:\d{2})");
             var dateEnd = dateEndT.ParseDateUn("dd.MM.yyyy HH:mm");
             var tn = new TenderToaz("ПАО «ТОАЗ»", "https://www.toaz.ru/", 389,

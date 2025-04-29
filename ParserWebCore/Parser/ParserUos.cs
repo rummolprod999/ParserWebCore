@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using HtmlAgilityPack;
@@ -6,6 +8,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {
@@ -20,7 +24,7 @@ namespace ParserWebCore.Parser
         {
             try
             {
-                ParsingPage($"https://uos.ru/Zakupki/");
+                ParsingPage("https://uos.ru/zakupki/");
             }
             catch (Exception e)
             {
@@ -41,7 +45,7 @@ namespace ParserWebCore.Parser
             htmlDoc.LoadHtml(s);
             var tens =
                 htmlDoc.DocumentNode.SelectNodes(
-                    "//table[@class = 'jc_sub']//td[@class = 'txt']/a[@class = 'caption']") ??
+                    "//div[@class = 'item-purchases']") ??
                 new HtmlNodeCollection(null);
             foreach (var a in tens)
             {
@@ -56,9 +60,9 @@ namespace ParserWebCore.Parser
             }
         }
 
-        private void ParserList(HtmlNode n)
+        private void ParserList(HtmlNode n2)
         {
-            var href = (n?.Attributes["href"]?.Value ?? "")
+            var href = (n2.SelectSingleNode(".//a")?.Attributes["href"]?.Value ?? "")
                 .Trim();
             if (string.IsNullOrEmpty(href))
             {
@@ -76,44 +80,47 @@ namespace ParserWebCore.Parser
 
             var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(s);
-            var tens =
-                htmlDoc.DocumentNode.SelectNodes(
-                    "//table[@class = 'jc_sub']//td[@class = 'txt']/a[@class = 'caption']") ??
-                new HtmlNodeCollection(null);
-            foreach (var a in tens)
+            var n = htmlDoc.DocumentNode;
+            var purName = (n.SelectSingleNode("//h1")
+                ?.InnerText ?? "").Trim().ReplaceHtmlEntyty();
+            var purNum = purName.ToMd5();
+            var dates1 = (n.SelectSingleNode("//div[@class = 'purchases-detail__date']")
+                ?.InnerText ?? "").Trim().ReplaceHtmlEntyty();
+            var dates = dates1.GetAllDataFromRegex(@"(\d{2}\.\d{2}\.\d{4}).+(\d{2}\.\d{2}\.\d{4})");
+            var datePub = dates[0].url.ParseDateUn("dd.MM.yyyy");
+            var dateEnd = dates[0].name.ParseDateUn("dd.MM.yyyy");
+            var notice = (n.SelectSingleNode("//div[@class = 'user_par_html']")
+                ?.InnerText ?? "").Trim().ReplaceHtmlEntyty();
+            var attachments = new List<TypeUos.Attachment>();
+            var atts = n.SelectNodes(@"//div[@class = 'item-information-file']");
+            foreach (var a in atts)
             {
-                try
+                var name = (a.SelectSingleNode(".//div[@class = 'item-information-file__name']")
+                    ?.InnerText ?? "").Trim().ReplaceHtmlEntyty();
+                var url = (a.SelectSingleNode(".//div[@class = 'item-information-file__right']//a")
+                    ?.Attributes["href"].Value.Trim() ?? "").Trim().ReplaceHtmlEntyty();
+                if (name == "" || url == "")
                 {
-                    ParserList2(a);
+                    continue;
                 }
-                catch (Exception e)
+
+                url = $"https://uos.ru{url}";
+                attachments.Add(new TypeUos.Attachment { Name = name, Url = url });
+            }
+
+            var tn = new TenderUos("АО «Уралоргсинтез»",
+                "https://uos.ru/", 382,
+                new TypeUos
                 {
-                    Log.Logger(e);
-                }
-            }
-        }
-
-        private void ParserList2(HtmlNode n)
-        {
-            var href = (n?.Attributes["href"]?.Value ?? "")
-                .Trim();
-            if (string.IsNullOrEmpty(href))
-            {
-                Log.Logger("Empty href");
-                return;
-            }
-
-            href = $"https://uos.ru{href}";
-            var s = DownloadString.DownLUserAgent(href);
-            if (string.IsNullOrEmpty(s))
-            {
-                Log.Logger("Empty string in ParserList2()", href);
-                return;
-            }
-
-            var htmlDoc = new HtmlDocument();
-            htmlDoc.LoadHtml(s);
-            ParserTender(htmlDoc.DocumentNode, href);
+                    DateEnd = dateEnd,
+                    DatePub = datePub,
+                    Href = href,
+                    PurNum = purNum,
+                    PurName = purName,
+                    Notice = notice,
+                    Attachments = attachments
+                });
+            ParserTender(tn);
         }
 
         private void ParserTender(HtmlNode n, string href)
@@ -134,7 +141,11 @@ namespace ParserWebCore.Parser
                     ?.InnerText ?? "").Trim().ReplaceHtmlEntyty();
                 var url = (a.SelectSingleNode("./td[2]//a")
                     ?.Attributes["href"].Value.Trim() ?? "").Trim().ReplaceHtmlEntyty();
-                if (name == "" || url == "") continue;
+                if (name == "" || url == "")
+                {
+                    continue;
+                }
+
                 url = $"https://uos.ru{url}";
                 attachments.Add(new TypeUos.Attachment { Name = name, Url = url });
             }

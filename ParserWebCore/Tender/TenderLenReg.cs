@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Data;
 using System.Text.RegularExpressions;
@@ -10,6 +12,8 @@ using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Tender
 {
@@ -44,7 +48,7 @@ namespace ParserWebCore.Tender
                     return;
                 }
 
-                var s = DownloadString.DownL(_tn.Href, tryCount: 5);
+                var s = DownloadString.DownL(_tn.Href, 5);
                 if (string.IsNullOrEmpty(s))
                 {
                     Log.Logger("Empty string in ParsingTender()", _tn.Href);
@@ -220,7 +224,7 @@ namespace ParserWebCore.Tender
                 var delivPlace =
                     DownloadString.DownL(
                             $"https://zakupki.lenreg.ru/ProductRequestGroup/GetDeliveryAddress?idGroup={id}",
-                            tryCount: 5)
+                            5)
                         .Trim('"');
                 var delivTerm1 = navigator.SelectSingleNode(
                                          "//td[. = 'Плановая дата заключения договора']/following-sibling::td")
@@ -269,7 +273,11 @@ namespace ParserWebCore.Tender
             {
                 var urlAtt = (dd?.Attributes["href"]?.Value ?? "").Trim();
                 var fName = (dd?.InnerText ?? "").Trim();
-                if (string.IsNullOrEmpty(fName)) continue;
+                if (string.IsNullOrEmpty(fName))
+                {
+                    continue;
+                }
+
                 var insertAttach =
                     $"INSERT INTO {AppBuilder.Prefix}attachment SET id_tender = @id_tender, file_name = @file_name, url = @url";
                 var cmd10 = new MySqlCommand(insertAttach, connect);

@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using HtmlAgilityPack;
@@ -6,6 +8,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {
@@ -85,7 +89,11 @@ namespace ParserWebCore.Parser
             {
                 var name = a.InnerText.Trim();
                 var url = a.GetAttributeValue("href", "").Trim();
-                if (name == "" || url == "") continue;
+                if (name == "" || url == "")
+                {
+                    continue;
+                }
+
                 attachments.Add(new TypeSamCom.Attachment { Name = name, Url = url });
             }
 
@@ -99,7 +107,7 @@ namespace ParserWebCore.Parser
                     PurNum = purNum,
                     PurName = purName,
                     Notice = notice,
-                    Attachments = attachments,
+                    Attachments = attachments
                 });
             ParserTender(tn);
         }

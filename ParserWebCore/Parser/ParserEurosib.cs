@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -10,14 +12,16 @@ using ParserWebCore.Logger;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
 
+#endregion
+
 namespace ParserWebCore.Parser
 {
     public class ParserEurosib : ParserAbstract, IParser
     {
         private const string Urlpage = "https://www.eurosib-td.ru/ru/zakupki-rabot-i-uslug/";
         private readonly ChromeDriver _driver = CreatorChromeDriver.GetChromeDriver();
-        private List<TypeEurosib> _listTenders = new List<TypeEurosib>();
-        private TimeSpan _timeoutB = TimeSpan.FromSeconds(120);
+        private readonly List<TypeEurosib> _listTenders = new List<TypeEurosib>();
+        private readonly TimeSpan _timeoutB = TimeSpan.FromSeconds(120);
 
         public void Parsing()
         {

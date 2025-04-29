@@ -1,4 +1,9 @@
+#region
+
 using System;
+using ParserWebCore.Logger;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {
@@ -17,7 +22,7 @@ namespace ParserWebCore.Parser
             }
             catch (Exception e)
             {
-                Logger.Log.Logger("Exception in parsing()", e);
+                Log.Logger("Exception in parsing()", e);
             }
 
             try
@@ -26,7 +31,7 @@ namespace ParserWebCore.Parser
             }
             catch (Exception e)
             {
-                Logger.Log.Logger("Exception in parsing()", e);
+                Log.Logger("Exception in parsing()", e);
             }
         }
     }

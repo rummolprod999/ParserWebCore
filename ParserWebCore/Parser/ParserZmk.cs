@@ -1,3 +1,5 @@
+#region
+
 using System;
 using HtmlAgilityPack;
 using ParserWebCore.Extensions;
@@ -5,6 +7,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {
@@ -76,7 +80,7 @@ namespace ParserWebCore.Parser
             var purNum = purName.ToMd5();
             var datePubT =
                 (n.SelectSingleNode(".//time[contains(@class, 'entry-date published')]")
-                    ?.InnerText ?? "").Trim();
+                    ?.InnerText?.Replace("Опубликовано:", "") ?? "").Trim();
             var datePub = datePubT.ParseDateUn("dd.MM.yyyy");
             if (datePub == DateTime.MinValue)
             {

@@ -2,7 +2,7 @@ namespace TwoCaptcha.Captcha
 {
     public class Yandex : Captcha
     {
-        public Yandex() : base()
+        public Yandex()
         {
             parameters["method"] = "yandex";
         }

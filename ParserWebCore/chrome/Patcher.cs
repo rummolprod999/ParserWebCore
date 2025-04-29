@@ -1,14 +1,19 @@
+#region
+
 using System;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
+#endregion
+
 namespace ParserWebCore.chrome
 {
     public class Patcher
     {
-        private string _driverExecutablePath;
+        private readonly string _driverExecutablePath;
+
         public Patcher(string driverExecutablePath = null)
         {
             _driverExecutablePath = driverExecutablePath;
@@ -17,28 +22,41 @@ namespace ParserWebCore.chrome
         public void Auto()
         {
             if (_driverExecutablePath == null)
+            {
                 throw new Exception("Parameter driverExecutablePath is required.");
+            }
+
             if (!isBinaryPatched())
+            {
                 patchExe();
+            }
         }
 
         private bool isBinaryPatched()
         {
             if (_driverExecutablePath == null)
+            {
                 throw new Exception("Parameter driverExecutablePath is required.");
+            }
 
             using (var fs = new FileStream(_driverExecutablePath,
-                FileMode.Open, FileAccess.Read))
+                       FileMode.Open, FileAccess.Read))
             using (var reader = new StreamReader(fs, Encoding.GetEncoding("ISO-8859-1")))
             {
                 while (true)
                 {
                     var line = reader.ReadLine();
                     if (line == null)
+                    {
                         break;
+                    }
+
                     if (line.Contains("undetected chromedriver"))
+                    {
                         return true;
+                    }
                 }
+
                 return false;
             }
         }
@@ -46,10 +64,12 @@ namespace ParserWebCore.chrome
         private void patchExe()
         {
             if (_driverExecutablePath == null)
+            {
                 throw new Exception("Parameter driverExecutablePath is required.");
+            }
 
             using (var fs = new FileStream(_driverExecutablePath,
-                FileMode.Open, FileAccess.ReadWrite))
+                       FileMode.Open, FileAccess.ReadWrite))
             {
                 var buffer = new byte[1024];
                 var stringBuilder = new StringBuilder();
@@ -59,13 +79,16 @@ namespace ParserWebCore.chrome
                 {
                     read = fs.Read(buffer, 0, buffer.Length);
                     if (read == 0)
+                    {
                         break;
+                    }
+
                     stringBuilder.Append(
                         Encoding.GetEncoding("ISO-8859-1").GetString(buffer, 0, read));
                 }
 
                 var content = stringBuilder.ToString();
-                var match = Regex.Match(content.ToString(), @"\{window\.cdc.*?;\}");
+                var match = Regex.Match(content, @"\{window\.cdc.*?;\}");
                 if (match.Success)
                 {
                     var target = match.Value;

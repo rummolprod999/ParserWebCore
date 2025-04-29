@@ -1,6 +1,10 @@
+#region
+
 using System;
 using System.Net;
 using System.Net.Http;
+
+#endregion
 
 namespace ParserWebCore.NetworkLibrary
 {
@@ -18,11 +22,11 @@ namespace ParserWebCore.NetworkLibrary
             //cookieContainer.SetCookies(new Uri(baseUrl), "PHPSESSID");
             cookieContainer.Add(new Uri(baseUrl), cookie);
             using (var client = new HttpClient(new HttpClientHandler
-            {
-                AllowAutoRedirect = true,
-                CookieContainer = cookieContainer,
-                UseCookies = true
-            }))
+                   {
+                       AllowAutoRedirect = true,
+                       CookieContainer = cookieContainer,
+                       UseCookies = true
+                   }))
             {
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Add("User-Agent",

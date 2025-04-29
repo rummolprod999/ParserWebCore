@@ -1,5 +1,8 @@
+#region
+
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Web;
 using HtmlAgilityPack;
 using ParserWebCore.Extensions;
@@ -7,6 +10,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {
@@ -24,7 +29,7 @@ namespace ParserWebCore.Parser
             var s = DownloadString.DownLUserAgent(_href);
             if (string.IsNullOrEmpty(s))
             {
-                Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                Log.Logger($"Empty string in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     _href);
                 return;
             }
@@ -64,7 +69,11 @@ namespace ParserWebCore.Parser
             {
                 var name = a.InnerText.Trim();
                 var url = a.GetAttributeValue("href", "").Trim();
-                if (name == "" || url == "") continue;
+                if (name == "" || url == "")
+                {
+                    continue;
+                }
+
                 url = $"https://uralmash-kartex.ru/{url}";
                 attachments.Add(new TypeUral2.Attachment { Name = name, Url = url });
             }

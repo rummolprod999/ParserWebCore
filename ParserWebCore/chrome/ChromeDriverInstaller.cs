@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -6,6 +8,8 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+
+#endregion
 
 namespace ParserWebCore.chrome
 {
@@ -21,7 +25,10 @@ namespace ParserWebCore.chrome
         public async Task<string> Install(string version, bool force = false)
         {
             if (string.IsNullOrWhiteSpace(version))
+            {
                 throw new Exception("Parameter version is required.");
+            }
+
             version = version.Substring(0, version.LastIndexOf('.'));
 
             var platform = "";
@@ -69,7 +76,9 @@ namespace ParserWebCore.chrome
                 Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), tempPath, driverName));
 
             if (!force && File.Exists(driverPath))
+            {
                 return driverPath;
+            }
 
             var httpClient = Http.Client;
 
@@ -77,7 +86,10 @@ namespace ParserWebCore.chrome
                 "https://googlechromelabs.github.io/chrome-for-testing/latest-patch-versions-per-build.json");
 
             if (!versionResponse.IsSuccessStatusCode)
-                throw new Exception($"ChromeDriver version request failed with status code: {versionResponse.StatusCode}, reason phrase: {versionResponse.ReasonPhrase}");
+            {
+                throw new Exception(
+                    $"ChromeDriver version request failed with status code: {versionResponse.StatusCode}, reason phrase: {versionResponse.ReasonPhrase}");
+            }
 
             var json = await versionResponse.Content.ReadAsStringAsync();
 
@@ -85,21 +97,31 @@ namespace ParserWebCore.chrome
 
             var driverVersion = match.Groups[1].Value;
             if (driverVersion == "")
+            {
                 throw new Exception($"ChromeDriver version not found for Chrome version {version}");
+            }
 
             var dirPath = Path.GetDirectoryName(driverPath);
             if (dirPath == null)
+            {
                 throw new Exception("Get ChromeDriver directory faild.");
+            }
+
             if (!Directory.Exists(dirPath))
+            {
                 Directory.CreateDirectory(dirPath);
+            }
 
             if (force)
             {
                 void deleteDriver()
                 {
                     if (File.Exists(driverPath))
+                    {
                         File.Delete(driverPath);
+                    }
                 }
+
                 try
                 {
                     deleteDriver();
@@ -111,7 +133,9 @@ namespace ParserWebCore.chrome
                         await forceKillInstances(driverPath);
                         deleteDriver();
                     }
-                    catch { }
+                    catch
+                    {
+                    }
                 }
             }
 
@@ -119,7 +143,10 @@ namespace ParserWebCore.chrome
 
             var zipResponse = await httpClient.GetAsync($"{baseUrl}/{driverVersion}/{platform}/{zipName}");
             if (!zipResponse.IsSuccessStatusCode)
-                throw new Exception($"ChromeDriver download request failed with status code: {zipResponse.StatusCode}, reason phrase: {zipResponse.ReasonPhrase}");
+            {
+                throw new Exception(
+                    $"ChromeDriver download request failed with status code: {zipResponse.StatusCode}, reason phrase: {zipResponse.ReasonPhrase}");
+            }
 
             using (var zipStream = await zipResponse.Content.ReadAsStreamAsync())
             using (var zipArchive = new ZipArchive(zipStream, ZipArchiveMode.Read))
@@ -128,7 +155,10 @@ namespace ParserWebCore.chrome
                 var entryName = $"chromedriver-{platform}/chromedriver{ext}";
                 var entry = zipArchive.GetEntry(entryName);
                 if (entry == null)
+                {
                     throw new Exception($"Not found zip entry {entryName}.");
+                }
+
                 using (var stream = entry.Open())
                 {
                     await stream.CopyToAsync(fs);
@@ -148,7 +178,10 @@ namespace ParserWebCore.chrome
                 info.RedirectStandardError = true;
                 var process = Process.Start(info);
                 if (process == null)
+                {
                     throw new Exception("Process start error.");
+                }
+
                 try
                 {
                     var error = await process.StandardError.ReadToEndAsync();
@@ -157,7 +190,9 @@ namespace ParserWebCore.chrome
                     process.Dispose();
 
                     if (!string.IsNullOrEmpty(error))
+                    {
                         throw new Exception("Failed to make chromedriver executable.");
+                    }
                 }
                 catch
                 {
@@ -172,7 +207,9 @@ namespace ParserWebCore.chrome
         public async Task<string> GetDriverVersion(string driverExecutablePath)
         {
             if (driverExecutablePath == null)
+            {
                 throw new Exception("Parameter driverExecutablePath is required.");
+            }
 
             var args = "--version";
             var info = new ProcessStartInfo(driverExecutablePath, args);
@@ -182,7 +219,10 @@ namespace ParserWebCore.chrome
             info.RedirectStandardError = true;
             var process = Process.Start(info);
             if (process == null)
+            {
                 throw new Exception("Process start error.");
+            }
+
             try
             {
                 var version = await process.StandardOutput.ReadToEndAsync();
@@ -192,7 +232,10 @@ namespace ParserWebCore.chrome
                 process.Dispose();
 
                 if (!string.IsNullOrEmpty(error))
+                {
                     throw new Exception("Failed to execute driver --version.");
+                }
+
                 return version.Split(' ').Skip(1).First();
             }
             catch
@@ -236,7 +279,10 @@ namespace ParserWebCore.chrome
             info.RedirectStandardError = true;
             var process = Process.Start(info);
             if (process == null)
+            {
                 throw new Exception("Process start error.");
+            }
+
             try
             {
                 await process.WaitForExitPatchAsync();

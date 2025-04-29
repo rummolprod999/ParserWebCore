@@ -1,7 +1,11 @@
-﻿using System;
+﻿#region
+
+using System;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using ParserWebCore.Logger;
+
+#endregion
 
 namespace ParserWebCore.Extensions
 {
@@ -26,7 +30,10 @@ namespace ParserWebCore.Extensions
                 {
                     count++;
                     Log.Logger(e);
-                    if (count > 10) return;
+                    if (count > 10)
+                    {
+                        return;
+                    }
                 }
             }
         }
@@ -48,7 +55,10 @@ namespace ParserWebCore.Extensions
                 {
                     count++;
                     Log.Logger(e);
-                    if (count > 10) return;
+                    if (count > 10)
+                    {
+                        return;
+                    }
                 }
             }
         }

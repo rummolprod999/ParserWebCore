@@ -1,19 +1,24 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using ParserWebCore.BuilderApp;
+
+#endregion
 
 namespace ParserWebCore.Logger
 {
     public static class Log
     {
-        private static string _fileLog;
-        private static object _locker = new object();
+        private static readonly string _fileLog;
+        private static readonly object _locker = new object();
 
         static Log()
         {
-            _fileLog = BuilderApp.AppBuilder.FileLog;
+            _fileLog = AppBuilder.FileLog;
         }
 
         public static void Logger(params object[] parametrs)

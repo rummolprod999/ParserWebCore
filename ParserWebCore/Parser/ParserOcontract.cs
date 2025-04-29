@@ -1,10 +1,15 @@
+#region
+
 using System;
+using System.Reflection;
 using Newtonsoft.Json.Linq;
 using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {
@@ -51,7 +56,7 @@ namespace ParserWebCore.Parser
                 }
                 catch (Exception e)
                 {
-                    Log.Logger($"Error in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                    Log.Logger($"Error in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                         e);
                 }
             }
@@ -59,22 +64,22 @@ namespace ParserWebCore.Parser
 
         private void ParserTenderObj(JToken t)
         {
-            var id = ((string) t.SelectToken("id") ?? "").Trim();
+            var id = ((string)t.SelectToken("id") ?? "").Trim();
             var href = $"https://onlinecontract.ru/tenders/{id}";
-            var currency = ((string) t.SelectToken("currency") ?? "").Trim();
-            var name = ((string) t.SelectToken("name") ?? "").Trim();
-            var nmck = ((string) t.SelectToken("startPrice") ?? "").Trim();
-            var orgName = ((string) t.SelectToken("owner.name") ?? "").Trim();
-            var status = ((string) t.SelectToken("status") ?? "").Trim();
-            var placingWay = ((string) t.SelectToken("type") ?? "").Trim();
-            var deliveryPlace = ((string) t.SelectToken("deliveryPlace") ?? "").Trim();
-            var deliveryTerms = ((string) t.SelectToken("deliveryTerms") ?? "").Trim();
-            var deliveryTime = ((string) t.SelectToken("deliveryTime") ?? "").Trim();
-            var formOfPayment = ((string) t.SelectToken("formOfPayment") ?? "").Trim();
-            var paymentTerms = ((string) t.SelectToken("paymentTerms") ?? "").Trim();
+            var currency = ((string)t.SelectToken("currency") ?? "").Trim();
+            var name = ((string)t.SelectToken("name") ?? "").Trim();
+            var nmck = ((string)t.SelectToken("startPrice") ?? "").Trim();
+            var orgName = ((string)t.SelectToken("owner.name") ?? "").Trim();
+            var status = ((string)t.SelectToken("status") ?? "").Trim();
+            var placingWay = ((string)t.SelectToken("type") ?? "").Trim();
+            var deliveryPlace = ((string)t.SelectToken("deliveryPlace") ?? "").Trim();
+            var deliveryTerms = ((string)t.SelectToken("deliveryTerms") ?? "").Trim();
+            var deliveryTime = ((string)t.SelectToken("deliveryTime") ?? "").Trim();
+            var formOfPayment = ((string)t.SelectToken("formOfPayment") ?? "").Trim();
+            var paymentTerms = ((string)t.SelectToken("paymentTerms") ?? "").Trim();
             var datePub = DateTime.Now;
-            var endDate = (DateTime?) t.SelectToken("date") ?? DateTime.Now.AddDays(2);
-            var biddingDateT = ((string) t.SelectToken("reBiddingStart") ?? "").Trim();
+            var endDate = (DateTime?)t.SelectToken("date") ?? DateTime.Now.AddDays(2);
+            var biddingDateT = ((string)t.SelectToken("reBiddingStart") ?? "").Trim();
             var biddingDate = biddingDateT.ParseDateUn("dd.MM.yyyy HH:mm");
             var tn = new TenderOcontract("ЭТП ONLINECONTRACT", "http://onlinecontract.ru/tenders", 41,
                 new TypeOcontract

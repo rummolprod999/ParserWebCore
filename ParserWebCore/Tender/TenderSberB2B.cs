@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,6 +13,8 @@ using ParserWebCore.BuilderApp;
 using ParserWebCore.Connections;
 using ParserWebCore.Extensions;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Tender
 {
@@ -228,7 +232,11 @@ namespace ParserWebCore.Tender
         {
             var els = new List<JToken>();
             var elsObj = j.SelectToken(s);
-            if (elsObj == null || elsObj.Type == JTokenType.Null) return els;
+            if (elsObj == null || elsObj.Type == JTokenType.Null)
+            {
+                return els;
+            }
+
             switch (elsObj.Type)
             {
                 case JTokenType.Object:

@@ -1,11 +1,16 @@
+#region
+
 using System;
 using System.Net;
+using System.Reflection;
 using HtmlAgilityPack;
 using ParserWebCore.Extensions;
 using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {
@@ -28,7 +33,7 @@ namespace ParserWebCore.Parser
             }
             catch (Exception e)
             {
-                Log.Logger($"Error in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}", e);
+                Log.Logger($"Error in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", e);
             }
         }
 
@@ -46,7 +51,7 @@ namespace ParserWebCore.Parser
             var s = DownloadString.DownLHttpPostWithCookies(url, HttpsT2Federal1Ru, Cookie);
             if (string.IsNullOrEmpty(s))
             {
-                Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                Log.Logger($"Empty string in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     url);
                 return;
             }

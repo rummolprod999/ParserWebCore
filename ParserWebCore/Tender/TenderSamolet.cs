@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Data;
 using MySql.Data.MySqlClient;
@@ -6,6 +8,8 @@ using ParserWebCore.BuilderApp;
 using ParserWebCore.Connections;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Tender
 {
@@ -235,6 +239,7 @@ namespace ParserWebCore.Tender
                         cmd16.ExecuteNonQuery();
                     }
                 }
+
                 TenderKwords(connect, idTender);
                 AddVerNumber(connect, _tn.PurNum, TypeFz);
             }

@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +13,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
 
+#endregion
+
 namespace ParserWebCore.Parser
 {
     public class ParserNaftan : ParserAbstract, IParser
@@ -18,7 +22,7 @@ namespace ParserWebCore.Parser
         private const string StartUrl = "http://www.naftan.by/ru/Home/PivotKps";
         private readonly ChromeDriver _driver = CreatorChromeDriver.GetChromeDriver();
         private readonly TimeSpan _timeoutB = TimeSpan.FromSeconds(30);
-        private List<TenderNaftan> _listTenders = new List<TenderNaftan>();
+        private readonly List<TenderNaftan> _listTenders = new List<TenderNaftan>();
 
         public void Parsing()
         {

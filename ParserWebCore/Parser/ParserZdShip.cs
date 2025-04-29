@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using HtmlAgilityPack;
@@ -6,6 +8,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {
@@ -27,7 +31,7 @@ namespace ParserWebCore.Parser
             {
                 try
                 {
-                    for (int i = 1; i < 5; i++)
+                    for (var i = 1; i < 5; i++)
                     {
                         ParsingPage($"https://zdship.ru/tender?page={i}");
                     }
@@ -113,7 +117,7 @@ namespace ParserWebCore.Parser
                     DatePub = datePub,
                     Href = href,
                     PurNum = purNum,
-                    PurName = purName,
+                    PurName = purName
                 });
             ParserTender(tn);
         }

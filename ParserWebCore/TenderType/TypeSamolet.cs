@@ -1,8 +1,6 @@
-using System;
-
 namespace ParserWebCore.TenderType
 {
-    public class TypeSamolet: AbstractTypeT
+    public class TypeSamolet : AbstractTypeT
     {
         public string Id { get; set; }
 

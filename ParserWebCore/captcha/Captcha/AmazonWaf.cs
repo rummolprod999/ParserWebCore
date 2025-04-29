@@ -2,7 +2,7 @@ namespace TwoCaptcha.Captcha
 {
     public class AmazonWaf : Captcha
     {
-        public AmazonWaf() : base()
+        public AmazonWaf()
         {
             parameters["method"] = "amazon_waf";
         }

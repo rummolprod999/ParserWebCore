@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Reflection;
 using Newtonsoft.Json.Linq;
@@ -6,6 +8,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {

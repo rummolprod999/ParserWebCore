@@ -1,5 +1,8 @@
+#region
+
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Newtonsoft.Json.Linq;
 using ParserWebCore.BuilderApp;
 using ParserWebCore.Extensions;
@@ -7,6 +10,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {
@@ -31,7 +36,7 @@ namespace ParserWebCore.Parser
                 }
                 catch (Exception e)
                 {
-                    Log.Logger($"Error in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}", e);
+                    Log.Logger($"Error in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", e);
                 }
             }
 
@@ -43,7 +48,7 @@ namespace ParserWebCore.Parser
                 }
                 catch (Exception e)
                 {
-                    Log.Logger($"Error in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}", e);
+                    Log.Logger($"Error in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", e);
                 }
             }
 
@@ -55,7 +60,7 @@ namespace ParserWebCore.Parser
                 }
                 catch (Exception e)
                 {
-                    Log.Logger($"Error in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}", e);
+                    Log.Logger($"Error in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}", e);
                 }
             }
         }
@@ -66,10 +71,10 @@ namespace ParserWebCore.Parser
                 $"https://old.zakupki.mos.ru/api/Cssp/Purchase/Query?queryDto={{\"filter\":{{\"typeIn\":[1],\"auctionSpecificFilter\":{{\"stateIdIn\":[19000002]}},\"needSpecificFilter\":{{}},\"tenderSpecificFilter\":{{}}}},\"order\":[{{\"field\":\"PublishDate\",\"desc\":true}}],\"withCount\":true,\"take\":50,\"skip\":{num * 50}}}";
             url = Uri.EscapeUriString(url);
 
-            var s = DownloadString.DownLHttpPostWithCookiesB2b(url, cookie: null, useProxy: AppBuilder.UserProxy);
+            var s = DownloadString.DownLHttpPostWithCookiesB2b(url, null, useProxy: AppBuilder.UserProxy);
             if (string.IsNullOrEmpty(s))
             {
-                Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                Log.Logger($"Empty string in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     _url);
                 return;
             }
@@ -84,7 +89,7 @@ namespace ParserWebCore.Parser
                 }
                 catch (Exception e)
                 {
-                    Log.Logger($"Error in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                    Log.Logger($"Error in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                         e, t.ToString());
                 }
             }
@@ -98,10 +103,10 @@ namespace ParserWebCore.Parser
                 $"https://old.zakupki.mos.ru/api/Cssp/Purchase/Query?queryDto={{\"filter\":{{\"auctionSpecificFilter\":{{}},\"needSpecificFilter\":{{}},\"tenderSpecificFilter\":{{}}}},\"order\":[{{\"field\":\"PublishDate\",\"desc\":true}}],\"withCount\":true,\"take\":50,\"skip\":{num * 50}}}";
             url = Uri.EscapeUriString(url);
 
-            var s = DownloadString.DownLHttpPostWithCookiesB2b(url, cookie: null, useProxy: AppBuilder.UserProxy);
+            var s = DownloadString.DownLHttpPostWithCookiesB2b(url, null, useProxy: AppBuilder.UserProxy);
             if (string.IsNullOrEmpty(s))
             {
-                Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                Log.Logger($"Empty string in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     _url);
                 return;
             }
@@ -116,7 +121,7 @@ namespace ParserWebCore.Parser
                 }
                 catch (Exception e)
                 {
-                    Log.Logger($"Error in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                    Log.Logger($"Error in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                         e, t.ToString());
                 }
             }
@@ -128,10 +133,10 @@ namespace ParserWebCore.Parser
                 $"https://old.zakupki.mos.ru/api/Cssp/Purchase/Query?queryDto={{\"filter\":{{\"typeIn\":[2],\"auctionSpecificFilter\":{{\"stateIdIn\":[19000002,19000005,19000003,19000004,19000008]}},\"needSpecificFilter\":{{\"isB2B\":false}},\"tenderSpecificFilter\":{{}}}},\"order\":[{{\"field\":\"PublishDate\",\"desc\":true}}],\"withCount\":true,\"take\":50,\"skip\":{num * 50}}}";
             url = Uri.EscapeUriString(url);
 
-            var s = DownloadString.DownLHttpPostWithCookiesB2b(url, cookie: null, useProxy: AppBuilder.UserProxy);
+            var s = DownloadString.DownLHttpPostWithCookiesB2b(url, null, useProxy: AppBuilder.UserProxy);
             if (string.IsNullOrEmpty(s))
             {
-                Log.Logger($"Empty string in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                Log.Logger($"Empty string in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                     _url);
                 return;
             }
@@ -146,7 +151,7 @@ namespace ParserWebCore.Parser
                 }
                 catch (Exception e)
                 {
-                    Log.Logger($"Error in {GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}",
+                    Log.Logger($"Error in {GetType().Name}.{MethodBase.GetCurrentMethod().Name}",
                         e, t.ToString());
                 }
             }

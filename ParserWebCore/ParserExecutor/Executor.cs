@@ -1,7 +1,12 @@
-﻿using System;
+﻿#region
+
+using System;
 using ParserWebCore.BuilderApp;
+using ParserWebCore.Logger;
 using ParserWebCore.MlConformity;
 using ParserWebCore.Parser;
+
+#endregion
 
 namespace ParserWebCore.ParserExecutor
 {
@@ -319,7 +324,7 @@ namespace ParserWebCore.ParserExecutor
             }
             catch (Exception e)
             {
-                Logger.Log.Logger("Exception in parsing()", e);
+                Log.Logger("Exception in parsing()", e);
             }
         }
     }

@@ -1,3 +1,5 @@
+#region
+
 using System;
 using HtmlAgilityPack;
 using ParserWebCore.Extensions;
@@ -5,6 +7,8 @@ using ParserWebCore.Logger;
 using ParserWebCore.NetworkLibrary;
 using ParserWebCore.Tender;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Parser
 {
@@ -17,7 +21,7 @@ namespace ParserWebCore.Parser
 
         private void ParsingMetPort()
         {
-            for (int i = 1; i < 20; i++)
+            for (var i = 1; i < 20; i++)
             {
                 try
                 {

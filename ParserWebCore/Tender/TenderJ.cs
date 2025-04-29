@@ -1,8 +1,12 @@
+#region
+
 using System.Data;
 using System.Threading;
 using MySql.Data.MySqlClient;
 using ParserWebCore.Connections;
 using ParserWebCore.TenderType;
+
+#endregion
 
 namespace ParserWebCore.Tender
 {
@@ -22,7 +26,7 @@ namespace ParserWebCore.Tender
             {
                 connect.Open();
                 var selectTend =
-                    $"SELECT id FROM event_log WHERE event = @event AND date_time = @date_time AND notification_number = @notification_number";
+                    "SELECT id FROM event_log WHERE event = @event AND date_time = @date_time AND notification_number = @notification_number";
                 var cmd = new MySqlCommand(selectTend, connect);
                 cmd.Prepare();
                 cmd.Parameters.AddWithValue("@notification_number", _tn.NotificationNumber);
@@ -38,7 +42,7 @@ namespace ParserWebCore.Tender
                 }
 
                 var ev =
-                    $"INSERT INTO event_log SET event = @event, date_time = @date_time, notification_number = @notification_number, type_fz = @type_fz, time_zone = @time_zone";
+                    "INSERT INTO event_log SET event = @event, date_time = @date_time, notification_number = @notification_number, type_fz = @type_fz, time_zone = @time_zone";
                 var cmd4 = new MySqlCommand(ev, connect);
                 cmd4.Prepare();
                 cmd4.Parameters.AddWithValue("@notification_number", _tn.NotificationNumber);

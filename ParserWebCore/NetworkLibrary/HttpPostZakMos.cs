@@ -1,14 +1,14 @@
+#region
+
 using System.Net.Http;
 using System.Text;
+
+#endregion
 
 namespace ParserWebCore.NetworkLibrary
 {
     public class HttpPostZakMos
     {
-        public HttpPostZakMos()
-        {
-        }
-
         public string DownloadString(string url, string data)
         {
             using (var client = new HttpClient())

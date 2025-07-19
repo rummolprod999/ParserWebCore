@@ -169,9 +169,10 @@ namespace ParserWebCore.Tender
                     cmd19.Parameters.AddWithValue("@price", "");
                     cmd19.Parameters.AddWithValue("@sum", "");
                     cmd19.ExecuteNonQuery();
-                    TenderKwords(connect, idTender);
-                    AddVerNumber(connect, _tn.PurNum, TypeFz);
                 }
+
+                TenderKwords(connect, idTender);
+                AddVerNumber(connect, _tn.PurNum, TypeFz);
             }
         }
 

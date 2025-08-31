@@ -20,6 +20,8 @@ namespace ParserWebCore.BuilderApp
 
         private static int _port;
         private static AppBuilder _b;
+        public static int Start = 0;
+        public static int End = 0;
 
         public static readonly string Path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName()
             .CodeBase.Substring(5));
@@ -493,6 +495,8 @@ namespace ParserWebCore.BuilderApp
                 UserProxy = (bool)o["use_proxy"];
                 ProxyFile = (string)o["proxy_file"];
                 _port = int.TryParse((string)o["port"], out _port) ? int.Parse((string)o["port"]) : 3306;
+                Start = int.TryParse((string)o["start"], out Start) ? int.Parse((string)o["start"]) : 0;
+                End = int.TryParse((string)o["end"], out End) ? int.Parse((string)o["end"]) : 0;
                 Database = (string)o["database"];
                 var logDirTmp = o["dirs"]
                     .Where(c => ((JObject)c).Properties().First().Name == Arg.ToString().ToLower())

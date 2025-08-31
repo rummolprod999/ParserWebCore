@@ -129,14 +129,25 @@ namespace ParserWebCore.Parser
 
         private void ParsingNextPage()
         {
+            var c = Count;
             var wait = new WebDriverWait(_driver, _timeoutB);
-            for (var i = 1; i <= Count; i++)
+            if (AppBuilder.Start != 0 && AppBuilder.End != 0)
+            {
+                for (var i = 0; i <= AppBuilder.Start; i++)
+                {
+                    _driver.ExecutorJs(
+                        "var elem = document.querySelectorAll('button.p-paginator-next'); elem[elem.length-1].click()");
+                    Thread.Sleep(1000);
+                    c = AppBuilder.End;
+                }
+            }
+            for (var i = 1; i <= c; i++)
             {
                 try
                 {
                     //_driver.Clicker("//td[contains(., 'Перейти на страницу:')]//a[. = '>']");
                     _driver.ExecutorJs(
-                        "var elem = document.querySelectorAll('a.ui-paginator-next'); elem[elem.length-1].click()");
+                        "var elem = document.querySelectorAll('button.p-paginator-next'); elem[elem.length-1].click()");
                     Thread.Sleep(1000);
                     wait.Until(dr =>
                         dr.FindElement(
@@ -151,8 +162,12 @@ namespace ParserWebCore.Parser
             }
         }
 
-        private void ParserFirstPage()
+        private void ParserFirstPage(bool skip = false)
         {
+            if (skip)
+            {
+                return;
+            }
             var tenders =
                 _driver.FindElements(
                     By.XPath("//article[@class = 'trade-card']"));

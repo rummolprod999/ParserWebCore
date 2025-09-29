@@ -166,6 +166,10 @@ namespace ParserWebCore.Parser
             {
                 var ev = (htmlDoc2.DocumentNode.SelectSingleNode("//td[2]")?.InnerText ?? "")
                     .Trim();
+                if (ev.ToLower().Contains("подача заявок") || ev.ToLower().Contains("работа комиссии"))
+                {
+                    continue;
+                }
                 var timezone = (htmlDoc2.DocumentNode.SelectSingleNode("//td[1]/span")?.InnerText ?? "")
                     .Trim();
                 var dtime = (htmlDoc2.DocumentNode.SelectSingleNode("//td[1]")?.InnerText ?? "")

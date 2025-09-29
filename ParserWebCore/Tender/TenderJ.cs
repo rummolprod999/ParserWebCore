@@ -26,11 +26,10 @@ namespace ParserWebCore.Tender
             {
                 connect.Open();
                 var selectTend =
-                    "SELECT id FROM event_log WHERE event = @event AND date_time = @date_time AND notification_number = @notification_number";
+                    "SELECT id FROM event_log WHERE event = @event AND notification_number = @notification_number";
                 var cmd = new MySqlCommand(selectTend, connect);
                 cmd.Prepare();
                 cmd.Parameters.AddWithValue("@notification_number", _tn.NotificationNumber);
-                cmd.Parameters.AddWithValue("@date_time", _tn.DateTime);
                 cmd.Parameters.AddWithValue("@event", _tn.Event);
                 var dt = new DataTable();
                 var adapter = new MySqlDataAdapter { SelectCommand = cmd };

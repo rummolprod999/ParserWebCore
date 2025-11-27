@@ -18,7 +18,7 @@ namespace ParserWebCore.Parser
 {
     public class ParserEurosib : ParserAbstract, IParser
     {
-        private const string Urlpage = "https://www.eurosib-td.ru/ru/zakupki-rabot-i-uslug/";
+        private const string Urlpage = "https://td.enplus.ru/redesign/works-and-services-purchase/?tab=1&page=";
         private readonly ChromeDriver _driver = CreatorChromeDriver.GetChromeDriver();
         private readonly List<TypeEurosib> _listTenders = new List<TypeEurosib>();
         private readonly TimeSpan _timeoutB = TimeSpan.FromSeconds(120);
@@ -48,11 +48,26 @@ namespace ParserWebCore.Parser
         private void ParserSelenium()
         {
             var wait = new WebDriverWait(_driver, _timeoutB);
-            _driver.Navigate().GoToUrl(Urlpage);
-            Thread.Sleep(5000);
-            wait.Until(dr =>
-                dr.FindElement(By.XPath("//table[@id = 'z']//tr[contains(., 'Дата начала подачи заявок:')]")));
-            ParserFirstPage();
+            for (var i = 0; i < 10; i++)
+            {
+                _driver.Navigate().GoToUrl(Urlpage + i);
+                Thread.Sleep(5000);
+                wait.Until(dr =>
+                    dr.FindElement(By.XPath("//a[@class = 'purchases__item']")));
+                try
+                {
+                    _driver.ExecutorJs(
+                        "document.querySelectorAll('div.button.button_small.button_neutral').forEach(e => e.click())");
+                    Thread.Sleep(5000);
+                    _driver.SwitchTo().DefaultContent();
+                }
+                catch (Exception)
+                {
+                   // ignored
+                }
+                ParserFirstPage();
+            }
+            
             ParserTenderList();
         }
 
@@ -70,7 +85,7 @@ namespace ParserWebCore.Parser
         {
             var tenders =
                 _driver.FindElements(
-                    By.XPath("//table[@id = 'z']//tr[contains(., 'Дата начала подачи заявок:')]"));
+                    By.XPath("//a[@class = 'purchases__item']"));
             foreach (var t in tenders)
             {
                 try
@@ -86,44 +101,40 @@ namespace ParserWebCore.Parser
 
         private void ParsingPage(IWebElement t)
         {
-            var purName = "";
-            var purNum = t.FindElement(By.XPath(".//a"))?.Text.Replace("№", "").Trim() ??
+            var purName = t.FindElement(By.XPath(".//h6"))?.Text.Trim() ??
+                          throw new Exception("cannot find purName");
+            var purNum = t.FindElement(By.XPath(".//span[@class = 'purchases__item-number']"))?.Text.Replace("№", "").Trim() ??
                          throw new Exception("cannot find purNum");
             var href =
-                t.FindElement(By.XPath(".//a"))?.GetAttribute("href") ??
+                t.GetAttribute("href") ??
                 throw new Exception(
                     $"Cannot find href in {purNum}");
             var cusName = "";
             var pubDateT =
-                t.FindElement(By.XPath(".//p[contains(., 'Дата начала подачи заявок:')]"))?.Text
+                t.FindElement(By.XPath(".//span[. = 'Дата начала подачи заявок:']/following-sibling::div/span[1]"))?.Text
                     ?.Replace("Дата начала подачи заявок:", "")
                     .Trim().ReplaceHtmlEntyty().DelDoubleWhitespace().Trim() ??
                 throw new Exception("cannot find pubDateT");
-            var datePub = pubDateT.ParseDateUn("dd/MM/yyyy HH:mm");
-            if (datePub == DateTime.MinValue)
-            {
-                datePub = pubDateT.ParseDateUn("dd/MM/yyyy");
-            }
-
+            var pubDateTT =
+                t.FindElement(By.XPath(".//span[. = 'Дата начала подачи заявок:']/following-sibling::div/span[2]"))?.Text
+                    ?.Replace("Дата начала подачи заявок:", "")
+                    .Trim().ReplaceHtmlEntyty().DelDoubleWhitespace().Trim() ??
+                throw new Exception("cannot find pubDateT");
+            var datePub = (pubDateT + " " + pubDateTT).ParseDateUn("dd.MM.yyyy HH:mm:ss");
             if (datePub == DateTime.MinValue)
             {
                 datePub = DateTime.Today;
             }
 
             var endDateT =
-                t.FindElement(By.XPath(".//p[contains(., 'Дата окончания приема заявок:')]"))?.Text
+                t.FindElement(By.XPath(".//span[. = 'Дата окончания приема заявок:']/following-sibling::div/span[1]"))?.Text
                     ?.Replace("Дата окончания приема заявок:", "")
                     .Trim().ReplaceHtmlEntyty().DelDoubleWhitespace().Trim() ?? "";
-            var dateEnd = endDateT.ParseDateUn("dd/MM/yyyy HH:mm");
-            if (dateEnd == DateTime.MinValue)
-            {
-                dateEnd = endDateT.ParseDateUn("dd/MM/yyyy");
-            }
-
-            if (dateEnd == DateTime.MinValue)
-            {
-                dateEnd = endDateT.ParseDateUn("dd/MM/yyyy HH:mm:ss");
-            }
+            var endDateTT =
+                t.FindElement(By.XPath(".//span[. = 'Дата окончания приема заявок:']/following-sibling::div/span[2]"))?.Text
+                    ?.Replace("Дата окончания приема заявок:", "")
+                    .Trim().ReplaceHtmlEntyty().DelDoubleWhitespace().Trim() ?? "";
+            var dateEnd = (endDateT + " " + endDateTT).ParseDateUn("dd.MM.yyyy HH:mm:ss");
 
             if (dateEnd == DateTime.MinValue)
             {

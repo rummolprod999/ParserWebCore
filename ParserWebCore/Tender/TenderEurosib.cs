@@ -59,17 +59,13 @@ namespace ParserWebCore.Tender
                 var htmlDoc = new HtmlDocument();
                 htmlDoc.LoadHtml(s);
                 var navigator = (HtmlNodeNavigator)htmlDoc.CreateNavigator();
-                _tn.PurName =
-                    navigator.SelectSingleNode("//td[. = 'Предмет']/following-sibling::td")?.Value?
-                        .Trim().ReplaceHtmlEntyty() ?? throw new Exception(
-                        "cannot find purNum");
                 _tn.CusName =
-                    navigator.SelectSingleNode("//td[. = 'Заказчик']/following-sibling::td")?.Value?
+                    navigator.SelectSingleNode("//span[.='Заказчик']/following-sibling::span")?.Value?
                         .Trim().ReplaceHtmlEntyty() ?? "";
                 updated = UpdateVersion(connect, updated, dateUpd, ref cancelStatus);
                 CreaateOrganizer(connect, out var organiserId);
                 PlacingWay =
-                    navigator.SelectSingleNode("//td[. = 'Способ']/following-sibling::td")?.Value?
+                    navigator.SelectSingleNode("//span[.='Способ ']/following-sibling::span")?.Value?
                         .Trim().ReplaceHtmlEntyty() ?? "";
                 GetEtp(connect, out var idEtp);
                 GetPlacingWay(connect, out var idPlacingWay);
@@ -98,7 +94,7 @@ namespace ParserWebCore.Tender
                     }
                 }
 
-                var nmck = navigator.SelectSingleNode("//td[. = 'НМЦД']/following-sibling::td")?.Value?
+                var nmck = navigator.SelectSingleNode("//span[.='НМЦД']/following-sibling::span")?.Value?
                     .Trim().ReplaceHtmlEntyty().ExtractPriceNew() ?? "";
                 var lotNum = 1;
                 var insertLot =
